@@ -41,7 +41,9 @@ export const LifecycleStageCard: React.FC<LifecycleStageCardProps> = ({
   const hoverColorClass = isAmber ? 'hover:text-amber-500' : 'hover:text-primary';
 
   return (
-    <div className={`group relative bg-base-100 ${isAmber ? 'bg-base-100/50' : ''} rounded-xl p-4 border border-base-content/5 ${isAmber ? 'hover:border-amber-500/30' : 'hover:border-primary/30'} transition-all animate-in fade-in slide-in-from-top-2 duration-300`}>
+    <div
+      className={`group relative bg-base-100 ${isAmber ? 'bg-base-100/50' : ''} rounded-xl p-4 border border-base-content/5 ${isAmber ? 'hover:border-amber-500/30' : 'hover:border-primary/30'} transition-all`}
+    >
       <div className="flex items-center gap-4">
         {!isAmber && (
           <div className="cursor-grab text-base-content/20 hover:text-base-content/40 transition-colors pt-2">
@@ -82,7 +84,7 @@ export const LifecycleStageCard: React.FC<LifecycleStageCardProps> = ({
           </button>
 
           {showDescription && (
-            <div className="mt-2 animate-in fade-in slide-in-from-top-2 duration-300">
+            <div className="mt-2">
               <input
                 type="text"
                 value={stage.description}
@@ -98,7 +100,7 @@ export const LifecycleStageCard: React.FC<LifecycleStageCardProps> = ({
           <label tabIndex={0} className="btn btn-ghost btn-xs btn-circle text-base-content/40 hover:text-primary transition-colors">
             <MoreHorizontal size={16} />
           </label>
-          <ul tabIndex={0} className="dropdown-content z-[1] menu p-2 shadow-xl bg-base-200 rounded-xl w-56 border border-base-content/5 animate-in fade-in zoom-in-95 duration-200">
+          <ul tabIndex={0} className="dropdown-content z-[1] menu p-2 shadow-xl bg-base-200 rounded-xl w-56 border border-base-content/5">
             <li className={stage.is_default ? 'disabled' : ''}>
               <a 
                 className={`text-xs font-medium flex items-center gap-2 py-2 ${stage.is_default ? 'pointer-events-none opacity-50' : ''}`}

@@ -111,7 +111,7 @@ export const LifecycleConfig: React.FC = () => {
   }
 
   return (
-    <div className="p-6 max-w-7xl mx-auto animate-in fade-in duration-500">
+    <div className="p-6 max-w-7xl mx-auto animate-slide-up">
       <div className="flex items-center justify-between mb-8">
         <div>
           <h1 className="text-2xl font-bold text-base-content">Configurar etapas de ciclo de vida</h1>
@@ -162,7 +162,7 @@ export const LifecycleConfig: React.FC = () => {
               ))}
               
               {addingTo === 'active' ? (
-                <div className="bg-base-100 rounded-xl p-3 border border-primary/30 animate-in zoom-in-95 duration-200 shadow-lg">
+                <div className="bg-base-100 rounded-xl p-3 border border-primary/30 shadow-lg">
                   <h3 className="text-[10px] font-bold text-primary uppercase tracking-wider mb-2">Nueva Etapa Activa</h3>
                   <div className="space-y-2">
                     <div>
@@ -236,7 +236,7 @@ export const LifecycleConfig: React.FC = () => {
               ))}
 
               {addingTo === 'lost' ? (
-                <div className="bg-base-100 rounded-xl p-3 border border-amber-500/30 animate-in zoom-in-95 duration-200 shadow-lg">
+                <div className="bg-base-100 rounded-xl p-3 border border-amber-500/30 shadow-lg">
                   <h3 className="text-[10px] font-bold text-amber-500 uppercase tracking-wider mb-2">Nueva Etapa Perdida</h3>
                   <div className="space-y-2">
                     <div>
