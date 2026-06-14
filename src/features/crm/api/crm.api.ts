@@ -19,6 +19,16 @@ import type {
   UpdateCustomFieldInput,
 } from './types';
 
+export type {
+  CreateContactInput,
+  UpdateContactInput,
+  CreateActivityInput,
+  CreateTagInput,
+  UpdateTagInput,
+  CreateCustomFieldInput,
+  UpdateCustomFieldInput,
+};
+
 const buildQS = (q: Record<string, unknown>): string => {
   const sp = new URLSearchParams();
   for (const [k, v] of Object.entries(q)) {

@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Bot, Globe, MessageSquare, Settings, Send, Loader2, Plus, X, HelpCircle } from 'lucide-react';
 import { aiApi, ChatbotConfig } from '@features/chatbot/api/aiApi';
 

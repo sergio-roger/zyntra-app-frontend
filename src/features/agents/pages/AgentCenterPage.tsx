@@ -154,7 +154,7 @@ export const AgentCenterPage: React.FC = () => {
                         {task.type.replace('_', ' ')}
                       </h3>
                       <p className="text-base font-medium truncate max-w-md">
-                        {task.input.topic || 'Análisis de datos'}
+                        {(task.input.topic as string) || 'Análisis de datos'}
                       </p>
                     </div>
                   </div>
@@ -225,7 +225,7 @@ export const AgentCenterPage: React.FC = () => {
           <div className="modal-box max-w-4xl max-h-[80vh]">
             <div className="flex justify-between items-start mb-6">
               <div>
-                <h3 className="font-bold text-2xl">{selectedTask.input.topic}</h3>
+                <h3 className="font-bold text-2xl">{(selectedTask.input.topic as string) || 'Resultado de la Tarea'}</h3>
                 <p className="text-sm opacity-60">Resultado del Agente de {selectedTask.type}</p>
               </div>
               <button onClick={() => setSelectedTask(null)} className="btn btn-sm btn-circle btn-ghost text-xl">✕</button>
@@ -233,7 +233,9 @@ export const AgentCenterPage: React.FC = () => {
             
             <div className="prose max-w-none bg-base-200/50 p-6 rounded-xl border border-base-300 overflow-auto">
               <pre className="whitespace-pre-wrap font-sans text-base leading-relaxed">
-                {selectedTask.output || 'No hay resultado disponible.'}
+                {typeof selectedTask.output === 'string'
+                  ? selectedTask.output
+                  : (selectedTask.output?.output as string) || JSON.stringify(selectedTask.output, null, 2) || 'No hay resultado disponible.'}
               </pre>
             </div>
 

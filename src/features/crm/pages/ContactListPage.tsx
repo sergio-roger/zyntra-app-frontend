@@ -10,7 +10,7 @@ import { ContactFormSidebar } from '@crm/components/ContactFormSidebar';
 import { ContactImportModal } from '@crm/components/ContactImportModal';
 import { Pagination } from '@crm/components/Pagination';
 import { ConfirmModal } from '@shared/components/ConfirmModal';
-import type { Contact, ContactSource } from '@crm/types';
+import type { Contact, ContactSource, ContactStage } from '@crm/types';
 import api from '@shared/api/axios';
 
 interface LifecycleStage {
@@ -22,7 +22,7 @@ interface LifecycleStage {
 
 export const ContactListPage: React.FC = () => {
   const [search, setSearch] = useState('');
-  const [stage, setStage] = useState<string>('');
+  const [stage, setStage] = useState<ContactStage | ''>('');
   const [source, setSource] = useState<ContactSource | ''>('');
   const [page, setPage] = useState(1);
   const [stages, setStages] = useState<LifecycleStage[]>([]);
@@ -116,7 +116,7 @@ export const ContactListPage: React.FC = () => {
           setPage(1);
         }}
         onStageChange={(v) => {
-          setStage(v);
+          setStage(v as ContactStage);
           setPage(1);
         }}
         onSourceChange={(v) => {

@@ -1,6 +1,6 @@
 import { aiApi, Conversation, ConversationDetail } from '@features/chatbot/api/aiApi';
 import { Clock, Loader2, RefreshCw, User } from 'lucide-react';
-import { useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 
 export const ConversationsPage: React.FC = () => {
   const [conversations, setConversations] = useState<Conversation[]>([]);

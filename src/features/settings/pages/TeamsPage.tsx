@@ -160,14 +160,13 @@ export const TeamsPage: React.FC = () => {
       />
 
       <ConfirmModal
-        open={!!deletingTeamId}
+        isOpen={!!deletingTeamId}
         onClose={() => setDeletingTeamId(null)}
         onConfirm={handleDelete}
         title="Eliminar Equipo"
         description="¿Estás seguro de que deseas eliminar este equipo? Los usuarios asignados no serán eliminados, pero ya no pertenecerán a este grupo."
-        confirmLabel="Eliminar"
+        confirmText="Eliminar"
         variant="danger"
-        isLoading={deleteMutation.isPending}
       />
     </div>
   );
