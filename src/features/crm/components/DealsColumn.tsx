@@ -1,6 +1,6 @@
 import React from 'react';
 import { DealCard } from './DealCard';
-import type { Deal, DealStage } from '@crm/types';
+import { Deal, DealStage } from '@crm/types';
 import { DEAL_STAGE_LABELS } from '@crm/types';
 
 interface DealsColumnProps {

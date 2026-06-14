@@ -1,5 +1,5 @@
 import api from '@shared/api/axios';
-import type { LoginCredentials, RegisterData, User } from '@features/auth/types/auth.types';
+import { LoginCredentials, RegisterData, User } from '@features/auth/types/auth.types';
 
 export const authApi = {
   login: (credentials: LoginCredentials) =>

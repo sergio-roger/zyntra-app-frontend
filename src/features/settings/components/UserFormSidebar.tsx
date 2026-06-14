@@ -10,7 +10,7 @@ import {
 } from 'lucide-react';
 import { Input } from '@core/ui/Input';
 import { useCreateUser, useUpdateUser } from '@features/settings/hooks/useUsersTeams';
-import type { CrmUser, UserRole } from '@features/settings/types';
+import { CrmUser, UserRole } from '@features/settings/types';
 
 interface UserFormSidebarProps {
   open: boolean;

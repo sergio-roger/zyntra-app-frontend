@@ -3,7 +3,7 @@ import { X, Loader2, Briefcase, DollarSign, Calendar, ArrowRightCircle } from 'l
 import { useConvertToDeal } from '@crm/hooks/useLeads';
 import { Input } from '@core/ui/Input';
 import { Textarea } from '@core/ui/Textarea';
-import type { Contact, DealStage, ConvertToDealInput } from '@crm/types';
+import { Contact, DealStage, ConvertToDealInput } from '@crm/types';
 import { DEAL_STAGES, DEAL_STAGE_LABELS } from '@crm/types';
 
 interface ConvertToDealSidebarProps {

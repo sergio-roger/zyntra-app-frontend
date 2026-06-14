@@ -14,7 +14,7 @@ import { Input } from '@core/ui/Input';
 import { Textarea } from '@core/ui/Textarea';
 import { useCreateTask, useUpdateTask } from '@crm/hooks/useCrmTasks';
 import { useContactsList } from '@crm/hooks/useContacts';
-import type { CrmTask, TaskPriority } from '@crm/types';
+import { CrmTask, TaskPriority } from '@crm/types';
 
 interface TaskFormSidebarProps {
   open: boolean;

@@ -1,5 +1,5 @@
 import api from '@shared/api/axios';
-import type { Contact, ContactsListResponse, ConvertToDealInput, Deal } from '@crm/types';
+import { Contact, ContactsListResponse, ConvertToDealInput, Deal } from '@crm/types';
 
 const buildQS = (q: Record<string, unknown>): string => {
   const sp = new URLSearchParams();

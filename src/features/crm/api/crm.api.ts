@@ -1,5 +1,5 @@
 import api from '@shared/api/axios';
-import type {
+import {
   Contact,
   ContactActivity,
   ContactsListResponse,
@@ -9,7 +9,7 @@ import type {
   CustomField,
   ContactStage,
 } from '@crm/types';
-import type {
+import {
   CreateContactInput,
   UpdateContactInput,
   CreateActivityInput,

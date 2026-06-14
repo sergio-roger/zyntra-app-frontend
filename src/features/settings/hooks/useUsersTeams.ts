@@ -1,6 +1,6 @@
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import api from '@shared/api/axios';
-import type { CrmUser, Team, CreateUserInput, CreateTeamInput } from '../types';
+import { CrmUser, Team, CreateUserInput, CreateTeamInput } from '../types';
 
 // Users Hooks
 export function useUsersList() {

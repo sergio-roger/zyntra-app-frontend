@@ -10,7 +10,7 @@ import { ContactFormSidebar } from '@crm/components/ContactFormSidebar';
 import { ContactImportModal } from '@crm/components/ContactImportModal';
 import { Pagination } from '@crm/components/Pagination';
 import { ConfirmModal } from '@shared/components/ConfirmModal';
-import type { Contact, ContactSource, ContactStage } from '@crm/types';
+import { Contact, ContactSource, ContactStage } from '@crm/types';
 import api from '@shared/api/axios';
 
 interface LifecycleStage {

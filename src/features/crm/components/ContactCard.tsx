@@ -1,6 +1,6 @@
 import React from 'react';
 import { Calendar, Building2 } from 'lucide-react';
-import type { Contact } from '@crm/types';
+import { Contact } from '@crm/types';
 
 interface ContactCardProps {
   contact: Contact;

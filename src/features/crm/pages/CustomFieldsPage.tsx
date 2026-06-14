@@ -16,7 +16,7 @@ import { useCustomFields, useRemoveField } from '@crm/hooks/useCustomFields';
 import { CustomFieldFormSidebar } from '@crm/components/CustomFieldFormSidebar';
 import { ConfirmModal } from '@shared/components/ConfirmModal';
 import { EmptyState } from '@shared/components/EmptyState';
-import type { CustomField, CustomFieldType } from '@crm/types';
+import { CustomField, CustomFieldType } from '@crm/types';
 
 const FIELD_TYPE_ICONS: Record<CustomFieldType, any> = {
   text: Type,

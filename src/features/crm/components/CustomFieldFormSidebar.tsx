@@ -1,5 +1,5 @@
 import { useCreateField, useUpdateField } from '@crm/hooks/useCustomFields';
-import type { CustomField, CustomFieldType } from '@crm/types';
+import { CustomField, CustomFieldType } from '@crm/types';
 import {
   Check,
   Loader2,

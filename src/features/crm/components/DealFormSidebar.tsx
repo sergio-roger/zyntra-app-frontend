@@ -4,7 +4,7 @@ import { useCreateDeal, useUpdateDeal } from '@crm/hooks/useDeals';
 import { useContactsList } from '@crm/hooks/useContacts';
 import { Input } from '@core/ui/Input';
 import { Textarea } from '@core/ui/Textarea';
-import type { Deal, DealStage } from '@crm/types';
+import { Deal, DealStage } from '@crm/types';
 import { DEAL_STAGES, DEAL_STAGE_LABELS } from '@crm/types';
 
 interface DealFormSidebarProps {

@@ -13,7 +13,7 @@ import {
 import { useUsersList, useUpdateUser } from '@features/settings/hooks/useUsersTeams';
 import { UserFormSidebar } from '../components/UserFormSidebar';
 import { EmptyState } from '@shared/components/EmptyState';
-import type { CrmUser } from '@features/settings/types';
+import { CrmUser } from '@features/settings/types';
 
 export const UsersPage: React.FC = () => {
   const [sidebarOpen, setSidebarOpen] = useState(false);

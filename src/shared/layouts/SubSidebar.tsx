@@ -1,7 +1,7 @@
 import React from 'react';
 import { NavLink } from 'react-router-dom';
 import { X } from 'lucide-react';
-import type { NavModule } from './nav.config';
+import { NavModule } from './nav.config';
 
 interface SubSidebarProps {
   module: NavModule;

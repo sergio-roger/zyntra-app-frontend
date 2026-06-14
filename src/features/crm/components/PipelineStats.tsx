@@ -1,6 +1,6 @@
 import React from 'react';
 import { Users, DollarSign, Trophy, Target, Clock } from 'lucide-react';
-import type { Contact } from '@crm/types';
+import { Contact } from '@crm/types';
 
 interface PipelineStatsProps {
   kanbanData: Record<string, Contact[]>;

@@ -9,7 +9,7 @@ import {
 import { useLeadsList, useArchiveLead } from '@crm/hooks/useLeads';
 import { LeadsTable } from '@crm/components/LeadsTable';
 import { ConvertToDealSidebar } from '@crm/components/ConvertToDealSidebar';
-import type { Contact } from '@crm/types';
+import { Contact } from '@crm/types';
 
 export const InboxLeadsPage: React.FC = () => {
   const [search, setSearch] = useState('');

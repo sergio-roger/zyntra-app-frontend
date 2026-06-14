@@ -1,6 +1,6 @@
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { leadsApi, type ListLeadsQuery } from '@crm/api/leads.api';
-import type { ConvertToDealInput } from '@crm/types';
+import { ConvertToDealInput } from '@crm/types';
 
 export const leadsKeys = {
   all: ['leads'] as const,

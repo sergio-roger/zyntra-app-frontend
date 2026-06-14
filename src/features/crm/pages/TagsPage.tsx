@@ -12,7 +12,7 @@ import { useTags, useRemoveTag } from '@crm/hooks/useTags';
 import { TagFormSidebar } from '@crm/components/TagFormSidebar';
 import { ConfirmModal } from '@shared/components/ConfirmModal';
 import { EmptyState } from '@shared/components/EmptyState';
-import type { Tag } from '@crm/types';
+import { Tag } from '@crm/types';
 
 export const TagsPage: React.FC = () => {
   const { data: tags, isLoading, isError, error } = useTags();

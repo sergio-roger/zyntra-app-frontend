@@ -1,6 +1,6 @@
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { dealsApi } from '@crm/api/deals.api';
-import type { Deal, ListDealsQuery, DealStage } from '@crm/types';
+import { Deal, ListDealsQuery, DealStage } from '@crm/types';
 
 export const dealsKeys = {
   all: ['deals'] as const,

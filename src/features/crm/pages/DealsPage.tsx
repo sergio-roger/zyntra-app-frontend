@@ -3,7 +3,7 @@ import { Loader2, AlertCircle, Plus, Search, Filter, TrendingUp } from 'lucide-r
 import { useDealsKanban } from '@crm/hooks/useDeals';
 import { DealsKanban } from '@crm/components/DealsKanban';
 import { DealFormSidebar } from '@crm/components/DealFormSidebar';
-import type { Deal } from '@crm/types';
+import { Deal } from '@crm/types';
 
 export const DealsPage: React.FC = () => {
   const { data, isLoading, isError, error } = useDealsKanban();

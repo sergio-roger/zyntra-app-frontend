@@ -1,5 +1,5 @@
 import React from 'react';
-import type { NavModule } from '../../../shared/layouts/nav.config';
+import { NavModule } from '../../../shared/layouts/nav.config';
 
 interface RailLinkProps {
   module: NavModule;

@@ -1,5 +1,5 @@
 import { AxiosError } from 'axios';
-import type { ApiErrorResponse, ApiError } from '@features/auth/types/auth.types';
+import { ApiErrorResponse, ApiError } from '@features/auth/types/auth.types';
 
 /**
  * Extracts structured errors from the API error response.

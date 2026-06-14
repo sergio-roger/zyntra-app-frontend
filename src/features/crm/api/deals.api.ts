@@ -1,5 +1,5 @@
 import api from '@shared/api/axios';
-import type { Deal, ListDealsQuery, DealStage } from '@crm/types';
+import { Deal, ListDealsQuery, DealStage } from '@crm/types';
 
 const buildQS = (q: Record<string, unknown>): string => {
   const sp = new URLSearchParams();
