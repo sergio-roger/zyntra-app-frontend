@@ -1,5 +1,5 @@
 export const ERROR_CODE_MAP: Record<string, string> = {
-  E0001: 'Correo o contraseña incorrectos. Por favor, verifica tus datos.', // Unauthorized / Invalid credentials
+  E0001: 'Credenciales inválidas. Por favor, inténtalo de nuevo.', // Unauthorized / Invalid credentials
   E0002: 'Los datos ingresados ya existen o están en conflicto.', // Conflict (e.g., email already registered)
   E0003: 'Los datos enviados son inválidos. Revisa el formulario.', // Bad Request
   E0004: 'Pago requerido o suscripción expirada.', // Payment Required

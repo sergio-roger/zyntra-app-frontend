@@ -41,7 +41,7 @@ export const LoginForm: React.FC<LoginFormProps> = ({ onSuccess }) => {
       for (const error of apiErrors) {
         toastManager.add({
           title: 'Error de autenticación',
-          description: `[${error.code}] ${error.description}`,
+          description: error.description,
           type: 'error',
         });
       }
