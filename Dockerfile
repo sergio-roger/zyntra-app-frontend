@@ -28,5 +28,8 @@ RUN echo 'server { \
         try_files $uri $uri/ /index.html; \
     } \
 }' > /etc/nginx/conf.d/default.conf
+
 EXPOSE 80
-CMD ["nginx", "-g", "daemon off;"]
+
+# Al arrancar, genera dinámicamente el archivo config.js basándose en la variable de entorno VITE_API_URL
+CMD ["/bin/sh", "-c", "echo \"window.env = { VITE_API_URL: '${VITE_API_URL:-/api}' };\" > /usr/share/nginx/html/config.js && nginx -g 'daemon off;'"]
