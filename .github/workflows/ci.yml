@@ -74,3 +74,5 @@ jobs:
           target: production
           push: true
           tags: ${{ steps.meta.outputs.tags }}
+          build-args: |
+            VITE_API_URL=${{ secrets.VITE_API_URL }}

@@ -9,10 +9,12 @@ CMD ["npm", "run", "start:dev", "--", "--host"]
 
 # Stage 2: Compilación (Builder para producción)
 FROM node:20-alpine AS builder
+ARG VITE_API_URL
 WORKDIR /usr/src/app
 COPY package*.json ./
 RUN npm ci
 COPY . .
+RUN echo "VITE_API_URL=${VITE_API_URL}" > .env
 RUN npm run build
 
 # Stage 3: Producción (Servidor ligero con Nginx)
@@ -31,5 +33,4 @@ RUN echo 'server { \
 
 EXPOSE 80
 
-# Al arrancar, genera dinámicamente el archivo config.js basándose en la variable de entorno VITE_API_URL
-CMD ["/bin/sh", "-c", "echo \"window.env = { VITE_API_URL: '${VITE_API_URL:-/api}' };\" > /usr/share/nginx/html/config.js && nginx -g 'daemon off;'"]
+CMD ["nginx", "-g", "daemon off;"]
