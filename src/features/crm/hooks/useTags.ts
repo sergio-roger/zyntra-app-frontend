@@ -1,6 +1,5 @@
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { crmApi } from '@crm/api/crm.api';
-import type { Tag } from '@crm/types';
 
 export const tagsKeys = {
   all: ['crm', 'tags'] as const,

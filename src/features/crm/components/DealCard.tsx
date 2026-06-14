@@ -1,7 +1,6 @@
 import React from 'react';
 import { Calendar, User, Building2, TrendingUp } from 'lucide-react';
 import type { Deal } from '@crm/types';
-import { DEAL_STAGE_LABELS } from '@crm/types';
 
 interface DealCardProps {
   deal: Deal;

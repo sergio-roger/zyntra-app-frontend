@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Loader2, AlertCircle, Plus, ChevronDown, Search, Filter, TrendingUp } from 'lucide-react';
+import { Loader2, AlertCircle, Plus, Search, Filter, TrendingUp } from 'lucide-react';
 import { useDealsKanban } from '@crm/hooks/useDeals';
 import { DealsKanban } from '@crm/components/DealsKanban';
 import { DealFormSidebar } from '@crm/components/DealFormSidebar';

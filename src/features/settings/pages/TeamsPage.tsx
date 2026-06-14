@@ -8,7 +8,7 @@ import {
   Trash2,
   MessageCircle
 } from 'lucide-react';
-import { useTeamsList, useUpdateTeam, useDeleteTeam } from '@features/settings/hooks/useUsersTeams';
+import { useTeamsList, useDeleteTeam } from '@features/settings/hooks/useUsersTeams';
 import { TeamFormSidebar } from '../components/TeamFormSidebar';
 import { ConfirmModal } from '@shared/components/ConfirmModal';
 import { EmptyState } from '@shared/components/EmptyState';

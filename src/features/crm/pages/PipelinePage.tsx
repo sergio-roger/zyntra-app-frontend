@@ -1,5 +1,5 @@
 import React from 'react';
-import { Loader2, AlertCircle, Plus, ChevronDown, Calendar, Search } from 'lucide-react';
+import { Loader2, AlertCircle, Plus, ChevronDown, Search } from 'lucide-react';
 import { useKanban } from '@crm/hooks/useContacts';
 import { PipelineKanban } from '@crm/components/PipelineKanban';
 import { PipelineStats } from '@crm/components/PipelineStats';

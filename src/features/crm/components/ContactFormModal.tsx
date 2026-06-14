@@ -75,10 +75,7 @@ export const ContactFormModal: React.FC<ContactFormModalProps> = ({
               tags: [],
             },
       );
-      if (serverError !== '') {
-        const timer = setTimeout(() => setServerError(''), 0);
-        return () => clearTimeout(timer);
-      }
+      setServerError('');
     }
   }, [contact, open, reset]);
 

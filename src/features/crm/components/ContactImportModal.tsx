@@ -6,8 +6,7 @@ import {
   FileSpreadsheet, 
   ArrowRight, 
   Loader2, 
-  AlertCircle,
-  Table as TableIcon
+  AlertCircle
 } from 'lucide-react';
 import api from '@shared/api/axios';
 import { useQueryClient } from '@tanstack/react-query';
@@ -28,11 +27,9 @@ const CRM_FIELDS = [
 
 export const ContactImportModal: React.FC<ContactImportModalProps> = ({ open, onClose }) => {
   const [step, setStep] = useState<Step>('upload');
-  const [file, setFile] = useState<File | null>(null);
   const [headers, setHeaders] = useState<string[]>([]);
   const [rows, setRows] = useState<string[][]>([]);
   const [mapping, setMapping] = useState<Record<string, string>>({});
-  const [isProcessing, setIsProcessing] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [stats, setStats] = useState({ success: 0, failed: 0 });
   
@@ -43,12 +40,10 @@ export const ContactImportModal: React.FC<ContactImportModalProps> = ({ open, on
 
   const reset = () => {
     setStep('upload');
-    setFile(null);
     setHeaders([]);
     setRows([]);
     setMapping({});
     setError(null);
-    setIsProcessing(false);
   };
 
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -60,7 +55,6 @@ export const ContactImportModal: React.FC<ContactImportModalProps> = ({ open, on
       return;
     }
 
-    setFile(selectedFile);
     processFile(selectedFile);
   };
 
@@ -122,7 +116,6 @@ export const ContactImportModal: React.FC<ContactImportModalProps> = ({ open, on
       return;
     }
 
-    setIsProcessing(true);
     setStep('importing');
 
     try {
@@ -143,7 +136,7 @@ export const ContactImportModal: React.FC<ContactImportModalProps> = ({ open, on
       setError(err.response?.data?.message || 'Ocurrió un error durante la importación.');
       setStep('mapping');
     } finally {
-      setIsProcessing(false);
+      // Import process completed
     }
   };
 

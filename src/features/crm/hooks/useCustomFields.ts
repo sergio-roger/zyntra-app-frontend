@@ -1,6 +1,5 @@
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { crmApi } from '@crm/api/crm.api';
-import type { CustomField } from '@crm/types';
 
 export const fieldsKeys = {
   all: ['crm', 'fields'] as const,
