@@ -1,0 +1,117 @@
+name: Frontend CI/CD
+
+on:
+  push:
+    branches: [ main, develop ]
+  pull_request:
+    branches: [ main, develop ]
+
+jobs:
+  test-and-lint:
+    runs-on: ubuntu-22.04
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Run linter
+        run: npm run lint
+
+      - name: Build project (production build check)
+        run: npm run build
+
+  build-and-push-hub-prod:
+    needs: test-and-lint
+    if: gitea.event_name == 'push' && gitea.ref_name == 'main'
+    runs-on: ubuntu-22.04
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v3
+
+      - name: Log in to Harbor
+        uses: docker/login-action@v3
+        with:
+          registry: ${{ secrets.HARBOR_URL }}
+          username: ${{ secrets.HARBOR_USER }}
+          password: ${{ secrets.HARBOR_PASS }}
+
+      - name: Get short SHA
+        id: vars
+        run: echo "sha_short=$(git rev-parse --short HEAD)" >> $GITEA_OUTPUT
+
+      - name: Determine tags
+        id: meta
+        run: |
+          SHA=${{ steps.vars.outputs.sha_short }}
+          REGISTRY=${{ secrets.HARBOR_URL }}
+          PROJECT=zyntra
+          TAGS="$REGISTRY/$PROJECT/marketing-frontend:latest,$REGISTRY/$PROJECT/marketing-frontend:prod-$SHA"
+          echo "tags=$TAGS" >> $GITEA_OUTPUT
+
+      - name: Build and push Docker image
+        uses: docker/build-push-action@v6
+        with:
+          context: .
+          file: ./Dockerfile
+          target: production
+          push: true
+          tags: ${{ steps.meta.outputs.tags }}
+          provenance: false
+          build-args: |
+            VITE_API_URL=${{ secrets.VITE_API_URL }}
+
+      - name: Trigger Dokploy Deployment
+        run: |
+          curl -X POST "${{ secrets.DOKPLOY_WEBHOOK_URL }}"
+
+  build-and-push-hub-dev:
+    needs: test-and-lint
+    if: gitea.event_name == 'push' && gitea.ref_name == 'develop'
+    runs-on: ubuntu-22.04
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v3
+
+      - name: Log in to Harbor
+        uses: docker/login-action@v3
+        with:
+          registry: ${{ secrets.HARBOR_URL }}
+          username: ${{ secrets.HARBOR_USER }}
+          password: ${{ secrets.HARBOR_PASS }}
+
+      - name: Get short SHA
+        id: vars
+        run: echo "sha_short=$(git rev-parse --short HEAD)" >> $GITEA_OUTPUT
+
+      - name: Determine tags
+        id: meta
+        run: |
+          SHA=${{ steps.vars.outputs.sha_short }}
+          REGISTRY=${{ secrets.HARBOR_URL }}
+          PROJECT=zyntra
+          TAGS="$REGISTRY/$PROJECT/marketing-frontend:dev-latest,$REGISTRY/$PROJECT/marketing-frontend:dev-$SHA"
+          echo "tags=$TAGS" >> $GITEA_OUTPUT
+
+      - name: Build and push Docker image
+        uses: docker/build-push-action@v6
+        with:
+          context: .
+          file: ./Dockerfile
+          target: production
+          push: true
+          tags: ${{ steps.meta.outputs.tags }}
+          provenance: false
+          build-args: |
+            VITE_API_URL=${{ secrets.VITE_API_URL }}
+
+      - name: Trigger Dokploy Deployment
+        run: |
+          curl -X POST "${{ secrets.DOKPLOY_WEBHOOK_URL }}"
