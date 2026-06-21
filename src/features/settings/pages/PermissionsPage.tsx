@@ -1,7 +1,7 @@
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Shield, ShieldAlert, ShieldCheck, ArrowRight, Loader2 } from 'lucide-react';
-import { useMenusList, useRolePermissions } from '../hooks/usePermissions';
+import { useMenusList, useRolePermissions } from '@features/settings/hooks/usePermissions';
 
 export const PermissionsPage: React.FC = () => {
   const navigate = useNavigate();

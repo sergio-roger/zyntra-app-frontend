@@ -1,8 +1,8 @@
-import React from 'react';
-import { useParams, useNavigate } from 'react-router-dom';
+import { PermissionMatrix } from '@features/settings/components/PermissionMatrix';
+import { SYSTEM_ROLES } from '@features/settings/types';
 import { ArrowLeft, Shield } from 'lucide-react';
-import { PermissionMatrix } from '../components/PermissionMatrix';
-import { SYSTEM_ROLES } from '../types';
+import React from 'react';
+import { useNavigate, useParams } from 'react-router-dom';
 
 export const RolePermissionsPage: React.FC = () => {
   const { role } = useParams<{ role: string }>();
