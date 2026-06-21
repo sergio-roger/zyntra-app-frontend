@@ -17,7 +17,7 @@ export type User = {
   id: string;
   name: string;
   email: string;
-  role: 'admin' | 'manager' | 'agent' | null;
+  role: 'admin' | 'manager' | 'agent' | 'superAdmin' | null;
   plan: Plan;
   plan_status: string;
 };

@@ -56,6 +56,7 @@ export const UsersPage: React.FC = () => {
       case 'admin': return 'Administrador';
       case 'manager': return 'Gerente';
       case 'agent': return 'Agente';
+      case 'superAdmin': return 'Super Admin';
       default: return role;
     }
   };

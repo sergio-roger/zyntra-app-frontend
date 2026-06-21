@@ -4,7 +4,7 @@ import { useAuthStore } from '@features/auth/store/authStore';
 
 export const PermissionGuard: React.FC<{ menuKey: string; children: React.ReactNode }> = ({ menuKey, children }) => {
   const { allowedMenus } = useAuthStore();
-  const isAdmin = useAuthStore((s) => s.user?.role === 'admin');
+  const isAdmin = useAuthStore((s) => s.user?.role === 'admin' || s.user?.role === 'superAdmin');
 
   if (isAdmin) return <>{children}</>;
 

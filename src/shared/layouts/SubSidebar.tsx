@@ -82,7 +82,7 @@ const SubNavLink: React.FC<SubNavLinkProps> = ({ item, onClose }) => {
 
 export const SubSidebar: React.FC<SubSidebarProps> = ({ module, isOpen, onClose }) => {
   const { allowedMenus, user } = useAuthStore();
-  const isAdmin = user?.role === 'admin';
+  const isAdmin = user?.role === 'admin' || user?.role === 'superAdmin';
 
   const dbModuleKey = module.key === 'agents' ? 'agents_ia' : module.key;
   const currentModuleAllowed = allowedMenus?.find((m) => m.key === dbModuleKey);
