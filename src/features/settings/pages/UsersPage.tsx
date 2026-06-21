@@ -14,10 +14,12 @@ import { useUsersList, useUpdateUser } from '@features/settings/hooks/useUsersTe
 import { UserFormSidebar } from '../components/UserFormSidebar';
 import { EmptyState } from '@shared/components/EmptyState';
 import { CrmUser } from '@features/settings/types';
+import { useAuthStore } from '@features/auth/store/authStore';
 
 export const UsersPage: React.FC = () => {
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const [editingUser, setEditingUser] = useState<CrmUser | null>(null);
+  const currentUser = useAuthStore(s => s.user);
 
   const { data: users = [], isLoading, isError, error } = useUsersList();
   const updateMutation = useUpdateUser();
@@ -36,6 +38,10 @@ export const UsersPage: React.FC = () => {
     await updateMutation.mutateAsync({ id: user.id, is_active: !user.is_active });
   };
 
+  const limit = currentUser?.plan?.user_limit ?? 999999;
+  const activeUsersCount = users.filter(u => u.is_active).length;
+  const isLimitReached = activeUsersCount >= limit && limit !== 999999;
+
   const getRoleLabel = (role: string) => {
     switch (role) {
       case 'admin': return 'Administrador';
@@ -52,13 +58,32 @@ export const UsersPage: React.FC = () => {
           <h2 className="text-xl font-bold text-white tracking-tight">Usuarios y Colaboradores</h2>
           <p className="text-sm text-slate-400">Gestiona quién tiene acceso a tu plataforma y sus permisos.</p>
         </div>
-        <button
-          onClick={openCreate}
-          className="inline-flex items-center gap-2 rounded-xl bg-primary px-5 py-2.5 text-sm font-bold text-white shadow-lg shadow-primary/20 transition-all hover:-translate-y-px hover:shadow-xl active:scale-95"
-        >
-          <Plus size={18} /> Añadir usuario
-        </button>
+        <div className="flex items-center gap-4">
+          {limit !== 999999 && (
+            <div className="text-sm font-medium text-slate-400">
+              <span className={isLimitReached ? 'text-rose-400 font-bold' : 'text-slate-300'}>{activeUsersCount}</span> / {limit} usuarios del plan
+            </div>
+          )}
+          <button
+            onClick={openCreate}
+            disabled={isLimitReached}
+            className={`inline-flex items-center gap-2 rounded-xl px-5 py-2.5 text-sm font-bold shadow-lg transition-all ${
+              isLimitReached
+                ? 'bg-slate-800 text-slate-500 cursor-not-allowed shadow-none'
+                : 'bg-primary text-white shadow-primary/20 hover:-translate-y-px hover:shadow-xl active:scale-95'
+            }`}
+          >
+            <Plus size={18} /> Añadir usuario
+          </button>
+        </div>
       </div>
+
+      {isLimitReached && (
+        <div className="flex items-center gap-3 rounded-2xl border border-warning/20 bg-warning/10 p-4 text-sm text-warning-content">
+          <AlertCircle size={20} className="text-warning" />
+          <p>Has alcanzado el límite de {limit} usuarios activos permitidos en tu plan. Actualiza tu suscripción para añadir más.</p>
+        </div>
+      )}
 
       {isLoading && (
         <div className="flex flex-col items-center justify-center py-32 space-y-4">

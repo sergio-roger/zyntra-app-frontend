@@ -7,7 +7,6 @@ UserRound,
   MessageSquare,
   Sparkles,
   BarChart3,
-  CreditCard,
   Settings,
   TrendingUp,
   Search,
@@ -156,15 +155,6 @@ export const NAV_MODULES: NavModule[] = [
     ],
   },
   {
-    key: 'billing',
-    label: 'Facturación',
-    icon: CreditCard,
-    match: '/billing',
-    to: '/billing',
-    description: 'Planes y pagos.',
-    color: 'text-primary',
-  },
-  {
     key: 'settings',
     label: 'Ajustes',
     icon: Settings,
@@ -190,6 +180,7 @@ export const getMenuKeyFromPath = (path: string): string => {
   const p = path.replace(/\/$/, '');
   
   if (p === '/dashboard') return 'dashboard';
+  if (p === '/dashboard/home') return 'dashboard_home';
   if (p === '/crm') return 'crm';
   if (p === '/crm/contacts') return 'crm_contacts';
   if (p === '/crm/leads') return 'crm_leads';

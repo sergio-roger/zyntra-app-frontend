@@ -1,24 +1,10 @@
 import { useAuth } from '@features/auth/hooks/useAuth';
 import { useAuthStore } from '@features/auth/store/authStore';
-import {
-  Code2,
-  Crown,
-  HelpCircle,
-  LogOut,
-  PanelLeft,
-  PanelLeftClose,
-  Settings,
-  Zap,
-} from 'lucide-react';
+import { Code2, CreditCard, HelpCircle, LogOut, Settings, Zap } from 'lucide-react';
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
 
-interface UserMenuProps {
-  isSidebarOpen: boolean;
-  onToggleSidebar: (open: boolean) => void;
-}
-
-export const UserMenu: React.FC<UserMenuProps> = ({ isSidebarOpen, onToggleSidebar }) => {
+export const UserMenu: React.FC = () => {
   const user = useAuthStore((s) => s.user);
   const { logout } = useAuth();
   const navigate = useNavigate();
@@ -26,15 +12,6 @@ export const UserMenu: React.FC<UserMenuProps> = ({ isSidebarOpen, onToggleSideb
 
   return (
     <div className="mt-auto flex flex-col items-center gap-2 pt-3">
-      {/* Sidebar Toggle Button */}
-      <button
-        onClick={() => onToggleSidebar(!isSidebarOpen)}
-        className="btn btn-ghost btn-xs btn-circle text-base-content/40 hover:text-primary mb-2"
-      >
-        {isSidebarOpen ? <PanelLeftClose size={14} /> : <PanelLeft size={14} />}
-      </button>
-
-      <div className="h-px w-8 bg-base-content/10" aria-hidden />
 
       {/* Avatar Dropdown */}
       <div className="dropdown dropdown-hover dropdown-right dropdown-end group/avatar">
@@ -58,7 +35,7 @@ export const UserMenu: React.FC<UserMenuProps> = ({ isSidebarOpen, onToggleSideb
               </div>
             )}
           </div>
-          <li><a className="text-sm py-2" onClick={() => navigate('/billing')}><Crown size={14} className="text-amber-500" /> Gestionar plan</a></li>
+          <li><a className="text-sm py-2" onClick={() => navigate('/billing')}><CreditCard size={14} className="text-primary" /> Facturación</a></li>
           <li><a className="text-sm py-2" onClick={() => navigate('/settings')}><Settings size={14} /> Settings</a></li>
           <li><a className="text-sm py-2"><Code2 size={14} /> Developers</a></li>
           <li><a className="text-sm py-2"><HelpCircle size={14} /> Help</a></li>

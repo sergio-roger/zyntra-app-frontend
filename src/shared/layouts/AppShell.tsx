@@ -3,7 +3,7 @@ import { Breadcrumbs } from '@shared/components/Breadcrumbs';
 import { SideRail } from '@shared/layouts/SideRail';
 import { SubSidebar } from '@shared/layouts/SubSidebar';
 import { findActiveModule, type NavModule } from '@shared/layouts/nav.config';
-import { Bell, ChevronRight, LayoutDashboard, Menu, Search } from 'lucide-react';
+import { Bell, LayoutDashboard, Menu, Search, Zap } from 'lucide-react';
 import React, { useEffect, useState } from 'react';
 import { Outlet, useLocation } from 'react-router-dom';
 
@@ -21,7 +21,7 @@ export const AppShell: React.FC = () => {
   const { user } = useAuthStore();
   const { pathname } = useLocation();
   const [isMobileRailOpen, setIsMobileRailOpen] = useState(false);
-  const [isSubSidebarOpen, setIsSubSidebarOpen] = useState(true);
+  const [isSubSidebarOpen, setIsSubSidebarOpen] = useState(false);
   const activeModule = findActiveModule(pathname);
 
   useEffect(() => {
@@ -87,7 +87,7 @@ export const AppShell: React.FC = () => {
                 onClick={() => setIsSubSidebarOpen(true)}
                 className="btn btn-ghost btn-sm btn-circle hidden md:flex"
               >
-                <ChevronRight size={20} />
+                <Menu size={20} />
               </button>
             )}
             <Breadcrumbs pathname={pathname} />
@@ -95,9 +95,10 @@ export const AppShell: React.FC = () => {
 
           <div className="ml-auto flex items-center gap-2">
             {user?.plan && (
-              <div className="hidden sm:flex items-center gap-1.5 bg-base-200/50 border border-base-content/10 px-3 py-1.5 rounded-lg text-xs">
-                <span className="text-base-content/50 font-bold uppercase tracking-wider text-[10px]">Plan:</span>
-                <span className="text-primary font-extrabold">{user.plan.name}</span>
+              <div className="flex items-center gap-1.5 bg-gradient-to-r from-primary/10 via-secondary/5 to-transparent border border-primary/20 px-2.5 py-1 rounded-full text-xs font-medium shadow-sm">
+                <Zap size={11} className="text-primary animate-pulse" />
+                <span className="text-base-content/60 font-semibold text-[10px] hidden sm:inline">Plan:</span>
+                <span className="text-primary font-extrabold text-[11px]">{user.plan.name}</span>
               </div>
             )}
             {/* Search */}

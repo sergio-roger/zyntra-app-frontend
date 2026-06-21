@@ -11,6 +11,7 @@ import {
 import { Input } from '@core/ui/Input';
 import { useCreateUser, useUpdateUser } from '@features/settings/hooks/useUsersTeams';
 import { CrmUser, UserRole } from '@features/settings/types';
+import { useAuthStore } from '@features/auth/store/authStore';
 
 interface UserFormSidebarProps {
   open: boolean;
@@ -29,6 +30,9 @@ export const UserFormSidebar: React.FC<UserFormSidebarProps> = ({ open, user, on
   const createMutation = useCreateUser();
   const updateMutation = useUpdateUser();
   const isSaving = createMutation.isPending || updateMutation.isPending;
+
+  const currentUser = useAuthStore(s => s.user);
+  const planName = currentUser?.plan?.name || 'Impulse Pro';
 
   useEffect(() => {
     if (user) {
@@ -114,8 +118,10 @@ export const UserFormSidebar: React.FC<UserFormSidebarProps> = ({ open, user, on
                 className="w-full bg-slate-950/50 border border-white/10 rounded-xl py-2.5 px-4 text-sm text-white focus:outline-none focus:border-primary/50 transition-all appearance-none cursor-pointer"
               >
                 <option value="admin">Administrador (Acceso Total)</option>
-                <option value="manager">Gerente (Gestión de CRM y Agentes)</option>
-                <option value="agent">Agente (Operación Diaria)</option>
+                {planName !== 'BrandStart' && (
+                  <option value="manager">Gerente (Gestión de CRM y Agentes)</option>
+                )}
+                <option value="agent">{planName === 'BrandStart' ? 'Usuario Estándar (Operación Diaria)' : 'Agente (Operación Diaria)'}</option>
               </select>
             </div>
 
