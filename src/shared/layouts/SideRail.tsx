@@ -15,7 +15,7 @@ export const SideRail: React.FC<SideRailProps> = ({
   onToggleSidebar 
 }) => {
   return (
-    <aside className="relative flex w-[72px] shrink-0 flex-col items-center border-r border-base-content/5 bg-base-300/80 py-3 z-50 overflow-visible">
+    <aside className="relative hidden md:flex w-[72px] shrink-0 flex-col items-center border-r border-base-content/5 bg-base-300/80 py-3 z-50 overflow-visible">
       <BrandLogo isSidebarOpen={isSidebarOpen} onToggle={onToggleSidebar} />
       
       <RailNavigation 

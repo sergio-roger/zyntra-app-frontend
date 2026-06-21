@@ -1,13 +1,14 @@
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
-import { 
-  PanelLeft, 
-  PanelLeftClose, 
-  Crown, 
-  Settings, 
-  Code2, 
-  HelpCircle, 
-  LogOut 
+import {
+  PanelLeft,
+  PanelLeftClose,
+  Crown,
+  Settings,
+  Code2,
+  HelpCircle,
+  LogOut,
+  Zap,
 } from 'lucide-react';
 import { useAuthStore } from '@features/auth/store/authStore';
 import { useAuth } from '@features/auth/hooks/useAuth';
@@ -45,8 +46,19 @@ export const UserMenu: React.FC<UserMenuProps> = ({ isSidebarOpen, onToggleSideb
           <div className="px-4 py-3 border-b border-base-300 mb-2">
             <p className="text-xs font-bold text-base-content/90 truncate">{user?.name}</p>
             <p className="text-[10px] text-base-content/50 truncate">{user?.email}</p>
+            {user?.plan && (
+              <div className="mt-2 flex items-center gap-1.5">
+                <span className={`inline-flex items-center gap-1 rounded-full px-2 py-0.5 text-[10px] font-semibold ${user.plan_status === 'active' ? 'bg-primary/15 text-primary' : 'bg-base-content/10 text-base-content/50'}`}>
+                  <Zap size={9} />
+                  {user.plan.name}
+                </span>
+                {user.plan_status !== 'active' && (
+                  <span className="text-[10px] text-warning">inactivo</span>
+                )}
+              </div>
+            )}
           </div>
-          <li><a className="text-sm py-2" onClick={() => navigate('/billing')}><Crown size={14} className="text-amber-500" /> Upgrade Plan</a></li>
+          <li><a className="text-sm py-2" onClick={() => navigate('/billing')}><Crown size={14} className="text-amber-500" /> Gestionar plan</a></li>
           <li><a className="text-sm py-2" onClick={() => navigate('/settings')}><Settings size={14} /> Settings</a></li>
           <li><a className="text-sm py-2"><Code2 size={14} /> Developers</a></li>
           <li><a className="text-sm py-2"><HelpCircle size={14} /> Help</a></li>

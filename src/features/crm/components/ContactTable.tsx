@@ -41,13 +41,13 @@ export const ContactTable: React.FC<ContactTableProps> = ({
         <thead className="border-b border-white/10 bg-slate-900/80 text-xs text-slate-400 uppercase">
           <tr>
             <th className="px-4 py-3">Nombre</th>
-            <th className="px-4 py-3">Email</th>
-            <th className="px-4 py-3">Teléfono</th>
-            <th className="px-4 py-3">Stage</th>
-            <th className="px-4 py-3">Ciclo de Vida</th>
-            <th className="px-4 py-3">Origen</th>
-            <th className="px-4 py-3">Etiquetas</th>
-            <th className="px-4 py-3">Último contacto</th>
+            <th className="hidden md:table-cell px-4 py-3">Email</th>
+            <th className="hidden sm:table-cell px-4 py-3">Teléfono</th>
+            <th className="px-4 py-3">Etapa</th>
+            <th className="hidden sm:table-cell px-4 py-3">Ciclo de vida</th>
+            <th className="hidden md:table-cell px-4 py-3">Origen</th>
+            <th className="hidden sm:table-cell px-4 py-3">Etiquetas</th>
+            <th className="hidden md:table-cell px-4 py-3">Último contacto</th>
             <th className="px-4 py-3 text-right">Acciones</th>
           </tr>
         </thead>
@@ -65,19 +65,19 @@ export const ContactTable: React.FC<ContactTableProps> = ({
                   {c.name}
                 </button>
               </td>
-              <td className="px-4 py-3 text-slate-300">{c.email ?? '—'}</td>
-              <td className="px-4 py-3 text-slate-300">{c.phone ?? '—'}</td>
+              <td className="hidden md:table-cell px-4 py-3 text-slate-300">{c.email ?? '—'}</td>
+              <td className="hidden sm:table-cell px-4 py-3 text-slate-300">{c.phone ?? '—'}</td>
               <td className="px-4 py-3">
                 <StageBadge stage={c.stage} />
               </td>
-              <td className="px-4 py-3">
+              <td className="hidden sm:table-cell px-4 py-3">
                 {c.lifecycle_stage ? (
-                  <span 
+                  <span
                     className="inline-flex items-center px-2 py-0.5 rounded text-[10px] font-medium"
-                    style={{ 
-                      backgroundColor: `${c.lifecycle_stage.color}20`, 
+                    style={{
+                      backgroundColor: `${c.lifecycle_stage.color}20`,
                       color: c.lifecycle_stage.color,
-                      border: `1px solid ${c.lifecycle_stage.color}40`
+                      border: `1px solid ${c.lifecycle_stage.color}40`,
                     }}
                   >
                     {c.lifecycle_stage.name}
@@ -86,14 +86,14 @@ export const ContactTable: React.FC<ContactTableProps> = ({
                   <span className="text-slate-600">—</span>
                 )}
               </td>
-              <td className="px-4 py-3">
+              <td className="hidden md:table-cell px-4 py-3">
                 <SourceBadge source={c.source} />
               </td>
-              <td className="px-4 py-3">
+              <td className="hidden sm:table-cell px-4 py-3">
                 <div className="flex flex-wrap gap-1 max-w-[150px]">
                   {c.tags && c.tags.length > 0 ? (
                     c.tags.map((tag: any) => (
-                      <span 
+                      <span
                         key={tag.id}
                         className="text-[10px] px-2 py-0.5 rounded-full text-white font-medium"
                         style={{ backgroundColor: tag.color }}
@@ -106,7 +106,7 @@ export const ContactTable: React.FC<ContactTableProps> = ({
                   )}
                 </div>
               </td>
-              <td className="px-4 py-3 text-slate-400">
+              <td className="hidden md:table-cell px-4 py-3 text-slate-400">
                 {formatDate(c.last_activity_at)}
               </td>
               <td className="px-4 py-3 text-right">

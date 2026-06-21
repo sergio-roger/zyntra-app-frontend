@@ -43,7 +43,7 @@ export const AuthLayout: React.FC<AuthLayoutProps> = ({
         <div className="space-y-8">
           <div>
             <h2 className="bg-gradient-to-r from-white via-indigo-100 to-violet-200 bg-clip-text text-4xl leading-tight font-bold text-transparent xl:text-5xl">
-              Marketing impulsado por IA, para tu negocio.
+              Marketing impulsado por IA para tu negocio.
             </h2>
             <p className="mt-4 text-lg text-slate-400">
               Una plataforma. Múltiples agentes. Resultados medibles.

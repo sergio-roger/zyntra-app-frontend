@@ -45,10 +45,7 @@ export const ContactListPage: React.FC = () => {
   }, []);
 
   useEffect(() => {
-    const timer = setTimeout(() => {
-      fetchStages();
-    }, 0);
-    return () => clearTimeout(timer);
+    fetchStages();
   }, [fetchStages]);
 
   const limit = 20;

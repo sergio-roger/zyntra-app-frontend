@@ -87,7 +87,7 @@ export const NAV_MODULES: NavModule[] = [
     color: 'text-secondary',
     children: [
       { to: '/agents/strategy', label: 'Estrategia', icon: TrendingUp, description: 'Optimización de marca.' },
-      { to: '/agents/content', label: 'Contenido', icon: MessageSquare, description: 'Creación de textos y copys.' },
+      { to: '/agents/content', label: 'Contenido', icon: MessageSquare, description: 'Creación de textos y contenidos.' },
       { to: '/agents/analysis', label: 'Análisis', icon: Search, description: 'Insights de negocio.' },
     ],
   },
@@ -170,11 +170,11 @@ export const NAV_MODULES: NavModule[] = [
     description: 'Configura tu cuenta y preferencias.',
     color: 'text-primary',
     children: [
+      { to: '/settings/permissions', label: 'Permisos', icon: ShieldCheck, description: 'Configura qué puede ver cada rol.' },
       { to: '/settings/users', label: 'Usuarios', icon: UserRound, description: 'Gestiona tu equipo y roles.' },
       { to: '/settings/teams', label: 'Equipo', icon: Users, description: 'Organiza usuarios en grupos.' },
       { to: '/settings/lifecycle', label: 'Ciclo de vida', icon: Sparkles, description: 'Etapas de tus contactos.' },
       { to: '/settings/channels', label: 'Canales', icon: Share2, description: 'Conecta tus redes sociales.' },
-      { to: '/settings/permissions', label: 'Permisos', icon: ShieldCheck, description: 'Configura qué puede ver cada rol.' },
     ],
   },
 ];

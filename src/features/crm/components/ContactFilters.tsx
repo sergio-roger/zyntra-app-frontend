@@ -35,7 +35,7 @@ export const ContactFilters: React.FC<ContactFiltersProps> = ({
   const hasFilters = Boolean(search || stage || source);
   return (
     <div className="flex flex-wrap items-center gap-3 rounded-xl border border-white/10 bg-slate-900/50 p-3">
-      <div className="relative min-w-[240px] flex-1">
+      <div className="relative min-w-[180px] flex-1">
         <Search
           size={16}
           className="pointer-events-none absolute top-1/2 left-3 -translate-y-1/2 text-slate-500"
@@ -54,7 +54,7 @@ export const ContactFilters: React.FC<ContactFiltersProps> = ({
         onChange={(e) => onStageChange(e.target.value)}
         className="rounded-lg border border-white/10 bg-slate-950/60 px-3 py-2 text-sm text-slate-200 outline-none focus:border-indigo-400"
       >
-        <option value="">Todos los stages</option>
+        <option value="">Todas las etapas</option>
         {stages.map((s) => (
           <option key={s.id} value={s.id}>
             {s.name}

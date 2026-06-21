@@ -119,7 +119,7 @@ export const ContactFormSidebar: React.FC<ContactFormSidebarProps> = ({
                 {contact ? 'Editar contacto' : 'Nuevo contacto'}
               </h3>
               <p className="text-sm text-slate-400 mt-1">
-                {contact ? 'Actualiza la información del lead' : 'Crea un nuevo prospecto manualmente'}
+                {contact ? 'Actualiza la información del prospecto' : 'Crea un nuevo prospecto manualmente'}
               </p>
             </div>
             <button 
@@ -216,11 +216,11 @@ export const ContactFormSidebar: React.FC<ContactFormSidebarProps> = ({
                             <div className="flex items-center gap-2">
                               <Target size={14} className="text-indigo-400" />
                               <span className="text-sm font-bold text-white group-hover:text-indigo-300 transition-colors">
-                                Crear como lead
+                                Crear como prospecto
                               </span>
                             </div>
                             <p className="text-[11px] text-slate-400 mt-0.5">
-                              Aparecerá en el inbox de leads para seguimiento.
+                              Aparecerá en el inbox de prospectos para seguimiento.
                             </p>
                           </div>
                         </label>

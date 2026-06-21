@@ -1,6 +1,6 @@
 import React from 'react';
 import { Outlet, useLocation, Link } from 'react-router-dom';
-import { Bell, ChevronRight, LayoutDashboard, Search } from 'lucide-react';
+import { Bell, ChevronRight, LayoutDashboard, Menu, Search } from 'lucide-react';
 import { SideRail } from './SideRail';
 import { SubSidebar } from './SubSidebar';
 import { findActiveModule, type NavModule } from './nav.config';
@@ -76,12 +76,21 @@ export const AppShell: React.FC = () => {
       />
 
       <div className="flex min-w-0 flex-1 flex-col">
-        <header className="flex items-center gap-4 border-b border-base-content/5 bg-base-100 px-6 py-3">
-          <div className="flex items-center gap-4">
+        <header className="flex items-center gap-4 border-b border-base-content/5 bg-base-100 px-4 sm:px-6 py-3">
+          <div className="flex items-center gap-3">
+            {/* Mobile hamburger — always visible below md */}
+            <button
+              onClick={() => setIsSidebarOpen(!isSidebarOpen)}
+              aria-label="Abrir navegación"
+              className="btn btn-ghost btn-sm btn-circle md:hidden"
+            >
+              <Menu size={20} />
+            </button>
+            {/* Desktop chevron — only when subsidebar is closed */}
             {!isSidebarOpen && (
-              <button 
+              <button
                 onClick={() => setIsSidebarOpen(true)}
-                className="btn btn-ghost btn-sm btn-circle lg:hidden"
+                className="btn btn-ghost btn-sm btn-circle hidden md:flex"
               >
                 <ChevronRight size={20} />
               </button>
@@ -112,7 +121,7 @@ export const AppShell: React.FC = () => {
           </div>
         </header>
 
-        <main className="min-w-0 flex-1 overflow-auto p-6 lg:p-8">
+        <main className="min-w-0 flex-1 overflow-auto p-4 sm:p-5 lg:p-8">
           <Outlet />
         </main>
       </div>

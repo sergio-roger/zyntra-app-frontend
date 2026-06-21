@@ -50,13 +50,13 @@ export const UsersPage: React.FC = () => {
       <div className="flex flex-wrap items-center justify-between gap-3">
         <div>
           <h2 className="text-xl font-bold text-white tracking-tight">Usuarios y Colaboradores</h2>
-          <p className="text-sm text-slate-400">Gestiona quién tiene acceso a tu plataforma y sus permisos</p>
+          <p className="text-sm text-slate-400">Gestiona quién tiene acceso a tu plataforma y sus permisos.</p>
         </div>
         <button
           onClick={openCreate}
           className="inline-flex items-center gap-2 rounded-xl bg-primary px-5 py-2.5 text-sm font-bold text-white shadow-lg shadow-primary/20 transition-all hover:-translate-y-px hover:shadow-xl active:scale-95"
         >
-          <Plus size={18} /> Añadir Usuario
+          <Plus size={18} /> Añadir usuario
         </button>
       </div>
 
@@ -79,7 +79,7 @@ export const UsersPage: React.FC = () => {
           icon={Users}
           title="Sin colaboradores registrados"
           description="Añade a los miembros de tu equipo para empezar a colaborar y asignarles tareas o conversaciones."
-          actionLabel="Añadir Primer Usuario"
+          actionLabel="Añadir primer usuario"
           onAction={openCreate}
         />
       )}

@@ -31,12 +31,31 @@ export const SubSidebar: React.FC<SubSidebarProps> = ({ module, isOpen, onClose 
   const hasChildren = visibleItems.length > 0;
 
   return (
-    <aside 
-      className={`relative flex shrink-0 flex-col border-r border-base-content/5 bg-base-200/60 transition-all duration-300 ease-in-out overflow-hidden ${
-        isOpen ? 'w-64 opacity-100' : 'w-0 opacity-0 border-none'
-      }`}
-    >
-      <div className="flex w-64 flex-col h-full"> {/* Fixed width wrapper to prevent content squishing */}
+    <>
+      {/* Mobile overlay */}
+      <div
+        className={`fixed inset-0 z-40 bg-black/60 backdrop-blur-sm transition-opacity duration-300 md:hidden ${
+          isOpen ? 'opacity-100' : 'pointer-events-none opacity-0'
+        }`}
+        onClick={onClose}
+      />
+
+      {/* Sidebar — mobile: fixed drawer; desktop: flow panel with width animation */}
+      <aside
+        className={`
+          fixed inset-y-0 left-0 z-50 flex flex-col w-72
+          border-r border-base-content/5 bg-base-200/60
+          transition-transform duration-300 ease-in-out
+          md:relative md:inset-y-auto md:left-auto md:z-auto
+          md:shrink-0 md:overflow-hidden
+          md:transition-all md:duration-300 md:ease-in-out
+          ${isOpen
+            ? 'translate-x-0 md:w-64 md:opacity-100'
+            : '-translate-x-full md:translate-x-0 md:w-0 md:opacity-0 md:border-none'
+          }
+        `}
+      >
+      <div className="flex flex-col h-full w-72 md:w-64">
       {/* Module Header */}
       <div className="flex items-center justify-between px-5 pt-5 pb-4">
         <h2 className="text-base font-semibold text-base-content/90">{module.label}</h2>
@@ -114,6 +133,7 @@ export const SubSidebar: React.FC<SubSidebarProps> = ({ module, isOpen, onClose 
         <p className="text-[10px] text-base-content/20 uppercase tracking-widest font-bold">Zyntra AI Platform</p>
       </div>
       </div>
-    </aside>
+      </aside>
+    </>
   );
 };
