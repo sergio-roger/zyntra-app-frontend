@@ -43,15 +43,18 @@ export interface Menu {
   description: string | null;
 }
 
+export interface Role {
+  id: string;
+  name: string;
+  label: string;
+  description: string;
+  isEditable: boolean;
+  badge: string | null;
+  badgeColor: string | null;
+  iconColor: string | null;
+}
+
 export interface RolePermissions {
   role: string;
   menu_ids: string[];
 }
-
-export const SYSTEM_ROLES = [
-  { key: 'admin',   label: 'Administrador', description: 'Acceso total a la plataforma' },
-  { key: 'manager', label: 'Gerente',       description: 'Gestión de CRM y equipos' },
-  { key: 'agent',   label: 'Agente',        description: 'Operación diaria' },
-] as const;
-
-export type SystemRole = typeof SYSTEM_ROLES[number]['key'];

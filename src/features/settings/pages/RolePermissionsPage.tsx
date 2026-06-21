@@ -1,6 +1,6 @@
 import { PermissionMatrix } from '@features/settings/components/PermissionMatrix';
-import { SYSTEM_ROLES } from '@features/settings/types';
-import { ArrowLeft, Shield } from 'lucide-react';
+import { useRolesList } from '@features/settings/hooks/usePermissions';
+import { ArrowLeft, Shield, Loader2 } from 'lucide-react';
 import React from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 
@@ -8,8 +8,19 @@ export const RolePermissionsPage: React.FC = () => {
   const { role } = useParams<{ role: string }>();
   const navigate = useNavigate();
 
+  const { data: dbRoles = [], isLoading } = useRolesList();
+
   const roleKey = role as 'manager' | 'agent' | 'admin';
-  const roleInfo = SYSTEM_ROLES.find((r) => r.key === roleKey);
+  const roleInfo = dbRoles.find((r) => r.name === roleKey);
+
+  if (isLoading) {
+    return (
+      <div className="flex flex-col items-center justify-center py-32 space-y-4">
+        <Loader2 className="animate-spin text-primary" size={40} />
+        <p className="text-sm text-slate-500 font-medium">Cargando información del rol...</p>
+      </div>
+    );
+  }
 
   if (!roleInfo || roleKey === 'admin') {
     return (

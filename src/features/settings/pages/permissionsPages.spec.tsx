@@ -10,7 +10,12 @@ import * as usePermsHook from '../hooks/usePermissions';
 vi.mock('../hooks/usePermissions', () => ({
   useMenusList: vi.fn(),
   useRolePermissions: vi.fn(),
-  useUpdatePermissions: vi.fn(),
+  useUpdatePermissions: vi.fn(() => ({
+    isPending: false,
+    variables: [],
+    mutate: vi.fn(),
+  })),
+  useRolesList: vi.fn(),
 }));
 
 const createWrapper = () => {
@@ -29,6 +34,14 @@ const createWrapper = () => {
 describe('Permissions Pages', () => {
   beforeEach(() => {
     vi.clearAllMocks();
+    vi.mocked(usePermsHook.useRolesList).mockReturnValue({
+      data: [
+        { id: '1', name: 'admin', label: 'Administrador', description: 'Control total', isEditable: false, badge: 'Acceso Total', badgeColor: '', iconColor: '' },
+        { id: '2', name: 'manager', label: 'Gerente', description: 'Gestión', isEditable: true, badge: 'Configurable', badgeColor: '', iconColor: '' },
+        { id: '3', name: 'agent', label: 'Agente', description: 'Operación', isEditable: true, badge: 'Configurable', badgeColor: '', iconColor: '' },
+      ],
+      isLoading: false,
+    } as any);
   });
 
   describe('PermissionsPage', () => {

@@ -1,6 +1,16 @@
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import api from '@shared/api/axios';
-import { RolePermissions, Menu } from '../types';
+import { RolePermissions, Menu, Role } from '../types';
+
+export function useRolesList() {
+  return useQuery<Role[]>({
+    queryKey: ['settings-roles'],
+    queryFn: async () => {
+      const { data } = await api.get('/settings/roles');
+      return data;
+    },
+  });
+}
 
 export function useMenusList() {
   return useQuery<Menu[]>({

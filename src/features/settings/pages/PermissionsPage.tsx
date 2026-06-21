@@ -1,53 +1,35 @@
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Shield, ShieldAlert, ShieldCheck, ArrowRight, Loader2 } from 'lucide-react';
-import { useMenusList, useRolePermissions } from '@features/settings/hooks/usePermissions';
+import { useMenusList, useRolePermissions, useRolesList } from '@features/settings/hooks/usePermissions';
 
 export const PermissionsPage: React.FC = () => {
   const navigate = useNavigate();
 
   const { data: allMenus = [], isLoading: loadingMenus } = useMenusList();
+  const { data: dbRoles = [], isLoading: loadingRoles } = useRolesList();
   const { data: managerPerms, isLoading: loadingManager } = useRolePermissions('manager');
   const { data: agentPerms, isLoading: loadingAgent } = useRolePermissions('agent');
 
   const totalMenus = allMenus.length;
-  const isLoading = loadingMenus || loadingManager || loadingAgent;
+  const isLoading = loadingMenus || loadingRoles || loadingManager || loadingAgent;
 
-  const roles = [
-    {
-      key: 'admin',
-      label: 'Administrador',
-      description: 'Control total de la plataforma. Acceso ilimitado a todas las configuraciones, canales y reportes.',
-      icon: ShieldAlert,
-      iconColor: 'text-rose-500 bg-rose-500/10 border-rose-500/20',
-      badge: 'Acceso Total',
-      badgeColor: 'bg-rose-500/10 text-rose-400',
-      activeCount: totalMenus,
-      isEditable: false,
-    },
-    {
-      key: 'manager',
-      label: 'Gerente',
-      description: 'Supervisión y gestión operativa del equipo, clientes, canales y agentes de inteligencia artificial.',
-      icon: ShieldCheck,
-      iconColor: 'text-indigo-400 bg-indigo-500/10 border-indigo-500/20',
-      badge: 'Configurable',
-      badgeColor: 'bg-indigo-500/10 text-indigo-400',
-      activeCount: managerPerms?.menu_ids.length ?? 0,
-      isEditable: true,
-    },
-    {
-      key: 'agent',
-      label: 'Agente',
-      description: 'Operación diaria del chat, atención a clientes y seguimiento básico de prospectos e inbox.',
-      icon: Shield,
-      iconColor: 'text-emerald-400 bg-emerald-500/10 border-emerald-500/20',
-      badge: 'Configurable',
-      badgeColor: 'bg-emerald-500/10 text-emerald-400',
-      activeCount: agentPerms?.menu_ids.length ?? 0,
-      isEditable: true,
-    },
-  ];
+  const getRoleIcon = (name: string) => {
+    switch (name) {
+      case 'admin': return ShieldAlert;
+      case 'manager': return ShieldCheck;
+      default: return Shield;
+    }
+  };
+
+  const getRoleActiveCount = (name: string) => {
+    switch (name) {
+      case 'admin': return totalMenus;
+      case 'manager': return managerPerms?.menu_ids.length ?? 0;
+      case 'agent': return agentPerms?.menu_ids.length ?? 0;
+      default: return 0;
+    }
+  };
 
   return (
     <div className="space-y-6 animate-in fade-in duration-500">
@@ -63,21 +45,24 @@ export const PermissionsPage: React.FC = () => {
         </div>
       ) : (
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-          {roles.map((role) => {
-            const Icon = role.icon;
+          {dbRoles.map((role) => {
+            const Icon = getRoleIcon(role.name);
+            const activeCount = getRoleActiveCount(role.name);
 
             return (
               <div
-                key={role.key}
+                key={role.id}
                 className="flex flex-col bg-slate-900/50 border border-white/5 rounded-3xl p-6 shadow-xl relative group hover:border-white/10 transition-all hover:-translate-y-0.5"
               >
                 <div className="flex items-center justify-between">
-                  <div className={`p-3 rounded-2xl border ${role.iconColor}`}>
+                  <div className={`p-3 rounded-2xl border ${role.iconColor || 'text-slate-400 bg-slate-500/10 border-slate-500/20'}`}>
                     <Icon size={24} />
                   </div>
-                  <span className={`text-[10px] font-black uppercase tracking-wider px-2.5 py-1 rounded-lg ${role.badgeColor}`}>
-                    {role.badge}
-                  </span>
+                  {role.badge && (
+                    <span className={`text-[10px] font-black uppercase tracking-wider px-2.5 py-1 rounded-lg ${role.badgeColor || 'bg-slate-500/10 text-slate-400'}`}>
+                      {role.badge}
+                    </span>
+                  )}
                 </div>
 
                 <div className="mt-6 flex-1 space-y-2">
@@ -87,13 +72,13 @@ export const PermissionsPage: React.FC = () => {
 
                 <div className="mt-8 pt-6 border-t border-white/5 flex items-center justify-between">
                   <div>
-                    <span className="text-2xl font-extrabold text-white">{role.activeCount}</span>
+                    <span className="text-2xl font-extrabold text-white">{activeCount}</span>
                     <span className="text-xs text-slate-500 font-bold ml-1">/ {totalMenus} permisos</span>
                   </div>
 
                   {role.isEditable ? (
                     <button
-                      onClick={() => navigate(`/settings/permissions/${role.key}`)}
+                      onClick={() => navigate(`/settings/permissions/${role.name}`)}
                       className="inline-flex items-center gap-1.5 px-4 py-2.5 rounded-xl bg-slate-800 hover:bg-slate-700 text-sm font-bold text-white transition-all group-hover:text-primary"
                     >
                       Configurar <ArrowRight size={16} />
