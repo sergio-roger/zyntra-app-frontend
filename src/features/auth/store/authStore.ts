@@ -1,16 +1,6 @@
 import { create } from 'zustand';
 import { persist } from 'zustand/middleware';
-import { User } from '@features/auth/types/auth.types';
-
-interface AuthState {
-  user: User | null;
-  isAuthenticated: boolean;
-  isLoading: boolean;
-
-  setUser: (user: User | null) => void;
-  setLoading: (isLoading: boolean) => void;
-  logout: () => void;
-}
+import { AuthState } from './authStore.types';
 
 export const useAuthStore = create<AuthState>()(
   persist(
@@ -18,6 +8,7 @@ export const useAuthStore = create<AuthState>()(
       user: null,
       isAuthenticated: false,
       isLoading: true,
+      allowedMenus: null,
 
       setUser: (user) =>
         set({
@@ -28,11 +19,14 @@ export const useAuthStore = create<AuthState>()(
 
       setLoading: (isLoading) => set({ isLoading }),
 
+      setAllowedMenus: (allowedMenus) => set({ allowedMenus }),
+
       logout: () =>
         set({
           user: null,
           isAuthenticated: false,
           isLoading: false,
+          allowedMenus: null,
         }),
     }),
     {

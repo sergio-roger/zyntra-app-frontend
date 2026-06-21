@@ -27,6 +27,7 @@ UserRound,
   Database,
   ListFilter,
   Briefcase,
+  ShieldCheck,
   type LucideIcon,
 } from 'lucide-react';
 
@@ -173,10 +174,64 @@ export const NAV_MODULES: NavModule[] = [
       { to: '/settings/teams', label: 'Equipo', icon: Users, description: 'Organiza usuarios en grupos.' },
       { to: '/settings/lifecycle', label: 'Ciclo de vida', icon: Sparkles, description: 'Etapas de tus contactos.' },
       { to: '/settings/channels', label: 'Canales', icon: Share2, description: 'Conecta tus redes sociales.' },
+      { to: '/settings/permissions', label: 'Permisos', icon: ShieldCheck, description: 'Configura qué puede ver cada rol.' },
     ],
   },
 ];
 
 export const findActiveModule = (pathname: string): NavModule | undefined => {
   return NAV_MODULES.find((module) => pathname.startsWith(module.match));
+};
+
+export const getMenuKeyFromPath = (path: string): string => {
+  const p = path.replace(/\/$/, '');
+  
+  if (p === '/dashboard') return 'dashboard';
+  if (p === '/crm') return 'crm';
+  if (p === '/crm/contacts') return 'crm_contacts';
+  if (p === '/crm/leads') return 'crm_leads';
+  if (p === '/crm/deals') return 'crm_deals';
+  if (p === '/crm/tags') return 'crm_tags';
+  if (p === '/crm/tasks') return 'crm_tasks';
+  if (p === '/crm/fields') return 'crm_fields';
+  if (p === '/crm/segments') return 'crm_segments';
+  
+  if (p === '/agents' || p === '/agents/strategy') return 'agents_strategy';
+  if (p === '/agents/content') return 'agents_content';
+  if (p === '/agents/analysis') return 'agents_analysis';
+  
+  if (p === '/inbox' || p === '/inbox/conversations') return 'inbox_conversations';
+  if (p === '/inbox/automations') return 'inbox_automations';
+  if (p === '/inbox/channels') return 'inbox_channels';
+  
+  if (p === '/funnels') return 'funnels';
+  if (p === '/funnels/dashboard') return 'funnels_dashboard';
+  if (p === '/funnels/builder') return 'funnels_builder';
+  if (p === '/funnels/templates') return 'funnels_templates';
+  if (p === '/funnels/automations') return 'funnels_automations';
+  if (p === '/funnels/leads') return 'funnels_leads';
+  if (p === '/funnels/analytics') return 'funnels_analytics';
+  
+  if (p === '/avatar') return 'avatar';
+  if (p === '/avatar/identity') return 'avatar_identity';
+  if (p === '/avatar/knowledge') return 'avatar_knowledge';
+  if (p === '/avatar/voice') return 'avatar_voice';
+  if (p === '/avatar/memory') return 'avatar_memory';
+  
+  if (p === '/analytics') return 'analytics';
+  if (p === '/analytics/general') return 'analytics_general';
+  if (p === '/analytics/conversations') return 'analytics_convs';
+  if (p === '/analytics/leads') return 'analytics_leads';
+  if (p === '/analytics/performance') return 'analytics_perf';
+  
+  if (p === '/billing') return 'billing';
+  
+  if (p === '/settings') return 'settings';
+  if (p === '/settings/users') return 'settings_users';
+  if (p === '/settings/teams') return 'settings_teams';
+  if (p === '/settings/lifecycle') return 'settings_lifecycle';
+  if (p === '/settings/channels') return 'settings_channels';
+  if (p === '/settings/permissions') return 'settings_permissions';
+
+  return '';
 };

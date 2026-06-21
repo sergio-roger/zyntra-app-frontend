@@ -1,5 +1,5 @@
 import api from '@shared/api/axios';
-import { LoginCredentials, RegisterData, User } from '@features/auth/types/auth.types';
+import { LoginCredentials, RegisterData, User, MenuNode } from '@features/auth/types/auth.types';
 
 export const authApi = {
   login: (credentials: LoginCredentials) =>
@@ -11,6 +11,8 @@ export const authApi = {
   logout: () => api.post('/auth/logout'),
 
   me: () => api.get<unknown, { data: User }>('/auth/me'),
+
+  getMenus: () => api.get<unknown, { data: MenuNode[] }>('/auth/menus'),
 
   forgotPassword: (email: string) =>
     api.post<unknown, { message: string }>('/auth/forgot-password', { email }),

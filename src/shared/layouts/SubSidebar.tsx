@@ -1,7 +1,8 @@
 import React from 'react';
 import { NavLink } from 'react-router-dom';
 import { X } from 'lucide-react';
-import { NavModule } from './nav.config';
+import { NavModule, getMenuKeyFromPath } from './nav.config';
+import { useAuthStore } from '@features/auth/store/authStore';
 
 interface SubSidebarProps {
   module: NavModule;
@@ -10,7 +11,24 @@ interface SubSidebarProps {
 }
 
 export const SubSidebar: React.FC<SubSidebarProps> = ({ module, isOpen, onClose }) => {
-  const hasChildren = module.children && module.children.length > 0;
+  const { allowedMenus, user } = useAuthStore();
+  const isAdmin = user?.role === 'admin';
+
+  const dbModuleKey = module.key === 'agents' ? 'agents_ia' : module.key;
+  const currentModuleAllowed = allowedMenus?.find((m) => m.key === dbModuleKey);
+  const allowedSubKeys = currentModuleAllowed?.children.map((c) => c.key) ?? [];
+
+  const visibleItems = module.children?.filter((item) => {
+    if (isAdmin) return true;
+    if (!allowedMenus) return false;
+
+    const itemKey = getMenuKeyFromPath(item.to);
+    if (itemKey === 'settings_permissions') return false;
+
+    return allowedSubKeys.includes(itemKey);
+  }) ?? [];
+
+  const hasChildren = visibleItems.length > 0;
 
   return (
     <aside 
@@ -34,7 +52,7 @@ export const SubSidebar: React.FC<SubSidebarProps> = ({ module, isOpen, onClose 
       {hasChildren && (
         <nav className="flex-1 px-3">
           <ul className="flex flex-col gap-1.5">
-            {module.children!.map(({ to, label, icon: Icon, description }) => (
+            {visibleItems.map(({ to, label, icon: Icon, description }) => (
               <li key={to}>
                 <NavLink
                   to={to}

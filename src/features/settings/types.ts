@@ -33,3 +33,24 @@ export interface CreateTeamInput {
   color?: string;
   member_ids?: string[];
 }
+
+export interface Menu {
+  id: string;
+  key: string;
+  label: string;
+  path: string;
+  parent_key: string | null;
+}
+
+export interface RolePermissions {
+  role: string;
+  menu_ids: string[];
+}
+
+export const SYSTEM_ROLES = [
+  { key: 'admin',   label: 'Administrador', description: 'Acceso total a la plataforma' },
+  { key: 'manager', label: 'Gerente',       description: 'Gestión de CRM y equipos' },
+  { key: 'agent',   label: 'Agente',        description: 'Operación diaria' },
+] as const;
+
+export type SystemRole = typeof SYSTEM_ROLES[number]['key'];

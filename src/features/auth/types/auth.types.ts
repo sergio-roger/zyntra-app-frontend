@@ -1,9 +1,19 @@
 import { Plan } from './plan';
 
+export interface MenuNode {
+  id: string;
+  key: string;
+  label: string;
+  path: string;
+  parent_key: string | null;
+  children: MenuNode[];
+}
+
 export type User = {
   id: string;
   name: string;
   email: string;
+  role: 'admin' | 'manager' | 'agent' | null;
   plan: Plan;
   plan_status: string;
 };
