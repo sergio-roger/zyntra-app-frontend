@@ -55,9 +55,12 @@ export const NAV_MODULES: NavModule[] = [
     label: 'Dashboard',
     icon: LayoutDashboard,
     match: '/dashboard',
-    to: '/dashboard',
+    to: '/dashboard/home',
     description: 'Vista general de tu negocio.',
     color: 'text-primary',
+    children: [
+      { to: '/dashboard/home', label: 'Inicio', icon: LayoutDashboard, description: 'Vista general e inicio.' },
+    ],
   },
   {
     key: 'crm',

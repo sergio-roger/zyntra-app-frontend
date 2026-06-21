@@ -1,10 +1,11 @@
-import React from 'react';
-import { Outlet, useLocation, Link } from 'react-router-dom';
-import { Bell, ChevronRight, LayoutDashboard, Menu, Search } from 'lucide-react';
-import { SideRail } from './SideRail';
-import { SubSidebar } from './SubSidebar';
-import { findActiveModule, type NavModule } from './nav.config';
 import { useAuthStore } from '@features/auth/store/authStore';
+import { Breadcrumbs } from '@shared/components/Breadcrumbs';
+import { SideRail } from '@shared/layouts/SideRail';
+import { SubSidebar } from '@shared/layouts/SubSidebar';
+import { findActiveModule, type NavModule } from '@shared/layouts/nav.config';
+import { Bell, ChevronRight, LayoutDashboard, Menu, Search } from 'lucide-react';
+import React, { useEffect, useState } from 'react';
+import { Outlet, useLocation } from 'react-router-dom';
 
 const DEFAULT_MODULE: NavModule = {
   key: 'dashboard',
@@ -16,45 +17,14 @@ const DEFAULT_MODULE: NavModule = {
   color: '',
 };
 
-const Breadcrumbs: React.FC<{ pathname: string }> = ({ pathname }) => {
-  const module = findActiveModule(pathname);
-  const sub = module?.children?.find(
-    (c) => pathname === c.to || pathname.startsWith(`${c.to}/`),
-  );
-
-  return (
-    <nav
-      aria-label="Breadcrumb"
-      className="flex items-center gap-1.5 text-sm text-base-content/60"
-    >
-      {module ? (
-        <Link
-          to={module.to}
-          className="font-medium text-base-content transition-colors hover:text-primary"
-        >
-          {module.label}
-        </Link>
-      ) : (
-        <span className="font-medium text-base-content">Zyntra</span>
-      )}
-      {sub && (
-        <>
-          <ChevronRight size={14} className="text-base-content/35" />
-          <span className="text-base-content/80">{sub.label}</span>
-        </>
-      )}
-    </nav>
-  );
-};
-
 export const AppShell: React.FC = () => {
   const { user } = useAuthStore();
   const { pathname } = useLocation();
-  const [isMobileRailOpen, setIsMobileRailOpen] = React.useState(false);
-  const [isSubSidebarOpen, setIsSubSidebarOpen] = React.useState(true);
+  const [isMobileRailOpen, setIsMobileRailOpen] = useState(false);
+  const [isSubSidebarOpen, setIsSubSidebarOpen] = useState(true);
   const activeModule = findActiveModule(pathname);
 
-  React.useEffect(() => {
+  useEffect(() => {
     if (activeModule && (!activeModule.children || activeModule.children.length === 0)) {
       const timer = setTimeout(() => {
         setIsSubSidebarOpen(false);

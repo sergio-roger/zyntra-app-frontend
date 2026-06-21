@@ -22,11 +22,17 @@ const AppRoutes = () => {
       children: [
         {
           path: '/dashboard',
-          element: (
-            <Suspense fallback={<DashboardFallback />}>
-              <DashboardLoader />
-            </Suspense>
-          )
+          children: [
+            { path: '', element: <Navigate to="/dashboard/home" replace /> },
+            {
+              path: 'home',
+              element: (
+                <Suspense fallback={<DashboardFallback />}>
+                  <DashboardLoader />
+                </Suspense>
+              )
+            }
+          ]
         },
         ...crmRoutes,
         ...chatbotRoutes,
