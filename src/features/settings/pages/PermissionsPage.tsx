@@ -2,9 +2,11 @@ import React from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Shield, ShieldAlert, ShieldCheck, ArrowRight, Loader2 } from 'lucide-react';
 import { useMenusList, useRolePermissions, useRolesList } from '@features/settings/hooks/usePermissions';
+import { useAuthStore } from '@features/auth/store/authStore';
 
 export const PermissionsPage: React.FC = () => {
   const navigate = useNavigate();
+  const { user } = useAuthStore();
 
   const { data: allMenus = [], isLoading: loadingMenus } = useMenusList();
   const { data: dbRoles = [], isLoading: loadingRoles } = useRolesList();
@@ -33,9 +35,24 @@ export const PermissionsPage: React.FC = () => {
 
   return (
     <div className="space-y-6 animate-in fade-in duration-500">
-      <div>
-        <h2 className="text-xl font-bold text-white tracking-tight">Permisos de Acceso</h2>
-        <p className="text-sm text-slate-400">Define qué secciones y funcionalidades puede ver cada rol en la plataforma.</p>
+      <div className="flex flex-wrap items-center justify-between gap-4">
+        <div>
+          <h2 className="text-xl font-bold text-white tracking-tight">Permisos de Acceso</h2>
+          <p className="text-sm text-slate-400">Define qué secciones y funcionalidades puede ver cada rol en la plataforma.</p>
+        </div>
+        {user?.plan && (
+          <div className="flex items-center gap-2 bg-slate-900 border border-white/5 px-4 py-2.5 rounded-2xl">
+            <span className="text-xs text-slate-400 font-bold uppercase tracking-wider">Plan Activo:</span>
+            <span className="text-sm text-indigo-400 font-extrabold">{user.plan.name}</span>
+            {user.plan_status && (
+              <span className={`text-[10px] font-black uppercase tracking-wider px-2 py-0.5 rounded-md ${
+                user.plan_status === 'active' ? 'bg-emerald-500/10 text-emerald-400' : 'bg-amber-500/10 text-amber-400'
+              }`}>
+                {user.plan_status === 'active' ? 'Activo' : user.plan_status}
+              </span>
+            )}
+          </div>
+        )}
       </div>
 
       {isLoading ? (

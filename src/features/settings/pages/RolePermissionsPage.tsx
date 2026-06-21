@@ -1,5 +1,6 @@
 import { PermissionMatrix } from '@features/settings/components/PermissionMatrix';
 import { useRolesList } from '@features/settings/hooks/usePermissions';
+import { useAuthStore } from '@features/auth/store/authStore';
 import { ArrowLeft, Shield, Loader2 } from 'lucide-react';
 import React from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
@@ -7,6 +8,7 @@ import { useNavigate, useParams } from 'react-router-dom';
 export const RolePermissionsPage: React.FC = () => {
   const { role } = useParams<{ role: string }>();
   const navigate = useNavigate();
+  const { user } = useAuthStore();
 
   const { data: dbRoles = [], isLoading } = useRolesList();
 
@@ -56,6 +58,12 @@ export const RolePermissionsPage: React.FC = () => {
           </h2>
           <p className="text-sm text-slate-400">{roleInfo.description}</p>
         </div>
+        {user?.plan && (
+          <div className="flex items-center gap-2 bg-slate-900 border border-white/5 px-4 py-2.5 rounded-2xl">
+            <span className="text-xs text-slate-400 font-bold uppercase tracking-wider">Plan Activo:</span>
+            <span className="text-sm text-indigo-400 font-extrabold">{user.plan.name}</span>
+          </div>
+        )}
       </div>
 
       <div className="bg-slate-950/20 border border-white/5 rounded-3xl p-6 md:p-8">
