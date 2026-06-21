@@ -1,7 +1,6 @@
 import React from 'react';
-import { useMenusList, useRolePermissions, useUpdatePermissions } from '../hooks/usePermissions';
-import { PermissionToggle } from './PermissionToggle';
-import { toastManager } from '@shared/components/toast/toastManager';
+import { PermissionToggle } from '@features/settings/components/PermissionToggle';
+import { usePermissionMatrix } from '@features/settings/hooks/usePermissionMatrix';
 import { Loader2 } from 'lucide-react';
 
 interface PermissionMatrixProps {
@@ -10,11 +9,16 @@ interface PermissionMatrixProps {
 }
 
 export const PermissionMatrix: React.FC<PermissionMatrixProps> = ({ roleKey, readOnly = false }) => {
-  const { data: allMenus, isLoading: loadingMenus } = useMenusList();
-  const { data: rolePerms, isLoading: loadingPerms } = useRolePermissions(roleKey);
-  const updateMutation = useUpdatePermissions(roleKey);
-
-  const isLoading = loadingMenus || loadingPerms;
+  const {
+    isLoading,
+    allMenus,
+    rolePerms,
+    roots,
+    activeMenuIds,
+    handleToggle,
+    isUpdating,
+    updatingVariables,
+  } = usePermissionMatrix({ roleKey, readOnly });
 
   if (isLoading) {
     return (
@@ -33,56 +37,6 @@ export const PermissionMatrix: React.FC<PermissionMatrixProps> = ({ roleKey, rea
     );
   }
 
-  const activeMenuIds = rolePerms.menu_ids;
-
-  // Group menus: parent_key === null are roots
-  const roots = allMenus.filter((m) => m.parent_key === null);
-
-  const handleToggle = (menuId: string, checked: boolean) => {
-    if (readOnly) return;
-
-    let nextIds = [...activeMenuIds];
-    const menu = allMenus.find((m) => m.id === menuId);
-    if (!menu) return;
-
-    if (checked) {
-      // Add current menu
-      if (!nextIds.includes(menu.id)) nextIds.push(menu.id);
-      // If it has a parent, also add the parent
-      if (menu.parent_key) {
-        const parent = allMenus.find((m) => m.key === menu.parent_key);
-        if (parent && !nextIds.includes(parent.id)) {
-          nextIds.push(parent.id);
-        }
-      } else {
-        // If it's a parent, also add all its children
-        const children = allMenus.filter((m) => m.parent_key === menu.key);
-        children.forEach((c) => {
-          if (!nextIds.includes(c.id)) nextIds.push(c.id);
-        });
-      }
-    } else {
-      // Remove current menu
-      nextIds = nextIds.filter((id) => id !== menu.id);
-      // If it's a parent, also remove all its children
-      if (!menu.parent_key) {
-        const children = allMenus.filter((m) => m.parent_key === menu.key);
-        const childrenIds = children.map((c) => c.id);
-        nextIds = nextIds.filter((id) => !childrenIds.includes(id));
-      }
-    }
-
-    updateMutation.mutate(nextIds, {
-      onError: () => {
-        toastManager.add({
-          title: 'Error al actualizar permisos',
-          description: 'No se pudo guardar la configuración. Intenta de nuevo.',
-          type: 'error',
-        });
-      },
-    });
-  };
-
   return (
     <div className="space-y-8">
       {roots.map((root) => {
@@ -96,10 +50,11 @@ export const PermissionMatrix: React.FC<PermissionMatrixProps> = ({ roleKey, rea
               <PermissionToggle
                 menuId={root.id}
                 label={root.label}
+                description={root.description || undefined}
                 checked={isRootChecked}
                 disabled={readOnly}
                 onChange={(val) => handleToggle(root.id, val)}
-                isPending={updateMutation.isPending && updateMutation.variables?.includes(root.id) !== isRootChecked}
+                isPending={isUpdating && updatingVariables?.includes(root.id) !== isRootChecked}
               />
             </div>
 
@@ -114,10 +69,11 @@ export const PermissionMatrix: React.FC<PermissionMatrixProps> = ({ roleKey, rea
                       key={child.id}
                       menuId={child.id}
                       label={child.label}
+                      description={child.description || undefined}
                       checked={isChildChecked}
                       disabled={readOnly}
                       onChange={(val) => handleToggle(child.id, val)}
-                      isPending={updateMutation.isPending && updateMutation.variables?.includes(child.id) !== isChildChecked}
+                      isPending={isUpdating && updatingVariables?.includes(child.id) !== isChildChecked}
                     />
                   );
                 })}

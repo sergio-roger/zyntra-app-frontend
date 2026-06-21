@@ -40,6 +40,7 @@ export interface Menu {
   label: string;
   path: string;
   parent_key: string | null;
+  description: string | null;
 }
 
 export interface RolePermissions {

@@ -6,6 +6,7 @@ export interface MenuNode {
   label: string;
   path: string;
   parent_key: string | null;
+  description: string | null;
   children: MenuNode[];
 }
 
