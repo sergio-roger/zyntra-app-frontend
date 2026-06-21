@@ -12,14 +12,16 @@ import { Input } from '@core/ui/Input';
 import { useCreateUser, useUpdateUser } from '@features/settings/hooks/useUsersTeams';
 import { CrmUser, UserRole } from '@features/settings/types';
 import { useAuthStore } from '@features/auth/store/authStore';
+import { toastManager } from '@shared/components/toast/toastManager';
 
 interface UserFormSidebarProps {
   open: boolean;
   user: CrmUser | null;
+  isLimitReached?: boolean;
   onClose: () => void;
 }
 
-export const UserFormSidebar: React.FC<UserFormSidebarProps> = ({ open, user, onClose }) => {
+export const UserFormSidebar: React.FC<UserFormSidebarProps> = ({ open, user, isLimitReached, onClose }) => {
   const [formData, setFormData] = useState({
     name: '',
     email: '',
@@ -32,7 +34,7 @@ export const UserFormSidebar: React.FC<UserFormSidebarProps> = ({ open, user, on
   const isSaving = createMutation.isPending || updateMutation.isPending;
 
   const currentUser = useAuthStore(s => s.user);
-  const planName = currentUser?.plan?.name || 'Impulse Pro';
+  const planName = currentUser?.plan?.name || (currentUser as any)?.plan_object?.name || 'Impulse Pro';
 
   useEffect(() => {
     if (user) {
@@ -136,7 +138,17 @@ export const UserFormSidebar: React.FC<UserFormSidebarProps> = ({ open, user, on
                 </div>
                 <button 
                   type="button"
-                  onClick={() => setFormData({ ...formData, is_active: !formData.is_active })}
+                  onClick={() => {
+                    if (!formData.is_active && isLimitReached) {
+                      toastManager.add({
+                        title: 'Límite alcanzado',
+                        description: `Has alcanzado el límite de usuarios activos permitidos en tu plan.`,
+                        type: 'error',
+                      });
+                      return;
+                    }
+                    setFormData({ ...formData, is_active: !formData.is_active });
+                  }}
                   className={`relative inline-flex h-6 w-11 items-center rounded-full transition-colors focus:outline-none ${formData.is_active ? 'bg-indigo-600' : 'bg-slate-700'}`}
                 >
                   <span className={`inline-block h-4 w-4 transform rounded-full bg-white transition-transform ${formData.is_active ? 'translate-x-6' : 'translate-x-1'}`} />
