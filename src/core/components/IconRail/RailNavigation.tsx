@@ -14,11 +14,9 @@ export const RailNavigation: React.FC<RailNavigationProps> = ({
   onToggleSidebar 
 }) => {
   const navigate = useNavigate();
-  const { allowedMenus, user } = useAuthStore();
-  const isAdmin = user?.role === 'admin';
+  const { allowedMenus } = useAuthStore();
   
   const RAIL_MODULES = NAV_MODULES.filter(m => {
-    if (isAdmin) return true;
     if (!allowedMenus) return false;
     const dbKey = m.key === 'agents' ? 'agents_ia' : m.key;
     return allowedMenus.some(allowed => allowed.key === dbKey);

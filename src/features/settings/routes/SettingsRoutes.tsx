@@ -4,6 +4,7 @@ import { ConstructionPage } from '@shared/components/ConstructionPage';
 import { SuspenseLoader } from '@shared/components/SuspenseLoader';
 import { AdminGuard } from '@core/routes/AdminGuard';
 import { PermissionGuard } from '@core/routes/PermissionGuard';
+import { ModuleGuard } from '@core/components/ModuleGuard';
 
 const LifecycleConfig = lazy(() => import('../components/LifecycleConfig').then(m => ({ default: m.LifecycleConfig })));
 const UsersPage = lazy(() => import('../pages/UsersPage').then(m => ({ default: m.UsersPage })));
@@ -16,12 +17,12 @@ export const settingsRoutes: RouteObject[] = [
     path: '/settings',
     children: [
       { index: true, element: <Navigate to="/settings/users" replace /> },
-      { path: 'users', element: <PermissionGuard menuKey="settings_users"><SuspenseLoader><UsersPage /></SuspenseLoader></PermissionGuard> },
-      { path: 'teams', element: <PermissionGuard menuKey="settings_teams"><SuspenseLoader><TeamsPage /></SuspenseLoader></PermissionGuard> },
-      { path: 'lifecycle', element: <PermissionGuard menuKey="settings_lifecycle"><SuspenseLoader><LifecycleConfig /></SuspenseLoader></PermissionGuard> },
-      { 
-        path: 'channels', 
-        element: <PermissionGuard menuKey="settings_channels"><ConstructionPage title="Canales de Comunicación" description="Próximamente podrás integrar WhatsApp, Instagram y otros canales directamente aquí." /></PermissionGuard>
+      { path: 'users', element: <PermissionGuard menuKey="settings_users"><ModuleGuard menuKey="settings_users"><SuspenseLoader><UsersPage /></SuspenseLoader></ModuleGuard></PermissionGuard> },
+      { path: 'teams', element: <PermissionGuard menuKey="settings_teams"><ModuleGuard menuKey="settings_teams"><SuspenseLoader><TeamsPage /></SuspenseLoader></ModuleGuard></PermissionGuard> },
+      { path: 'lifecycle', element: <PermissionGuard menuKey="settings_lifecycle"><ModuleGuard menuKey="settings_lifecycle"><SuspenseLoader><LifecycleConfig /></SuspenseLoader></ModuleGuard></PermissionGuard> },
+      {
+        path: 'channels',
+        element: <PermissionGuard menuKey="settings_channels"><ModuleGuard menuKey="settings_channels"><ConstructionPage title="Canales de Comunicación" description="Próximamente podrás integrar WhatsApp, Instagram y otros canales directamente aquí." /></ModuleGuard></PermissionGuard>
       },
       {
         path: 'permissions',

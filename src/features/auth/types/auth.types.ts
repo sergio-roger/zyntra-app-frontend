@@ -1,5 +1,7 @@
 import { Plan } from './plan';
 
+export type ModuleAccessLevel = 'full' | 'read_only' | 'locked';
+
 export interface MenuNode {
   id: string;
   key: string;
@@ -7,6 +9,7 @@ export interface MenuNode {
   path: string;
   parent_key: string | null;
   description: string | null;
+  access_level?: ModuleAccessLevel;
   children: MenuNode[];
 }
 

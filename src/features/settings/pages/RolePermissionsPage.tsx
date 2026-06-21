@@ -24,6 +24,23 @@ export const RolePermissionsPage: React.FC = () => {
     );
   }
 
+  if (user?.plan?.name !== 'Core Digital') {
+    return (
+      <div className="space-y-6">
+        <button
+          onClick={() => navigate('/settings/permissions')}
+          className="inline-flex items-center gap-2 text-slate-400 hover:text-white transition-colors"
+        >
+          <ArrowLeft size={16} /> Volver a permisos
+        </button>
+        <div className="bg-slate-900 border border-white/5 rounded-3xl p-12 text-center text-slate-400">
+          Tu plan actual no permite la edición dinámica de permisos. Actualiza a{' '}
+          <span className="font-semibold text-primary">Core Digital</span> para desbloquear esta funcionalidad.
+        </div>
+      </div>
+    );
+  }
+
   if (!roleInfo || roleKey === 'admin') {
     return (
       <div className="space-y-6">

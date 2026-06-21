@@ -1,17 +1,17 @@
-import React from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useAuth } from '@features/auth/hooks/useAuth';
+import { useAuthStore } from '@features/auth/store/authStore';
 import {
-  PanelLeft,
-  PanelLeftClose,
-  Crown,
-  Settings,
   Code2,
+  Crown,
   HelpCircle,
   LogOut,
+  PanelLeft,
+  PanelLeftClose,
+  Settings,
   Zap,
 } from 'lucide-react';
-import { useAuthStore } from '@features/auth/store/authStore';
-import { useAuth } from '@features/auth/hooks/useAuth';
+import React from 'react';
+import { useNavigate } from 'react-router-dom';
 
 interface UserMenuProps {
   isSidebarOpen: boolean;
@@ -42,7 +42,7 @@ export const UserMenu: React.FC<UserMenuProps> = ({ isSidebarOpen, onToggleSideb
           <span className="text-xs font-bold">{initial}</span>
         </label>
 
-        <ul tabIndex={0} className="dropdown-content menu p-2 shadow-2xl bg-base-200 border border-base-300 rounded-box w-56">
+        <ul tabIndex={0} className="dropdown-content menu p-2 shadow-2xl bg-base-200 border border-base-300 rounded-box w-56 z-[200]">
           <div className="px-4 py-3 border-b border-base-300 mb-2">
             <p className="text-xs font-bold text-base-content/90 truncate">{user?.name}</p>
             <p className="text-[10px] text-base-content/50 truncate">{user?.email}</p>

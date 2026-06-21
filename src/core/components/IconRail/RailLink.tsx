@@ -1,5 +1,7 @@
 import React from 'react';
 import { NavModule } from '../../../shared/layouts/nav.config';
+import { usePlanModule } from '@features/auth/hooks/usePlanModule';
+import { Lock } from 'lucide-react';
 
 interface RailLinkProps {
   module: NavModule;
@@ -13,6 +15,9 @@ export const RailLink: React.FC<RailLinkProps> = ({
   onClick,
 }) => {
   const Icon = module.icon;
+  const dbKey = module.key === 'agents' ? 'agents_ia' : module.key;
+  const { isLocked } = usePlanModule(dbKey);
+
   return (
     <li>
       <button
@@ -25,13 +30,18 @@ export const RailLink: React.FC<RailLinkProps> = ({
         }`}
       >
         <div
-          className={`flex h-10 w-10 items-center justify-center rounded-xl transition-all duration-200 ${
+          className={`relative flex h-10 w-10 items-center justify-center rounded-xl transition-all duration-200 ${
             active
               ? 'bg-primary/15 ring-2 ring-primary/60 shadow-lg shadow-primary/20'
               : 'group-hover:bg-base-content/5'
           }`}
         >
           <Icon size={20} strokeWidth={active ? 2 : 1.5} />
+          {isLocked && (
+            <div className="absolute -top-1 -right-1 flex h-4.5 w-4.5 items-center justify-center rounded-full bg-warning text-warning-content border border-base-300 shadow">
+              <Lock size={10} />
+            </div>
+          )}
         </div>
         <span
           className={`text-[10px] leading-tight font-medium transition-colors ${

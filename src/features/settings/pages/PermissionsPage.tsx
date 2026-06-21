@@ -93,7 +93,7 @@ export const PermissionsPage: React.FC = () => {
                     <span className="text-xs text-slate-500 font-bold ml-1">/ {totalMenus} permisos</span>
                   </div>
 
-                  {role.isEditable ? (
+                  {role.isEditable && user?.plan?.name === 'Core Digital' ? (
                     <button
                       onClick={() => navigate(`/settings/permissions/${role.name}`)}
                       className="inline-flex items-center gap-1.5 px-4 py-2.5 rounded-xl bg-slate-800 hover:bg-slate-700 text-sm font-bold text-white transition-all group-hover:text-primary"
@@ -101,7 +101,9 @@ export const PermissionsPage: React.FC = () => {
                       Configurar <ArrowRight size={16} />
                     </button>
                   ) : (
-                    <span className="text-xs text-slate-600 font-bold italic">No editable</span>
+                    <span className="text-xs text-slate-600 font-bold italic">
+                      {user?.plan?.name !== 'Core Digital' && role.isEditable ? 'Requiere Core Digital' : 'No editable'}
+                    </span>
                   )}
                 </div>
               </div>

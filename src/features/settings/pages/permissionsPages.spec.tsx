@@ -5,6 +5,7 @@ import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import React from 'react';
 import { PermissionsPage } from './PermissionsPage';
 import { RolePermissionsPage } from './RolePermissionsPage';
+import { useAuthStore } from '@features/auth/store/authStore';
 import * as usePermsHook from '../hooks/usePermissions';
 
 vi.mock('../hooks/usePermissions', () => ({
@@ -16,6 +17,10 @@ vi.mock('../hooks/usePermissions', () => ({
     mutate: vi.fn(),
   })),
   useRolesList: vi.fn(),
+}));
+
+vi.mock('@features/auth/store/authStore', () => ({
+  useAuthStore: vi.fn(),
 }));
 
 const createWrapper = () => {
@@ -34,6 +39,10 @@ const createWrapper = () => {
 describe('Permissions Pages', () => {
   beforeEach(() => {
     vi.clearAllMocks();
+    vi.mocked(useAuthStore).mockImplementation((selector: any) => {
+      const state = { user: { plan: { name: 'Core Digital' } } };
+      return selector ? selector(state) : state;
+    });
     vi.mocked(usePermsHook.useRolesList).mockReturnValue({
       data: [
         { id: '1', name: 'admin', label: 'Administrador', description: 'Control total', isEditable: false, badge: 'Acceso Total', badgeColor: '', iconColor: '' },

@@ -1,14 +1,14 @@
-import { Suspense } from 'react';
-import { BrowserRouter, Navigate, useRoutes } from 'react-router-dom';
-import { authRoutes } from '@features/auth/routes/AuthRoutes';
+import { ModuleGuard } from '@core/components/ModuleGuard';
+import { ProtectedRoute } from '@core/routes/ProtectedRoute';
 import { crmRoutes } from '@crm/routes/CrmRoutes';
 import { agentRoutes } from '@features/agents/routes/AgentRoutes';
+import { authRoutes } from '@features/auth/routes/AuthRoutes';
 import { chatbotRoutes } from '@features/chatbot/routes/ChatbotRoutes';
+import { dashboardRoutes } from '@features/dashboard/routes/DashboardRoutes';
 import { settingsRoutes } from '@features/settings/routes/SettingsRoutes';
-import { ProtectedRoute } from '@core/routes/ProtectedRoute';
-import { AppShell } from '@shared/layouts/AppShell';
-import { DashboardLoader, DashboardFallback } from '@features/dashboard/DashboardLoader';
 import { ConstructionPage } from '@shared/components/ConstructionPage';
+import { AppShell } from '@shared/layouts/AppShell';
+import { BrowserRouter, Navigate, useRoutes } from 'react-router-dom';
 
 const AppRoutes = () => {
   return useRoutes([
@@ -20,27 +20,15 @@ const AppRoutes = () => {
         </ProtectedRoute>
       ),
       children: [
-        {
-          path: '/dashboard',
-          children: [
-            { path: '', element: <Navigate to="/dashboard/home" replace /> },
-            {
-              path: 'home',
-              element: (
-                <Suspense fallback={<DashboardFallback />}>
-                  <DashboardLoader />
-                </Suspense>
-              )
-            }
-          ]
-        },
+        ...dashboardRoutes,
         ...crmRoutes,
         ...chatbotRoutes,
         ...agentRoutes,
         ...settingsRoutes,
-        { path: '/funnels/*', element: <ConstructionPage /> },
-        { path: '/avatar/*', element: <ConstructionPage /> },
-        { path: '/analytics/*', element: <ConstructionPage /> },
+        { path: '/funnels/*', element: <ModuleGuard menuKey="funnels"><ConstructionPage /></ModuleGuard> },
+        { path: '/avatar/*', element: <ModuleGuard menuKey="avatar"><ConstructionPage /></ModuleGuard> },
+        { path: '/analytics/*', element: <ModuleGuard menuKey="analytics"><ConstructionPage /></ModuleGuard> },
+        { path: '/billing', element: <ConstructionPage title="Facturación" description="Gestiona tu plan y métodos de pago." /> },
         { path: '/construction', element: <ConstructionPage /> }
       ]
     },

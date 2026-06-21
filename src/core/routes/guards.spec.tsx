@@ -3,11 +3,21 @@ import { render, screen } from '@testing-library/react';
 import { MemoryRouter, Routes, Route } from 'react-router-dom';
 import { AdminGuard } from './AdminGuard';
 import { PermissionGuard } from './PermissionGuard';
+import { ModuleGuard } from '../components/ModuleGuard';
 import { useAuthStore } from '@features/auth/store/authStore';
 
 vi.mock('@features/auth/store/authStore', () => ({
   useAuthStore: vi.fn(),
 }));
+
+// Mock useNavigate since LockedModuleOverlay uses it
+vi.mock('react-router-dom', async () => {
+  const actual = await vi.importActual('react-router-dom');
+  return {
+    ...actual as any,
+    useNavigate: () => vi.fn(),
+  };
+});
 
 describe('Guards', () => {
   beforeEach(() => {
@@ -158,6 +168,85 @@ describe('Guards', () => {
 
       expect(screen.queryByText('Contacts Content')).not.toBeInTheDocument();
       expect(screen.getByText('Dashboard Content')).toBeInTheDocument();
+    });
+  });
+
+  describe('ModuleGuard', () => {
+    it('renders children if module is FULL', () => {
+      vi.mocked(useAuthStore).mockImplementation((selector: any) => {
+        const state = {
+          user: { role: 'admin' },
+          allowedMenus: [
+            {
+              key: 'crm',
+              access_level: 'full',
+            },
+          ],
+        };
+        return selector ? selector(state) : state;
+      });
+
+      render(
+        <MemoryRouter>
+          <ModuleGuard menuKey="crm">
+            <div>CRM Enabled Content</div>
+          </ModuleGuard>
+        </MemoryRouter>
+      );
+
+      expect(screen.getByText('CRM Enabled Content')).toBeInTheDocument();
+    });
+
+    it('renders LockedModuleOverlay for admin if module is LOCKED by the plan', () => {
+      vi.mocked(useAuthStore).mockImplementation((selector: any) => {
+        const state = {
+          user: { role: 'admin' },
+          allowedMenus: [
+            {
+              key: 'crm',
+              access_level: 'locked',
+            },
+          ],
+        };
+        return selector ? selector(state) : state;
+      });
+
+      render(
+        <MemoryRouter>
+          <ModuleGuard menuKey="crm">
+            <div>CRM Locked Content</div>
+          </ModuleGuard>
+        </MemoryRouter>
+      );
+
+      expect(screen.queryByText('CRM Locked Content')).not.toBeInTheDocument();
+      expect(screen.getByText('Módulo bloqueado')).toBeInTheDocument();
+    });
+
+    it('renders read-only warning bar if module is READ_ONLY', () => {
+      vi.mocked(useAuthStore).mockImplementation((selector: any) => {
+        const state = {
+          user: { role: 'admin' },
+          allowedMenus: [
+            {
+              key: 'crm',
+              access_level: 'read_only',
+            },
+          ],
+        };
+        return selector ? selector(state) : state;
+      });
+
+      render(
+        <MemoryRouter>
+          <ModuleGuard menuKey="crm">
+            <div>CRM ReadOnly Content</div>
+          </ModuleGuard>
+        </MemoryRouter>
+      );
+
+      expect(screen.getByText('CRM ReadOnly Content')).toBeInTheDocument();
+      expect(screen.getByText('Solo lectura — actualiza tu plan para editar')).toBeInTheDocument();
     });
   });
 });
