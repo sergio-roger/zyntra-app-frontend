@@ -27,21 +27,21 @@ export const UserMenu: React.FC<UserMenuProps> = ({ isSidebarOpen, onToggleSideb
   return (
     <div className="mt-auto flex flex-col items-center gap-2 pt-3">
       {/* Sidebar Toggle Button */}
-      <button 
+      <button
         onClick={() => onToggleSidebar(!isSidebarOpen)}
         className="btn btn-ghost btn-xs btn-circle text-base-content/40 hover:text-primary mb-2"
       >
         {isSidebarOpen ? <PanelLeftClose size={14} /> : <PanelLeft size={14} />}
       </button>
-      
+
       <div className="h-px w-8 bg-base-content/10" aria-hidden />
-      
+
       {/* Avatar Dropdown */}
       <div className="dropdown dropdown-hover dropdown-right dropdown-end group/avatar">
         <label tabIndex={0} className="flex h-9 w-9 cursor-pointer items-center justify-center rounded-full bg-gradient-to-br from-primary to-secondary text-primary-content ring-2 ring-primary/30 ring-offset-2 ring-offset-base-300/80 transition-transform group-hover/avatar:scale-110">
           <span className="text-xs font-bold">{initial}</span>
         </label>
-        
+
         <ul tabIndex={0} className="dropdown-content menu p-2 shadow-2xl bg-base-200 border border-base-300 rounded-box w-56">
           <div className="px-4 py-3 border-b border-base-300 mb-2">
             <p className="text-xs font-bold text-base-content/90 truncate">{user?.name}</p>

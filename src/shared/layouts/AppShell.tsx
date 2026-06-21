@@ -47,8 +47,8 @@ export const AppShell: React.FC = () => {
         />
       )}
 
-      <SideRail 
-        activeKey={activeModule?.key} 
+      <SideRail
+        activeKey={activeModule?.key}
         onToggleSidebar={(open) => {
           setIsSubSidebarOpen(open);
           if (!open) {
@@ -58,9 +58,9 @@ export const AppShell: React.FC = () => {
         isSidebarOpen={isMobileRailOpen}
       />
 
-      <SubSidebar 
+      <SubSidebar
         isOpen={isSubSidebarOpen}
-        module={activeModule || DEFAULT_MODULE} 
+        module={activeModule || DEFAULT_MODULE}
         onClose={() => {
           setIsSubSidebarOpen(false);
           setIsMobileRailOpen(false);
