@@ -1,5 +1,5 @@
 import React from 'react';
-import { DEAL_STAGES, type Deal, type DealStage } from '@crm/types';
+import { DEAL_STAGES, Deal, DealStage } from '@crm/types';
 import { DealsColumn } from './DealsColumn';
 
 interface DealsKanbanProps {

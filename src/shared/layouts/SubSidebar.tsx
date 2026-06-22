@@ -2,7 +2,8 @@ import React from 'react';
 import { NavLink } from 'react-router-dom';
 import { usePlanModule } from '@features/auth/hooks/usePlanModule';
 import { X, Lock } from 'lucide-react';
-import { NavModule, SubNavItem, getMenuKeyFromPath } from './nav.config';
+import { getMenuKeyFromPath } from './nav.config';
+import { NavModule, SubNavItem } from '@shared/types/nav';
 import { useAuthStore } from '@features/auth/store/authStore';
 
 interface SubSidebarProps {

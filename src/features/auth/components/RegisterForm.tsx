@@ -7,7 +7,7 @@ import { FormField } from '@features/auth/components/FormField';
 import { SubmitButton } from '@features/auth/components/SubmitButton';
 import {
   registerSchema,
-  type RegisterFormValues,
+  RegisterFormValues,
 } from '@features/auth/schemas/register.schema';
 import { mapAuthError } from '@features/auth/lib/mapAuthError';
 

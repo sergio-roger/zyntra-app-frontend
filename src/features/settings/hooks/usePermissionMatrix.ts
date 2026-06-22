@@ -1,6 +1,6 @@
 import { useMenusList, useRolePermissions, useUpdatePermissions } from '@features/settings/hooks/usePermissions';
-import { toastManager } from '@shared/components/toast/toastManager';
 import { Menu } from '@features/settings/types/settings';
+import { toastManager } from '@shared/components/toast/toastManager';
 
 interface UsePermissionMatrixParams {
   roleKey: string;

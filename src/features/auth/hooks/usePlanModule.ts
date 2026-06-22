@@ -1,5 +1,5 @@
 import { useAuthStore } from '@features/auth/store/authStore';
-import type { MenuNode, ModuleAccessLevel } from '@features/auth/types/auth.types';
+import { MenuNode, ModuleAccessLevel } from '@features/auth/types/auth.types';
 
 function findNode(nodes: MenuNode[], key: string): MenuNode | null {
   for (const node of nodes) {

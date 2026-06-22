@@ -73,7 +73,7 @@ export const UserMenu: React.FC = () => {
             </div>
             <li><a className="text-sm py-2" onClick={() => handleNavigate('/billing')}><CreditCard size={14} className="text-primary" /> Facturación</a></li>
             <li><a className="text-sm py-2" onClick={() => handleNavigate('/plans')}><Zap size={14} className="text-warning" /> Planes</a></li>
-            <li><a className="text-sm py-2" onClick={() => handleNavigate('/settings')}><Settings size={14} /> Settings</a></li>
+            <li><a className="text-sm py-2" onClick={() => handleNavigate('/settings')}><Settings size={14} /> Configuración</a></li>
             <li><a className="text-sm py-2" onClick={() => handleNavigate('/construction')}><Code2 size={14} /> Developers</a></li>
             <li><a className="text-sm py-2" onClick={() => handleNavigate('/construction')}><HelpCircle size={14} /> Help</a></li>
             <div className="h-px bg-base-300 my-1" />

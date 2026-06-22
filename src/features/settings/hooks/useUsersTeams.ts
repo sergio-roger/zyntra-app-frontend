@@ -1,6 +1,6 @@
+import { CreateTeamInput, CreateUserInput, CrmUser, Team } from '@features/settings/types/settings';
 import api from '@shared/api/axios';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
-import { CreateTeamInput, CreateUserInput, CrmUser, Team } from '../types/settings';
 
 export function useUsersList() {
   return useQuery<CrmUser[]>({
@@ -40,7 +40,6 @@ export function useUpdateUser() {
   });
 }
 
-// Teams Hooks
 export function useTeamsList() {
   return useQuery<Team[]>({
     queryKey: ['settings-teams'],

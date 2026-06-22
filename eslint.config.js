@@ -22,7 +22,7 @@ export default defineConfig([
       'react-refresh/only-export-components': 'off',
       'react-hooks/set-state-in-effect': 'off',
       '@typescript-eslint/no-explicit-any': 'off',
-      '@typescript-eslint/consistent-type-imports': 'off',
+      '@typescript-eslint/consistent-type-imports': ['error', { prefer: 'no-type-imports' }],
     },
   },
 ])

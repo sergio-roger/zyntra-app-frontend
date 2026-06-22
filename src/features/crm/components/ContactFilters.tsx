@@ -3,7 +3,7 @@ import { Search, X } from 'lucide-react';
 import {
   SOURCES,
   SOURCE_LABELS,
-  type ContactSource,
+  ContactSource,
 } from '@crm/types';
 
 interface LifecycleStage {

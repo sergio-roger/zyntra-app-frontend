@@ -4,16 +4,16 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { X } from 'lucide-react';
 import {
   contactSchema,
-  type ContactFormValues,
+  ContactFormValues,
 } from '@crm/schemas/contact.schema';
 import {
   STAGES,
   SOURCES,
   STAGE_LABELS,
   SOURCE_LABELS,
-  type Contact,
-  type ContactSource,
-  type ContactStage,
+  Contact,
+  ContactSource,
+  ContactStage,
 } from '@crm/types';
 import { useCreateContact, useUpdateContact } from '@crm/hooks/useContacts';
 import { mapAuthError } from '@features/auth/lib/mapAuthError';

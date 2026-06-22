@@ -7,7 +7,7 @@ import { FormField } from '@features/auth/components/FormField';
 import { SubmitButton } from '@features/auth/components/SubmitButton';
 import {
   resetPasswordSchema,
-  type ResetPasswordFormValues,
+  ResetPasswordFormValues,
 } from '@features/auth/schemas/reset-password.schema';
 import { mapAuthError } from '@features/auth/lib/mapAuthError';
 

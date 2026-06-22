@@ -7,13 +7,13 @@ import {
   FileText,
   Upload,
   Hand,
-  type LucideIcon,
+  LucideIcon,
 } from 'lucide-react';
 import {
   STAGE_LABELS,
   SOURCE_LABELS,
-  type ContactStage,
-  type ContactSource,
+  ContactStage,
+  ContactSource,
 } from '@crm/types';
 
 const STAGE_CLASSES: Record<ContactStage, string> = {

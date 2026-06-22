@@ -7,7 +7,7 @@ import { FormField } from '@features/auth/components/FormField';
 import { SubmitButton } from '@features/auth/components/SubmitButton';
 import {
   forgotPasswordSchema,
-  type ForgotPasswordFormValues,
+  ForgotPasswordFormValues,
 } from '@features/auth/schemas/forgot-password.schema';
 import { mapAuthError } from '@features/auth/lib/mapAuthError';
 

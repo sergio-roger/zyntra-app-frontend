@@ -1,5 +1,5 @@
 import React from 'react';
-import { NavModule } from '../../../shared/layouts/nav.config';
+import { NavModule } from '@shared/types/nav';
 import { usePlanModule } from '@features/auth/hooks/usePlanModule';
 import { Lock } from 'lucide-react';
 

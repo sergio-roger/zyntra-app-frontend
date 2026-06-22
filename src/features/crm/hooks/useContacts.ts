@@ -1,5 +1,5 @@
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
-import { crmApi, type CreateContactInput, type UpdateContactInput } from '@crm/api/crm.api';
+import { crmApi, CreateContactInput, UpdateContactInput } from '@crm/api/crm.api';
 import { ContactsListResponse, ListContactsQuery, Pipeline } from '@crm/types';
 
 export const contactsKeys = {

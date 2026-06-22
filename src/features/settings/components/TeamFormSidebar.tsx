@@ -1,18 +1,18 @@
-import React, { useEffect, useState } from 'react';
-import { 
-  X, 
-  Check, 
-  Loader2, 
-  Users,
-  Type,
-  Palette,
-  AlignLeft,
-  UserPlus
-} from 'lucide-react';
 import { Input } from '@core/ui/Input';
 import { Textarea } from '@core/ui/Textarea';
 import { useCreateTeam, useUpdateTeam, useUsersList } from '@features/settings/hooks/useUsersTeams';
 import { Team } from '@features/settings/types/settings';
+import {
+  AlignLeft,
+  Check,
+  Loader2,
+  Palette,
+  Type,
+  UserPlus,
+  Users,
+  X
+} from 'lucide-react';
+import React, { useEffect, useState } from 'react';
 
 interface TeamFormSidebarProps {
   open: boolean;

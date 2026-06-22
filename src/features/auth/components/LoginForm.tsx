@@ -6,7 +6,7 @@ import { Mail, Lock } from 'lucide-react';
 import { useAuth } from '@features/auth/hooks/useAuth';
 import { FormField } from '@features/auth/components/FormField';
 import { SubmitButton } from '@features/auth/components/SubmitButton';
-import { loginSchema, type LoginFormValues } from '@features/auth/schemas/login.schema';
+import { loginSchema, LoginFormValues } from '@features/auth/schemas/login.schema';
 import { extractApiErrors } from '@features/auth/lib/mapAuthError';
 import { toastManager } from '@shared/components/toast/toastManager';
 
