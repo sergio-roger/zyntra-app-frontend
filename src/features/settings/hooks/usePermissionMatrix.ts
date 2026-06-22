@@ -3,7 +3,7 @@ import { toastManager } from '@shared/components/toast/toastManager';
 import { Menu } from '@features/settings/types';
 
 interface UsePermissionMatrixParams {
-  roleKey: 'manager' | 'agent';
+  roleKey: string;
   readOnly?: boolean;
 }
 

@@ -12,8 +12,7 @@ export const RolePermissionsPage: React.FC = () => {
 
   const { data: dbRoles = [], isLoading } = useRolesList();
 
-  const roleKey = role as 'manager' | 'agent' | 'admin';
-  const roleInfo = dbRoles.find((r) => r.name === roleKey);
+  const roleInfo = dbRoles.find((r) => r.name === role);
 
   if (isLoading) {
     return (
@@ -41,7 +40,7 @@ export const RolePermissionsPage: React.FC = () => {
     );
   }
 
-  if (!roleInfo || roleKey === 'admin') {
+  if (!roleInfo || ['admin', 'superAdmin'].includes(role || '')) {
     return (
       <div className="space-y-6">
         <button
@@ -57,7 +56,7 @@ export const RolePermissionsPage: React.FC = () => {
     );
   }
 
-  const configRoleKey = roleKey as 'manager' | 'agent';
+  const configRoleKey = role as string;
 
   return (
     <div className="space-y-6 animate-in fade-in duration-500">
@@ -75,12 +74,6 @@ export const RolePermissionsPage: React.FC = () => {
           </h2>
           <p className="text-sm text-slate-400">{roleInfo.description}</p>
         </div>
-        {user?.plan && (
-          <div className="flex items-center gap-2 bg-slate-900 border border-white/5 px-4 py-2.5 rounded-2xl">
-            <span className="text-xs text-slate-400 font-bold uppercase tracking-wider">Plan Activo:</span>
-            <span className="text-sm text-indigo-400 font-extrabold">{user.plan.name}</span>
-          </div>
-        )}
       </div>
 
       <div className="bg-slate-950/20 border border-white/5 rounded-3xl p-6 md:p-8">
