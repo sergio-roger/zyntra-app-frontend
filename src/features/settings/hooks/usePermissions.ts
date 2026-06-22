@@ -12,6 +12,26 @@ export function useRolesList() {
   });
 }
 
+export function useCreateRole() {
+  const queryClient = useQueryClient();
+  return useMutation({
+    mutationFn: async (newRole: {
+      name: string;
+      label: string;
+      description?: string;
+      badge?: string;
+      badgeColor?: string;
+      iconColor?: string;
+    }) => {
+      const { data } = await api.post('/settings/roles', newRole);
+      return data;
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['settings-roles'] });
+    },
+  });
+}
+
 export function useMenusList() {
   return useQuery<Menu[]>({
     queryKey: ['settings-menus'],
