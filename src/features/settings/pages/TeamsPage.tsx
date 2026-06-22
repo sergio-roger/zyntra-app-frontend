@@ -1,5 +1,5 @@
 import { useDeleteTeam, useTeamsList } from '@features/settings/hooks/useUsersTeams';
-import { Team } from '@features/settings/types';
+import { Team } from '@features/settings/types/settings';
 import { ConfirmModal } from '@shared/components/ConfirmModal';
 import { EmptyState } from '@shared/components/EmptyState';
 import {

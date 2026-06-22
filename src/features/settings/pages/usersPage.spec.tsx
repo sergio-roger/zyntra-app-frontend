@@ -21,6 +21,23 @@ vi.mock('@features/auth/store/authStore', () => ({
   useAuthStore: vi.fn(),
 }));
 
+vi.mock('@features/settings/hooks/usePermissions', () => ({
+  useRolesList: vi.fn(() => ({
+    data: [
+      { id: 'admin-id', name: 'admin', label: 'Administrador' },
+      { id: 'manager-id', name: 'manager', label: 'Gerente' },
+      { id: 'agent-id', name: 'agent', label: 'Agente' }
+    ],
+    isLoading: false
+  })),
+  useCreateRole: vi.fn(),
+  useUpdateRole: vi.fn(),
+  useDeleteRole: vi.fn(),
+  useMenusList: vi.fn(),
+  useRolePermissions: vi.fn(),
+  useUpdatePermissions: vi.fn()
+}));
+
 vi.mock('@shared/components/toast/toastManager', () => ({
   toastManager: {
     add: vi.fn(),

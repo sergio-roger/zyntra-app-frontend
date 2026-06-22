@@ -10,6 +10,7 @@ import {
 } from 'lucide-react';
 import { Input } from '@core/ui/Input';
 import { useCreateUser, useUpdateUser } from '@features/settings/hooks/useUsersTeams';
+import { useRolesList } from '@features/settings/hooks/usePermissions';
 import { CrmUser, UserRole } from '@features/settings/types';
 import { useAuthStore } from '@features/auth/store/authStore';
 import { toastManager } from '@shared/components/toast/toastManager';
@@ -32,6 +33,8 @@ export const UserFormSidebar: React.FC<UserFormSidebarProps> = ({ open, user, is
   const createMutation = useCreateUser();
   const updateMutation = useUpdateUser();
   const isSaving = createMutation.isPending || updateMutation.isPending;
+
+  const { data: dbRoles } = useRolesList();
 
   const currentUser = useAuthStore(s => s.user);
   const planName = currentUser?.plan?.name || (currentUser as any)?.plan_object?.name || 'Impulse Pro';
@@ -63,6 +66,20 @@ export const UserFormSidebar: React.FC<UserFormSidebarProps> = ({ open, user, is
     }
     onClose();
   };
+
+  const getRoleLabel = (role: any) => {
+    if (role.name === 'admin') return 'Administrador (Acceso Total)';
+    if (role.name === 'manager') return 'Gerente (Gestión de CRM y Agentes)';
+    if (role.name === 'agent') return planName === 'BrandStart' ? 'Usuario Estándar (Operación Diaria)' : 'Agente (Operación Diaria)';
+    return `${role.label} (${role.description || 'Rol Personalizado'})`;
+  };
+
+  const displayRoles = dbRoles || [];
+  const filteredRoles = displayRoles.filter(role => {
+    if (role.name === 'superAdmin') return false;
+    if (role.name === 'manager' && planName === 'BrandStart') return false;
+    return true;
+  });
 
   return (
     <>
@@ -116,14 +133,14 @@ export const UserFormSidebar: React.FC<UserFormSidebarProps> = ({ open, user, is
               </label>
               <select
                 value={formData.role}
-                onChange={(e) => setFormData({ ...formData, role: e.target.value as UserRole })}
+                onChange={(e) => setFormData({ ...formData, role: e.target.value })}
                 className="w-full bg-slate-950/50 border border-white/10 rounded-xl py-2.5 px-4 text-sm text-white focus:outline-none focus:border-primary/50 transition-all appearance-none cursor-pointer"
               >
-                <option value="admin">Administrador (Acceso Total)</option>
-                {planName !== 'BrandStart' && (
-                  <option value="manager">Gerente (Gestión de CRM y Agentes)</option>
-                )}
-                <option value="agent">{planName === 'BrandStart' ? 'Usuario Estándar (Operación Diaria)' : 'Agente (Operación Diaria)'}</option>
+                {filteredRoles.map(role => (
+                  <option key={role.id} value={role.name}>
+                    {getRoleLabel(role)}
+                  </option>
+                ))}
               </select>
             </div>
 

@@ -1,4 +1,4 @@
-export type UserRole = 'admin' | 'manager' | 'agent' | 'superAdmin';
+export type UserRole = string;
 
 export interface CrmUser {
   id: string;

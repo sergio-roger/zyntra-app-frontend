@@ -60,7 +60,7 @@ export const PermissionMatrix: React.FC<PermissionMatrixProps> = ({ roleKey, rea
   return (
     <div className="flex flex-col md:flex-row gap-8 items-start">
       {/* Selector de pestañas vertical (Módulos principales) */}
-      <div className="w-full md:w-72 bg-slate-900/40 border border-white/5 rounded-3xl p-4 flex flex-col gap-1.5 self-stretch">
+      <div className="w-full md:w-72 bg-slate-900/40 border border-white/5 rounded-xl p-4 flex flex-col gap-1.5 self-stretch">
         <p className="text-[10px] font-black uppercase tracking-wider text-slate-500 px-3 mb-2">Módulos</p>
         
         {roots.map((root) => {
@@ -72,7 +72,7 @@ export const PermissionMatrix: React.FC<PermissionMatrixProps> = ({ roleKey, rea
             <button
               key={root.id}
               onClick={() => setActiveTabKey(root.key)}
-              className={`w-full text-left px-4 py-3.5 rounded-2xl text-sm font-bold transition-all flex items-center justify-between group ${
+              className={`w-full text-left px-4 py-3.5 rounded-xl text-sm font-bold transition-all flex items-center justify-between group ${
                 isActive
                   ? 'bg-primary text-primary-content shadow-lg shadow-primary/20 scale-[1.01]'
                   : 'text-slate-400 hover:text-white hover:bg-white/5'
@@ -102,9 +102,9 @@ export const PermissionMatrix: React.FC<PermissionMatrixProps> = ({ roleKey, rea
       </div>
 
       {/* Contenedor de configuración de permisos a la derecha */}
-      <div className="flex-1 w-full bg-slate-900/20 border border-white/5 rounded-3xl p-6 md:p-8 min-h-[400px]">
+      <div className="flex-1 w-full bg-slate-900/20 border border-white/5 rounded-xl p-6 md:p-8 min-h-[400px]">
         {/* Parent Module Toggle */}
-        <div className="bg-slate-900 border border-white/5 rounded-2xl p-6 shadow-xl mb-6">
+        <div className="bg-slate-900 border border-white/5 rounded-xl p-6 shadow-xl mb-6">
           <div className="flex items-center justify-between">
             <div>
               <span className="text-[10px] font-black uppercase tracking-wider text-primary mb-1 block">Acceso Principal</span>
@@ -130,7 +130,7 @@ export const PermissionMatrix: React.FC<PermissionMatrixProps> = ({ roleKey, rea
                 const isChildChecked = activeMenuIds.includes(child.id);
 
                 return (
-                  <div key={child.id} className="bg-slate-900/40 border border-white/5 hover:border-white/10 rounded-2xl p-5 transition-all">
+                  <div key={child.id} className="bg-slate-900/40 border border-white/5 hover:border-white/10 rounded-xl p-5 transition-all">
                     <PermissionToggle
                       menuId={child.id}
                       label={child.label}
@@ -146,7 +146,7 @@ export const PermissionMatrix: React.FC<PermissionMatrixProps> = ({ roleKey, rea
             </div>
           </div>
         ) : (
-          <div className="flex flex-col items-center justify-center py-20 text-slate-500 border border-dashed border-white/5 rounded-2xl">
+          <div className="flex flex-col items-center justify-center py-20 text-slate-500 border border-dashed border-white/5 rounded-xl">
             <p className="text-sm font-medium">Este módulo no contiene subsecciones configurables.</p>
             <p className="text-xs mt-1">El acceso es binario y se controla mediante el switch principal superior.</p>
           </div>

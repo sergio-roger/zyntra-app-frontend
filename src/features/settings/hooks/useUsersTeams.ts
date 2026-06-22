@@ -1,8 +1,7 @@
-import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import api from '@shared/api/axios';
-import { CrmUser, Team, CreateUserInput, CreateTeamInput } from '../types';
+import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
+import { CreateTeamInput, CreateUserInput, CrmUser, Team } from '../types/settings';
 
-// Users Hooks
 export function useUsersList() {
   return useQuery<CrmUser[]>({
     queryKey: ['settings-users'],

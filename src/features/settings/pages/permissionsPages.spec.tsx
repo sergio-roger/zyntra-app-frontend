@@ -17,6 +17,18 @@ vi.mock('../hooks/usePermissions', () => ({
     mutate: vi.fn(),
   })),
   useRolesList: vi.fn(),
+  useCreateRole: vi.fn(() => ({
+    mutateAsync: vi.fn(),
+    isPending: false,
+  })),
+  useUpdateRole: vi.fn(() => ({
+    mutateAsync: vi.fn(),
+    isPending: false,
+  })),
+  useDeleteRole: vi.fn(() => ({
+    mutateAsync: vi.fn(),
+    isPending: false,
+  })),
 }));
 
 vi.mock('@features/auth/store/authStore', () => ({

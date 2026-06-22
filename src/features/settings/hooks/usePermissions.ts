@@ -1,6 +1,6 @@
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import api from '@shared/api/axios';
-import { RolePermissions, Menu, Role } from '../types';
+import { RolePermissions, Menu, Role } from '../types/settings';
 
 export function useRolesList() {
   return useQuery<Role[]>({
@@ -73,6 +73,41 @@ export function useUpdatePermissions(roleName: string) {
     },
     onSettled: () => {
       queryClient.invalidateQueries({ queryKey: ['settings-permissions', roleName] });
+    },
+  });
+}
+
+export function useUpdateRole() {
+  const queryClient = useQueryClient();
+  return useMutation({
+    mutationFn: async ({ roleName, data: updatedRole }: {
+      roleName: string;
+      data: {
+        label: string;
+        description?: string;
+        badge?: string;
+        badgeColor?: string;
+        iconColor?: string;
+      }
+    }) => {
+      const { data } = await api.put(`/settings/roles/${roleName}`, updatedRole);
+      return data;
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['settings-roles'] });
+    },
+  });
+}
+
+export function useDeleteRole() {
+  const queryClient = useQueryClient();
+  return useMutation({
+    mutationFn: async (roleName: string) => {
+      const { data } = await api.delete(`/settings/roles/${roleName}`);
+      return data;
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['settings-roles'] });
     },
   });
 }

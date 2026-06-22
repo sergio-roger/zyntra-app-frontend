@@ -2,6 +2,7 @@ import React from 'react';
 import { useAuthStore } from '@features/auth/store/authStore';
 import { Check, X, Sparkles } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
+import { CardWrapper } from '@shared/components/CardWrapper';
 
 interface PlanDetail {
   name: string;
@@ -143,13 +144,10 @@ export const PlansPage: React.FC = () => {
           const isCurrent = currentPlanName.toLowerCase() === plan.name.toLowerCase();
 
           return (
-            <div
+            <CardWrapper
               key={plan.name}
-              className={`relative flex flex-col justify-between rounded-3xl bg-base-200 border transition-all duration-300 ${
-                isCurrent 
-                  ? 'border-primary ring-2 ring-primary/20 scale-[1.02] shadow-2xl' 
-                  : `${plan.borderColor} hover:border-base-content/20 hover:shadow-xl`
-              }`}
+              variant={isCurrent ? 'highlighted' : 'interactive'}
+              hoverable={!isCurrent}
             >
               {/* Badge superior si es popular o actual */}
               <div className="absolute -top-3.5 right-6 flex gap-2">
@@ -211,13 +209,13 @@ export const PlansPage: React.FC = () => {
                   {isCurrent ? 'Plan Actual' : 'Gestionar suscripción'}
                 </button>
               </div>
-            </div>
+            </CardWrapper>
           );
         })}
       </div>
 
       {/* Tabla Comparativa */}
-      <div className="bg-base-200 rounded-3xl border border-base-300 p-6 md:p-8 shadow-lg">
+      <div className="bg-base-200 rounded-xl border border-base-300 p-6 md:p-8 shadow-lg">
         <h2 className="text-2xl font-bold text-base-content mb-6 text-center md:text-left">
           Comparativa detallada de características
         </h2>

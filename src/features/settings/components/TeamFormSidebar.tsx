@@ -12,7 +12,7 @@ import {
 import { Input } from '@core/ui/Input';
 import { Textarea } from '@core/ui/Textarea';
 import { useCreateTeam, useUpdateTeam, useUsersList } from '@features/settings/hooks/useUsersTeams';
-import { Team } from '@features/settings/types';
+import { Team } from '@features/settings/types/settings';
 
 interface TeamFormSidebarProps {
   open: boolean;

@@ -1,86 +1,9 @@
+import { useAuthStore } from '@features/auth/store/authStore';
+import { RoleCard } from '@features/settings/components/RoleCard';
+import { useCreateRole, useDeleteRole, useMenusList, useRolesList, useUpdateRole } from '@features/settings/hooks/usePermissions';
+import { Loader2, Plus, Shield } from 'lucide-react';
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { Shield, ShieldAlert, ShieldCheck, ArrowRight, Loader2, Plus } from 'lucide-react';
-import { useMenusList, useRolePermissions, useRolesList, useCreateRole } from '@features/settings/hooks/usePermissions';
-import { useAuthStore } from '@features/auth/store/authStore';
-
-// Subcomponente de tarjeta para manejo dinámico de permisos de cada rol
-interface RoleCardProps {
-  role: {
-    id: string;
-    name: string;
-    label: string;
-    description: string;
-    isEditable: boolean;
-    badge?: string;
-    badgeColor?: string;
-    iconColor?: string;
-  };
-  totalMenus: number;
-  user: any;
-  navigate: ReturnType<typeof useNavigate>;
-}
-
-const RoleCard: React.FC<RoleCardProps> = ({ role, totalMenus, user, navigate }) => {
-  const { data: perms, isLoading } = useRolePermissions(role.name);
-
-  const getRoleIcon = (name: string) => {
-    switch (name) {
-      case 'admin': return ShieldAlert;
-      case 'manager': return ShieldCheck;
-      default: return Shield;
-    }
-  };
-
-  const Icon = getRoleIcon(role.name);
-  const activeCount = role.name === 'admin' ? totalMenus : (perms?.menu_ids.length ?? 0);
-
-  return (
-    <div className="flex flex-col bg-slate-900/50 border border-white/5 rounded-3xl p-6 shadow-xl relative group hover:border-white/10 transition-all hover:-translate-y-0.5">
-      <div className="flex items-center justify-between">
-        <div className={`p-3 rounded-2xl border ${role.iconColor || 'text-slate-400 bg-slate-500/10 border-slate-500/20'}`}>
-          <Icon size={24} />
-        </div>
-        {role.badge && (
-          <span className={`text-[10px] font-black uppercase tracking-wider px-2.5 py-1 rounded-lg ${role.badgeColor || 'bg-slate-500/10 text-slate-400'}`}>
-            {role.badge}
-          </span>
-        )}
-      </div>
-
-      <div className="mt-6 flex-1 space-y-2">
-        <h3 className="text-lg font-bold text-white">{role.label}</h3>
-        <p className="text-sm text-slate-400 leading-relaxed">{role.description}</p>
-      </div>
-
-      <div className="mt-8 pt-6 border-t border-white/5 flex items-center justify-between">
-        <div>
-          {isLoading ? (
-            <span className="loading loading-spinner loading-xs text-slate-500"></span>
-          ) : (
-            <>
-              <span className="text-2xl font-extrabold text-white">{activeCount}</span>
-              <span className="text-xs text-slate-500 font-bold ml-1">/ {totalMenus} permisos</span>
-            </>
-          )}
-        </div>
-
-        {role.isEditable && user?.plan?.name === 'Core Digital' ? (
-          <button
-            onClick={() => navigate(`/settings/permissions/${role.name}`)}
-            className="inline-flex items-center gap-1.5 px-4 py-2.5 rounded-xl bg-slate-800 hover:bg-slate-700 text-sm font-bold text-white transition-all group-hover:text-primary"
-          >
-            Configurar <ArrowRight size={16} />
-          </button>
-        ) : (
-          <span className="text-xs text-slate-600 font-bold italic">
-            {user?.plan?.name !== 'Core Digital' && role.isEditable ? 'Requiere Core Digital' : 'No editable'}
-          </span>
-        )}
-      </div>
-    </div>
-  );
-};
 
 export const PermissionsPage: React.FC = () => {
   const navigate = useNavigate();
@@ -89,9 +12,11 @@ export const PermissionsPage: React.FC = () => {
   const { data: allMenus = [], isLoading: loadingMenus } = useMenusList();
   const { data: dbRoles = [], isLoading: loadingRoles } = useRolesList();
   const createRoleMutation = useCreateRole();
+  const updateRoleMutation = useUpdateRole();
+  const deleteRoleMutation = useDeleteRole();
 
-  // Estados del modal de creación de roles
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [editingRole, setEditingRole] = useState<any | null>(null);
   const [roleName, setRoleName] = useState('');
   const [roleLabel, setRoleLabel] = useState('');
   const [roleDesc, setRoleDesc] = useState('');
@@ -103,6 +28,7 @@ export const PermissionsPage: React.FC = () => {
   const isLoading = loadingMenus || loadingRoles;
 
   const resetForm = () => {
+    setEditingRole(null);
     setRoleName('');
     setRoleLabel('');
     setRoleDesc('');
@@ -111,32 +37,68 @@ export const PermissionsPage: React.FC = () => {
     setCreateError('');
   };
 
-  const handleCreateRole = async (e: React.FormEvent) => {
+  const handleCreateOrUpdateRole = async (e: React.FormEvent) => {
     e.preventDefault();
     setCreateError('');
 
-    // Validar nombre del rol (solo minúsculas y guiones bajos / letras para evitar problemas en url)
     const sanitizedName = roleName.trim().toLowerCase().replace(/\s+/g, '_');
-    if (!/^[a-z0-9_]+$/.test(sanitizedName)) {
+    if (!editingRole && !/^[a-z0-9_]+$/.test(sanitizedName)) {
       setCreateError('El identificador del rol solo puede contener letras minúsculas, números y guiones bajos.');
       return;
     }
 
     try {
-      await createRoleMutation.mutateAsync({
-        name: sanitizedName,
-        label: roleLabel.trim(),
-        description: roleDesc.trim(),
-        badge: roleBadge.trim() || undefined,
-        iconColor: roleIconColor,
-        badgeColor: roleIconColor.replace('bg-', 'bg-').replace('text-', 'text-'), // reutiliza colores
-      });
+      if (editingRole) {
+        // Modo Edición
+        await updateRoleMutation.mutateAsync({
+          roleName: editingRole.name,
+          data: {
+            label: roleLabel.trim(),
+            description: roleDesc.trim(),
+            badge: roleBadge.trim() || undefined,
+            iconColor: roleIconColor,
+            badgeColor: roleIconColor.replace('bg-', 'bg-').replace('text-', 'text-'),
+          },
+        });
+      } else {
+        // Modo Creación
+        await createRoleMutation.mutateAsync({
+          name: sanitizedName,
+          label: roleLabel.trim(),
+          description: roleDesc.trim(),
+          badge: roleBadge.trim() || undefined,
+          iconColor: roleIconColor,
+          badgeColor: roleIconColor.replace('bg-', 'bg-').replace('text-', 'text-'),
+        });
+      }
       setIsModalOpen(false);
       resetForm();
     } catch (err: any) {
-      setCreateError(err?.response?.data?.message || 'Error al crear el rol. Inténtalo de nuevo.');
+      setCreateError(err?.response?.data?.message || 'Error al guardar el rol. Inténtalo de nuevo.');
     }
   };
+
+  const handleEditClick = (role: any) => {
+    setEditingRole(role);
+    setRoleName(role.name);
+    setRoleLabel(role.label);
+    setRoleDesc(role.description);
+    setRoleBadge(role.badge || '');
+    setRoleIconColor(role.iconColor || 'text-primary bg-primary/10 border-primary/20');
+    setIsModalOpen(true);
+  };
+
+  const handleDeleteClick = async (role: any) => {
+    if (window.confirm(`¿Estás seguro de que deseas eliminar el rol "${role.label}"? Se revocarán todos los permisos asociados.`)) {
+      try {
+        await deleteRoleMutation.mutateAsync(role.name);
+      } catch (err: any) {
+        alert(err?.response?.data?.message || 'Error al eliminar el rol.');
+      }
+    }
+  };
+
+  const isMutationPending = createRoleMutation.isPending || updateRoleMutation.isPending;
 
   return (
     <div className="space-y-6 animate-in fade-in duration-500">
@@ -149,15 +111,18 @@ export const PermissionsPage: React.FC = () => {
         {/* Botón de crear rol si cuenta con el plan con permisos (Core Digital) */}
         {user?.plan?.name === 'Core Digital' ? (
           <button
-            onClick={() => setIsModalOpen(true)}
-            className="flex items-center gap-2 px-5 py-2.5 rounded-2xl bg-gradient-to-r from-primary to-secondary text-primary-content font-bold text-sm shadow-lg shadow-primary/20 hover:scale-[1.02] active:scale-95 transition-all"
+            onClick={() => {
+              resetForm();
+              setIsModalOpen(true);
+            }}
+            className="flex items-center gap-2 px-5 py-2.5 rounded-xl bg-gradient-to-r from-primary to-secondary text-primary-content font-bold text-sm shadow-lg shadow-primary/20 hover:scale-[1.02] active:scale-95 transition-all"
           >
             <Plus size={16} />
             Crear nuevo rol
           </button>
         ) : (
           user?.plan && (
-            <div className="flex items-center gap-2 bg-slate-900 border border-white/5 px-4 py-2.5 rounded-2xl">
+            <div className="flex items-center gap-2 bg-slate-900 border border-white/5 px-4 py-2.5 rounded-xl">
               <span className="text-xs text-slate-400 font-bold uppercase tracking-wider">Plan Activo:</span>
               <span className="text-sm text-indigo-400 font-extrabold">{user.plan.name}</span>
               {user.plan_status && (
@@ -186,20 +151,22 @@ export const PermissionsPage: React.FC = () => {
               totalMenus={totalMenus}
               user={user}
               navigate={navigate}
+              onEdit={() => handleEditClick(role)}
+              onDelete={() => handleDeleteClick(role)}
             />
           ))}
         </div>
       )}
 
-      {/* Modal para Crear Rol */}
+      {/* Modal para Crear/Editar Rol */}
       {isModalOpen && (
         <div className="modal modal-open z-[250]">
-          <div className="modal-box bg-slate-950 border border-white/10 rounded-3xl p-6 text-white max-w-md shadow-2xl">
+          <div className="modal-box bg-slate-950 border border-white/10 rounded-xl p-6 text-white max-w-md shadow-2xl">
             <h3 className="font-bold text-xl mb-4 flex items-center gap-2">
-              <Shield className="text-primary animate-pulse" /> Crear Nuevo Rol
+              <Shield className="text-primary animate-pulse" /> {editingRole ? 'Editar Rol' : 'Crear Nuevo Rol'}
             </h3>
             
-            <form onSubmit={handleCreateRole} className="space-y-4">
+            <form onSubmit={handleCreateOrUpdateRole} className="space-y-4">
               <div>
                 <label className="label text-xs font-bold uppercase tracking-wider text-slate-400">Identificador del Rol (Único en minúsculas)</label>
                 <input
@@ -207,8 +174,9 @@ export const PermissionsPage: React.FC = () => {
                   placeholder="ej. manager_ventas"
                   value={roleName}
                   onChange={(e) => setRoleName(e.target.value)}
-                  className="input input-bordered w-full bg-slate-900 border-white/10 focus:border-primary text-sm rounded-xl mt-1 text-white"
+                  className="input input-bordered w-full bg-slate-900 border-white/10 focus:border-primary text-sm rounded-xl mt-1 text-white disabled:opacity-50"
                   required
+                  disabled={!!editingRole}
                 />
               </div>
 
@@ -274,16 +242,16 @@ export const PermissionsPage: React.FC = () => {
                     resetForm();
                   }}
                   className="btn btn-ghost border-white/5 hover:bg-white/5 text-sm font-bold rounded-xl"
-                  disabled={createRoleMutation.isPending}
+                  disabled={isMutationPending}
                 >
                   Cancelar
                 </button>
                 <button
                   type="submit"
                   className="btn btn-primary text-white text-sm font-bold rounded-xl px-6"
-                  disabled={createRoleMutation.isPending}
+                  disabled={isMutationPending}
                 >
-                  {createRoleMutation.isPending ? <Loader2 className="animate-spin" size={16} /> : 'Guardar Rol'}
+                  {isMutationPending ? <Loader2 className="animate-spin" size={16} /> : 'Guardar Rol'}
                 </button>
               </div>
             </form>

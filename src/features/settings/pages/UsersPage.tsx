@@ -13,7 +13,7 @@ import {
 import { useUsersList, useUpdateUser } from '@features/settings/hooks/useUsersTeams';
 import { UserFormSidebar } from '@features/settings/components/UserFormSidebar';
 import { EmptyState } from '@shared/components/EmptyState';
-import { CrmUser } from '@features/settings/types';
+import { CrmUser } from '@features/settings/types/settings';
 import { useAuthStore } from '@features/auth/store/authStore';
 import { toastManager } from '@shared/components/toast/toastManager';
 
