@@ -11,9 +11,9 @@ interface RoleCardProps {
     label: string;
     description: string;
     isEditable: boolean;
-    badge?: string;
-    badgeColor?: string;
-    iconColor?: string;
+    badge?: string | null;
+    badgeColor?: string | null;
+    iconColor?: string | null;
   };
   totalMenus: number;
   user: any;

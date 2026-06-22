@@ -11,7 +11,7 @@ import {
 import { Input } from '@core/ui/Input';
 import { useCreateUser, useUpdateUser } from '@features/settings/hooks/useUsersTeams';
 import { useRolesList } from '@features/settings/hooks/usePermissions';
-import { CrmUser, UserRole } from '@features/settings/types';
+import { CrmUser, UserRole } from '@features/settings/types/settings';
 import { useAuthStore } from '@features/auth/store/authStore';
 import { toastManager } from '@shared/components/toast/toastManager';
 

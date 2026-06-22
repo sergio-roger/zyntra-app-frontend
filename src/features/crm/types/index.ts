@@ -239,3 +239,31 @@ export interface ConvertToDealInput {
   description?: string;
 }
 
+export interface SegmentCondition {
+  field: string;
+  operator: 'equals' | 'not_equals' | 'contains' | 'greater_than' | 'less_than' | 'in' | 'is_empty' | 'is_not_empty';
+  value: any;
+}
+
+export interface Segment {
+  id: string;
+  business_id: string;
+  name: string;
+  description: string | null;
+  conditions: SegmentCondition[];
+  created_at: string;
+  updated_at: string;
+}
+
+export interface CreateSegmentInput {
+  name: string;
+  description?: string;
+  conditions: SegmentCondition[];
+}
+
+export interface UpdateSegmentInput {
+  name?: string;
+  description?: string;
+  conditions?: SegmentCondition[];
+}
+

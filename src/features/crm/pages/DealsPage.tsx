@@ -1,9 +1,9 @@
-import React, { useState } from 'react';
-import { Loader2, AlertCircle, Plus, Search, TrendingUp } from 'lucide-react';
-import { useDealsKanban } from '@crm/hooks/useDeals';
-import { DealsKanban } from '@crm/components/DealsKanban';
 import { DealFormSidebar } from '@crm/components/DealFormSidebar';
+import { DealsKanban } from '@crm/components/DealsKanban';
+import { useDealsKanban } from '@crm/hooks/useDeals';
 import { Deal } from '@crm/types';
+import { AlertCircle, Loader2, Plus, Search, TrendingUp } from 'lucide-react';
+import React, { useState } from 'react';
 
 export const DealsPage: React.FC = () => {
   const { data, isLoading, isError, error } = useDealsKanban();
@@ -20,7 +20,6 @@ export const DealsPage: React.FC = () => {
     setIsSidebarOpen(true);
   };
 
-  // Calculate total pipeline value
   const totalPipelineValue = data ? Object.values(data).flat().reduce((sum, d) => sum + Number(d.value), 0) : 0;
   const formattedTotal = new Intl.NumberFormat('es-CO', {
     style: 'currency',
