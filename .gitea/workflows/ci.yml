@@ -68,9 +68,30 @@ jobs:
           build-args: |
             VITE_API_URL=${{ secrets.VITE_API_URL }}
 
-      - name: Trigger Dokploy Deployment
+      # --- MIRROR A GCP: solo etiqueta "latest" ---
+      - name: Autenticar en GCP
         run: |
-          curl -X POST "${{ secrets.DOKPLOY_WEBHOOK_URL }}"
+          echo '${{ secrets.GCP_SERVICE_ACCOUNT_KEY }}' > /tmp/gcp-key.json
+          gcloud auth activate-service-account --key-file=/tmp/gcp-key.json
+          gcloud auth configure-docker ${{ secrets.GCP_REGION }}-docker.pkg.dev --quiet
+
+      - name: Mirror latest → GCP Artifact Registry
+        run: |
+          SOURCE="${{ secrets.HARBOR_URL }}/zyntra/marketing-frontend:latest"
+          TARGET="${{ secrets.GCP_REGION }}-docker.pkg.dev/${{ secrets.GCP_PROJECT }}/${{ secrets.GCP_REPOSITORY }}/marketing-frontend:latest"
+
+          docker pull $SOURCE
+          docker tag $SOURCE $TARGET
+          docker push $TARGET
+
+          echo "✅ Mirror prod → $TARGET"
+
+      - name: Limpiar credenciales GCP
+        if: always()
+        run: rm -f /tmp/gcp-key.json
+
+      - name: Trigger Dokploy Deployment
+        run: curl -X POST "${{ secrets.DOKPLOY_WEBHOOK_URL }}"
 
   build-and-push-hub-dev:
     needs: test-and-lint
@@ -115,6 +136,27 @@ jobs:
           build-args: |
             VITE_API_URL=${{ secrets.VITE_API_URL }}
 
-      - name: Trigger Dokploy Deployment
+      # --- MIRROR A GCP: solo etiqueta "dev-latest" ---
+      - name: Autenticar en GCP
         run: |
-          curl -X POST "${{ secrets.DOKPLOY_WEBHOOK_URL }}"
+          echo '${{ secrets.GCP_SERVICE_ACCOUNT_KEY }}' > /tmp/gcp-key.json
+          gcloud auth activate-service-account --key-file=/tmp/gcp-key.json
+          gcloud auth configure-docker ${{ secrets.GCP_REGION }}-docker.pkg.dev --quiet
+
+      - name: Mirror dev-latest → GCP Artifact Registry
+        run: |
+          SOURCE="${{ secrets.HARBOR_URL }}/zyntra/marketing-frontend:dev-latest"
+          TARGET="${{ secrets.GCP_REGION }}-docker.pkg.dev/${{ secrets.GCP_PROJECT }}/${{ secrets.GCP_REPOSITORY }}/marketing-frontend:dev-latest"
+
+          docker pull $SOURCE
+          docker tag $SOURCE $TARGET
+          docker push $TARGET
+
+          echo "✅ Mirror dev → $TARGET"
+
+      - name: Limpiar credenciales GCP
+        if: always()
+        run: rm -f /tmp/gcp-key.json
+
+      - name: Trigger Dokploy Deployment
+        run: curl -X POST "${{ secrets.DOKPLOY_WEBHOOK_URL }}"
