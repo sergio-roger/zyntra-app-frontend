@@ -123,13 +123,16 @@ export const SegmentDetail: React.FC<SegmentDetailProps> = ({ segment, onEdit, o
                       <td className="px-4 py-3">
                         {c.lifecycle_stage ? (
                           <span
-                            className="inline-flex items-center px-2 py-0.5 rounded text-[10px] font-medium"
+                            className="inline-flex items-center gap-1 px-2 py-0.5 rounded text-[10px] font-medium"
                             style={{
                               backgroundColor: `${c.lifecycle_stage.color}20`,
                               color: c.lifecycle_stage.color,
                               border: `1px solid ${c.lifecycle_stage.color}40`,
                             }}
                           >
+                            {c.lifecycle_stage.icon && (
+                              <span className="text-[11px] leading-none">{c.lifecycle_stage.icon}</span>
+                            )}
                             {c.lifecycle_stage.name}
                           </span>
                         ) : (

@@ -1,7 +1,7 @@
 import { useCreateContact, useUpdateContact } from '@crm/hooks/useContacts';
 import { useTags } from '@crm/hooks/useTags';
 import { useCustomFields } from '@crm/hooks/useCustomFields';
-import { Contact, ContactSource } from '@crm/types';
+import { Contact, ContactSource, LifecycleStage } from '@crm/types';
 import { 
   ChevronRight, 
   Loader2, 
@@ -19,13 +19,6 @@ import {
 import React, { useEffect, useState } from 'react';
 import { Input } from '@core/ui/Input';
 import { Textarea } from '@core/ui/Textarea';
-
-interface LifecycleStage {
-  id: string;
-  name: string;
-  icon: string;
-  type: 'active' | 'lost';
-}
 
 interface ContactFormSidebarProps {
   open: boolean;

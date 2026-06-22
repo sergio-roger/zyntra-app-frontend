@@ -28,6 +28,8 @@ export interface LifecycleStage {
   id: string;
   name: string;
   color: string;
+  icon?: string;
+  type?: 'active' | 'lost';
   description: string | null;
 }
 
