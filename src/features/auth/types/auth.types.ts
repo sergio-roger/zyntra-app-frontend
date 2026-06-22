@@ -1,9 +1,23 @@
 import { Plan } from './plan';
 
+export type ModuleAccessLevel = 'full' | 'read_only' | 'locked';
+
+export interface MenuNode {
+  id: string;
+  key: string;
+  label: string;
+  path: string;
+  parent_key: string | null;
+  description: string | null;
+  access_level?: ModuleAccessLevel;
+  children: MenuNode[];
+}
+
 export type User = {
   id: string;
   name: string;
   email: string;
+  role: 'admin' | 'manager' | 'agent' | 'superAdmin' | null;
   plan: Plan;
   plan_status: string;
 };

@@ -1,7 +1,9 @@
-import { lazy } from 'react';
-import { Navigate, RouteObject } from 'react-router-dom';
+import { ModuleGuard } from '@core/components/ModuleGuard';
+import { PermissionGuard } from '@core/routes/PermissionGuard';
 import { ConstructionPage } from '@shared/components/ConstructionPage';
 import { SuspenseLoader } from '@shared/components/SuspenseLoader';
+import { lazy } from 'react';
+import { Navigate, RouteObject } from 'react-router-dom';
 
 const ContactListPage = lazy(() => import('@crm/pages/ContactListPage').then(m => ({ default: m.ContactListPage })));
 const PipelinePage = lazy(() => import('@crm/pages/PipelinePage').then(m => ({ default: m.PipelinePage })));
@@ -16,14 +18,14 @@ export const crmRoutes: RouteObject[] = [
     path: '/crm',
     children: [
       { index: true, element: <Navigate to="/crm/contacts" replace /> },
-      { path: 'contacts', element: <SuspenseLoader><ContactListPage /></SuspenseLoader> },
-      { path: 'leads', element: <SuspenseLoader><InboxLeadsPage /></SuspenseLoader> },
-      { path: 'deals', element: <SuspenseLoader><DealsPage /></SuspenseLoader> },
-      { path: 'pipeline', element: <SuspenseLoader><PipelinePage /></SuspenseLoader> },
-      { path: 'tags', element: <SuspenseLoader><TagsPage /></SuspenseLoader> },
-      { path: 'tasks', element: <SuspenseLoader><TasksPage /></SuspenseLoader> },
-      { path: 'fields', element: <SuspenseLoader><CustomFieldsPage /></SuspenseLoader> },
-      { path: 'segments', element: <ConstructionPage title="Segmentos Inteligentes" description="Crea listas dinámicas que se actualizan solas según el comportamiento de tus leads." /> }
+      { path: 'contacts', element: <PermissionGuard menuKey="crm_contacts"><ModuleGuard menuKey="crm_contacts"><SuspenseLoader><ContactListPage /></SuspenseLoader></ModuleGuard></PermissionGuard> },
+      { path: 'leads', element: <PermissionGuard menuKey="crm_leads"><ModuleGuard menuKey="crm_leads"><SuspenseLoader><InboxLeadsPage /></SuspenseLoader></ModuleGuard></PermissionGuard> },
+      { path: 'deals', element: <PermissionGuard menuKey="crm_deals"><ModuleGuard menuKey="crm_deals"><SuspenseLoader><DealsPage /></SuspenseLoader></ModuleGuard></PermissionGuard> },
+      { path: 'pipeline', element: <PermissionGuard menuKey="crm_deals"><ModuleGuard menuKey="crm_deals"><SuspenseLoader><PipelinePage /></SuspenseLoader></ModuleGuard></PermissionGuard> },
+      { path: 'tags', element: <PermissionGuard menuKey="crm_tags"><ModuleGuard menuKey="crm_tags"><SuspenseLoader><TagsPage /></SuspenseLoader></ModuleGuard></PermissionGuard> },
+      { path: 'tasks', element: <PermissionGuard menuKey="crm_tasks"><ModuleGuard menuKey="crm_tasks"><SuspenseLoader><TasksPage /></SuspenseLoader></ModuleGuard></PermissionGuard> },
+      { path: 'fields', element: <PermissionGuard menuKey="crm_fields"><ModuleGuard menuKey="crm_fields"><SuspenseLoader><CustomFieldsPage /></SuspenseLoader></ModuleGuard></PermissionGuard> },
+      { path: 'segments', element: <PermissionGuard menuKey="crm_segments"><ModuleGuard menuKey="crm_segments"><ConstructionPage title="Segmentos Inteligentes" description="Crea listas dinámicas que se actualizan solas según el comportamiento de tus leads." /></ModuleGuard></PermissionGuard> }
     ]
   }
 ];

@@ -12,6 +12,7 @@ import { Pagination } from '@crm/components/Pagination';
 import { ConfirmModal } from '@shared/components/ConfirmModal';
 import { Contact, ContactSource, ContactStage } from '@crm/types';
 import api from '@shared/api/axios';
+import { useAuthStore } from '@features/auth/store/authStore';
 
 interface LifecycleStage {
   id: string;
@@ -45,10 +46,7 @@ export const ContactListPage: React.FC = () => {
   }, []);
 
   useEffect(() => {
-    const timer = setTimeout(() => {
-      fetchStages();
-    }, 0);
-    return () => clearTimeout(timer);
+    fetchStages();
   }, [fetchStages]);
 
   const limit = 20;
@@ -60,6 +58,10 @@ export const ContactListPage: React.FC = () => {
     limit,
   });
   const deleteMutation = useDeleteContact();
+
+  const currentUser = useAuthStore(s => s.user);
+  const contactLimit = currentUser?.plan?.contact_limit ?? (currentUser as any)?.plan_object?.contact_limit ?? 999999;
+  const isLimitReached = data ? data.total >= contactLimit && contactLimit !== 999999 : false;
 
   const openCreate = () => {
     setEditing(null);
@@ -84,27 +86,45 @@ export const ContactListPage: React.FC = () => {
   return (
     <div className="space-y-5 animate-in fade-in duration-500">
       <div className="flex flex-wrap items-center justify-between gap-3">
-        <div>
+        <div className="space-y-1">
           <h2 className="text-xl font-bold text-white tracking-tight">Gestión de Contactos</h2>
-          <p className="text-sm text-slate-400">
-            {data ? `${data.total} contactos registrados` : 'Cargando directorio…'}
-          </p>
+          <p className="text-sm text-slate-400">Gestiona tu base de clientes, leads y prospectos comerciales.</p>
+          <div className="text-xs font-semibold text-slate-500">
+            <span className={isLimitReached ? 'text-rose-400 font-bold' : 'text-slate-300'}>{data?.total || 0}</span> / {contactLimit === 999999 ? '∞' : contactLimit} registrados
+          </div>
         </div>
         <div className="flex items-center gap-3">
           <button
             onClick={() => setIsImportOpen(true)}
-            className="inline-flex items-center gap-2 rounded-xl border border-white/10 bg-slate-800 px-5 py-2.5 text-sm font-bold text-slate-300 transition-all hover:bg-slate-700 hover:-translate-y-px active:scale-95"
+            disabled={isLimitReached}
+            className={`inline-flex items-center gap-2 rounded-xl border px-5 py-2.5 text-sm font-bold transition-all ${
+              isLimitReached
+                ? 'bg-slate-800 border-white/5 text-slate-500 cursor-not-allowed shadow-none'
+                : 'border-white/10 bg-slate-800 text-slate-300 hover:bg-slate-700 hover:-translate-y-px active:scale-95'
+            }`}
           >
             <FileSpreadsheet size={18} /> Importar
           </button>
           <button
             onClick={openCreate}
-            className="inline-flex items-center gap-2 rounded-xl bg-primary px-5 py-2.5 text-sm font-bold text-white shadow-lg shadow-primary/20 transition-all hover:-translate-y-px hover:shadow-xl active:scale-95"
+            disabled={isLimitReached}
+            className={`inline-flex items-center gap-2 rounded-xl px-5 py-2.5 text-sm font-bold shadow-lg transition-all ${
+              isLimitReached
+                ? 'bg-slate-800 text-slate-500 cursor-not-allowed shadow-none'
+                : 'bg-primary text-white shadow-primary/20 hover:-translate-y-px hover:shadow-xl active:scale-95'
+            }`}
           >
             <Plus size={18} /> Nuevo contacto
           </button>
         </div>
       </div>
+
+      {isLimitReached && (
+        <div className="flex items-center gap-3 rounded-2xl border border-warning/20 bg-warning/10 p-4 text-sm text-warning-content">
+          <AlertCircle size={20} className="text-warning" />
+          <p>Has alcanzado el límite de {contactLimit} contactos permitidos en tu plan. Actualiza tu suscripción para añadir más.</p>
+        </div>
+      )}
 
       <ContactFilters
         search={search}

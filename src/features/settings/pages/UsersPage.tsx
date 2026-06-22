@@ -11,13 +11,16 @@ import {
   Users
 } from 'lucide-react';
 import { useUsersList, useUpdateUser } from '@features/settings/hooks/useUsersTeams';
-import { UserFormSidebar } from '../components/UserFormSidebar';
+import { UserFormSidebar } from '@features/settings/components/UserFormSidebar';
 import { EmptyState } from '@shared/components/EmptyState';
 import { CrmUser } from '@features/settings/types';
+import { useAuthStore } from '@features/auth/store/authStore';
+import { toastManager } from '@shared/components/toast/toastManager';
 
 export const UsersPage: React.FC = () => {
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const [editingUser, setEditingUser] = useState<CrmUser | null>(null);
+  const currentUser = useAuthStore(s => s.user);
 
   const { data: users = [], isLoading, isError, error } = useUsersList();
   const updateMutation = useUpdateUser();
@@ -32,7 +35,19 @@ export const UsersPage: React.FC = () => {
     setSidebarOpen(true);
   };
 
+  const limit = currentUser?.plan?.user_limit ?? (currentUser as any)?.plan_object?.user_limit ?? 999999;
+  const activeUsersCount = users.filter(u => u.is_active).length;
+  const isLimitReached = activeUsersCount >= limit && limit !== 999999;
+
   const toggleStatus = async (user: CrmUser) => {
+    if (!user.is_active && isLimitReached) {
+      toastManager.add({
+        title: 'Límite alcanzado',
+        description: `Has alcanzado el límite de ${limit} usuarios activos permitidos en tu plan.`,
+        type: 'error',
+      });
+      return;
+    }
     await updateMutation.mutateAsync({ id: user.id, is_active: !user.is_active });
   };
 
@@ -41,6 +56,7 @@ export const UsersPage: React.FC = () => {
       case 'admin': return 'Administrador';
       case 'manager': return 'Gerente';
       case 'agent': return 'Agente';
+      case 'superAdmin': return 'Super Admin';
       default: return role;
     }
   };
@@ -48,17 +64,32 @@ export const UsersPage: React.FC = () => {
   return (
     <div className="space-y-6 animate-in fade-in duration-500">
       <div className="flex flex-wrap items-center justify-between gap-3">
-        <div>
+        <div className="space-y-1">
           <h2 className="text-xl font-bold text-white tracking-tight">Usuarios y Colaboradores</h2>
-          <p className="text-sm text-slate-400">Gestiona quién tiene acceso a tu plataforma y sus permisos</p>
+          <p className="text-sm text-slate-400">Gestiona quién tiene acceso a tu plataforma y sus permisos.</p>
+          <div className="text-xs font-semibold text-slate-500">
+            <span className={isLimitReached ? 'text-rose-400 font-bold' : 'text-slate-300'}>{activeUsersCount}</span> / {limit === 999999 ? '∞' : limit} activos
+          </div>
         </div>
         <button
           onClick={openCreate}
-          className="inline-flex items-center gap-2 rounded-xl bg-primary px-5 py-2.5 text-sm font-bold text-white shadow-lg shadow-primary/20 transition-all hover:-translate-y-px hover:shadow-xl active:scale-95"
+          disabled={isLimitReached}
+          className={`inline-flex items-center gap-2 rounded-xl px-5 py-2.5 text-sm font-bold shadow-lg transition-all ${
+            isLimitReached
+              ? 'bg-slate-800 text-slate-500 cursor-not-allowed shadow-none'
+              : 'bg-primary text-white shadow-primary/20 hover:-translate-y-px hover:shadow-xl active:scale-95'
+          }`}
         >
-          <Plus size={18} /> Añadir Usuario
+          <Plus size={18} /> Añadir usuario
         </button>
       </div>
+
+      {isLimitReached && (
+        <div className="flex items-center gap-3 rounded-2xl border border-warning/20 bg-warning/10 p-4 text-sm text-warning-content">
+          <AlertCircle size={20} className="text-warning" />
+          <p>Has alcanzado el límite de {limit} usuarios activos permitidos en tu plan. Actualiza tu suscripción para añadir más.</p>
+        </div>
+      )}
 
       {isLoading && (
         <div className="flex flex-col items-center justify-center py-32 space-y-4">
@@ -79,7 +110,7 @@ export const UsersPage: React.FC = () => {
           icon={Users}
           title="Sin colaboradores registrados"
           description="Añade a los miembros de tu equipo para empezar a colaborar y asignarles tareas o conversaciones."
-          actionLabel="Añadir Primer Usuario"
+          actionLabel="Añadir primer usuario"
           onAction={openCreate}
         />
       )}
@@ -182,6 +213,7 @@ export const UsersPage: React.FC = () => {
       <UserFormSidebar
         open={sidebarOpen}
         user={editingUser}
+        isLimitReached={isLimitReached}
         onClose={() => setSidebarOpen(false)}
       />
     </div>

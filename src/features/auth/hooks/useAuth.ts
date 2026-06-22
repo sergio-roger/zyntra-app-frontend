@@ -9,6 +9,7 @@ export const useAuth = () => {
     isAuthenticated,
     isLoading,
     setUser,
+    setAllowedMenus,
     logout: clearStore,
     setLoading,
   } = useAuthStore();
@@ -19,12 +20,14 @@ export const useAuth = () => {
       try {
         const response = await authApi.login(credentials);
         setUser(response.data);
+        const menusResponse = await authApi.getMenus();
+        setAllowedMenus(menusResponse.data);
         return response.data;
       } finally {
         setLoading(false);
       }
     },
-    [setUser, setLoading],
+    [setUser, setAllowedMenus, setLoading],
   );
 
   const register = useCallback(
@@ -33,12 +36,14 @@ export const useAuth = () => {
       try {
         const response = await authApi.register(data);
         setUser(response.data);
+        const menusResponse = await authApi.getMenus();
+        setAllowedMenus(menusResponse.data);
         return response.data;
       } finally {
         setLoading(false);
       }
     },
-    [setUser, setLoading],
+    [setUser, setAllowedMenus, setLoading],
   );
 
   const logout = useCallback(async () => {
@@ -54,12 +59,14 @@ export const useAuth = () => {
     try {
       const response = await authApi.me();
       setUser(response.data);
+      const menusResponse = await authApi.getMenus();
+      setAllowedMenus(menusResponse.data);
     } catch {
       clearStore();
     } finally {
       setLoading(false);
     }
-  }, [setUser, clearStore, setLoading]);
+  }, [setUser, setAllowedMenus, clearStore, setLoading]);
 
   return {
     user,

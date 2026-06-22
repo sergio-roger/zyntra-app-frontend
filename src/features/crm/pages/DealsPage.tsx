@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Loader2, AlertCircle, Plus, Search, Filter, TrendingUp } from 'lucide-react';
+import { Loader2, AlertCircle, Plus, Search, TrendingUp } from 'lucide-react';
 import { useDealsKanban } from '@crm/hooks/useDeals';
 import { DealsKanban } from '@crm/components/DealsKanban';
 import { DealFormSidebar } from '@crm/components/DealFormSidebar';
@@ -79,14 +79,19 @@ export const DealsPage: React.FC = () => {
               <TrendingUp size={24} />
             </div>
             <div>
-              <p className="text-[10px] font-bold text-slate-500 uppercase tracking-widest">Negocios Abiertos</p>
+              <p className="text-[10px] font-bold text-slate-500 uppercase tracking-widest">Negocios abiertos</p>
               <h3 className="text-xl font-black text-white">{Object.values(data).flat().length}</h3>
             </div>
           </div>
 
-          <div className="bg-slate-900/40 border border-white/5 rounded-2xl p-4 backdrop-blur-md flex items-center justify-center gap-2 group cursor-pointer hover:bg-slate-900/60 transition-all">
-             <Filter size={14} className="text-slate-400" />
-             <span className="text-xs font-bold text-slate-400 group-hover:text-white">Filtros Avanzados</span>
+          <div className="bg-slate-900/40 border border-white/5 rounded-2xl p-4 backdrop-blur-md flex items-center gap-4">
+            <div className="h-12 w-12 rounded-xl bg-violet-500/10 flex items-center justify-center text-violet-400">
+              <TrendingUp size={24} />
+            </div>
+            <div>
+              <p className="text-[10px] font-bold text-slate-500 uppercase tracking-widest">Columnas activas</p>
+              <h3 className="text-xl font-black text-white">{Object.keys(data).length}</h3>
+            </div>
           </div>
         </div>
       )}
@@ -99,7 +104,7 @@ export const DealsPage: React.FC = () => {
             <Loader2 className="animate-spin text-indigo-400 relative" size={48} />
           </div>
           <div className="flex flex-col items-center gap-1">
-            <p className="text-slate-200 text-sm font-bold tracking-wide">Cargando Oportunidades</p>
+            <p className="text-slate-200 text-sm font-bold tracking-wide">Cargando oportunidades</p>
             <p className="text-slate-500 text-[10px] uppercase font-bold tracking-tighter">Sincronizando con el servidor...</p>
           </div>
         </div>
@@ -110,7 +115,7 @@ export const DealsPage: React.FC = () => {
         <div className="flex flex-col items-center justify-center py-20 gap-4 max-w-md mx-auto text-center">
           <div className="rounded-3xl bg-rose-500/10 p-8 text-rose-400 border border-rose-500/20 shadow-2xl shadow-rose-500/5">
             <AlertCircle size={48} className="mx-auto mb-4" />
-            <h3 className="text-xl font-black">Error de Conexión</h3>
+            <h3 className="text-xl font-black">Error de conexión</h3>
             <p className="text-sm opacity-70 mt-2 font-medium">No pudimos recuperar la información del pipeline. Revisa tu conexión a internet.</p>
             <p className="text-[10px] text-rose-500/50 mt-4 font-mono">{(error as Error)?.message}</p>
           </div>

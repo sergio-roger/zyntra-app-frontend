@@ -1,25 +1,30 @@
 export enum BillingCycle {
-  ONE_TIME = 'one-time',
   MONTHLY = 'monthly',
+  ONE_TIME = 'one-time',
   YEARLY = 'yearly',
 }
 
 export interface PlanDescription {
   id: string;
-  plan_id: string;
-  text: string;
   is_included: boolean;
   order: number;
+  plan_id: string;
+  text: string;
 }
 
 export interface Plan {
+  ai_agent_limit: number;
+  billing_cycle: BillingCycle;
+  channel_limit: number;
+  chatbot_limit: number;
+  contact_limit: number;
+  descriptions?: PlanDescription[];
+  funnel_limit: number;
   id: string;
+  is_popular: boolean;
   name: string;
   price: string | number;
-  billing_cycle: BillingCycle;
-  is_popular: boolean;
-  contact_limit: number;
-  task_limit: number;
   stripe_price_id?: string;
-  descriptions?: PlanDescription[];
+  task_limit: number;
+  user_limit: number;
 }
