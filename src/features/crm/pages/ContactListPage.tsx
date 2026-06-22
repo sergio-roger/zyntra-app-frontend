@@ -1,25 +1,18 @@
-import React, { useState, useEffect } from 'react';
-import { Plus, Loader2, AlertCircle, FileSpreadsheet } from 'lucide-react';
+import { ContactFilters } from '@crm/components/ContactFilters';
+import { ContactFormSidebar } from '@crm/components/ContactFormSidebar';
+import { ContactImportModal } from '@crm/components/ContactImportModal';
+import { ContactTable } from '@crm/components/ContactTable';
+import { Pagination } from '@crm/components/Pagination';
 import {
   useContactsList,
   useDeleteContact,
 } from '@crm/hooks/useContacts';
-import { ContactFilters } from '@crm/components/ContactFilters';
-import { ContactTable } from '@crm/components/ContactTable';
-import { ContactFormSidebar } from '@crm/components/ContactFormSidebar';
-import { ContactImportModal } from '@crm/components/ContactImportModal';
-import { Pagination } from '@crm/components/Pagination';
-import { ConfirmModal } from '@shared/components/ConfirmModal';
-import { Contact, ContactSource, ContactStage } from '@crm/types';
-import api from '@shared/api/axios';
+import { Contact, ContactSource, ContactStage, LifecycleStage } from '@crm/types';
 import { useAuthStore } from '@features/auth/store/authStore';
-
-interface LifecycleStage {
-  id: string;
-  name: string;
-  icon: string;
-  type: 'active' | 'lost';
-}
+import api from '@shared/api/axios';
+import { ConfirmModal } from '@shared/components/ConfirmModal';
+import { AlertCircle, FileSpreadsheet, Loader2, Plus } from 'lucide-react';
+import React, { useEffect, useState } from 'react';
 
 export const ContactListPage: React.FC = () => {
   const [search, setSearch] = useState('');
