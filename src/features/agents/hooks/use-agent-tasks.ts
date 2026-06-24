@@ -1,6 +1,6 @@
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { agentsApi } from '../api/agents.api';
-import { AgentTaskStatus } from '../types';
+import { AgentTaskStatus } from '@features/agents/types/agents';
 
 export const useAgentTasks = () => {
   const queryClient = useQueryClient();

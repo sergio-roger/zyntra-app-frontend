@@ -1,6 +1,6 @@
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { crmApi, CreateContactInput, UpdateContactInput } from '@crm/api/crm.api';
-import { ContactsListResponse, ListContactsQuery, Pipeline } from '@crm/types';
+import { ContactsListResponse, ListContactsQuery, Pipeline } from '@crm/types/crm';
 
 export const contactsKeys = {
   all: ['contacts'] as const,

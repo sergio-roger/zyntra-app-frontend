@@ -1,10 +1,10 @@
 import React, { useEffect, useState } from 'react';
-import { X, Loader2, Briefcase, DollarSign, Calendar, ArrowRightCircle } from 'lucide-react';
+import { ArrowRightCircle, Briefcase, Calendar, ChevronDown, DollarSign, Loader2, X } from 'lucide-react';
 import { useConvertToDeal } from '@crm/hooks/useLeads';
+import { usePipelines } from '@crm/hooks/useDeals';
 import { Input } from '@core/ui/Input';
 import { Textarea } from '@core/ui/Textarea';
-import { Contact, DealStage, ConvertToDealInput } from '@crm/types';
-import { DEAL_STAGES, DEAL_STAGE_LABELS } from '@crm/types';
+import { Contact, ConvertToDealInput, DealPipelineStage } from '@crm/types/crm';
 
 interface ConvertToDealSidebarProps {
   open: boolean;
@@ -13,44 +13,69 @@ interface ConvertToDealSidebarProps {
   onSuccess?: () => void;
 }
 
+const emptyForm = (): ConvertToDealInput => ({
+  title: '',
+  value: 0,
+  pipeline_id: '',
+  stage_id: '',
+  expected_close_date: '',
+  description: '',
+});
+
 export const ConvertToDealSidebar: React.FC<ConvertToDealSidebarProps> = ({
   open,
   lead,
   onClose,
   onSuccess,
 }) => {
-  const [formData, setFormData] = useState<ConvertToDealInput>({
-    title: '',
-    value: 0,
-    stage: 'prospecting',
-    expected_close_date: '',
-    description: '',
-  });
+  const [formData, setFormData] = useState<ConvertToDealInput>(emptyForm());
+  const [stages, setStages] = useState<DealPipelineStage[]>([]);
 
+  const { data: pipelines = [] } = usePipelines();
   const convertMutation = useConvertToDeal();
 
+  // Set defaults when the sidebar opens
   useEffect(() => {
-    if (lead) {
-      setFormData({
-        title: `Negocio con ${lead.name}`,
-        value: lead.deal_value ? Number(lead.deal_value) : 0,
-        stage: 'prospecting',
-        expected_close_date: '',
-        description: '',
-      });
-    }
-  }, [lead, open]);
+    if (!open) return;
 
-  const handleSubmit = async (e: React.FormEvent) => {
+    const defaultPipeline = pipelines.find((p) => p.is_default) ?? pipelines[0] ?? null;
+    const firstStage = defaultPipeline?.stages?.[0];
+    setStages(defaultPipeline?.stages ?? []);
+
+    setFormData({
+      title: lead ? `Negocio con ${lead.name}` : '',
+      value: lead?.deal_value ? Number(lead.deal_value) : 0,
+      pipeline_id: defaultPipeline?.id ?? '',
+      stage_id: firstStage?.id ?? '',
+      expected_close_date: '',
+      description: '',
+    });
+  }, [lead, open, pipelines]);
+
+  const handlePipelineChange = (pipelineId: string) => {
+    const pipeline = pipelines.find((p) => p.id === pipelineId) ?? null;
+    const newStages = pipeline?.stages ?? [];
+    setStages(newStages);
+    const firstStage = newStages[0];
+    setFormData((f) => ({
+      ...f,
+      pipeline_id: pipelineId,
+      stage_id: firstStage?.id ?? '',
+    }));
+  };
+
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>): Promise<void> => {
     e.preventDefault();
     if (!lead) return;
     try {
-      const input: ConvertToDealInput = {
-        ...formData,
-        expected_close_date: formData.expected_close_date || undefined,
-        description: formData.description || undefined,
-      };
-      await convertMutation.mutateAsync({ id: lead.id, input });
+      await convertMutation.mutateAsync({
+        id: lead.id,
+        input: {
+          ...formData,
+          expected_close_date: formData.expected_close_date || undefined,
+          description: formData.description || undefined,
+        },
+      });
       onSuccess?.();
       onClose();
     } catch (err) {
@@ -67,6 +92,7 @@ export const ConvertToDealSidebar: React.FC<ConvertToDealSidebarProps> = ({
 
       <div className={`fixed inset-y-0 right-0 w-full !mt-0 max-w-md bg-slate-900 border-l border-white/10 z-[70] shadow-2xl transform transition-transform duration-300 ease-out ${open ? 'translate-x-0' : 'translate-x-full'}`}>
         <div className="flex flex-col h-full">
+          {/* Header */}
           <div className="flex items-center justify-between p-6 border-b border-white/5">
             <div>
               <div className="flex items-center gap-2 mb-1">
@@ -79,14 +105,12 @@ export const ConvertToDealSidebar: React.FC<ConvertToDealSidebarProps> = ({
                 </p>
               )}
             </div>
-            <button
-              onClick={onClose}
-              className="p-2 hover:bg-white/5 rounded-full transition-colors text-slate-400 hover:text-white"
-            >
+            <button onClick={onClose} className="p-2 hover:bg-white/5 rounded-full transition-colors text-slate-400 hover:text-white">
               <X size={20} />
             </button>
           </div>
 
+          {/* Form */}
           <form id="convert-form" onSubmit={handleSubmit} className="flex-1 overflow-y-auto p-6 space-y-5">
             <Input
               label="Título del negocio"
@@ -116,17 +140,49 @@ export const ConvertToDealSidebar: React.FC<ConvertToDealSidebarProps> = ({
               />
             </div>
 
+            {/* Pipeline */}
             <div className="space-y-1.5">
-              <label className="text-xs font-medium text-slate-400 ml-1">Etapa inicial</label>
-              <select
-                value={formData.stage}
-                onChange={(e) => setFormData({ ...formData, stage: e.target.value as DealStage })}
-                className="w-full bg-slate-950/50 border border-white/10 rounded-xl py-2.5 px-4 text-sm text-white focus:outline-none focus:border-primary/50 transition-all appearance-none"
-              >
-                {DEAL_STAGES.filter((s) => s !== 'won' && s !== 'lost').map((s) => (
-                  <option key={s} value={s}>{DEAL_STAGE_LABELS[s]}</option>
-                ))}
-              </select>
+              <label className="text-xs font-medium text-slate-400 ml-1">Pipeline *</label>
+              <div className="relative">
+                <select
+                  required
+                  value={formData.pipeline_id}
+                  onChange={(e) => handlePipelineChange(e.target.value)}
+                  className="w-full bg-slate-950/50 border border-white/10 rounded-xl py-2.5 px-4 pr-9 text-sm text-white focus:outline-none focus:border-primary/50 transition-all appearance-none"
+                >
+                  <option value="">Seleccionar pipeline...</option>
+                  {pipelines.map((p) => (
+                    <option key={p.id} value={p.id}>
+                      {p.name}{p.is_default ? ' (principal)' : ''}
+                    </option>
+                  ))}
+                </select>
+                <ChevronDown size={14} className="absolute right-3 top-1/2 -translate-y-1/2 text-slate-500 pointer-events-none" />
+              </div>
+            </div>
+
+            {/* Stage */}
+            <div className="space-y-1.5">
+              <label className="text-xs font-medium text-slate-400 ml-1">Etapa inicial *</label>
+              <div className="relative">
+                <select
+                  required
+                  value={formData.stage_id}
+                  onChange={(e) => setFormData({ ...formData, stage_id: e.target.value })}
+                  disabled={stages.length === 0}
+                  className="w-full bg-slate-950/50 border border-white/10 rounded-xl py-2.5 px-4 pr-9 text-sm text-white focus:outline-none focus:border-primary/50 transition-all appearance-none disabled:opacity-40"
+                >
+                  <option value="">Seleccionar etapa...</option>
+                  {stages
+                    .filter((s) => s.type === 'active')
+                    .map((s) => (
+                      <option key={s.id} value={s.id}>
+                        {s.name} ({s.probability_percent}%)
+                      </option>
+                    ))}
+                </select>
+                <ChevronDown size={14} className="absolute right-3 top-1/2 -translate-y-1/2 text-slate-500 pointer-events-none" />
+              </div>
             </div>
 
             <Textarea
@@ -137,6 +193,7 @@ export const ConvertToDealSidebar: React.FC<ConvertToDealSidebarProps> = ({
               onChange={(e) => setFormData({ ...formData, description: e.target.value })}
             />
 
+            {/* Lead info panel */}
             {lead && (
               <div className="rounded-xl bg-slate-800/40 border border-white/5 p-4 space-y-2">
                 <p className="text-xs text-slate-400 font-medium uppercase tracking-wide">Datos del lead</p>
@@ -162,6 +219,7 @@ export const ConvertToDealSidebar: React.FC<ConvertToDealSidebarProps> = ({
             )}
           </form>
 
+          {/* Footer */}
           <div className="p-6 border-t border-white/5 bg-slate-950/30 flex gap-3">
             <button
               type="button"
@@ -173,7 +231,7 @@ export const ConvertToDealSidebar: React.FC<ConvertToDealSidebarProps> = ({
             <button
               form="convert-form"
               type="submit"
-              disabled={convertMutation.isPending || !formData.title}
+              disabled={convertMutation.isPending || !formData.title || !formData.pipeline_id || !formData.stage_id}
               className="flex-[2] px-4 py-2.5 rounded-xl bg-primary text-white text-sm font-semibold shadow-lg shadow-primary/20 hover:opacity-90 disabled:opacity-50 transition-all flex items-center justify-center gap-2"
             >
               {convertMutation.isPending ? (

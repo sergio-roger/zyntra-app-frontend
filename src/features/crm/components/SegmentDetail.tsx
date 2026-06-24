@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { Edit2, Filter, Loader2, Pencil, Tag, Users } from 'lucide-react';
 import { EmptyState } from '@shared/components/EmptyState';
 import { useSegmentContacts } from '@crm/hooks/useSegments';
-import { Segment, Contact, LifecycleStage } from '@crm/types';
+import { Segment, Contact, LifecycleStage } from '@crm/types/crm';
 import { Pagination } from '@crm/components/Pagination';
 import { StageBadge, SourceBadge } from '@crm/components/badges';
 import { ContactFormSidebar } from '@crm/components/ContactFormSidebar';

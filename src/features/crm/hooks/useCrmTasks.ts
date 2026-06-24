@@ -1,6 +1,6 @@
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import api from '@shared/api/axios';
-import { CrmTask, CreateTaskInput, TaskStatus } from '../types';
+import { CrmTask, CreateTaskInput, TaskStatus } from '@crm/types/crm';
 
 export function useCrmTasks(filters: { status?: TaskStatus; contact_id?: string } = {}) {
   return useQuery<CrmTask[]>({

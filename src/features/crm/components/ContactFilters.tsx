@@ -4,7 +4,7 @@ import {
   SOURCES,
   SOURCE_LABELS,
   ContactSource,
-} from '@crm/types';
+} from '@crm/types/crm';
 
 interface LifecycleStage {
   id: string;

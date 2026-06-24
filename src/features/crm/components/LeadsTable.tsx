@@ -11,8 +11,8 @@ import {
   User,
   Inbox,
 } from 'lucide-react';
-import { Contact, ContactSource } from '@crm/types';
-import { SOURCE_LABELS } from '@crm/types';
+import { Contact, ContactSource } from '@crm/types/crm';
+import { SOURCE_LABELS } from '@crm/types/crm';
 
 interface LeadsTableProps {
   leads: Contact[];

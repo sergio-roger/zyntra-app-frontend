@@ -172,16 +172,68 @@ export interface CreateTaskInput {
   deal_id?: string;
 }
 
-export type DealStage = 
-  | 'prospecting' 
-  | 'qualification' 
-  | 'proposal' 
-  | 'negotiation' 
-  | 'closing' 
-  | 'won' 
-  | 'lost';
+// ─── Deal Pipeline (relacional, desde backend) ─────────────────────────────
 
+export type DealStageType = 'active' | 'won' | 'lost';
 export type DealStatus = 'open' | 'won' | 'lost' | 'abandoned';
+
+export interface DealPipelineStage {
+  id: string;
+  pipeline_id: string;
+  name: string;
+  color: string;
+  position: number;
+  type: DealStageType;
+  probability_percent: number;
+}
+
+export interface DealPipeline {
+  id: string;
+  business_id: string;
+  name: string;
+  position: number;
+  is_default: boolean;
+  stages: DealPipelineStage[];
+  deleted_at: string | null;
+  created_at: string;
+  updated_at: string;
+}
+
+export interface DealStageHistoryRecord {
+  id: string;
+  deal_id: string;
+  stage_id: string;
+  stage?: DealPipelineStage;
+  entered_at: string;
+  left_at: string | null;
+}
+
+export interface KanbanColumn {
+  stage: DealPipelineStage;
+  deals: Deal[];
+  total_value: number;
+}
+
+export interface KanbanResponse {
+  pipeline: DealPipeline;
+  columns: KanbanColumn[];
+}
+
+export interface ForecastMonth {
+  month: string;
+  total_value: number;
+  weighted_value: number;
+  deal_count: number;
+}
+
+export interface PipelineForecast {
+  totals: {
+    total_value: number;
+    weighted_value: number;
+    deal_count: number;
+  };
+  by_month: ForecastMonth[];
+}
 
 export interface Deal {
   id: string;
@@ -189,54 +241,58 @@ export interface Deal {
   title: string;
   description: string | null;
   value: number;
-  stage: DealStage;
+  currency: string;
+  pipeline_id: string;
+  stage_id: string;
+  pipeline?: DealPipeline;
+  stage?: DealPipelineStage;
   status: DealStatus;
   contact_id: string;
   contact?: Contact;
   assigned_to_id: string | null;
-  assigned_to?: any; // Will refine if needed
+  assigned_to?: any;
   team_id: string | null;
   team?: any;
   expected_close_date: string | null;
   probability: number;
+  closed_at: string | null;
   created_at: string;
   updated_at: string;
 }
 
 export interface ListDealsQuery {
   search?: string;
-  stage?: DealStage;
+  pipeline_id?: string;
+  stage_id?: string;
   status?: DealStatus;
   contact_id?: string;
   assigned_to_id?: string;
+  team_id?: string;
   page?: number;
   limit?: number;
 }
 
-export const DEAL_STAGES: DealStage[] = [
-  'prospecting',
-  'qualification',
-  'proposal',
-  'negotiation',
-  'closing',
-  'won',
-  'lost',
-];
+export interface CreateDealInput {
+  title: string;
+  description?: string;
+  value: number;
+  currency?: string;
+  pipeline_id: string;
+  stage_id: string;
+  contact_id: string;
+  assigned_to_id?: string;
+  team_id?: string;
+  expected_close_date?: string;
+  probability?: number;
+}
 
-export const DEAL_STAGE_LABELS: Record<DealStage, string> = {
-  prospecting: 'Prospección',
-  qualification: 'Calificación',
-  proposal: 'Propuesta',
-  negotiation: 'Negociación',
-  closing: 'Cierre',
-  won: 'Ganado',
-  lost: 'Perdido',
-};
+export type UpdateDealInput = Partial<CreateDealInput>;
 
 export interface ConvertToDealInput {
   title: string;
   value?: number;
-  stage?: DealStage;
+  pipeline_id: string;
+  stage_id: string;
   expected_close_date?: string;
   description?: string;
 }

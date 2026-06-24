@@ -1,5 +1,5 @@
 import { z } from 'zod';
-import { STAGES, SOURCES } from '@crm/types';
+import { STAGES, SOURCES } from '@crm/types/crm';
 
 export const contactSchema = z.object({
   name: z.string().min(1, 'El nombre es requerido').max(120),

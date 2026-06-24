@@ -1,5 +1,5 @@
 import api from '@shared/api/axios';
-import { AgentTask, CreateTaskDto } from '../types';
+import { AgentTask, CreateTaskDto } from '@features/agents/types/agents';
 
 export const agentsApi = {
   getTasks: async (): Promise<AgentTask[]> => {

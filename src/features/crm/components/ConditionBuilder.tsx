@@ -2,7 +2,7 @@ import React from 'react';
 import { Plus, Trash2, Filter } from 'lucide-react';
 import { useTags } from '@crm/hooks/useTags';
 import { useCustomFields } from '@crm/hooks/useCustomFields';
-import { SegmentCondition, SOURCES, SOURCE_LABELS, STAGES, STAGE_LABELS } from '@crm/types';
+import { SegmentCondition, SOURCES, SOURCE_LABELS, STAGES, STAGE_LABELS } from '@crm/types/crm';
 
 interface ConditionBuilderProps {
   conditions: SegmentCondition[];

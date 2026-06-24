@@ -1,5 +1,5 @@
 import React from 'react';
-import { STAGES, Contact } from '@crm/types';
+import { STAGES, Contact } from '@crm/types/crm';
 import { PipelineColumn } from './PipelineColumn';
 
 interface PipelineKanbanProps {

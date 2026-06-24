@@ -14,7 +14,7 @@ import {
   SOURCE_LABELS,
   ContactStage,
   ContactSource,
-} from '@crm/types';
+} from '@crm/types/crm';
 
 const STAGE_CLASSES: Record<ContactStage, string> = {
   lead: 'bg-slate-500/15 text-slate-300 ring-slate-500/30',

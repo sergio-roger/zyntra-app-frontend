@@ -1,5 +1,12 @@
 import api from '@shared/api/axios';
-import { Deal, ListDealsQuery, DealStage } from '@crm/types';
+import {
+  Deal,
+  ListDealsQuery,
+  CreateDealInput,
+  UpdateDealInput,
+  KanbanResponse,
+  DealStageHistoryRecord,
+} from '@crm/types/crm';
 
 const buildQS = (q: Record<string, unknown>): string => {
   const sp = new URLSearchParams();
@@ -16,18 +23,21 @@ export const dealsApi = {
       `/crm/deals${buildQS(query as Record<string, unknown>)}`,
     ),
 
-  kanban: () => 
-    api.get<unknown, { data: Record<DealStage, Deal[]> }>('/crm/deals/kanban'),
+  kanban: (pipelineId: string) =>
+    api.get<unknown, { data: KanbanResponse }>(`/crm/deals/kanban/${pipelineId}`),
 
-  get: (id: string) => 
+  get: (id: string) =>
     api.get<unknown, { data: Deal }>(`/crm/deals/${id}`),
 
-  create: (input: Partial<Deal>) =>
+  history: (id: string) =>
+    api.get<unknown, { data: DealStageHistoryRecord[] }>(`/crm/deals/${id}/history`),
+
+  create: (input: CreateDealInput) =>
     api.post<unknown, { data: Deal }>('/crm/deals', input),
 
-  update: (id: string, input: Partial<Deal>) =>
+  update: (id: string, input: UpdateDealInput) =>
     api.patch<unknown, { data: Deal }>(`/crm/deals/${id}`, input),
 
-  remove: (id: string) => 
+  remove: (id: string) =>
     api.delete(`/crm/deals/${id}`),
 };

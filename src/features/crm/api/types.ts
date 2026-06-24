@@ -1,4 +1,4 @@
-import { Contact, ActivityType } from '@crm/types';
+import { Contact, ActivityType } from '@crm/types/crm';
 
 export interface CreateContactInput {
   name: string;

@@ -16,7 +16,7 @@ import {
 import React, { useMemo, useState } from 'react';
 import { useLocation } from 'react-router-dom';
 import { useAgentTasks } from '../hooks/use-agent-tasks';
-import { AgentTask, AgentTaskStatus, AgentTaskType } from '../types';
+import { AgentTask, AgentTaskStatus, AgentTaskType } from '@features/agents/types/agents';
 
 export const AgentCenterPage: React.FC = () => {
   const { pathname } = useLocation();

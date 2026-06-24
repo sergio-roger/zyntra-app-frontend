@@ -1,7 +1,7 @@
 import React from 'react';
 import { ContactCard } from './ContactCard';
-import { Contact, ContactStage } from '@crm/types';
-import { STAGE_LABELS } from '@crm/types';
+import { Contact, ContactStage } from '@crm/types/crm';
+import { STAGE_LABELS } from '@crm/types/crm';
 
 interface PipelineColumnProps {
   stage: ContactStage;

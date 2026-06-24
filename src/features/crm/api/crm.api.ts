@@ -8,7 +8,7 @@ import {
   Tag,
   CustomField,
   ContactStage,
-} from '@crm/types';
+} from '@crm/types/crm';
 import {
   CreateContactInput,
   UpdateContactInput,

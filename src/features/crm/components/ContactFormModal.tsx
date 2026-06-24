@@ -14,7 +14,7 @@ import {
   Contact,
   ContactSource,
   ContactStage,
-} from '@crm/types';
+} from '@crm/types/crm';
 import { useCreateContact, useUpdateContact } from '@crm/hooks/useContacts';
 import { mapAuthError } from '@features/auth/lib/mapAuthError';
 

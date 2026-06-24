@@ -1,7 +1,7 @@
 import { useCreateContact, useUpdateContact } from '@crm/hooks/useContacts';
 import { useTags } from '@crm/hooks/useTags';
 import { useCustomFields } from '@crm/hooks/useCustomFields';
-import { Contact, ContactSource, LifecycleStage } from '@crm/types';
+import { Contact, ContactSource, LifecycleStage } from '@crm/types/crm';
 import { 
   ChevronRight, 
   Loader2, 

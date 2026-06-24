@@ -7,7 +7,7 @@ import {
   useContactsList,
   useDeleteContact,
 } from '@crm/hooks/useContacts';
-import { Contact, ContactSource, ContactStage, LifecycleStage } from '@crm/types';
+import { Contact, ContactSource, ContactStage, LifecycleStage } from '@crm/types/crm';
 import { useAuthStore } from '@features/auth/store/authStore';
 import api from '@shared/api/axios';
 import { ConfirmModal } from '@shared/components/ConfirmModal';

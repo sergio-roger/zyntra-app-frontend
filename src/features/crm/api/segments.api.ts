@@ -1,5 +1,5 @@
 import api from '@shared/api/axios';
-import { Segment, CreateSegmentInput, UpdateSegmentInput, ContactsListResponse } from '@crm/types';
+import { Segment, CreateSegmentInput, UpdateSegmentInput, ContactsListResponse } from '@crm/types/crm';
 
 const buildQS = (q: Record<string, unknown>): string => {
   const sp = new URLSearchParams();
