@@ -7,7 +7,6 @@ import { chatbotRoutes } from '@features/chatbot/routes/ChatbotRoutes';
 import { dashboardRoutes } from '@features/dashboard/routes/DashboardRoutes';
 import { settingsRoutes } from '@features/settings/routes/SettingsRoutes';
 import { ConstructionPage } from '@shared/components/ConstructionPage';
-import { PlansPage } from '../shared/pages/PlansPage';
 import { AppShell } from '@shared/layouts/AppShell';
 import { BrowserRouter, Navigate, useRoutes } from 'react-router-dom';
 
@@ -30,7 +29,6 @@ const AppRoutes = () => {
         { path: '/avatar/*', element: <ModuleGuard menuKey="avatar"><ConstructionPage /></ModuleGuard> },
         { path: '/analytics/*', element: <ModuleGuard menuKey="analytics"><ConstructionPage /></ModuleGuard> },
         { path: '/billing', element: <ConstructionPage title="Facturación" description="Gestiona tu plan y métodos de pago." /> },
-        { path: '/plans', element: <PlansPage /> },
         { path: '/construction', element: <ConstructionPage /> }
       ]
     },

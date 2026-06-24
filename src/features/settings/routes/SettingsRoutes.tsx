@@ -11,6 +11,7 @@ const UsersPage = lazy(() => import('../pages/UsersPage').then(m => ({ default: 
 const TeamsPage = lazy(() => import('../pages/TeamsPage').then(m => ({ default: m.TeamsPage })));
 const PermissionsPage = lazy(() => import('../pages/PermissionsPage').then(m => ({ default: m.PermissionsPage })));
 const RolePermissionsPage = lazy(() => import('../pages/RolePermissionsPage').then(m => ({ default: m.RolePermissionsPage })));
+const PlansPage = lazy(() => import('../../../shared/pages/PlansPage').then(m => ({ default: m.PlansPage })));
 
 export const settingsRoutes: RouteObject[] = [
   {
@@ -20,6 +21,7 @@ export const settingsRoutes: RouteObject[] = [
       { path: 'configuracion', element: <PermissionGuard menuKey="settings_config"><SuspenseLoader><ConstructionPage title="Configuración General" description="Ajustes y preferencias de la plataforma." /></SuspenseLoader></PermissionGuard> },
       { path: 'my-account', element: <PermissionGuard menuKey="settings_my_account"><SuspenseLoader><ConstructionPage title="Mi Cuenta" description="Gestiona los datos de tu cuenta de usuario, contraseña y perfil." /></SuspenseLoader></PermissionGuard> },
       { path: 'users', element: <PermissionGuard menuKey="settings_users"><ModuleGuard menuKey="settings_users"><SuspenseLoader><UsersPage /></SuspenseLoader></ModuleGuard></PermissionGuard> },
+      { path: 'plans', element: <PermissionGuard menuKey="billing"><ModuleGuard menuKey="billing"><SuspenseLoader><PlansPage /></SuspenseLoader></ModuleGuard></PermissionGuard> },
       { path: 'teams', element: <PermissionGuard menuKey="settings_teams"><ModuleGuard menuKey="settings_teams"><SuspenseLoader><TeamsPage /></SuspenseLoader></ModuleGuard></PermissionGuard> },
       { path: 'lifecycle', element: <PermissionGuard menuKey="settings_lifecycle"><ModuleGuard menuKey="settings_lifecycle"><SuspenseLoader><LifecycleConfig /></SuspenseLoader></ModuleGuard></PermissionGuard> },
       {

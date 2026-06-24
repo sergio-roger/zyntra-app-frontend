@@ -45,6 +45,7 @@ const PATH_TO_KEY_MAP: Record<string, string> = {
   '/analytics/leads': 'analytics_leads',
   '/analytics/performance': 'analytics_perf',
   '/billing': 'billing',
+  '/settings/plans': 'billing',
   '/settings': 'settings',
   '/settings/configuracion': 'settings_config',
   '/settings/my-account': 'settings_my_account',

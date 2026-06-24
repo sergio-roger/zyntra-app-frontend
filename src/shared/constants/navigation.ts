@@ -146,6 +146,7 @@ export const NAV_MODULES: NavModule[] = [
     color: 'text-primary',
     children: [
       { to: '/settings/configuracion', label: 'Configuración', icon: Settings, description: 'Ajustes y preferencias generales.' },
+      { to: '/settings/plans', label: 'Planes', icon: Zap, description: 'Visualiza y gestiona tu plan de suscripción.' },
       { to: '/settings/my-account', label: 'Mi cuenta', icon: UserRound, description: 'Tu perfil y contraseña.' },
       { to: '/settings/permissions', label: 'Permisos', icon: ShieldCheck, description: 'Configura qué puede ver cada rol.' },
       { to: '/settings/users', label: 'Usuarios', icon: UserRound, description: 'Gestiona tu equipo y roles.' },
