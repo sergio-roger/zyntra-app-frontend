@@ -26,6 +26,7 @@ export const DealsColumn: React.FC<DealsColumnProps> = ({
 
   return (
     <div
+      ref={setNodeRef}
       className={`flex flex-col gap-4 min-w-[280px] w-full max-w-[320px] rounded-2xl p-4 border backdrop-blur-sm transition-colors duration-200 ${
         isOver
           ? 'bg-indigo-500/10 border-indigo-500/40'
@@ -75,9 +76,8 @@ export const DealsColumn: React.FC<DealsColumnProps> = ({
         </div>
       </div>
 
-      {/* Drop zone */}
+      {/* Card list */}
       <div
-        ref={setNodeRef}
         className="flex flex-col gap-3 min-h-[500px] overflow-y-auto pr-1 scrollbar-thin scrollbar-thumb-slate-800"
       >
         {deals.map((deal) => (

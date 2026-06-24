@@ -1,19 +1,21 @@
-import React, { useState, useCallback } from 'react';
+import React, { useMemo, useState, useCallback } from 'react';
 import {
   DndContext,
   DragEndEvent,
-  DragOverEvent,
   DragStartEvent,
   DragOverlay,
   PointerSensor,
   useSensor,
   useSensors,
-  closestCorners,
+  pointerWithin,
+  rectIntersection,
+  CollisionDetection,
 } from '@dnd-kit/core';
 import { useQueryClient } from '@tanstack/react-query';
 import { dealsKeys } from '@crm/hooks/useDeals';
 import { dealsApi } from '@crm/api/deals.api';
 import { Deal, KanbanResponse } from '@crm/types/crm';
+import { useKanbanStore } from '@crm/store/kanbanStore';
 import { DealsColumn } from './DealsColumn';
 import { DealCard } from './DealCard';
 
@@ -22,13 +24,50 @@ interface DealsKanbanProps {
   onDealClick?: (deal: Deal) => void;
 }
 
+const kanbanCollision: CollisionDetection = (args) => {
+  const hits = pointerWithin(args);
+  if (hits.length > 0) return hits;
+  return rectIntersection(args);
+};
+
 export const DealsKanban: React.FC<DealsKanbanProps> = ({ kanbanData, onDealClick }) => {
   const qc = useQueryClient();
   const [activeDeal, setActiveDeal] = useState<Deal | null>(null);
 
+  const { pendingMoves, setPendingMove, clearPendingMove } = useKanbanStore();
+
   const sensors = useSensors(
     useSensor(PointerSensor, { activationConstraint: { distance: 6 } }),
   );
+
+  const displayData = useMemo<KanbanResponse>(() => {
+    if (Object.keys(pendingMoves).length === 0) return kanbanData;
+
+    const allDeals = kanbanData.columns.flatMap((c) => c.deals);
+
+    return {
+      ...kanbanData,
+      columns: kanbanData.columns.map((col) => {
+        const staying = col.deals.filter(
+          (d) => !pendingMoves[d.id] || pendingMoves[d.id] === col.stage.id,
+        );
+        const arriving = allDeals.filter(
+          (d) =>
+            pendingMoves[d.id] === col.stage.id &&
+            col.deals.every((existing) => existing.id !== d.id),
+        );
+        const merged = [
+          ...staying,
+          ...arriving.map((d) => ({ ...d, stage_id: col.stage.id })),
+        ];
+        return {
+          ...col,
+          deals: merged,
+          total_value: merged.reduce((s, d) => s + Number(d.value), 0),
+        };
+      }),
+    };
+  }, [kanbanData, pendingMoves]);
 
   const handleDragStart = useCallback((event: DragStartEvent) => {
     const dealId = event.active.id as string;
@@ -52,68 +91,40 @@ export const DealsKanban: React.FC<DealsKanbanProps> = ({ kanbanData, onDealClic
       );
       if (!sourceCol || sourceCol.stage.id === newStageId) return;
 
-      const pipelineId = kanbanData.pipeline.id;
-      const queryKey = dealsKeys.kanban(pipelineId);
+      const queryKey = dealsKeys.kanban(kanbanData.pipeline.id);
 
-      // Optimistic update
-      qc.setQueryData<KanbanResponse>(queryKey, (prev) => {
-        if (!prev) return prev;
-        const deal = prev.columns
-          .flatMap((c) => c.deals)
-          .find((d) => d.id === dealId);
-        if (!deal) return prev;
-
-        return {
-          ...prev,
-          columns: prev.columns.map((col) => {
-            if (col.stage.id === sourceCol.stage.id) {
-              const newDeals = col.deals.filter((d) => d.id !== dealId);
-              return {
-                ...col,
-                deals: newDeals,
-                total_value: newDeals.reduce((s, d) => s + Number(d.value), 0),
-              };
-            }
-            if (col.stage.id === newStageId) {
-              const movedDeal = { ...deal, stage_id: newStageId };
-              const targetDeals = [...col.deals, movedDeal];
-              return {
-                ...col,
-                deals: targetDeals,
-                total_value: targetDeals.reduce((s, d) => s + Number(d.value), 0),
-              };
-            }
-            return col;
-          }),
-        };
-      });
+      // 1. Immediate visual move via Zustand
+      setPendingMove(dealId, newStageId);
 
       try {
+        // 2. Persist on the server
         await dealsApi.update(dealId, { stage_id: newStageId });
-        // Refresh to get accurate status/closed_at from server
-        qc.invalidateQueries({ queryKey });
-      } catch {
-        // Revert on error
-        qc.invalidateQueries({ queryKey });
+
+        // 3. Wait for the refetch so the RQ cache now reflects the server state
+        await qc.invalidateQueries({ queryKey });
+
+        // 4. Override no longer needed — RQ and Zustand now agree
+        clearPendingMove(dealId);
+      } catch (err) {
+        // Revert: remove the override first so displayData reverts immediately,
+        // then let the refetch confirm the server position.
+        clearPendingMove(dealId);
+        await qc.invalidateQueries({ queryKey });
+        console.error('Failed to move deal:', err);
       }
     },
-    [kanbanData, qc],
+    [kanbanData, qc, setPendingMove, clearPendingMove],
   );
-
-  const handleDragOver = useCallback((_event: DragOverEvent) => {
-    // Visual feedback is handled by droppable isOver in DealsColumn
-  }, []);
 
   return (
     <DndContext
       sensors={sensors}
-      collisionDetection={closestCorners}
+      collisionDetection={kanbanCollision}
       onDragStart={handleDragStart}
-      onDragOver={handleDragOver}
       onDragEnd={handleDragEnd}
     >
       <div className="flex gap-5 overflow-x-auto pb-8 scrollbar-thin scrollbar-thumb-slate-800 scrollbar-track-transparent">
-        {kanbanData.columns.map((col) => (
+        {displayData.columns.map((col) => (
           <DealsColumn
             key={col.stage.id}
             stage={col.stage}
