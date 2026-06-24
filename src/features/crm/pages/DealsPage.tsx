@@ -1,10 +1,11 @@
-import React, { useEffect, useState } from 'react';
-import { AlertCircle, BarChart3, ChevronDown, DollarSign, Loader2, Search, Target, TrendingUp, FolderPlus } from 'lucide-react';
 import { DealFormSidebar } from '@crm/components/DealFormSidebar';
-import { PipelineFormModal } from '@crm/components/PipelineFormModal';
 import { DealsKanban } from '@crm/components/DealsKanban';
+import { PipelineFormModal } from '@crm/components/PipelineFormModal';
+import { PipelineSettingsDrawer } from '@crm/components/PipelineSettingsDrawer';
 import { useDealsKanban, usePipelineForecast, usePipelines } from '@crm/hooks/useDeals';
 import { Deal, DealPipeline } from '@crm/types/crm';
+import { AlertCircle, BarChart3, ChevronDown, DollarSign, FolderPlus, Loader2, Search, Settings2, Target, TrendingUp } from 'lucide-react';
+import React, { useEffect, useState } from 'react';
 
 const fmt = (value: number, currency = 'COP') =>
   new Intl.NumberFormat('es-CO', {
@@ -17,6 +18,7 @@ export const DealsPage: React.FC = () => {
   const [selectedDeal, setSelectedDeal] = useState<Deal | null>(null);
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
   const [isPipelineModalOpen, setIsPipelineModalOpen] = useState(false);
+  const [settingsPipeline, setSettingsPipeline] = useState<DealPipeline | null>(null);
   const [activePipelineId, setActivePipelineId] = useState<string | null>(null);
   const [showForecast, setShowForecast] = useState(false);
   const [stageOverrideId, setStageOverrideId] = useState<string | undefined>(undefined);
@@ -25,7 +27,6 @@ export const DealsPage: React.FC = () => {
   const { data: kanbanData, isLoading: loadingKanban, isError, error } = useDealsKanban(activePipelineId);
   const { data: forecast } = usePipelineForecast(showForecast ? activePipelineId : null);
 
-  // Auto-select default pipeline once loaded
   useEffect(() => {
     if (pipelines.length > 0 && !activePipelineId) {
       const defaultPipeline = pipelines.find((p) => p.is_default) ?? pipelines[0];
@@ -87,40 +88,52 @@ export const DealsPage: React.FC = () => {
       </div>
 
       {/* Pipeline Selector / Selector de Pipelines */}
-      <div className="flex flex-wrap items-center gap-3 bg-slate-900/30 border border-white/5 p-3 rounded-2xl">
-        <div className="relative shrink-0">
-          <select
-            value={activePipelineId ?? ''}
-            onChange={(e) => setActivePipelineId(e.target.value)}
-            className="bg-slate-950 border border-white/10 text-slate-200 rounded-xl px-4 py-2 text-sm font-bold focus:outline-none focus:border-indigo-500/50 pr-9 appearance-none transition-all cursor-pointer"
-          >
-            {pipelines.map((p) => (
-              <option key={p.id} value={p.id}>
-                Pipeline: {p.name}
-              </option>
-            ))}
-          </select>
-          <ChevronDown size={14} className="absolute right-3 top-1/2 -translate-y-1/2 text-slate-400 pointer-events-none" />
-        </div>
+      {pipelines.length > 0 && (
+        <div className="flex flex-wrap items-center gap-3 bg-slate-900/30 border border-white/5 p-3 rounded-2xl">
+          <div className="relative shrink-0">
+            <select
+              value={activePipelineId ?? ''}
+              onChange={(e) => setActivePipelineId(e.target.value)}
+              className="bg-slate-950 border border-white/10 text-slate-200 rounded-xl px-4 py-2 text-sm font-bold focus:outline-none focus:border-indigo-500/50 pr-9 appearance-none transition-all cursor-pointer"
+            >
+              {pipelines.map((p) => (
+                <option key={p.id} value={p.id}>
+                  Pipeline: {p.name}
+                </option>
+              ))}
+            </select>
+            <ChevronDown size={14} className="absolute right-3 top-1/2 -translate-y-1/2 text-slate-400 pointer-events-none" />
+          </div>
 
-        {/* Pipeline Tabs */}
-        {pipelines.length > 0 && (
+          {/* Pipeline Tabs */}
           <div className="flex items-center gap-2 overflow-x-auto scrollbar-none flex-1">
             {pipelines.map((p: DealPipeline) => (
-              <button
-                key={p.id}
-                onClick={() => setActivePipelineId(p.id)}
-                className={`shrink-0 flex items-center gap-2 px-3 py-1.5 rounded-lg text-xs font-bold transition-all border ${
-                  activePipelineId === p.id
-                    ? 'bg-indigo-600/20 border-indigo-500/40 text-indigo-300'
-                    : 'bg-slate-950 border-white/5 text-slate-400 hover:text-slate-200 hover:border-white/10'
-                }`}
-              >
-                {p.name}
-                {p.is_default && (
-                  <span className="text-[8px] font-black uppercase tracking-widest opacity-50 bg-indigo-500/20 px-1 rounded">principal</span>
-                )}
-              </button>
+              <div key={p.id} className="shrink-0 flex items-center gap-0.5">
+                <button
+                  onClick={() => setActivePipelineId(p.id)}
+                  className={`flex items-center gap-2 px-3 py-1.5 rounded-l-lg text-xs font-bold transition-all border border-r-0 ${
+                    activePipelineId === p.id
+                      ? 'bg-indigo-600/20 border-indigo-500/40 text-indigo-300'
+                      : 'bg-slate-950 border-white/5 text-slate-400 hover:text-slate-200 hover:border-white/10'
+                  }`}
+                >
+                  {p.name}
+                  {p.is_default && (
+                    <span className="text-[8px] font-black uppercase tracking-widest opacity-50 bg-indigo-500/20 px-1 rounded">principal</span>
+                  )}
+                </button>
+                <button
+                  onClick={() => setSettingsPipeline(p)}
+                  title="Configurar etapas"
+                  className={`flex items-center justify-center px-2 py-1.5 rounded-r-lg text-xs transition-all border ${
+                    activePipelineId === p.id
+                      ? 'bg-indigo-600/20 border-indigo-500/40 text-indigo-400 hover:bg-indigo-600/30'
+                      : 'bg-slate-950 border-white/5 text-slate-600 hover:text-slate-300 hover:border-white/10'
+                  }`}
+                >
+                  <Settings2 size={11} />
+                </button>
+              </div>
             ))}
 
             <button
@@ -135,8 +148,8 @@ export const DealsPage: React.FC = () => {
               Pronóstico
             </button>
           </div>
-        )}
-      </div>
+        </div>
+      )}
 
       {/* Forecast Widget */}
       {showForecast && forecast && (
@@ -284,6 +297,12 @@ export const DealsPage: React.FC = () => {
       <PipelineFormModal
         open={isPipelineModalOpen}
         onClose={() => setIsPipelineModalOpen(false)}
+      />
+
+      <PipelineSettingsDrawer
+        open={settingsPipeline !== null}
+        pipeline={pipelines.find((p) => p.id === settingsPipeline?.id) ?? settingsPipeline}
+        onClose={() => setSettingsPipeline(null)}
       />
     </div>
   );

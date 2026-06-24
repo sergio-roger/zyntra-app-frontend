@@ -76,6 +76,54 @@ export const useDeletePipeline = () => {
   });
 };
 
+// ─── Pipeline Stages ────────────────────────────────────────────────────────
+
+export const useCreateStage = () => {
+  const qc = useQueryClient();
+  return useMutation({
+    mutationFn: async (vars: { pipelineId: string; input: Parameters<typeof pipelinesApi.createStage>[1] }) => {
+      const res = await pipelinesApi.createStage(vars.pipelineId, vars.input);
+      return res.data;
+    },
+    onSuccess: () => qc.invalidateQueries({ queryKey: pipelineKeys.all }),
+  });
+};
+
+export const useUpdateStage = () => {
+  const qc = useQueryClient();
+  return useMutation({
+    mutationFn: async (vars: { stageId: string; input: Parameters<typeof pipelinesApi.updateStage>[1] }) => {
+      const res = await pipelinesApi.updateStage(vars.stageId, vars.input);
+      return res.data;
+    },
+    onSuccess: () => qc.invalidateQueries({ queryKey: pipelineKeys.all }),
+  });
+};
+
+export const useDeleteStage = () => {
+  const qc = useQueryClient();
+  return useMutation({
+    mutationFn: async (stageId: string) => {
+      await pipelinesApi.deleteStage(stageId);
+    },
+    onSuccess: () => {
+      qc.invalidateQueries({ queryKey: pipelineKeys.all });
+      qc.invalidateQueries({ queryKey: dealsKeys.all });
+    },
+  });
+};
+
+export const useReorderStages = () => {
+  const qc = useQueryClient();
+  return useMutation({
+    mutationFn: async (vars: { pipelineId: string; stages: { id: string; position: number }[] }) => {
+      const res = await pipelinesApi.reorderStages(vars.pipelineId, { stages: vars.stages });
+      return res.data;
+    },
+    onSuccess: () => qc.invalidateQueries({ queryKey: pipelineKeys.all }),
+  });
+};
+
 // ─── Deals Kanban ───────────────────────────────────────────────────────────
 
 export const useDealsKanban = (pipelineId: string | null) =>

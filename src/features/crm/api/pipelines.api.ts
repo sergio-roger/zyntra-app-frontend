@@ -2,7 +2,6 @@ import api from '@shared/api/axios';
 import {
   DealPipeline,
   DealPipelineStage,
-  KanbanResponse,
   PipelineForecast,
 } from '@crm/types/crm';
 
@@ -54,4 +53,7 @@ export const pipelinesApi = {
 
   updateStage: (stageId: string, input: Partial<CreateStageInput>) =>
     api.patch<unknown, { data: DealPipelineStage }>(`/crm/pipelines/stages/${stageId}`, input),
+
+  deleteStage: (stageId: string) =>
+    api.delete(`/crm/pipelines/stages/${stageId}`),
 };

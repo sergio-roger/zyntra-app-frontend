@@ -76,10 +76,11 @@ export const DealsKanban: React.FC<DealsKanbanProps> = ({ kanbanData, onDealClic
             }
             if (col.stage.id === newStageId) {
               const movedDeal = { ...deal, stage_id: newStageId };
+              const targetDeals = [...col.deals, movedDeal];
               return {
                 ...col,
-                deals: [...col.deals, movedDeal],
-                total_value: col.deals.reduce((s, d) => s + Number(d.value), 0) + Number(deal.value),
+                deals: targetDeals,
+                total_value: targetDeals.reduce((s, d) => s + Number(d.value), 0),
               };
             }
             return col;
