@@ -1,5 +1,6 @@
 import React from 'react';
 import { useDroppable } from '@dnd-kit/core';
+import { Pencil } from 'lucide-react';
 import { DealCard } from './DealCard';
 import { Deal, DealPipelineStage } from '@crm/types/crm';
 
@@ -8,6 +9,7 @@ interface DealsColumnProps {
   deals: Deal[];
   totalValue: number;
   onDealClick?: (deal: Deal) => void;
+  onEditStage?: (stage: DealPipelineStage) => void;
 }
 
 export const DealsColumn: React.FC<DealsColumnProps> = ({
@@ -15,6 +17,7 @@ export const DealsColumn: React.FC<DealsColumnProps> = ({
   deals,
   totalValue,
   onDealClick,
+  onEditStage,
 }) => {
   const { setNodeRef, isOver } = useDroppable({ id: stage.id });
 
@@ -50,9 +53,16 @@ export const DealsColumn: React.FC<DealsColumnProps> = ({
           </div>
           <div className="flex items-center gap-1.5">
             <button
+              onClick={() => onEditStage?.(stage)}
+              className="p-1 rounded-lg bg-white/5 hover:bg-slate-700/60 text-slate-500 hover:text-slate-300 border border-white/5 transition-all active:scale-95"
+              title="Editar esta etapa"
+            >
+              <Pencil className="w-3.5 h-3.5" />
+            </button>
+            <button
               onClick={() => onDealClick?.({ id: 'new', stage_id: stage.id } as any)}
               className="p-1 rounded-lg bg-white/5 hover:bg-indigo-600/20 text-slate-400 hover:text-indigo-400 border border-white/5 transition-all active:scale-95"
-              title="Añadir negocio a esta fase"
+              title="Añadir negocio a esta etapa"
             >
               <svg className="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M12 4v16m8-8H4" />

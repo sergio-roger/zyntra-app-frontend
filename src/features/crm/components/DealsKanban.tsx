@@ -1,6 +1,6 @@
 import { dealsApi } from '@crm/api/deals.api';
 import { dealsKeys } from '@crm/hooks/useDeals';
-import { Deal, KanbanResponse } from '@crm/types/crm';
+import { Deal, DealPipelineStage, KanbanResponse } from '@crm/types/crm';
 import {
   CollisionDetection,
   DndContext,
@@ -21,6 +21,7 @@ import { DealsColumn } from './DealsColumn';
 interface DealsKanbanProps {
   kanbanData: KanbanResponse;
   onDealClick?: (deal: Deal) => void;
+  onEditStage?: (stage: DealPipelineStage) => void;
 }
 
 const kanbanCollision: CollisionDetection = (args) => {
@@ -29,7 +30,7 @@ const kanbanCollision: CollisionDetection = (args) => {
   return rectIntersection(args);
 };
 
-export const DealsKanban: React.FC<DealsKanbanProps> = ({ kanbanData, onDealClick }) => {
+export const DealsKanban: React.FC<DealsKanbanProps> = ({ kanbanData, onDealClick, onEditStage }) => {
   const qc = useQueryClient();
   const [activeDeal, setActiveDeal] = useState<Deal | null>(null);
 
@@ -130,6 +131,7 @@ export const DealsKanban: React.FC<DealsKanbanProps> = ({ kanbanData, onDealClic
             deals={col.deals}
             totalValue={col.total_value}
             onDealClick={onDealClick}
+            onEditStage={onEditStage}
           />
         ))}
       </div>

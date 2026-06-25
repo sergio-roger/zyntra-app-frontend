@@ -3,8 +3,9 @@ import { DealDetailSidebar } from '@crm/components/DealDetailSidebar';
 import { DealsKanban } from '@crm/components/DealsKanban';
 import { PipelineFormModal } from '@crm/components/PipelineFormModal';
 import { PipelineSettingsDrawer } from '@crm/components/PipelineSettingsDrawer';
+import { StageEditSidebar } from '@crm/components/StageEditSidebar';
 import { useDealsKanban, usePipelineForecast, usePipelines } from '@crm/hooks/useDeals';
-import { Deal, DealPipeline } from '@crm/types/crm';
+import { Deal, DealPipeline, DealPipelineStage } from '@crm/types/crm';
 import { AlertCircle, BarChart3, ChevronDown, DollarSign, FolderPlus, Loader2, Search, Settings2, Target, TrendingUp } from 'lucide-react';
 import React, { useEffect, useState } from 'react';
 
@@ -20,6 +21,7 @@ export const DealsPage: React.FC = () => {
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
   const [isPipelineModalOpen, setIsPipelineModalOpen] = useState(false);
   const [settingsPipeline, setSettingsPipeline] = useState<DealPipeline | null>(null);
+  const [editingStage, setEditingStage] = useState<DealPipelineStage | null>(null);
   const [activePipelineId, setActivePipelineId] = useState<string | null>(null);
   const [showForecast, setShowForecast] = useState(false);
   const [stageOverrideId, setStageOverrideId] = useState<string | undefined>(undefined);
@@ -280,7 +282,11 @@ export const DealsPage: React.FC = () => {
       {/* Kanban Board */}
       {!isLoading && kanbanData && (
         <div className="mt-2 min-h-[600px] animate-in fade-in slide-in-from-bottom-4 duration-700">
-          <DealsKanban kanbanData={kanbanData} onDealClick={handleDealClick} />
+          <DealsKanban
+            kanbanData={kanbanData}
+            onDealClick={handleDealClick}
+            onEditStage={(stage) => setEditingStage(stage)}
+          />
         </div>
       )}
 
@@ -304,6 +310,12 @@ export const DealsPage: React.FC = () => {
           setIsSidebarOpen(false);
           setSelectedDeal(null);
         }}
+      />
+
+      <StageEditSidebar
+        open={editingStage !== null}
+        stage={editingStage}
+        onClose={() => setEditingStage(null)}
       />
 
       <PipelineFormModal

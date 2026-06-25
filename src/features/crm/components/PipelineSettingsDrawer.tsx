@@ -379,7 +379,7 @@ export const PipelineSettingsDrawer: React.FC<PipelineSettingsDrawerProps> = ({
         onClose={() => setDeletingStage(null)}
         onConfirm={confirmDeleteStage}
         title="¿Eliminar esta etapa?"
-        description={`¿Seguro que deseas eliminar la etapa "${deletingStage?.name}"? Esta acción no se puede deshacer y los tratos activos en esta fase podrían verse afectados.`}
+        description={`¿Seguro que deseas eliminar la etapa "${deletingStage?.name}"? Esta acción no se puede deshacer y los negocios en esta etapa podrían verse afectados.`}
         confirmText="Confirmar Eliminar"
         cancelText="Cancelar"
         variant="danger"
