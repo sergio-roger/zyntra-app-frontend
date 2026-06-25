@@ -97,20 +97,63 @@ export const DealsKanban: React.FC<DealsKanbanProps> = ({ kanbanData, onDealClic
       setPendingMove(dealId, newStageId);
 
       try {
-        // 2. Persist on the server
-        await dealsApi.update(dealId, {
+        // 2. Persist on the server — capture the full updated deal (includes
+        //    stage, contact, and other relations) so we can patch the cache
+        //    with exact server data and avoid a second round-trip.
+        const { data: updatedDeal } = await dealsApi.update(dealId, {
           stage_id: newStageId,
           pipeline_id: kanbanData.pipeline.id,
         });
 
-        // 3. Wait for the refetch so the RQ cache now reflects the server state.
-        await qc.refetchQueries({ queryKey });
+        // 3. Patch the cache with the server-returned deal so every field
+        //    (including the stage relation object) is already correct.
+        //    This prevents the "pulse" that occurred when setQueryData only
+        //    set stage_id and the background invalidation later brought in
+        //    the full stage object — causing a visible diff and re-render.
+        qc.setQueryData<KanbanResponse>(queryKey, (old) => {
+          if (!old) return old;
+          return {
+            ...old,
+            columns: old.columns.map((col) => {
+              if (col.stage.id === newStageId) {
+                if (col.deals.some((d) => d.id === dealId)) {
+                  const updated = col.deals.map((d) =>
+                    d.id === dealId ? updatedDeal : d,
+                  );
+                  return {
+                    ...col,
+                    deals: updated,
+                    total_value: updated.reduce(
+                      (s, d) => s + Number(d.value),
+                      0,
+                    ),
+                  };
+                }
+                const updated = [...col.deals, updatedDeal];
+                return {
+                  ...col,
+                  deals: updated,
+                  total_value: updated.reduce((s, d) => s + Number(d.value), 0),
+                };
+              }
+              if (col.deals.some((d) => d.id === dealId)) {
+                const updated = col.deals.filter((d) => d.id !== dealId);
+                return {
+                  ...col,
+                  deals: updated,
+                  total_value: updated.reduce((s, d) => s + Number(d.value), 0),
+                };
+              }
+              return col;
+            }),
+          };
+        });
 
-        // 4. Override no longer needed — RQ and Zustand now agree
+        // 4. Override no longer needed — cache and Zustand now agree
         clearPendingMove(dealId);
       } catch (err) {
         clearPendingMove(dealId);
-        await qc.invalidateQueries({ queryKey });
+        qc.invalidateQueries({ queryKey });
         console.error('Failed to move deal:', err);
       }
     },
