@@ -4,6 +4,7 @@ import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import React from 'react';
 import { DealsKanban } from '@crm/components/DealsKanban';
 import { useKanbanStore } from '@crm/store/kanbanStore';
+import { dealsKeys } from '@crm/hooks/useDeals';
 import * as dealsApiModule from '@crm/api/deals.api';
 import { KanbanResponse, Deal, DealPipelineStage, DealPipeline } from '@crm/types/crm';
 
@@ -60,7 +61,9 @@ const makeStage = (overrides: Partial<DealPipelineStage> = {}): DealPipelineStag
 
 const makeDeal = (overrides: Partial<Deal> = {}): Deal => ({
   id: 'deal-1',
+  business_id: 'biz-1',
   title: 'Test Deal',
+  description: null,
   value: 1000,
   currency: 'COP',
   status: 'open',
@@ -68,6 +71,11 @@ const makeDeal = (overrides: Partial<Deal> = {}): Deal => ({
   stage_id: 'stage-prospección',
   contact_id: 'contact-1',
   contact: { id: 'contact-1', name: 'Cliente Test' } as any,
+  assigned_to_id: null,
+  team_id: null,
+  expected_close_date: null,
+  probability: 10,
+  closed_at: null,
   created_at: new Date().toISOString(),
   updated_at: new Date().toISOString(),
   ...overrides,
@@ -83,6 +91,9 @@ const makePipeline = (): DealPipeline => ({
   position: 0,
   stages: [stageA, stageB],
   business_id: 'biz-1',
+  deleted_at: null,
+  created_at: new Date().toISOString(),
+  updated_at: new Date().toISOString(),
 });
 
 const makeKanbanData = (dealStageId = 'stage-prospección'): KanbanResponse => ({
@@ -153,13 +164,15 @@ describe('DealsKanban — drag-and-drop', () => {
     });
   });
 
-  it('sets a pending move immediately (optimistic UI) before the API resolves', async () => {
-    // The API is intentionally slow — we check the store before it resolves
+  it('updates the React Query cache optimistically before the API resolves', async () => {
+    // The API is intentionally slow — we check the cache before it resolves
     let resolveApi!: (v: any) => void;
     updateMock.mockReturnValue(new Promise((res) => { resolveApi = res; }));
 
-    const { Wrapper } = createWrapper();
+    const { qc, Wrapper } = createWrapper();
     const kanbanData = makeKanbanData('stage-prospección');
+    // Seed the cache so setQueryData has a base to patch
+    qc.setQueryData(dealsKeys.kanban('pipe-1'), kanbanData);
 
     render(
       <Wrapper>
@@ -175,21 +188,24 @@ describe('DealsKanban — drag-and-drop', () => {
       });
     });
 
-    // pendingMoves should be set synchronously BEFORE the api resolves
-    const { pendingMoves } = useKanbanStore.getState();
-    expect(pendingMoves['deal-1']).toBe('stage-contactado');
+    // Cache should reflect the move synchronously BEFORE the API resolves
+    const cached = qc.getQueryData<typeof kanbanData>(dealsKeys.kanban('pipe-1'));
+    const destDeals = cached?.columns.find((c) => c.stage.id === 'stage-contactado')?.deals ?? [];
+    expect(destDeals.some((d) => d.id === 'deal-1')).toBe(true);
 
     // Cleanup — resolve the promise so there are no dangling async ops
     await act(async () => {
-      resolveApi({ data: {} });
+      resolveApi({ data: makeDeal({ stage_id: 'stage-contactado' }) });
     });
   });
 
-  it('clears the pending move AFTER the server responds (deal stays in new column)', async () => {
-    updateMock.mockResolvedValue({ data: { id: 'deal-1', stage_id: 'stage-contactado' } });
+  it('deal stays in new column after the server responds', async () => {
+    const updatedDeal = makeDeal({ stage_id: 'stage-contactado' });
+    updateMock.mockResolvedValue({ data: updatedDeal });
 
-    const { Wrapper } = createWrapper();
+    const { qc, Wrapper } = createWrapper();
     const kanbanData = makeKanbanData('stage-prospección');
+    qc.setQueryData(dealsKeys.kanban('pipe-1'), kanbanData);
 
     render(
       <Wrapper>
@@ -204,16 +220,20 @@ describe('DealsKanban — drag-and-drop', () => {
       });
     });
 
-    // After full resolution, the pending move must be gone
-    const { pendingMoves } = useKanbanStore.getState();
-    expect(pendingMoves['deal-1']).toBeUndefined();
+    // After full resolution the deal must be in the destination column
+    const cached = qc.getQueryData<typeof kanbanData>(dealsKeys.kanban('pipe-1'));
+    const destDeals = cached?.columns.find((c) => c.stage.id === 'stage-contactado')?.deals ?? [];
+    const srcDeals = cached?.columns.find((c) => c.stage.id === 'stage-prospección')?.deals ?? [];
+    expect(destDeals.some((d) => d.id === 'deal-1')).toBe(true);
+    expect(srcDeals.some((d) => d.id === 'deal-1')).toBe(false);
   });
 
-  it('reverts the pending move when the API call fails', async () => {
+  it('reverts to server state when the API call fails', async () => {
     updateMock.mockRejectedValue(new Error('Network error'));
 
-    const { Wrapper } = createWrapper();
+    const { qc, Wrapper } = createWrapper();
     const kanbanData = makeKanbanData('stage-prospección');
+    qc.setQueryData(dealsKeys.kanban('pipe-1'), kanbanData);
 
     render(
       <Wrapper>
@@ -228,9 +248,9 @@ describe('DealsKanban — drag-and-drop', () => {
       });
     });
 
-    // On failure the pending override must also be cleared (so UI reverts to server state)
-    const { pendingMoves } = useKanbanStore.getState();
-    expect(pendingMoves['deal-1']).toBeUndefined();
+    // On failure the query is invalidated (marked stale) so the next mount
+    // will refetch the real server state
+    expect(qc.getQueryState(dealsKeys.kanban('pipe-1'))?.isInvalidated).toBe(true);
   });
 
   it('does NOT call the API when dropping onto the same stage', async () => {
