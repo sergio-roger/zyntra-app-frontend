@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import {
   X, Settings2, Plus, Trash2, Loader2, GripVertical, Check,
 } from 'lucide-react';
-import { useCreateStage, useUpdateStage, useDeleteStage, useReorderStages } from '@crm/hooks/useDeals';
+import { useCreateStage, useUpdateStage, useDeleteStage } from '@crm/hooks/useDeals';
 import { DealPipeline } from '@crm/types/crm';
 import { EditableStage, StageType } from '@crm/types/pipeline-settings';
 import { PIPELINE_STAGE_COLORS, STAGE_TYPE_LABELS } from '@crm/constants/pipeline-settings';
@@ -28,7 +28,7 @@ export const PipelineSettingsDrawer: React.FC<PipelineSettingsDrawerProps> = ({
   const createStage = useCreateStage();
   const updateStage = useUpdateStage();
   const deleteStage = useDeleteStage();
-  const reorderStages = useReorderStages();
+
 
   useEffect(() => {
     if (pipeline) {

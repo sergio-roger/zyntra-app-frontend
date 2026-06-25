@@ -58,7 +58,7 @@ export const useUpdatePipeline = () => {
       const res = await pipelinesApi.update(vars.id, vars.input);
       return res.data;
     },
-    onSuccess: (_, vars) => {
+    onSuccess: () => {
       qc.invalidateQueries({ queryKey: pipelineKeys.all });
     },
   });

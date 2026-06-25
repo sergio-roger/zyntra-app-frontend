@@ -1,32 +1,7 @@
-/**
- * DealsKanban — Drag-and-Drop Integration Test
- *
- * This test exercises the full client-side DnD flow in isolation:
- *   1. handleDragEnd fires the PATCH API with the correct { stage_id }
- *   2. The deal card visually moves to the new column BEFORE the server responds
- *      (optimistic / pending-move via Zustand)
- *   3. After the server responds, the card stays in the new column
- *   4. On API failure the card reverts to its original column
- *
- * ─── WHY THE BUG EXISTS ───────────────────────────────────────────────────────
- * Previously `qc.invalidateQueries` was called BEFORE `clearPendingMove`.
- * React-Query would immediately refetch from the server.  If the server returned
- * the deal still in the old stage (e.g. because the PATCH had not fully committed,
- * or because the status filter was stripping the deal), the cache was updated with
- * the old position, and clearPendingMove removed the optimistic override — leaving
- * the deal back in its original column even though the move succeeded.
- *
- * The correct order is:
- *   PATCH → invalidateQueries (await refetch) → clearPendingMove
- * so Zustand keeps the card in the new column until the authoritative server
- * data confirms the new stage.
- */
-
 import { describe, it, expect, vi, beforeEach } from 'vitest';
-import { render, screen, act } from '@testing-library/react';
+import { render, act } from '@testing-library/react';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import React from 'react';
-
 import { DealsKanban } from '@crm/components/DealsKanban';
 import { useKanbanStore } from '@crm/store/kanbanStore';
 import * as dealsApiModule from '@crm/api/deals.api';
@@ -39,7 +14,7 @@ import { KanbanResponse, Deal, DealPipelineStage, DealPipeline } from '@crm/type
 let capturedOnDragEnd: ((e: any) => void) | null = null;
 
 vi.mock('@dnd-kit/core', async (importOriginal) => {
-  const real = await importOriginal<typeof import('@dnd-kit/core')>();
+  const real = await importOriginal<Record<string, unknown>>();
   return {
     ...real,
     DndContext: ({ children, onDragEnd }: any) => {
