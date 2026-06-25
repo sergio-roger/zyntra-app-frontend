@@ -1,9 +1,11 @@
 import React, { useEffect, useState } from 'react';
 import {
   X, Save, Loader2, Briefcase, DollarSign, User, TrendingUp,
-  Calendar, AlertCircle, ChevronDown, Clock, CheckCircle2,
+  Calendar, AlertCircle, ChevronDown, Clock, CheckCircle2, Trash2,
 } from 'lucide-react';
-import { useUpdateDeal, usePipelines, useDealHistory } from '@crm/hooks/useDeals';
+import { useUpdateDeal, useDeleteDeal, usePipelines, useDealHistory } from '@crm/hooks/useDeals';
+import { ConfirmModal } from '@shared/components/ConfirmModal';
+import { toastManager } from '@shared/components/toast/toastManager';
 import { useContactsList } from '@crm/hooks/useContacts';
 import { Input } from '@core/ui/Input';
 import { Textarea } from '@core/ui/Textarea';
@@ -128,7 +130,10 @@ export const DealDetailSidebar: React.FC<DealDetailSidebarProps> = ({ open, deal
   const { data: history = [], isLoading: loadingHistory } = useDealHistory(open ? (deal?.id ?? null) : null);
   const contacts = contactsData?.items ?? [];
 
+  const [confirmDelete, setConfirmDelete] = useState(false);
+
   const updateMutation = useUpdateDeal();
+  const deleteMutation = useDeleteDeal();
   const isSaving = updateMutation.isPending;
   const stages: DealPipelineStage[] = selectedPipeline?.stages ?? [];
 
@@ -182,6 +187,26 @@ export const DealDetailSidebar: React.FC<DealDetailSidebarProps> = ({ open, deal
       onClose();
     } catch (err) {
       console.error('Error updating deal:', err);
+    }
+  };
+
+  const handleConfirmDelete = async () => {
+    if (!deal) return;
+    try {
+      await deleteMutation.mutateAsync(deal.id);
+      toastManager.add({
+        title: 'Negocio eliminado',
+        description: `"${deal.title}" fue eliminado correctamente.`,
+        type: 'success',
+      });
+      setConfirmDelete(false);
+      onClose();
+    } catch (err: any) {
+      toastManager.add({
+        title: 'Error al eliminar',
+        description: err?.response?.data?.message ?? 'No se pudo eliminar el negocio.',
+        type: 'error',
+      });
     }
   };
 
@@ -367,26 +392,48 @@ export const DealDetailSidebar: React.FC<DealDetailSidebarProps> = ({ open, deal
 
         {/* Footer — only for Detalle tab */}
         {activeTab === 'detalle' && (
-          <div className="p-6 border-t border-white/5 bg-slate-950/30 flex gap-3 shrink-0">
+          <div className="p-6 border-t border-white/5 bg-slate-950/30 shrink-0 space-y-3">
+            <div className="flex gap-3">
+              <button
+                type="button"
+                onClick={onClose}
+                className="flex-1 px-4 py-2.5 rounded-xl border border-white/10 text-sm font-semibold text-slate-300 hover:bg-white/5 transition-colors"
+              >
+                Cancelar
+              </button>
+              <button
+                form="deal-detail-form"
+                type="submit"
+                disabled={isSaving || !formData.title || !formData.contact_id || !formData.pipeline_id || !formData.stage_id}
+                className="flex-[2] px-4 py-2.5 rounded-xl bg-primary text-white text-sm font-semibold shadow-lg shadow-primary/20 hover:opacity-90 disabled:opacity-50 transition-all flex items-center justify-center gap-2"
+              >
+                {isSaving ? <Loader2 className="animate-spin" size={18} /> : <Save size={18} />}
+                Actualizar Negocio
+              </button>
+            </div>
             <button
               type="button"
-              onClick={onClose}
-              className="flex-1 px-4 py-2.5 rounded-xl border border-white/10 text-sm font-semibold text-slate-300 hover:bg-white/5 transition-colors"
+              onClick={() => setConfirmDelete(true)}
+              disabled={deleteMutation.isPending}
+              className="w-full flex items-center justify-center gap-2 px-4 py-2 rounded-xl text-rose-400 hover:bg-rose-500/10 border border-rose-500/20 text-sm font-medium transition-all disabled:opacity-50"
             >
-              Cancelar
-            </button>
-            <button
-              form="deal-detail-form"
-              type="submit"
-              disabled={isSaving || !formData.title || !formData.contact_id || !formData.pipeline_id || !formData.stage_id}
-              className="flex-[2] px-4 py-2.5 rounded-xl bg-primary text-white text-sm font-semibold shadow-lg shadow-primary/20 hover:opacity-90 disabled:opacity-50 transition-all flex items-center justify-center gap-2"
-            >
-              {isSaving ? <Loader2 className="animate-spin" size={18} /> : <Save size={18} />}
-              Actualizar Negocio
+              <Trash2 size={15} />
+              Eliminar negocio
             </button>
           </div>
         )}
       </div>
+
+      <ConfirmModal
+        isOpen={confirmDelete}
+        onClose={() => setConfirmDelete(false)}
+        onConfirm={handleConfirmDelete}
+        title="¿Eliminar este negocio?"
+        description={`¿Seguro que deseas eliminar "${deal?.title}"? Esta acción no se puede deshacer.`}
+        confirmText="Eliminar"
+        cancelText="Cancelar"
+        variant="danger"
+      />
     </>
   );
 };
