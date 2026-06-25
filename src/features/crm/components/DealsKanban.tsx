@@ -1,23 +1,23 @@
-import React, { useMemo, useState, useCallback } from 'react';
+import { dealsApi } from '@crm/api/deals.api';
+import { dealsKeys } from '@crm/hooks/useDeals';
+import { useKanbanStore } from '@crm/store/kanbanStore';
+import { Deal, KanbanResponse } from '@crm/types/crm';
 import {
+  CollisionDetection,
   DndContext,
   DragEndEvent,
-  DragStartEvent,
   DragOverlay,
+  DragStartEvent,
   PointerSensor,
-  useSensor,
-  useSensors,
   pointerWithin,
   rectIntersection,
-  CollisionDetection,
+  useSensor,
+  useSensors,
 } from '@dnd-kit/core';
 import { useQueryClient } from '@tanstack/react-query';
-import { dealsKeys } from '@crm/hooks/useDeals';
-import { dealsApi } from '@crm/api/deals.api';
-import { Deal, KanbanResponse } from '@crm/types/crm';
-import { useKanbanStore } from '@crm/store/kanbanStore';
-import { DealsColumn } from './DealsColumn';
+import React, { useCallback, useMemo, useState } from 'react';
 import { DealCard } from './DealCard';
+import { DealsColumn } from './DealsColumn';
 
 interface DealsKanbanProps {
   kanbanData: KanbanResponse;
@@ -98,16 +98,17 @@ export const DealsKanban: React.FC<DealsKanbanProps> = ({ kanbanData, onDealClic
 
       try {
         // 2. Persist on the server
-        await dealsApi.update(dealId, { stage_id: newStageId });
+        await dealsApi.update(dealId, {
+          stage_id: newStageId,
+          pipeline_id: kanbanData.pipeline.id,
+        });
 
-        // 3. Wait for the refetch so the RQ cache now reflects the server state
-        await qc.invalidateQueries({ queryKey });
+        // 3. Wait for the refetch so the RQ cache now reflects the server state.
+        await qc.refetchQueries({ queryKey });
 
         // 4. Override no longer needed — RQ and Zustand now agree
         clearPendingMove(dealId);
       } catch (err) {
-        // Revert: remove the override first so displayData reverts immediately,
-        // then let the refetch confirm the server position.
         clearPendingMove(dealId);
         await qc.invalidateQueries({ queryKey });
         console.error('Failed to move deal:', err);
