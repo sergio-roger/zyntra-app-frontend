@@ -1,8 +1,9 @@
 import React, { useEffect, useState } from 'react';
 import {
-  X, Settings2, Plus, Trash2, Loader2, GripVertical, Check, Save, Star,
+  X, Settings2, Plus, Trash2, Loader2, GripVertical, Check, Save, Star, Users,
 } from 'lucide-react';
 import { useCreateStage, useUpdateStage, useDeleteStage, useUpdatePipeline } from '@crm/hooks/useDeals';
+import { useTeamsList } from '@features/settings/hooks/useUsersTeams';
 import { DealPipeline } from '@crm/types/crm';
 import { EditableStage, StageType } from '@crm/types/pipeline-settings';
 import { PIPELINE_STAGE_COLORS, STAGE_TYPE_LABELS } from '@crm/constants/pipeline-settings';
@@ -27,6 +28,7 @@ export const PipelineSettingsDrawer: React.FC<PipelineSettingsDrawerProps> = ({
   // ── Config form state ──────────────────────────────────────────────────────
   const [pipelineName, setPipelineName] = useState('');
   const [isDefault, setIsDefault] = useState(false);
+  const [teamId, setTeamId] = useState<string | null>(null);
 
   // ── Stages state ───────────────────────────────────────────────────────────
   const [stages, setStages] = useState<EditableStage[]>([]);
@@ -38,12 +40,14 @@ export const PipelineSettingsDrawer: React.FC<PipelineSettingsDrawerProps> = ({
   const updateStage = useUpdateStage();
   const deleteStage = useDeleteStage();
   const updatePipeline = useUpdatePipeline();
+  const { data: teams = [] } = useTeamsList();
 
   useEffect(() => {
     if (!pipeline) return;
     setActiveTab('configuracion');
     setPipelineName(pipeline.name);
     setIsDefault(pipeline.is_default);
+    setTeamId(pipeline.team_id);
     setStages([...pipeline.stages].sort((a, b) => a.position - b.position));
   }, [pipeline?.id]);
 
@@ -55,7 +59,7 @@ export const PipelineSettingsDrawer: React.FC<PipelineSettingsDrawerProps> = ({
     try {
       await updatePipeline.mutateAsync({
         id: pipeline.id,
-        input: { name: pipelineName.trim(), is_default: isDefault },
+        input: { name: pipelineName.trim(), is_default: isDefault, team_id: teamId },
       });
       toastManager.add({
         title: 'Pipeline actualizado',
@@ -236,6 +240,26 @@ export const PipelineSettingsDrawer: React.FC<PipelineSettingsDrawerProps> = ({
                     }`}
                   />
                 </button>
+              </div>
+
+              {/* Team */}
+              <div className="space-y-1.5">
+                <label className="text-xs font-medium text-slate-400 ml-1 flex items-center gap-1.5">
+                  <Users size={13} /> Equipo asignado
+                </label>
+                <select
+                  value={teamId ?? ''}
+                  onChange={(e) => setTeamId(e.target.value || null)}
+                  className="w-full bg-slate-950/50 border border-white/10 rounded-xl py-2.5 px-4 text-sm text-white focus:outline-none focus:border-indigo-500/50 transition-all appearance-none"
+                >
+                  <option value="">Sin equipo asignado</option>
+                  {teams.map((t) => (
+                    <option key={t.id} value={t.id}>{t.name}</option>
+                  ))}
+                </select>
+                {teams.length === 0 && (
+                  <p className="text-[10px] text-slate-600 ml-1">No hay equipos configurados aún.</p>
+                )}
               </div>
             </form>
           )}
