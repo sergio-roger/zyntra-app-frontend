@@ -35,12 +35,12 @@ export const DealCard: React.FC<DealCardProps> = ({ deal, onClick, isDragging = 
       className={`group flex flex-col gap-3 rounded-xl border bg-slate-800/40 p-4 transition-all cursor-pointer shadow-lg select-none ${
         isBeingDragged || isDragging
           ? 'opacity-40 border-indigo-500/40 scale-[0.98]'
-          : 'border-white/[0.05] hover:bg-slate-800/60 hover:border-white/[0.1] hover:-translate-y-0.5 active:scale-[0.98]'
+          : 'border-white/[0.05] active:scale-[0.98]'
       }`}
       onClick={() => !isBeingDragged && onClick?.(deal)}
     >
       <div className="flex items-start justify-between gap-2">
-        <h4 className="text-sm font-bold text-white line-clamp-2 leading-tight group-hover:text-indigo-400 transition-colors">
+        <h4 className="text-sm font-bold text-white line-clamp-2 leading-tight">
           {deal.title}
         </h4>
         <div className="flex items-center gap-1 shrink-0">
