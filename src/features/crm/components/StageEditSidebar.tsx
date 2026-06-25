@@ -1,10 +1,13 @@
-import React, { useEffect, useState } from 'react';
-import { X, Save, Loader2, Layers } from 'lucide-react';
-import { useUpdateStage } from '@crm/hooks/useDeals';
-import { DealPipelineStage } from '@crm/types/crm';
-import { StageType } from '@crm/types/pipeline-settings';
-import { PIPELINE_STAGE_COLORS, STAGE_TYPE_LABELS } from '@crm/constants/pipeline-settings';
-import { toastManager } from '@shared/components/toast/toastManager';
+import React, { useEffect, useState } from "react";
+import { X, Save, Loader2, Layers } from "lucide-react";
+import { useUpdateStage } from "@crm/hooks/useDeals";
+import { DealPipelineStage } from "@crm/types/crm";
+import { StageType } from "@crm/types/pipeline-settings";
+import {
+  PIPELINE_STAGE_COLORS,
+  STAGE_TYPE_LABELS,
+} from "@crm/constants/pipeline-settings";
+import { toastManager } from "@shared/components/toast/toastManager";
 
 interface StageEditSidebarProps {
   open: boolean;
@@ -12,10 +15,14 @@ interface StageEditSidebarProps {
   onClose: () => void;
 }
 
-export const StageEditSidebar: React.FC<StageEditSidebarProps> = ({ open, stage, onClose }) => {
-  const [name, setName] = useState('');
+export const StageEditSidebar: React.FC<StageEditSidebarProps> = ({
+  open,
+  stage,
+  onClose,
+}) => {
+  const [name, setName] = useState("");
   const [color, setColor] = useState(PIPELINE_STAGE_COLORS[0]);
-  const [type, setType] = useState<StageType>('active');
+  const [type, setType] = useState<StageType>("active");
   const [probability, setProbability] = useState(30);
 
   const updateStage = useUpdateStage();
@@ -43,16 +50,17 @@ export const StageEditSidebar: React.FC<StageEditSidebarProps> = ({ open, stage,
         },
       });
       toastManager.add({
-        title: 'Etapa actualizada',
+        title: "Etapa actualizada",
         description: `"${name.trim()}" fue guardada correctamente.`,
-        type: 'success',
+        type: "success",
       });
       onClose();
     } catch (err: any) {
       toastManager.add({
-        title: 'Error al guardar',
-        description: err?.response?.data?.message ?? 'No se pudo actualizar la etapa.',
-        type: 'error',
+        title: "Error al guardar",
+        description:
+          err?.response?.data?.message ?? "No se pudo actualizar la etapa.",
+        type: "error",
       });
     }
   };
@@ -60,12 +68,12 @@ export const StageEditSidebar: React.FC<StageEditSidebarProps> = ({ open, stage,
   return (
     <>
       <div
-        className={`fixed inset-0 bg-black/60 !mt-0 backdrop-blur-sm z-[60] transition-opacity duration-300 ${open ? 'opacity-100' : 'opacity-0 pointer-events-none'}`}
+        className={`fixed inset-0 bg-black/60 !mt-0 backdrop-blur-sm z-[60] transition-opacity duration-300 ${open ? "opacity-100" : "opacity-0 pointer-events-none"}`}
         onClick={onClose}
       />
 
       <div
-        className={`fixed inset-y-0 right-0 w-full !mt-0 max-w-sm bg-slate-900 border-l border-white/10 z-[70] shadow-2xl transform transition-transform duration-300 ease-out flex flex-col ${open ? 'translate-x-0' : 'translate-x-full'}`}
+        className={`fixed inset-y-0 right-0 w-full !mt-0 max-w-sm bg-slate-900 border-l border-white/10 z-[70] shadow-2xl transform transition-transform duration-300 ease-out flex flex-col ${open ? "translate-x-0" : "translate-x-full"}`}
       >
         {/* Header */}
         <div className="flex items-center justify-between p-6 border-b border-white/5 shrink-0">
@@ -77,7 +85,9 @@ export const StageEditSidebar: React.FC<StageEditSidebarProps> = ({ open, stage,
               <Layers size={20} />
             </div>
             <div className="min-w-0">
-              <h3 className="text-lg font-bold text-white truncate">Editar etapa</h3>
+              <h3 className="text-lg font-bold text-white truncate">
+                Editar etapa
+              </h3>
               <p className="text-xs text-slate-400 truncate">{stage.name}</p>
             </div>
           </div>
@@ -90,13 +100,22 @@ export const StageEditSidebar: React.FC<StageEditSidebarProps> = ({ open, stage,
         </div>
 
         {/* Color bar */}
-        <div className="h-1 w-full shrink-0" style={{ backgroundColor: color }} />
+        <div
+          className="h-1 w-full shrink-0"
+          style={{ backgroundColor: color }}
+        />
 
         {/* Form */}
-        <form id="stage-edit-form" onSubmit={handleSubmit} className="flex-1 overflow-y-auto p-6 space-y-6">
+        <form
+          id="stage-edit-form"
+          onSubmit={handleSubmit}
+          className="flex-1 overflow-y-auto p-6 space-y-6"
+        >
           {/* Name */}
           <div className="space-y-1.5">
-            <label className="text-xs font-medium text-slate-400 ml-1">Nombre de la etapa *</label>
+            <label className="text-xs font-medium text-slate-400 ml-1">
+              Nombre de la etapa *
+            </label>
             <input
               required
               type="text"
@@ -109,7 +128,9 @@ export const StageEditSidebar: React.FC<StageEditSidebarProps> = ({ open, stage,
 
           {/* Color */}
           <div className="space-y-2">
-            <label className="text-xs font-medium text-slate-400 ml-1">Color</label>
+            <label className="text-xs font-medium text-slate-400 ml-1">
+              Color
+            </label>
             <div className="flex flex-wrap gap-2.5 px-1">
               {PIPELINE_STAGE_COLORS.map((c) => (
                 <button
@@ -119,8 +140,8 @@ export const StageEditSidebar: React.FC<StageEditSidebarProps> = ({ open, stage,
                   className="h-7 w-7 rounded-full border-2 transition-all hover:scale-110"
                   style={{
                     backgroundColor: c,
-                    borderColor: color === c ? 'white' : 'transparent',
-                    boxShadow: color === c ? `0 0 8px ${c}80` : 'none',
+                    borderColor: color === c ? "white" : "transparent",
+                    boxShadow: color === c ? `0 0 8px ${c}80` : "none",
                   }}
                 />
               ))}
@@ -129,7 +150,9 @@ export const StageEditSidebar: React.FC<StageEditSidebarProps> = ({ open, stage,
 
           {/* Type */}
           <div className="space-y-1.5">
-            <label className="text-xs font-medium text-slate-400 ml-1">Tipo de etapa</label>
+            <label className="text-xs font-medium text-slate-400 ml-1">
+              Tipo de etapa
+            </label>
             <div className="grid grid-cols-3 gap-2">
               {(Object.keys(STAGE_TYPE_LABELS) as StageType[]).map((t) => (
                 <button
@@ -138,12 +161,12 @@ export const StageEditSidebar: React.FC<StageEditSidebarProps> = ({ open, stage,
                   onClick={() => setType(t)}
                   className={`py-2 px-3 rounded-xl text-xs font-semibold border transition-all ${
                     type === t
-                      ? t === 'won'
-                        ? 'bg-emerald-500/15 border-emerald-500/40 text-emerald-400'
-                        : t === 'lost'
-                        ? 'bg-rose-500/15 border-rose-500/40 text-rose-400'
-                        : 'bg-indigo-500/15 border-indigo-500/40 text-indigo-400'
-                      : 'bg-slate-800/50 border-white/5 text-slate-400 hover:text-slate-200'
+                      ? t === "won"
+                        ? "bg-emerald-500/15 border-emerald-500/40 text-emerald-400"
+                        : t === "lost"
+                          ? "bg-rose-500/15 border-rose-500/40 text-rose-400"
+                          : "bg-indigo-500/15 border-indigo-500/40 text-indigo-400"
+                      : "bg-slate-800/50 border-white/5 text-slate-400 hover:text-slate-200"
                   }`}
                 >
                   {STAGE_TYPE_LABELS[t]}
@@ -155,8 +178,12 @@ export const StageEditSidebar: React.FC<StageEditSidebarProps> = ({ open, stage,
           {/* Probability */}
           <div className="space-y-2">
             <div className="flex items-center justify-between ml-1">
-              <label className="text-xs font-medium text-slate-400">Probabilidad de cierre</label>
-              <span className="text-sm font-bold" style={{ color }}>{probability}%</span>
+              <label className="text-xs font-medium text-slate-400">
+                Probabilidad de cierre
+              </label>
+              <span className="text-sm font-bold" style={{ color }}>
+                {probability}%
+              </span>
             </div>
             <input
               type="range"
@@ -176,13 +203,24 @@ export const StageEditSidebar: React.FC<StageEditSidebarProps> = ({ open, stage,
 
           {/* Preview */}
           <div className="rounded-xl border border-white/5 bg-slate-800/30 p-4">
-            <p className="text-[10px] font-bold text-slate-500 uppercase tracking-wider mb-3">Vista previa</p>
+            <p className="text-[10px] font-bold text-slate-500 uppercase tracking-wider mb-3">
+              Vista previa
+            </p>
             <div className="flex items-center gap-2">
-              <div className="h-3 w-3 rounded-full shrink-0" style={{ backgroundColor: color }} />
-              <span className="text-sm font-bold text-white">{name || 'Nombre de la etapa'}</span>
+              <div
+                className="h-3 w-3 rounded-full shrink-0"
+                style={{ backgroundColor: color }}
+              />
+              <span className="text-sm font-bold text-white">
+                {name || "Nombre de la etapa"}
+              </span>
               <span
                 className="ml-auto text-[9px] font-bold uppercase tracking-wider px-1.5 py-0.5 rounded-full border"
-                style={{ color, borderColor: `${color}40`, backgroundColor: `${color}15` }}
+                style={{
+                  color,
+                  borderColor: `${color}40`,
+                  backgroundColor: `${color}15`,
+                }}
               >
                 {probability}%
               </span>
@@ -205,7 +243,11 @@ export const StageEditSidebar: React.FC<StageEditSidebarProps> = ({ open, stage,
             disabled={updateStage.isPending || !name.trim()}
             className="flex-[2] px-4 py-2.5 rounded-xl bg-primary text-white text-sm font-semibold shadow-lg shadow-primary/20 hover:opacity-90 disabled:opacity-50 transition-all flex items-center justify-center gap-2"
           >
-            {updateStage.isPending ? <Loader2 className="animate-spin" size={18} /> : <Save size={18} />}
+            {updateStage.isPending ? (
+              <Loader2 className="animate-spin" size={18} />
+            ) : (
+              <Save size={18} />
+            )}
             Guardar Etapa
           </button>
         </div>

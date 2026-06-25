@@ -1,8 +1,8 @@
-import React from 'react';
-import { useDroppable } from '@dnd-kit/core';
-import { Pencil } from 'lucide-react';
-import { DealCard } from './DealCard';
-import { Deal, DealPipelineStage } from '@crm/types/crm';
+import React from "react";
+import { useDroppable } from "@dnd-kit/core";
+import { Pencil } from "lucide-react";
+import { DealCard } from "./DealCard";
+import { Deal, DealPipelineStage } from "@crm/types/crm";
 
 interface DealsColumnProps {
   stage: DealPipelineStage;
@@ -21,9 +21,9 @@ export const DealsColumn: React.FC<DealsColumnProps> = ({
 }) => {
   const { setNodeRef, isOver } = useDroppable({ id: stage.id });
 
-  const formattedTotal = new Intl.NumberFormat('es-CO', {
-    style: 'currency',
-    currency: 'COP',
+  const formattedTotal = new Intl.NumberFormat("es-CO", {
+    style: "currency",
+    currency: "COP",
     maximumFractionDigits: 0,
   }).format(totalValue);
 
@@ -32,8 +32,8 @@ export const DealsColumn: React.FC<DealsColumnProps> = ({
       ref={setNodeRef}
       className={`flex flex-col gap-4 min-w-[280px] w-full max-w-[320px] rounded-2xl p-4 border backdrop-blur-sm transition-colors duration-200 ${
         isOver
-          ? 'bg-indigo-500/10 border-indigo-500/40'
-          : 'bg-slate-900/40 border-white/[0.03]'
+          ? "bg-indigo-500/10 border-indigo-500/40"
+          : "bg-slate-900/40 border-white/[0.03]"
       }`}
     >
       {/* Header */}
@@ -60,12 +60,24 @@ export const DealsColumn: React.FC<DealsColumnProps> = ({
               <Pencil className="w-3.5 h-3.5" />
             </button>
             <button
-              onClick={() => onDealClick?.({ id: 'new', stage_id: stage.id } as any)}
+              onClick={() =>
+                onDealClick?.({ id: "new", stage_id: stage.id } as any)
+              }
               className="p-1 rounded-lg bg-white/5 hover:bg-indigo-600/20 text-slate-400 hover:text-indigo-400 border border-white/5 transition-all active:scale-95"
               title="Añadir negocio a esta etapa"
             >
-              <svg className="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M12 4v16m8-8H4" />
+              <svg
+                className="w-3.5 h-3.5"
+                fill="none"
+                viewBox="0 0 24 24"
+                stroke="currentColor"
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth={2.5}
+                  d="M12 4v16m8-8H4"
+                />
               </svg>
             </button>
             <span
@@ -82,14 +94,14 @@ export const DealsColumn: React.FC<DealsColumnProps> = ({
         </div>
         <div className="px-1">
           <span className="text-xs font-bold text-slate-500">Total: </span>
-          <span className="text-sm font-black text-indigo-400">{formattedTotal}</span>
+          <span className="text-sm font-black text-indigo-400">
+            {formattedTotal}
+          </span>
         </div>
       </div>
 
       {/* Card list */}
-      <div
-        className="flex flex-col gap-3 min-h-[500px] overflow-y-auto pr-1 scrollbar-thin scrollbar-thumb-slate-800"
-      >
+      <div className="flex flex-col gap-3 min-h-[500px] overflow-y-auto pr-1 scrollbar-thin scrollbar-thumb-slate-800">
         {deals.map((deal) => (
           <DealCard key={deal.id} deal={deal} onClick={onDealClick} />
         ))}
@@ -98,12 +110,12 @@ export const DealsColumn: React.FC<DealsColumnProps> = ({
           <div
             className={`flex flex-col items-center justify-center py-12 border-2 border-dashed rounded-2xl transition-colors ${
               isOver
-                ? 'border-indigo-500/50 bg-indigo-500/5 opacity-100'
-                : 'border-white/5 bg-white/[0.02] opacity-30'
+                ? "border-indigo-500/50 bg-indigo-500/5 opacity-100"
+                : "border-white/5 bg-white/[0.02] opacity-30"
             }`}
           >
             <p className="text-[10px] font-bold text-slate-500 uppercase tracking-widest">
-              {isOver ? 'Soltar aquí' : 'Vacío'}
+              {isOver ? "Soltar aquí" : "Vacío"}
             </p>
           </div>
         )}

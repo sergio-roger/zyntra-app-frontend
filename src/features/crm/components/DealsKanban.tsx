@@ -1,6 +1,6 @@
-import { dealsApi } from '@crm/api/deals.api';
-import { dealsKeys } from '@crm/hooks/useDeals';
-import { Deal, DealPipelineStage, KanbanResponse } from '@crm/types/crm';
+import { dealsApi } from "@crm/api/deals.api";
+import { dealsKeys } from "@crm/hooks/useDeals";
+import { Deal, DealPipelineStage, KanbanResponse } from "@crm/types/crm";
 import {
   CollisionDetection,
   DndContext,
@@ -12,11 +12,11 @@ import {
   rectIntersection,
   useSensor,
   useSensors,
-} from '@dnd-kit/core';
-import { useQueryClient } from '@tanstack/react-query';
-import React, { useCallback, useState } from 'react';
-import { DealCard } from './DealCard';
-import { DealsColumn } from './DealsColumn';
+} from "@dnd-kit/core";
+import { useQueryClient } from "@tanstack/react-query";
+import React, { useCallback, useState } from "react";
+import { DealCard } from "./DealCard";
+import { DealsColumn } from "./DealsColumn";
 
 interface DealsKanbanProps {
   kanbanData: KanbanResponse;
@@ -30,7 +30,11 @@ const kanbanCollision: CollisionDetection = (args) => {
   return rectIntersection(args);
 };
 
-export const DealsKanban: React.FC<DealsKanbanProps> = ({ kanbanData, onDealClick, onEditStage }) => {
+export const DealsKanban: React.FC<DealsKanbanProps> = ({
+  kanbanData,
+  onDealClick,
+  onEditStage,
+}) => {
   const qc = useQueryClient();
   const [activeDeal, setActiveDeal] = useState<Deal | null>(null);
 
@@ -38,13 +42,16 @@ export const DealsKanban: React.FC<DealsKanbanProps> = ({ kanbanData, onDealClic
     useSensor(PointerSensor, { activationConstraint: { distance: 6 } }),
   );
 
-  const handleDragStart = useCallback((event: DragStartEvent) => {
-    const dealId = event.active.id as string;
-    const deal = kanbanData.columns
-      .flatMap((col) => col.deals)
-      .find((d) => d.id === dealId);
-    setActiveDeal(deal ?? null);
-  }, [kanbanData]);
+  const handleDragStart = useCallback(
+    (event: DragStartEvent) => {
+      const dealId = event.active.id as string;
+      const deal = kanbanData.columns
+        .flatMap((col) => col.deals)
+        .find((d) => d.id === dealId);
+      setActiveDeal(deal ?? null);
+    },
+    [kanbanData],
+  );
 
   const handleDragEnd = useCallback(
     async (event: DragEndEvent) => {
@@ -73,11 +80,19 @@ export const DealsKanban: React.FC<DealsKanbanProps> = ({ kanbanData, onDealClic
           columns: old.columns.map((col) => {
             if (col.stage.id === newStageId) {
               const updated = [...col.deals, optimistic];
-              return { ...col, deals: updated, total_value: updated.reduce((s, d) => s + Number(d.value), 0) };
+              return {
+                ...col,
+                deals: updated,
+                total_value: updated.reduce((s, d) => s + Number(d.value), 0),
+              };
             }
             if (col.stage.id === sourceCol.stage.id) {
               const updated = col.deals.filter((d) => d.id !== dealId);
-              return { ...col, deals: updated, total_value: updated.reduce((s, d) => s + Number(d.value), 0) };
+              return {
+                ...col,
+                deals: updated,
+                total_value: updated.reduce((s, d) => s + Number(d.value), 0),
+              };
             }
             return col;
           }),
@@ -100,7 +115,9 @@ export const DealsKanban: React.FC<DealsKanbanProps> = ({ kanbanData, onDealClic
               if (col.stage.id === newStageId) {
                 return {
                   ...col,
-                  deals: col.deals.map((d) => (d.id === dealId ? updatedDeal : d)),
+                  deals: col.deals.map((d) =>
+                    d.id === dealId ? updatedDeal : d,
+                  ),
                 };
               }
               return col;
@@ -110,7 +127,7 @@ export const DealsKanban: React.FC<DealsKanbanProps> = ({ kanbanData, onDealClic
       } catch (err) {
         // En error revertimos al estado real del servidor
         qc.invalidateQueries({ queryKey });
-        console.error('Failed to move deal:', err);
+        console.error("Failed to move deal:", err);
       }
     },
     [kanbanData, qc],
@@ -136,7 +153,7 @@ export const DealsKanban: React.FC<DealsKanbanProps> = ({ kanbanData, onDealClic
         ))}
       </div>
 
-      <DragOverlay dropAnimation={{ duration: 150, easing: 'ease' }}>
+      <DragOverlay dropAnimation={{ duration: 150, easing: "ease" }}>
         {activeDeal ? (
           <div className="rotate-2 opacity-95 shadow-2xl shadow-black/50">
             <DealCard deal={activeDeal} isDragging />

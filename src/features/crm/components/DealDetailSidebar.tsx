@@ -1,17 +1,39 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState } from "react";
 import {
-  X, Save, Loader2, Briefcase, DollarSign, User, TrendingUp,
-  Calendar, AlertCircle, ChevronDown, Clock, CheckCircle2, Trash2,
-} from 'lucide-react';
-import { useUpdateDeal, useDeleteDeal, usePipelines, useDealHistory } from '@crm/hooks/useDeals';
-import { ConfirmModal } from '@shared/components/ConfirmModal';
-import { toastManager } from '@shared/components/toast/toastManager';
-import { useContactsList } from '@crm/hooks/useContacts';
-import { Input } from '@core/ui/Input';
-import { Textarea } from '@core/ui/Textarea';
-import { Deal, DealPipeline, DealPipelineStage, CreateDealInput, DealStageHistoryRecord } from '@crm/types/crm';
+  X,
+  Save,
+  Loader2,
+  Briefcase,
+  DollarSign,
+  User,
+  TrendingUp,
+  Calendar,
+  AlertCircle,
+  ChevronDown,
+  Clock,
+  CheckCircle2,
+  Trash2,
+} from "lucide-react";
+import {
+  useUpdateDeal,
+  useDeleteDeal,
+  usePipelines,
+  useDealHistory,
+} from "@crm/hooks/useDeals";
+import { ConfirmModal } from "@shared/components/ConfirmModal";
+import { toastManager } from "@shared/components/toast/toastManager";
+import { useContactsList } from "@crm/hooks/useContacts";
+import { Input } from "@core/ui/Input";
+import { Textarea } from "@core/ui/Textarea";
+import {
+  Deal,
+  DealPipeline,
+  DealPipelineStage,
+  CreateDealInput,
+  DealStageHistoryRecord,
+} from "@crm/types/crm";
 
-type Tab = 'detalle' | 'historial';
+type Tab = "detalle" | "historial";
 
 interface DealDetailSidebarProps {
   open: boolean;
@@ -20,21 +42,27 @@ interface DealDetailSidebarProps {
 }
 
 const stageDuration = (entered: string, left: string | null): string => {
-  const ms = (left ? new Date(left) : new Date()).getTime() - new Date(entered).getTime();
+  const ms =
+    (left ? new Date(left) : new Date()).getTime() -
+    new Date(entered).getTime();
   const days = Math.floor(ms / 86_400_000);
-  if (days === 0) return 'Menos de 1 día';
-  return `${days} día${days !== 1 ? 's' : ''}`;
+  if (days === 0) return "Menos de 1 día";
+  return `${days} día${days !== 1 ? "s" : ""}`;
 };
 
 const fmtDate = (iso: string) =>
-  new Date(iso).toLocaleDateString('es-CO', { day: 'numeric', month: 'short', year: 'numeric' });
+  new Date(iso).toLocaleDateString("es-CO", {
+    day: "numeric",
+    month: "short",
+    year: "numeric",
+  });
 
 // ─── History Timeline ─────────────────────────────────────────────────────────
 
-const HistoryTimeline: React.FC<{ records: DealStageHistoryRecord[]; loading: boolean }> = ({
-  records,
-  loading,
-}) => {
+const HistoryTimeline: React.FC<{
+  records: DealStageHistoryRecord[];
+  loading: boolean;
+}> = ({ records, loading }) => {
   if (loading) {
     return (
       <div className="flex items-center justify-center py-16 text-slate-500">
@@ -59,7 +87,7 @@ const HistoryTimeline: React.FC<{ records: DealStageHistoryRecord[]; loading: bo
     <ol className="relative flex flex-col gap-0">
       {sorted.map((rec, idx) => {
         const isCurrent = rec.left_at === null;
-        const color = rec.stage?.color ?? '#6366f1';
+        const color = rec.stage?.color ?? "#6366f1";
         const isLast = idx === records.length - 1;
 
         return (
@@ -67,19 +95,17 @@ const HistoryTimeline: React.FC<{ records: DealStageHistoryRecord[]; loading: bo
             {/* Left: dot + connector line */}
             <div className="flex flex-col items-center">
               <div
-                className={`mt-1 w-3 h-3 rounded-full shrink-0 ring-2 ring-slate-900 ${isCurrent ? 'ring-offset-1 ring-offset-slate-900' : ''}`}
+                className={`mt-1 w-3 h-3 rounded-full shrink-0 ring-2 ring-slate-900 ${isCurrent ? "ring-offset-1 ring-offset-slate-900" : ""}`}
                 style={{ backgroundColor: color }}
               />
-              {!isLast && (
-                <div className="w-px flex-1 mt-1 mb-0 bg-white/10" />
-              )}
+              {!isLast && <div className="w-px flex-1 mt-1 mb-0 bg-white/10" />}
             </div>
 
             {/* Right: content */}
-            <div className={`pb-6 min-w-0 ${isLast ? 'pb-2' : ''}`}>
+            <div className={`pb-6 min-w-0 ${isLast ? "pb-2" : ""}`}>
               <div className="flex items-center gap-2 flex-wrap">
                 <span className="text-sm font-semibold text-white">
-                  {rec.stage?.name ?? 'Etapa eliminada'}
+                  {rec.stage?.name ?? "Etapa eliminada"}
                 </span>
                 {isCurrent && (
                   <span className="inline-flex items-center gap-1 text-[10px] font-bold px-2 py-0.5 rounded-full bg-emerald-500/15 text-emerald-400 border border-emerald-500/20">
@@ -90,8 +116,10 @@ const HistoryTimeline: React.FC<{ records: DealStageHistoryRecord[]; loading: bo
               </div>
               <p className="text-xs text-slate-400 mt-0.5">
                 Entró el {fmtDate(rec.entered_at)}
-                {' · '}
-                <span className={isCurrent ? 'text-emerald-400' : 'text-slate-500'}>
+                {" · "}
+                <span
+                  className={isCurrent ? "text-emerald-400" : "text-slate-500"}
+                >
                   {stageDuration(rec.entered_at, rec.left_at)}
                 </span>
               </p>
@@ -110,24 +138,32 @@ const HistoryTimeline: React.FC<{ records: DealStageHistoryRecord[]; loading: bo
 
 // ─── Main Component ───────────────────────────────────────────────────────────
 
-export const DealDetailSidebar: React.FC<DealDetailSidebarProps> = ({ open, deal, onClose }) => {
-  const [activeTab, setActiveTab] = useState<Tab>('detalle');
+export const DealDetailSidebar: React.FC<DealDetailSidebarProps> = ({
+  open,
+  deal,
+  onClose,
+}) => {
+  const [activeTab, setActiveTab] = useState<Tab>("detalle");
   const [formData, setFormData] = useState<CreateDealInput>({
-    title: '',
+    title: "",
     value: 0,
-    currency: 'USD',
-    pipeline_id: '',
-    stage_id: '',
-    contact_id: '',
+    currency: "USD",
+    pipeline_id: "",
+    stage_id: "",
+    contact_id: "",
     probability: 10,
-    expected_close_date: '',
-    description: '',
+    expected_close_date: "",
+    description: "",
   });
-  const [selectedPipeline, setSelectedPipeline] = useState<DealPipeline | null>(null);
+  const [selectedPipeline, setSelectedPipeline] = useState<DealPipeline | null>(
+    null,
+  );
 
   const { data: contactsData } = useContactsList({ limit: 100 });
   const { data: pipelines = [] } = usePipelines();
-  const { data: history = [], isLoading: loadingHistory } = useDealHistory(open ? (deal?.id ?? null) : null);
+  const { data: history = [], isLoading: loadingHistory } = useDealHistory(
+    open ? (deal?.id ?? null) : null,
+  );
   const contacts = contactsData?.items ?? [];
 
   const [confirmDelete, setConfirmDelete] = useState(false);
@@ -140,21 +176,24 @@ export const DealDetailSidebar: React.FC<DealDetailSidebarProps> = ({ open, deal
   // Reset tab and populate form when deal changes
   useEffect(() => {
     if (!open || !deal) return;
-    setActiveTab('detalle');
-    const pipeline = deal.pipeline ?? pipelines.find((p) => p.id === deal.pipeline_id) ?? null;
+    setActiveTab("detalle");
+    const pipeline =
+      deal.pipeline ?? pipelines.find((p) => p.id === deal.pipeline_id) ?? null;
     setSelectedPipeline(pipeline);
     setFormData({
       title: deal.title,
-      description: deal.description ?? '',
+      description: deal.description ?? "",
       value: Number(deal.value),
-      currency: deal.currency ?? 'USD',
+      currency: deal.currency ?? "USD",
       pipeline_id: deal.pipeline_id,
       stage_id: deal.stage_id,
       contact_id: deal.contact_id,
       assigned_to_id: deal.assigned_to_id ?? undefined,
       team_id: deal.team_id ?? undefined,
       probability: deal.probability,
-      expected_close_date: deal.expected_close_date ? deal.expected_close_date.split('T')[0] : '',
+      expected_close_date: deal.expected_close_date
+        ? deal.expected_close_date.split("T")[0]
+        : "",
     });
   }, [open, deal?.id, pipelines]);
 
@@ -165,7 +204,7 @@ export const DealDetailSidebar: React.FC<DealDetailSidebarProps> = ({ open, deal
     setFormData((f) => ({
       ...f,
       pipeline_id: pipelineId,
-      stage_id: firstStage?.id ?? '',
+      stage_id: firstStage?.id ?? "",
       probability: firstStage?.probability_percent ?? f.probability,
     }));
   };
@@ -186,7 +225,7 @@ export const DealDetailSidebar: React.FC<DealDetailSidebarProps> = ({ open, deal
       await updateMutation.mutateAsync({ id: deal.id, input: formData });
       onClose();
     } catch (err) {
-      console.error('Error updating deal:', err);
+      console.error("Error updating deal:", err);
     }
   };
 
@@ -195,17 +234,18 @@ export const DealDetailSidebar: React.FC<DealDetailSidebarProps> = ({ open, deal
     try {
       await deleteMutation.mutateAsync(deal.id);
       toastManager.add({
-        title: 'Negocio eliminado',
+        title: "Negocio eliminado",
         description: `"${deal.title}" fue eliminado correctamente.`,
-        type: 'success',
+        type: "success",
       });
       setConfirmDelete(false);
       onClose();
     } catch (err: any) {
       toastManager.add({
-        title: 'Error al eliminar',
-        description: err?.response?.data?.message ?? 'No se pudo eliminar el negocio.',
-        type: 'error',
+        title: "Error al eliminar",
+        description:
+          err?.response?.data?.message ?? "No se pudo eliminar el negocio.",
+        type: "error",
       });
     }
   };
@@ -214,19 +254,23 @@ export const DealDetailSidebar: React.FC<DealDetailSidebarProps> = ({ open, deal
     <>
       {/* Overlay */}
       <div
-        className={`fixed inset-0 bg-black/60 !mt-0 backdrop-blur-sm z-[60] transition-opacity duration-300 ${open ? 'opacity-100' : 'opacity-0 pointer-events-none'}`}
+        className={`fixed inset-0 bg-black/60 !mt-0 backdrop-blur-sm z-[60] transition-opacity duration-300 ${open ? "opacity-100" : "opacity-0 pointer-events-none"}`}
         onClick={onClose}
       />
 
       {/* Drawer */}
       <div
-        className={`fixed inset-y-0 right-0 w-full !mt-0 max-w-md bg-slate-900 border-l border-white/10 z-[70] shadow-2xl transform transition-transform duration-300 ease-out flex flex-col ${open ? 'translate-x-0' : 'translate-x-full'}`}
+        className={`fixed inset-y-0 right-0 w-full !mt-0 max-w-md bg-slate-900 border-l border-white/10 z-[70] shadow-2xl transform transition-transform duration-300 ease-out flex flex-col ${open ? "translate-x-0" : "translate-x-full"}`}
       >
         {/* Header */}
         <div className="flex items-start justify-between p-6 border-b border-white/5 shrink-0">
           <div className="min-w-0 pr-4">
-            <h3 className="text-xl font-bold text-white truncate">{deal?.title ?? 'Negocio'}</h3>
-            <p className="text-sm text-slate-400 mt-1">Detalle de la oportunidad</p>
+            <h3 className="text-xl font-bold text-white truncate">
+              {deal?.title ?? "Negocio"}
+            </h3>
+            <p className="text-sm text-slate-400 mt-1">
+              Detalle de la oportunidad
+            </p>
           </div>
           <button
             onClick={onClose}
@@ -238,17 +282,17 @@ export const DealDetailSidebar: React.FC<DealDetailSidebarProps> = ({ open, deal
 
         {/* Tabs */}
         <div className="flex border-b border-white/5 shrink-0">
-          {(['detalle', 'historial'] as Tab[]).map((tab) => (
+          {(["detalle", "historial"] as Tab[]).map((tab) => (
             <button
               key={tab}
               onClick={() => setActiveTab(tab)}
               className={`flex-1 py-3 text-sm font-semibold capitalize transition-colors ${
                 activeTab === tab
-                  ? 'text-indigo-400 border-b-2 border-indigo-500'
-                  : 'text-slate-500 hover:text-slate-300'
+                  ? "text-indigo-400 border-b-2 border-indigo-500"
+                  : "text-slate-500 hover:text-slate-300"
               }`}
             >
-              {tab === 'detalle' ? 'Detalle' : 'Historial'}
+              {tab === "detalle" ? "Detalle" : "Historial"}
             </button>
           ))}
         </div>
@@ -256,15 +300,21 @@ export const DealDetailSidebar: React.FC<DealDetailSidebarProps> = ({ open, deal
         {/* Content */}
         <div className="flex-1 overflow-y-auto">
           {/* ── Detalle Tab ── */}
-          {activeTab === 'detalle' && (
-            <form id="deal-detail-form" onSubmit={handleSubmit} className="p-6 space-y-5">
+          {activeTab === "detalle" && (
+            <form
+              id="deal-detail-form"
+              onSubmit={handleSubmit}
+              className="p-6 space-y-5"
+            >
               <Input
                 label="Título del negocio"
                 icon={Briefcase}
                 required
                 placeholder="Ej: Implementación CRM Corporativo"
                 value={formData.title}
-                onChange={(e) => setFormData({ ...formData, title: e.target.value })}
+                onChange={(e) =>
+                  setFormData({ ...formData, title: e.target.value })
+                }
               />
 
               {/* Contact */}
@@ -276,17 +326,22 @@ export const DealDetailSidebar: React.FC<DealDetailSidebarProps> = ({ open, deal
                   <select
                     required
                     value={formData.contact_id}
-                    onChange={(e) => setFormData({ ...formData, contact_id: e.target.value })}
+                    onChange={(e) =>
+                      setFormData({ ...formData, contact_id: e.target.value })
+                    }
                     className="w-full bg-slate-950/50 border border-white/10 rounded-xl py-2.5 px-4 pr-9 text-sm text-white focus:outline-none focus:border-primary/50 transition-all appearance-none"
                   >
                     <option value="">Seleccionar contacto...</option>
                     {contacts.map((c) => (
                       <option key={c.id} value={c.id}>
-                        {c.name} ({c.email || 'Sin email'})
+                        {c.name} ({c.email || "Sin email"})
                       </option>
                     ))}
                   </select>
-                  <ChevronDown size={14} className="absolute right-3 top-1/2 -translate-y-1/2 text-slate-500 pointer-events-none" />
+                  <ChevronDown
+                    size={14}
+                    className="absolute right-3 top-1/2 -translate-y-1/2 text-slate-500 pointer-events-none"
+                  />
                 </div>
                 {contacts.length === 0 && (
                   <p className="text-[10px] text-amber-500 mt-1 flex items-center gap-1">
@@ -297,7 +352,9 @@ export const DealDetailSidebar: React.FC<DealDetailSidebarProps> = ({ open, deal
 
               {/* Pipeline */}
               <div className="space-y-1.5">
-                <label className="text-xs font-medium text-slate-400 ml-1">Pipeline *</label>
+                <label className="text-xs font-medium text-slate-400 ml-1">
+                  Pipeline *
+                </label>
                 <div className="relative">
                   <select
                     required
@@ -308,17 +365,23 @@ export const DealDetailSidebar: React.FC<DealDetailSidebarProps> = ({ open, deal
                     <option value="">Seleccionar pipeline...</option>
                     {pipelines.map((p) => (
                       <option key={p.id} value={p.id}>
-                        {p.name}{p.is_default ? ' (principal)' : ''}
+                        {p.name}
+                        {p.is_default ? " (principal)" : ""}
                       </option>
                     ))}
                   </select>
-                  <ChevronDown size={14} className="absolute right-3 top-1/2 -translate-y-1/2 text-slate-500 pointer-events-none" />
+                  <ChevronDown
+                    size={14}
+                    className="absolute right-3 top-1/2 -translate-y-1/2 text-slate-500 pointer-events-none"
+                  />
                 </div>
               </div>
 
               {/* Stage */}
               <div className="space-y-1.5">
-                <label className="text-xs font-medium text-slate-400 ml-1">Etapa *</label>
+                <label className="text-xs font-medium text-slate-400 ml-1">
+                  Etapa *
+                </label>
                 <div className="relative">
                   <select
                     required
@@ -334,7 +397,10 @@ export const DealDetailSidebar: React.FC<DealDetailSidebarProps> = ({ open, deal
                       </option>
                     ))}
                   </select>
-                  <ChevronDown size={14} className="absolute right-3 top-1/2 -translate-y-1/2 text-slate-500 pointer-events-none" />
+                  <ChevronDown
+                    size={14}
+                    className="absolute right-3 top-1/2 -translate-y-1/2 text-slate-500 pointer-events-none"
+                  />
                 </div>
               </div>
 
@@ -347,7 +413,9 @@ export const DealDetailSidebar: React.FC<DealDetailSidebarProps> = ({ open, deal
                   required
                   placeholder="0.00"
                   value={formData.value}
-                  onChange={(e) => setFormData({ ...formData, value: Number(e.target.value) })}
+                  onChange={(e) =>
+                    setFormData({ ...formData, value: Number(e.target.value) })
+                  }
                 />
                 <Input
                   label="Probabilidad (%)"
@@ -356,7 +424,12 @@ export const DealDetailSidebar: React.FC<DealDetailSidebarProps> = ({ open, deal
                   min="0"
                   max="100"
                   value={formData.probability}
-                  onChange={(e) => setFormData({ ...formData, probability: Number(e.target.value) })}
+                  onChange={(e) =>
+                    setFormData({
+                      ...formData,
+                      probability: Number(e.target.value),
+                    })
+                  }
                 />
               </div>
 
@@ -365,22 +438,29 @@ export const DealDetailSidebar: React.FC<DealDetailSidebarProps> = ({ open, deal
                 label="Fecha de cierre estimada"
                 icon={Calendar}
                 type="date"
-                value={formData.expected_close_date ?? ''}
-                onChange={(e) => setFormData({ ...formData, expected_close_date: e.target.value })}
+                value={formData.expected_close_date ?? ""}
+                onChange={(e) =>
+                  setFormData({
+                    ...formData,
+                    expected_close_date: e.target.value,
+                  })
+                }
               />
 
               <Textarea
                 label="Descripción / Notas"
                 placeholder="Detalles sobre el alcance, requerimientos, etc."
                 rows={4}
-                value={formData.description ?? ''}
-                onChange={(e) => setFormData({ ...formData, description: e.target.value })}
+                value={formData.description ?? ""}
+                onChange={(e) =>
+                  setFormData({ ...formData, description: e.target.value })
+                }
               />
             </form>
           )}
 
           {/* ── Historial Tab ── */}
-          {activeTab === 'historial' && (
+          {activeTab === "historial" && (
             <div className="p-6">
               <p className="text-xs text-slate-500 mb-5">
                 Tiempo que el negocio ha permanecido en cada etapa del pipeline.
@@ -391,7 +471,7 @@ export const DealDetailSidebar: React.FC<DealDetailSidebarProps> = ({ open, deal
         </div>
 
         {/* Footer — only for Detalle tab */}
-        {activeTab === 'detalle' && (
+        {activeTab === "detalle" && (
           <div className="p-6 border-t border-white/5 bg-slate-950/30 shrink-0 space-y-3">
             <div className="flex gap-3">
               <button
@@ -404,10 +484,20 @@ export const DealDetailSidebar: React.FC<DealDetailSidebarProps> = ({ open, deal
               <button
                 form="deal-detail-form"
                 type="submit"
-                disabled={isSaving || !formData.title || !formData.contact_id || !formData.pipeline_id || !formData.stage_id}
+                disabled={
+                  isSaving ||
+                  !formData.title ||
+                  !formData.contact_id ||
+                  !formData.pipeline_id ||
+                  !formData.stage_id
+                }
                 className="flex-[2] px-4 py-2.5 rounded-xl bg-primary text-white text-sm font-semibold shadow-lg shadow-primary/20 hover:opacity-90 disabled:opacity-50 transition-all flex items-center justify-center gap-2"
               >
-                {isSaving ? <Loader2 className="animate-spin" size={18} /> : <Save size={18} />}
+                {isSaving ? (
+                  <Loader2 className="animate-spin" size={18} />
+                ) : (
+                  <Save size={18} />
+                )}
                 Actualizar Negocio
               </button>
             </div>
