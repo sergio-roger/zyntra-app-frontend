@@ -9,6 +9,7 @@ export interface CreatePipelineInput {
   name: string;
   position?: number;
   is_default?: boolean;
+  team_id?: string | null;
 }
 
 export interface CreateStageInput {

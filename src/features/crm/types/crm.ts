@@ -193,6 +193,8 @@ export interface DealPipeline {
   name: string;
   position: number;
   is_default: boolean;
+  team_id: string | null;
+  team?: { id: string; name: string; color: string } | null;
   stages: DealPipelineStage[];
   deleted_at: string | null;
   created_at: string;

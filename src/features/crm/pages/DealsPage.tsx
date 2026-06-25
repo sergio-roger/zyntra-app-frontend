@@ -1,4 +1,5 @@
 import { DealFormSidebar } from '@crm/components/DealFormSidebar';
+import { DealDetailSidebar } from '@crm/components/DealDetailSidebar';
 import { DealsKanban } from '@crm/components/DealsKanban';
 import { PipelineFormModal } from '@crm/components/PipelineFormModal';
 import { PipelineSettingsDrawer } from '@crm/components/PipelineSettingsDrawer';
@@ -283,14 +284,25 @@ export const DealsPage: React.FC = () => {
         </div>
       )}
 
+      {/* New deal form (create mode) */}
       <DealFormSidebar
-        open={isSidebarOpen}
-        deal={selectedDeal}
+        open={isSidebarOpen && selectedDeal === null}
+        deal={null}
         defaultPipelineId={activePipelineId ?? undefined}
         stageOverrideId={stageOverrideId}
         onClose={() => {
           setIsSidebarOpen(false);
           setStageOverrideId(undefined);
+        }}
+      />
+
+      {/* Existing deal detail + edit + history */}
+      <DealDetailSidebar
+        open={isSidebarOpen && selectedDeal !== null}
+        deal={selectedDeal}
+        onClose={() => {
+          setIsSidebarOpen(false);
+          setSelectedDeal(null);
         }}
       />
 
