@@ -1,31 +1,30 @@
-import { useCreateContact, useUpdateContact } from '@crm/hooks/useContacts';
-import { useTags } from '@crm/hooks/useTags';
-import { useCustomFields } from '@crm/hooks/useCustomFields';
+import { Input } from '@core/ui/Input';
+import { Select } from '@core/ui/Select';
+import { Textarea } from '@core/ui/Textarea';
 import { crmApi } from '@crm/api/crm.api';
-import { Contact, ContactSource, CrmMember, LifecycleStage } from '@crm/types/crm';
+import { useCreateContact, useUpdateContact } from '@crm/hooks/useContacts';
+import { useCustomFields } from '@crm/hooks/useCustomFields';
+import { useTags } from '@crm/hooks/useTags';
+import { ContactFormData } from '@crm/types/contact-form';
+import { Contact, CrmMember, LifecycleStage } from '@crm/types/crm';
 import { useAuthStore } from '@features/auth/store/authStore';
 import { useQuery } from '@tanstack/react-query';
 import {
+  Check,
   ChevronRight,
   Loader2,
   Mail,
   Phone,
   Save,
+  Settings2,
   StickyNote,
+  Tag as TagIcon,
+  Target,
   User,
   UserCheck,
-  X,
-  Tag as TagIcon,
-  Settings2,
-  Check,
-  Target
+  X
 } from 'lucide-react';
 import React, { useEffect, useState } from 'react';
-import { Input } from '@core/ui/Input';
-import { Textarea } from '@core/ui/Textarea';
-import { Select } from '@core/ui/Select';
-
-// ─── Types ────────────────────────────────────────────────────────────────────
 
 interface ContactFormSidebarProps {
   open: boolean;
@@ -34,22 +33,7 @@ interface ContactFormSidebarProps {
   onClose: () => void;
 }
 
-interface FormData {
-  name: string;
-  email: string;
-  phone: string;
-  stage: Contact['stage'];
-  lifecycle_stage_id: string;
-  source: ContactSource;
-  owner_id: string;
-  tags: string[];
-  notes: string;
-  custom_fields: Record<string, any>;
-}
-
-// ─── Pure helpers (no side effects, fully testable) ───────────────────────────
-
-function formDataFromContact(contact: Contact): FormData {
+function formDataFromContact(contact: Contact): ContactFormData {
   return {
     name: contact.name,
     email: contact.email ?? '',
@@ -64,7 +48,7 @@ function formDataFromContact(contact: Contact): FormData {
   };
 }
 
-function defaultFormData(stages: LifecycleStage[], ownerId?: string | null): FormData {
+function defaultFormData(stages: LifecycleStage[], ownerId?: string | null): ContactFormData {
   const firstActiveStage = stages.find((s) => s.type === 'active');
   return {
     name: '',
@@ -88,7 +72,7 @@ export const ContactFormSidebar: React.FC<ContactFormSidebarProps> = ({
 }) => {
   const { user } = useAuthStore();
 
-  const [formData, setFormData] = useState<FormData>(() => defaultFormData(stages, user?.crm_user_id));
+  const [formData, setFormData] = useState<ContactFormData>(() => defaultFormData(stages, user?.crm_user_id));
 
   const [activeTab, setActiveTab] = useState<'info' | 'advanced'>('info');
 
@@ -111,7 +95,7 @@ export const ContactFormSidebar: React.FC<ContactFormSidebarProps> = ({
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    
+
     if (contact) {
       await updateMutation.mutateAsync({ id: contact.id, input: formData });
     } else {

@@ -9,6 +9,7 @@ import {
   ToggleLeft
 } from 'lucide-react';
 import { Input } from '@core/ui/Input';
+import { Select } from '@core/ui/Select';
 import { useCreateUser, useUpdateUser } from '@features/settings/hooks/useUsersTeams';
 import { useRolesList } from '@features/settings/hooks/usePermissions';
 import { CrmUser, UserRole } from '@features/settings/types/settings';
@@ -135,23 +136,16 @@ export const UserFormSidebar: React.FC<UserFormSidebarProps> = ({ open, user, is
               placeholder="juan@empresa.com"
             />
 
-            <div className="space-y-1.5">
-              <label className="flex items-center gap-2 text-xs font-bold text-slate-400 uppercase tracking-wider ml-1">
-                <Shield size={14} className="text-slate-500" />
-                Rol del Usuario
-              </label>
-              <select
-                value={formData.role}
-                onChange={(e) => setFormData({ ...formData, role: e.target.value })}
-                className="w-full bg-slate-950/50 border border-white/10 rounded-xl py-2.5 px-4 text-sm text-white focus:outline-none focus:border-primary/50 transition-all appearance-none cursor-pointer"
-              >
-                {filteredRoles.map(role => (
-                  <option key={role.id} value={role.name}>
-                    {getRoleLabel(role)}
-                  </option>
-                ))}
-              </select>
-            </div>
+            <Select
+              label="Rol del Usuario"
+              icon={Shield}
+              options={filteredRoles.map(role => ({
+                value: role.name,
+                label: getRoleLabel(role),
+              }))}
+              value={formData.role}
+              onChange={(v) => { if (v) setFormData({ ...formData, role: v as UserRole }); }}
+            />
 
             {user && (
               <div className="flex items-center justify-between p-4 bg-slate-950/30 rounded-2xl border border-white/5">
