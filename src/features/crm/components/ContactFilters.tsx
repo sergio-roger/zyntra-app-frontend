@@ -13,7 +13,7 @@ interface LifecycleStage {
 
 interface ContactFiltersProps {
   search: string;
-  stage: string;
+  lifecycleStageId: string;
   source: ContactSource | '';
   stages: LifecycleStage[];
   onSearchChange: (v: string) => void;
@@ -24,7 +24,7 @@ interface ContactFiltersProps {
 
 export const ContactFilters: React.FC<ContactFiltersProps> = ({
   search,
-  stage,
+  lifecycleStageId,
   source,
   stages,
   onSearchChange,
@@ -32,7 +32,7 @@ export const ContactFilters: React.FC<ContactFiltersProps> = ({
   onSourceChange,
   onReset,
 }) => {
-  const hasFilters = Boolean(search || stage || source);
+  const hasFilters = Boolean(search || lifecycleStageId || source);
   return (
     <div className="flex flex-wrap items-center gap-3 rounded-xl border border-white/10 bg-slate-900/50 p-3">
       <div className="relative min-w-[180px] flex-1">
@@ -50,7 +50,7 @@ export const ContactFilters: React.FC<ContactFiltersProps> = ({
       </div>
 
       <select
-        value={stage}
+        value={lifecycleStageId}
         onChange={(e) => onStageChange(e.target.value)}
         className="rounded-lg border border-white/10 bg-slate-950/60 px-3 py-2 text-sm text-slate-200 outline-none focus:border-indigo-400"
       >

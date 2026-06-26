@@ -1,6 +1,6 @@
 import { Pencil, Trash2, User } from 'lucide-react';
 import { Contact } from '@crm/types/crm';
-import { StageBadge, SourceBadge } from './badges';
+import { SourceBadge } from './badges';
 import { EmptyState } from '@shared/components/EmptyState';
 
 interface ContactTableProps {
@@ -45,7 +45,6 @@ export const ContactTable: React.FC<ContactTableProps> = ({
             <th className="px-4 py-3">Nombre</th>
             <th className="hidden md:table-cell px-4 py-3">Email</th>
             <th className="hidden sm:table-cell px-4 py-3">Teléfono</th>
-            <th className="px-4 py-3">Etapa</th>
             <th className="hidden sm:table-cell px-4 py-3">Ciclo de vida</th>
             <th className="hidden md:table-cell px-4 py-3">Origen</th>
             <th className="hidden sm:table-cell px-4 py-3">Propietario</th>
@@ -69,9 +68,6 @@ export const ContactTable: React.FC<ContactTableProps> = ({
               </td>
               <td className="hidden md:table-cell px-4 py-3 text-slate-300">{c.email ?? '—'}</td>
               <td className="hidden sm:table-cell px-4 py-3 text-slate-300">{c.phone ?? '—'}</td>
-              <td className="px-4 py-3">
-                <StageBadge stage={c.stage} />
-              </td>
               <td className="hidden sm:table-cell px-4 py-3">
                 {c.lifecycleStage ? (
                   <span

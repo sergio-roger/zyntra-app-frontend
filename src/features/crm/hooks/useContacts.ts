@@ -1,14 +1,12 @@
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { crmApi, CreateContactInput, UpdateContactInput } from '@crm/api/crm.api';
-import { ContactsListResponse, ListContactsQuery, Pipeline } from '@crm/types/crm';
+import { ContactsListResponse, ListContactsQuery } from '@crm/types/crm';
 
 export const contactsKeys = {
   all: ['contacts'] as const,
   list: (query: ListContactsQuery) => ['contacts', 'list', query] as const,
   detail: (id: string) => ['contacts', 'detail', id] as const,
   activities: (id: string) => ['contacts', id, 'activities'] as const,
-  pipeline: ['pipeline'] as const,
-  kanban: ['contacts', 'kanban'] as const,
 };
 
 export const useContactsList = (query: ListContactsQuery, options?: { enabled?: boolean }) =>
@@ -19,24 +17,6 @@ export const useContactsList = (query: ListContactsQuery, options?: { enabled?: 
       return res.data as ContactsListResponse;
     },
     enabled: options?.enabled ?? true,
-  });
-
-export const usePipeline = () =>
-  useQuery({
-    queryKey: contactsKeys.pipeline,
-    queryFn: async () => {
-      const res = await crmApi.pipeline();
-      return res.data as Pipeline;
-    },
-  });
-
-export const useKanban = () =>
-  useQuery({
-    queryKey: contactsKeys.kanban,
-    queryFn: async () => {
-      const res = await crmApi.kanban();
-      return res.data;
-    },
   });
 
 export const useContact = (id: string | null) =>
@@ -61,7 +41,6 @@ export const useContactActivities = (id: string | null) =>
 
 const invalidateLists = (qc: ReturnType<typeof useQueryClient>) => {
   qc.invalidateQueries({ queryKey: contactsKeys.all });
-  qc.invalidateQueries({ queryKey: contactsKeys.pipeline });
 };
 
 export const useCreateContact = () => {

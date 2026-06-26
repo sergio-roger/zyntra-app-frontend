@@ -5,10 +5,8 @@ import {
   ContactsListResponse,
   CrmMember,
   ListContactsQuery,
-  Pipeline,
   Tag,
   CustomField,
-  ContactStage,
 } from '@crm/types/crm';
 import {
   CreateContactInput,
@@ -47,7 +45,6 @@ export const mapContact = (raw: any): Contact => ({
   phone: raw.phone,
   companyName: raw.companyName,
   dealValue: raw.dealValue,
-  stage: raw.stage,
   source: raw.source,
   lifecycleStageId: raw.lifecycleStageId,
   lifecycleStage: raw.lifecycleStage,
@@ -76,20 +73,6 @@ export const crmApi = {
     api
       .get<unknown, { data: any }>(`/crm/contacts${buildQS(query as Record<string, unknown>)}`)
       .then((r) => ({ data: mapContactsList(r.data) })),
-
-  pipeline: () => api.get<unknown, { data: Pipeline }>('/crm/pipeline'),
-
-  kanban: () =>
-    api
-      .get<unknown, { data: any }>('/crm/kanban')
-      .then((r) => ({
-        data: Object.fromEntries(
-          Object.entries(r.data).map(([stage, contacts]) => [
-            stage,
-            (contacts as any[]).map(mapContact),
-          ]),
-        ) as Record<ContactStage, Contact[]>,
-      })),
 
   get: (id: string) =>
     api

@@ -23,7 +23,7 @@ export const ContactCard: React.FC<ContactCardProps> = ({ contact }) => {
             <span className="line-clamp-1">{contact.name}</span>
           </div>
         </div>
-        {contact.stage === 'customer' && (
+        {contact.lifecycleStage?.name?.toLowerCase().includes('client') && (
           <span className="rounded-md bg-emerald-500/20 px-1.5 py-0.5 text-[10px] font-bold text-emerald-400 uppercase tracking-tight">
             Ganado
           </span>

@@ -57,9 +57,22 @@ export const SegmentPreviewPanel: React.FC<SegmentPreviewPanelProps> = ({
                     {c.email || c.phone || 'Sin contacto'}
                   </p>
                 </div>
-                <span className="shrink-0 text-[9px] uppercase font-black text-indigo-400 bg-indigo-500/10 px-1.5 py-0.5 rounded border border-indigo-500/15">
-                  {c.stage}
-                </span>
+                {c.lifecycleStage ? (
+                  <span
+                    className="shrink-0 text-[9px] uppercase font-black px-1.5 py-0.5 rounded"
+                    style={{
+                      backgroundColor: `${c.lifecycleStage.color}15`,
+                      color: c.lifecycleStage.color,
+                      border: `1px solid ${c.lifecycleStage.color}25`,
+                    }}
+                  >
+                    {c.lifecycleStage.name}
+                  </span>
+                ) : (
+                  <span className="shrink-0 text-[9px] uppercase font-black text-slate-500 bg-white/5 px-1.5 py-0.5 rounded border border-white/10">
+                    —
+                  </span>
+                )}
               </div>
             ))}
           </div>

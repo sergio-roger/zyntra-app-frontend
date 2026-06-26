@@ -1,9 +1,4 @@
-export type ContactStage =
-  | 'lead'
-  | 'prospect'
-  | 'qualified'
-  | 'customer'
-  | 'lost';
+
 
 export type ContactSource =
   | 'manual'
@@ -46,7 +41,6 @@ export interface Contact {
   phone: string | null;
   companyName: string | null;
   dealValue: number;
-  stage: ContactStage;
   source: ContactSource;
   lifecycleStageId: string | null;
   lifecycleStage: LifecycleStage | null;
@@ -81,7 +75,7 @@ export interface ContactsListResponse {
 }
 
 export interface ListContactsQuery {
-  stage?: ContactStage;
+  lifecycleStageId?: string;
   source?: ContactSource;
   search?: string;
   tag?: string;
@@ -90,16 +84,6 @@ export interface ListContactsQuery {
   limit?: number;
   isArchived?: boolean;
 }
-
-export type Pipeline = Record<ContactStage, number>;
-
-export const STAGES: ContactStage[] = [
-  'lead',
-  'prospect',
-  'qualified',
-  'customer',
-  'lost',
-];
 
 export const SOURCES: ContactSource[] = [
   'manual',
@@ -135,13 +119,7 @@ export interface CustomField {
   created_at: string;
 }
 
-export const STAGE_LABELS: Record<ContactStage, string> = {
-  lead: 'Lead',
-  prospect: 'Prospecto',
-  qualified: 'Calificado',
-  customer: 'Cliente',
-  lost: 'Perdido',
-};
+
 
 export const SOURCE_LABELS: Record<ContactSource, string> = {
   manual: 'Manual',

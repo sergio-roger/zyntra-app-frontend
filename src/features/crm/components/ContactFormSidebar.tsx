@@ -20,7 +20,6 @@ import {
   Settings2,
   StickyNote,
   Tag as TagIcon,
-  Target,
   User,
   UserCheck,
   X
@@ -39,7 +38,6 @@ function formDataFromContact(contact: Contact): ContactFormData {
     name: contact.name,
     email: contact.email ?? '',
     phone: contact.phone ?? '',
-    stage: contact.stage ?? 'lead',
     lifecycleStageId: contact.lifecycleStageId ?? '',
     source: contact.source ?? 'manual',
     ownerId: contact.ownerId ?? null,
@@ -55,7 +53,6 @@ function defaultFormData(stages: LifecycleStage[], ownerId?: string | null): Con
     name: '',
     email: '',
     phone: '',
-    stage: 'lead',
     lifecycleStageId: firstActiveStage?.id ?? '',
     source: 'manual',
     ownerId: ownerId ?? null,
@@ -97,11 +94,10 @@ export const ContactFormSidebar: React.FC<ContactFormSidebarProps> = ({
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
-    const sanitized = { ...formData, stage: formData.stage || undefined };
     if (contact) {
-      await updateMutation.mutateAsync({ id: contact.id, input: sanitized });
+      await updateMutation.mutateAsync({ id: contact.id, input: formData });
     } else {
-      await createMutation.mutateAsync(sanitized);
+      await createMutation.mutateAsync(formData);
     }
     onClose();
   };
@@ -208,35 +204,7 @@ export const ContactFormSidebar: React.FC<ContactFormSidebarProps> = ({
                       />
                     )}
 
-                    {!contact && (
-                      <div className="pt-2">
-                        <label className="flex items-center gap-3 p-4 rounded-2xl bg-indigo-500/10 border border-indigo-500/20 cursor-pointer group hover:bg-indigo-500/15 transition-all">
-                          <div className="relative flex items-center">
-                            <input
-                              type="checkbox"
-                              checked={formData.stage === 'lead'}
-                              onChange={(e) => setFormData({ ...formData, stage: e.target.checked ? 'lead' : '' })}
-                              className="peer h-5 w-5 rounded border-indigo-500/40 bg-slate-800 text-indigo-500 focus:ring-indigo-500/20 appearance-none"
-                            />
-                            <Check
-                              size={14}
-                              className="absolute left-0.5 top-0.5 text-white opacity-0 peer-checked:opacity-100 transition-opacity pointer-events-none"
-                            />
-                          </div>
-                          <div className="flex-1">
-                            <div className="flex items-center gap-2">
-                              <Target size={14} className="text-indigo-400" />
-                              <span className="text-sm font-bold text-white group-hover:text-indigo-300 transition-colors">
-                                Crear como prospecto
-                              </span>
-                            </div>
-                            <p className="text-[11px] text-slate-400 mt-0.5">
-                              Aparecerá en el inbox de prospectos para seguimiento.
-                            </p>
-                          </div>
-                        </label>
-                      </div>
-                    )}
+
                   </div>
                 </div>
 

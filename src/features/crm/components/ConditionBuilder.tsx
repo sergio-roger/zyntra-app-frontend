@@ -2,7 +2,7 @@ import React from 'react';
 import { Plus, Trash2, Filter } from 'lucide-react';
 import { useTags } from '@crm/hooks/useTags';
 import { useCustomFields } from '@crm/hooks/useCustomFields';
-import { SegmentCondition, SOURCES, SOURCE_LABELS, STAGES, STAGE_LABELS } from '@crm/types/crm';
+import { SegmentCondition, SOURCES, SOURCE_LABELS } from '@crm/types/crm';
 
 interface ConditionBuilderProps {
   conditions: SegmentCondition[];
@@ -15,6 +15,15 @@ const selectCls =
 export const ConditionBuilder: React.FC<ConditionBuilderProps> = ({ conditions, onChange }) => {
   const { data: tags = [] } = useTags();
   const { data: customFields = [] } = useCustomFields();
+  const [stages, setStages] = React.useState<any[]>([]);
+
+  React.useEffect(() => {
+    import('@shared/api/axios').then(({ default: api }) => {
+      api.get('/lifecycle/stages')
+        .then((r) => setStages(r.data))
+        .catch((e) => console.error(e));
+    });
+  }, []);
 
   const handleAddCondition = () => {
     onChange([...conditions, { field: 'source', operator: 'equals', value: '' }]);
@@ -135,7 +144,7 @@ export const ConditionBuilder: React.FC<ConditionBuilderProps> = ({ conditions, 
                     >
                       <optgroup label="Campos Básicos">
                         <option value="source">Origen / Fuente</option>
-                        <option value="stage">Etapa Comercial</option>
+                        <option value="lifecycleStageId">Ciclo de vida</option>
                         <option value="deal_value">Valor del Trato</option>
                       </optgroup>
                       <optgroup label="Etiquetas">
@@ -197,16 +206,16 @@ export const ConditionBuilder: React.FC<ConditionBuilderProps> = ({ conditions, 
                               </option>
                             ))}
                           </select>
-                        ) : cond.field === 'stage' ? (
+                        ) : cond.field === 'lifecycleStageId' ? (
                           <select
                             value={cond.value}
                             onChange={(e) => handleValueChange(index, e.target.value)}
                             className={selectCls}
                           >
                             <option value="">Selecciona etapa</option>
-                            {STAGES.map((s) => (
-                              <option key={s} value={s}>
-                                {STAGE_LABELS[s]}
+                            {stages.map((s) => (
+                              <option key={s.id} value={s.id}>
+                                {s.name}
                               </option>
                             ))}
                           </select>

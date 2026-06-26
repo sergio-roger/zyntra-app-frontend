@@ -1,11 +1,11 @@
 import React, { useState } from 'react';
 import { Plus, Users, Loader2, ChevronDown, Filter, Edit2, Trash2 } from 'lucide-react';
 import { EmptyState } from '@shared/components/EmptyState';
-import { Segment, SegmentCondition, STAGE_LABELS, SOURCE_LABELS } from '@crm/types/crm';
+import { Segment, SegmentCondition, SOURCE_LABELS } from '@crm/types/crm';
 
 const FIELD_LABELS: Record<string, string> = {
   source: 'Origen',
-  stage: 'Etapa',
+  lifecycleStageId: 'Ciclo de vida',
   deal_value: 'Valor trato',
   tags: 'Etiqueta',
 };
@@ -21,14 +21,17 @@ const OP_LABELS: Record<string, string> = {
   is_not_empty: 'no vacío',
 };
 
-function conditionSummary(c: SegmentCondition) {
+function conditionSummary(c: SegmentCondition, stages: any[]) {
   const field = c.field.startsWith('custom_fields.')
     ? c.field.replace('custom_fields.', '')
     : (FIELD_LABELS[c.field] ?? c.field);
   const op = OP_LABELS[c.operator] ?? c.operator;
   let value = '';
   if (c.operator !== 'is_empty' && c.operator !== 'is_not_empty') {
-    if (c.field === 'stage') value = (STAGE_LABELS as Record<string, string>)[c.value] ?? String(c.value ?? '');
+    if (c.field === 'lifecycleStageId') {
+      const stageObj = stages.find((s) => s.id === c.value);
+      value = stageObj ? stageObj.name : String(c.value ?? '');
+    }
     else if (c.field === 'source') value = (SOURCE_LABELS as Record<string, string>)[c.value] ?? String(c.value ?? '');
     else value = String(c.value ?? '');
   }
@@ -55,6 +58,15 @@ export const SegmentListPanel: React.FC<SegmentListPanelProps> = ({
   onDelete,
 }) => {
   const [expandedIds, setExpandedIds] = useState<Set<string>>(new Set());
+  const [stages, setStages] = useState<any[]>([]);
+
+  React.useEffect(() => {
+    import('@shared/api/axios').then(({ default: api }) => {
+      api.get('/lifecycle/stages')
+        .then((r) => setStages(r.data))
+        .catch((e) => console.error(e));
+    });
+  }, []);
 
   const toggleExpand = (id: string, e: React.MouseEvent) => {
     e.stopPropagation();
@@ -175,7 +187,7 @@ export const SegmentListPanel: React.FC<SegmentListPanelProps> = ({
                 {expanded && hasConditions && (
                   <div className="mx-3 mb-2 px-3 py-1.5 rounded-lg border border-slate-700/30 bg-slate-950/30">
                     {seg.conditions.map((c, i) => {
-                      const { field, op, value } = conditionSummary(c);
+                      const { field, op, value } = conditionSummary(c, stages);
                       const isFirst = i === 0;
                       const isLast = i === seg.conditions.length - 1;
                       const multiNode = seg.conditions.length > 1;

@@ -5,7 +5,6 @@ import { lazy } from 'react';
 import { Navigate, RouteObject } from 'react-router-dom';
 
 const ContactListPage = lazy(() => import('@crm/pages/ContactListPage').then(m => ({ default: m.ContactListPage })));
-const PipelinePage = lazy(() => import('@crm/pages/PipelinePage').then(m => ({ default: m.PipelinePage })));
 const InboxLeadsPage = lazy(() => import('@crm/pages/InboxLeadsPage').then(m => ({ default: m.InboxLeadsPage })));
 const TagsPage = lazy(() => import('@crm/pages/TagsPage').then(m => ({ default: m.TagsPage })));
 const CustomFieldsPage = lazy(() => import('@crm/pages/CustomFieldsPage').then(m => ({ default: m.CustomFieldsPage })));
@@ -21,7 +20,6 @@ export const crmRoutes: RouteObject[] = [
       { path: 'contacts', element: <PermissionGuard menuKey="crm_contacts"><ModuleGuard menuKey="crm_contacts"><SuspenseLoader><ContactListPage /></SuspenseLoader></ModuleGuard></PermissionGuard> },
       { path: 'leads', element: <PermissionGuard menuKey="crm_leads"><ModuleGuard menuKey="crm_leads"><SuspenseLoader><InboxLeadsPage /></SuspenseLoader></ModuleGuard></PermissionGuard> },
       { path: 'deals', element: <PermissionGuard menuKey="crm_deals"><ModuleGuard menuKey="crm_deals"><SuspenseLoader><DealsPage /></SuspenseLoader></ModuleGuard></PermissionGuard> },
-      { path: 'pipeline', element: <PermissionGuard menuKey="crm_deals"><ModuleGuard menuKey="crm_deals"><SuspenseLoader><PipelinePage /></SuspenseLoader></ModuleGuard></PermissionGuard> },
       { path: 'tags', element: <PermissionGuard menuKey="crm_tags"><ModuleGuard menuKey="crm_tags"><SuspenseLoader><TagsPage /></SuspenseLoader></ModuleGuard></PermissionGuard> },
       { path: 'tasks', element: <PermissionGuard menuKey="crm_tasks"><ModuleGuard menuKey="crm_tasks"><SuspenseLoader><TasksPage /></SuspenseLoader></ModuleGuard></PermissionGuard> },
       { path: 'fields', element: <PermissionGuard menuKey="crm_fields"><ModuleGuard menuKey="crm_fields"><SuspenseLoader><CustomFieldsPage /></SuspenseLoader></ModuleGuard></PermissionGuard> },

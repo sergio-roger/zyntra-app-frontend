@@ -4,7 +4,6 @@ export interface CreateContactInput {
   name: string;
   email?: string;
   phone?: string;
-  stage?: Contact['stage'];
   lifecycleStageId?: string;
   source?: Contact['source'];
   ownerId?: string | null;

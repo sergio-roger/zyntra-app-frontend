@@ -4,7 +4,7 @@ import { EmptyState } from '@shared/components/EmptyState';
 import { useSegmentContacts } from '@crm/hooks/useSegments';
 import { Segment, Contact, LifecycleStage } from '@crm/types/crm';
 import { Pagination } from '@crm/components/Pagination';
-import { StageBadge, SourceBadge } from '@crm/components/badges';
+import { SourceBadge } from '@crm/components/badges';
 import { ContactFormSidebar } from '@crm/components/ContactFormSidebar';
 import api from '@shared/api/axios';
 
@@ -94,7 +94,6 @@ export const SegmentDetail: React.FC<SegmentDetailProps> = ({ segment, onEdit, o
                   <tr>
                     <th className="px-4 py-3">Nombre</th>
                     <th className="px-4 py-3">Contacto</th>
-                    <th className="px-4 py-3">Etapa</th>
                     <th className="px-4 py-3">Ciclo de vida</th>
                     <th className="px-4 py-3">Origen</th>
                     <th className="px-4 py-3 text-right">Acciones</th>
@@ -116,9 +115,6 @@ export const SegmentDetail: React.FC<SegmentDetailProps> = ({ segment, onEdit, o
                             <span className="text-slate-500 text-[10px] mt-0.5">{c.phone}</span>
                           )}
                         </div>
-                      </td>
-                      <td className="px-4 py-3">
-                        <StageBadge stage={c.stage} />
                       </td>
                       <td className="px-4 py-3">
                         {c.lifecycleStage ? (
