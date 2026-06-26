@@ -6,6 +6,7 @@ import {
 } from 'lucide-react';
 import React, { useEffect, useState } from 'react';
 import { LifecycleStageCard } from './LifecycleStageCard';
+import { CardWrapper } from '@shared/components/CardWrapper';
 
 interface LifecycleStage {
   id?: string;
@@ -24,7 +25,6 @@ export const LifecycleConfig: React.FC = () => {
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
   
-  // State for new stage form
   const [addingTo, setAddingTo] = useState<'active' | 'lost' | null>(null);
   const [newStageName, setNewStageName] = useState('');
   const [newStageDesc, setNewStageDesc] = useState('');
@@ -133,7 +133,7 @@ export const LifecycleConfig: React.FC = () => {
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
         {/* Active Stages Section */}
         <div className="space-y-4">
-          <div className="bg-base-200/50 rounded-2xl p-6 border border-base-content/5">
+          <CardWrapper hoverable={false} className="p-6">
             <div className="flex items-center gap-3 mb-6">
               <span className="text-xl">🏆</span>
               <div>
@@ -200,12 +200,12 @@ export const LifecycleConfig: React.FC = () => {
                 </button>
               )}
             </div>
-          </div>
+          </CardWrapper>
         </div>
 
         {/* Lost Stages Section */}
         <div className="space-y-4">
-          <div className="bg-amber-500/5 rounded-2xl p-6 border border-amber-500/10">
+          <CardWrapper hoverable={false} className="p-6 border-amber-500/10 bg-amber-500/5">
             <div className="flex items-center gap-3 mb-6">
               <span className="text-xl">😔</span>
               <div>
@@ -274,7 +274,7 @@ export const LifecycleConfig: React.FC = () => {
                 </button>
               )}
             </div>
-          </div>
+          </CardWrapper>
         </div>
       </div>
     </div>
