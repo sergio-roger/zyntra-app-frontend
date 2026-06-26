@@ -111,13 +111,13 @@ export const LifecycleConfig: React.FC = () => {
   }
 
   return (
-    <div className="p-6 max-w-7xl mx-auto animate-slide-up">
-      <div className="flex items-center justify-between mb-8">
-        <div>
-          <h1 className="text-2xl font-bold text-base-content">Configurar etapas de ciclo de vida</h1>
-          <p className="text-sm text-base-content/60">Gestiona cómo evolucionan tus contactos en el sistema.</p>
+    <div className="space-y-6 animate-in fade-in duration-500">
+      <div className="flex flex-wrap items-center justify-between gap-3">
+        <div className="space-y-1">
+          <h2 className="text-xl font-bold text-white tracking-tight">Configurar etapas de ciclo de vida</h2>
+          <p className="text-sm text-slate-400">Gestiona cómo evolucionan tus contactos en el sistema.</p>
         </div>
-        <div className="flex gap-2">
+        <div className="flex items-center gap-2">
           <button className="btn btn-ghost btn-sm px-6" onClick={() => fetchStages()} disabled={saving}>Cancelar</button>
           <button 
             className="btn btn-primary btn-sm px-6 shadow-lg shadow-primary/20" 
