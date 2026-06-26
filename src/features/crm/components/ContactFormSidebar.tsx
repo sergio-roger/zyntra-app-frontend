@@ -7,7 +7,6 @@ import { useAuthStore } from '@features/auth/store/authStore';
 import { useQuery } from '@tanstack/react-query';
 import {
   ChevronRight,
-  ChevronDown,
   Loader2,
   Mail,
   Phone,
@@ -21,15 +20,64 @@ import {
   Check,
   Target
 } from 'lucide-react';
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Input } from '@core/ui/Input';
 import { Textarea } from '@core/ui/Textarea';
+import { Select } from '@core/ui/Select';
+
+// ─── Types ────────────────────────────────────────────────────────────────────
 
 interface ContactFormSidebarProps {
   open: boolean;
   contact: Contact | null;
   stages: LifecycleStage[];
   onClose: () => void;
+}
+
+interface FormData {
+  name: string;
+  email: string;
+  phone: string;
+  stage: Contact['stage'];
+  lifecycle_stage_id: string;
+  source: ContactSource;
+  owner_id: string;
+  tags: string[];
+  notes: string;
+  custom_fields: Record<string, any>;
+}
+
+// ─── Pure helpers (no side effects, fully testable) ───────────────────────────
+
+function formDataFromContact(contact: Contact): FormData {
+  return {
+    name: contact.name,
+    email: contact.email ?? '',
+    phone: contact.phone ?? '',
+    stage: contact.stage ?? 'lead',
+    lifecycle_stage_id: contact.lifecycle_stage_id ?? '',
+    source: contact.source ?? 'manual',
+    owner_id: contact.owner_id ?? '',
+    tags: contact.tags?.map((t: any) => (typeof t === 'string' ? t : t.id)) ?? [],
+    notes: contact.notes ?? '',
+    custom_fields: contact.custom_fields ?? {},
+  };
+}
+
+function defaultFormData(stages: LifecycleStage[], ownerId?: string | null): FormData {
+  const firstActiveStage = stages.find((s) => s.type === 'active');
+  return {
+    name: '',
+    email: '',
+    phone: '',
+    stage: 'lead',
+    lifecycle_stage_id: firstActiveStage?.id ?? '',
+    source: 'manual',
+    owner_id: ownerId ?? '',
+    tags: [],
+    notes: '',
+    custom_fields: {},
+  };
 }
 
 export const ContactFormSidebar: React.FC<ContactFormSidebarProps> = ({
@@ -39,31 +87,8 @@ export const ContactFormSidebar: React.FC<ContactFormSidebarProps> = ({
   onClose,
 }) => {
   const { user } = useAuthStore();
-  const [ownerDropOpen, setOwnerDropOpen] = useState(false);
-  const ownerDropRef = useRef<HTMLDivElement>(null);
 
-  useEffect(() => {
-    const handler = (e: MouseEvent) => {
-      if (ownerDropRef.current && !ownerDropRef.current.contains(e.target as Node)) {
-        setOwnerDropOpen(false);
-      }
-    };
-    document.addEventListener('mousedown', handler);
-    return () => document.removeEventListener('mousedown', handler);
-  }, []);
-
-  const [formData, setFormData] = useState({
-    name: '',
-    email: '',
-    phone: '',
-    stage: 'lead' as any,
-    lifecycle_stage_id: '',
-    source: 'manual' as ContactSource,
-    owner_id: '' as string,
-    tags: [] as string[],
-    notes: '',
-    custom_fields: {} as Record<string, any>,
-  });
+  const [formData, setFormData] = useState<FormData>(() => defaultFormData(stages, user?.crm_user_id));
 
   const [activeTab, setActiveTab] = useState<'info' | 'advanced'>('info');
 
@@ -80,39 +105,13 @@ export const ContactFormSidebar: React.FC<ContactFormSidebarProps> = ({
   const isSaving = createMutation.isPending || updateMutation.isPending;
 
   useEffect(() => {
-    if (contact) {
-      setFormData({
-        name: contact.name,
-        email: contact.email || '',
-        phone: contact.phone || '',
-        stage: contact.stage || 'lead',
-        lifecycle_stage_id: contact.lifecycle_stage_id || '',
-        source: contact.source || 'manual',
-        owner_id: contact.owner_id || '',
-        tags: contact.tags?.map((t: any) => typeof t === 'string' ? t : t.id) || [],
-        notes: contact.notes || '',
-        custom_fields: contact.custom_fields || {},
-      });
-    } else {
-      const firstActiveStage = stages.find((s) => s.type === 'active');
-      setFormData({
-        name: '',
-        email: '',
-        phone: '',
-        stage: 'lead',
-        lifecycle_stage_id: firstActiveStage?.id || '',
-        source: 'manual',
-        owner_id: user?.crm_user_id || '',
-        tags: [],
-        notes: '',
-        custom_fields: {},
-      });
-    }
+    setFormData(contact ? formDataFromContact(contact) : defaultFormData(stages, user?.crm_user_id));
     setActiveTab('info');
   }, [contact, stages, open, user]);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    
     if (contact) {
       await updateMutation.mutateAsync({ id: contact.id, input: formData });
     } else {
@@ -218,48 +217,24 @@ export const ContactFormSidebar: React.FC<ContactFormSidebarProps> = ({
                     </div>
 
                     {members.length > 0 && (
-                      <div className="space-y-1.5">
-                        <label className="text-xs font-medium text-slate-400 ml-1 flex items-center gap-1.5">
-                          <UserCheck size={12} />
-                          Propietario
-                        </label>
-                        <div className="relative" ref={ownerDropRef}>
-                          <button
-                            type="button"
-                            onClick={() => setOwnerDropOpen((v) => !v)}
-                            className="w-full bg-slate-950/50 border border-white/10 rounded-xl py-2.5 px-4 text-sm text-white focus:outline-none focus:border-primary/50 transition-all flex items-center justify-between cursor-pointer hover:border-white/20"
-                          >
-                            <span className={formData.owner_id ? 'text-white' : 'text-slate-500'}>
-                              {formData.owner_id === user?.crm_user_id
-                                ? 'Propietario (Yo)'
-                                : members.find((m) => m.id === formData.owner_id)?.name ?? 'Sin asignar'}
-                            </span>
-                            <ChevronDown size={14} className={`text-slate-400 transition-transform ${ownerDropOpen ? 'rotate-180' : ''}`} />
-                          </button>
-                          {ownerDropOpen && (
-                            <div className="absolute z-20 w-full mt-1 bg-slate-800 border border-white/10 rounded-xl shadow-xl overflow-hidden">
-                              <button
-                                type="button"
-                                onClick={() => { setFormData({ ...formData, owner_id: '' }); setOwnerDropOpen(false); }}
-                                className={`w-full px-4 py-2.5 text-sm text-left transition-colors hover:bg-white/5 ${!formData.owner_id ? 'text-white bg-primary/10' : 'text-slate-400'}`}
-                              >
-                                Sin asignar
-                              </button>
-                              {members.map((m) => (
-                                <button
-                                  key={m.id}
-                                  type="button"
-                                  onClick={() => { setFormData({ ...formData, owner_id: m.id }); setOwnerDropOpen(false); }}
-                                  className={`w-full px-4 py-2.5 text-sm text-left transition-colors hover:bg-white/5 flex items-center justify-between ${formData.owner_id === m.id ? 'text-white bg-primary/10' : 'text-slate-300'}`}
-                                >
-                                  {m.id === user?.crm_user_id ? `${m.name} (Yo)` : m.name}
-                                  {formData.owner_id === m.id && <Check size={12} className="text-primary shrink-0" />}
-                                </button>
-                              ))}
-                            </div>
-                          )}
-                        </div>
-                      </div>
+                      <Select
+                        label="Propietario"
+                        icon={UserCheck}
+                        options={members.map((m) => ({
+                          value: m.id,
+                          label: m.id === user?.crm_user_id ? `${m.name} (Yo)` : m.name,
+                        }))}
+                        value={formData.owner_id || null}
+                        onChange={(v) => setFormData({ ...formData, owner_id: v ?? '' })}
+                        clearable
+                        clearLabel="Sin asignar"
+                        placeholder="Sin asignar"
+                        displayValue={(id) =>
+                          id === user?.crm_user_id
+                            ? 'Propietario (Yo)'
+                            : (members.find((m) => m.id === id)?.name ?? '')
+                        }
+                      />
                     )}
 
                     {!contact && (
