@@ -14,9 +14,13 @@ import {
   Contact,
   ContactSource,
   ContactStage,
+  CrmMember,
 } from '@crm/types/crm';
 import { useCreateContact, useUpdateContact } from '@crm/hooks/useContacts';
 import { mapAuthError } from '@features/auth/lib/mapAuthError';
+import { useAuthStore } from '@features/auth/store/authStore';
+import { useQuery } from '@tanstack/react-query';
+import { crmApi } from '@crm/api/crm.api';
 
 interface ContactFormModalProps {
   open: boolean;
@@ -33,6 +37,15 @@ export const ContactFormModal: React.FC<ContactFormModalProps> = ({
   const createMutation = useCreateContact();
   const updateMutation = useUpdateContact();
   const [serverError, setServerError] = React.useState('');
+  const { user } = useAuthStore();
+  const isAdmin = user?.role === 'admin' || user?.role === 'superAdmin';
+
+  const { data: members = [] } = useQuery<CrmMember[]>({
+    queryKey: ['crm-members'],
+    queryFn: () => crmApi.listMembers().then((r) => r.data),
+    staleTime: 5 * 60 * 1000,
+    enabled: isAdmin,
+  });
 
   const {
     register,
@@ -49,6 +62,7 @@ export const ContactFormModal: React.FC<ContactFormModalProps> = ({
       source: 'manual',
       notes: '',
       tags: [],
+      ownerId: null,
     },
   });
 
@@ -64,6 +78,7 @@ export const ContactFormModal: React.FC<ContactFormModalProps> = ({
               source: contact.source,
               notes: contact.notes ?? '',
               tags: contact.tags?.map((t: any) => typeof t === 'string' ? t : t.id) || [],
+              ownerId: contact.ownerId ?? null,
             }
           : {
               name: '',
@@ -73,6 +88,7 @@ export const ContactFormModal: React.FC<ContactFormModalProps> = ({
               source: 'manual',
               notes: '',
               tags: [],
+              ownerId: null,
             },
       );
       setServerError('');
@@ -92,6 +108,7 @@ export const ContactFormModal: React.FC<ContactFormModalProps> = ({
       tags: values.tags,
       stage: values.stage as ContactStage | undefined,
       source: values.source as ContactSource | undefined,
+      ...(isAdmin && { ownerId: values.ownerId ?? null }),
     };
     try {
       if (isEdit && contact) {
@@ -201,6 +218,23 @@ export const ContactFormModal: React.FC<ContactFormModalProps> = ({
               className="mt-1 w-full resize-none rounded-lg border border-white/10 bg-slate-950/60 px-3 py-2 text-sm text-slate-100 outline-none focus:border-indigo-400 focus:ring-2 focus:ring-indigo-400/30"
             />
           </div>
+
+          {isAdmin && members.length > 0 && (
+            <div>
+              <label className="text-xs font-medium text-slate-300">Propietario</label>
+              <select
+                {...register('ownerId')}
+                className="mt-1 w-full rounded-lg border border-white/10 bg-slate-950/60 px-3 py-2 text-sm text-slate-100 outline-none focus:border-indigo-400"
+              >
+                <option value="">Sin asignar</option>
+                {members.map((m) => (
+                  <option key={m.id} value={m.id}>
+                    {m.id === user?.crm_user_id ? `${m.name} (Yo)` : m.name}
+                  </option>
+                ))}
+              </select>
+            </div>
+          )}
 
           {serverError && (
             <div

@@ -187,7 +187,7 @@ export const ContactFormSidebar: React.FC<ContactFormSidebarProps> = ({
                       />
                     </div>
 
-                    {members.length > 0 && (
+                    {members.length > 0 && (user?.role === 'admin' || user?.role === 'superAdmin') && (
                       <Select
                         label="Propietario"
                         icon={UserCheck}

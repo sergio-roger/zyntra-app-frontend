@@ -13,6 +13,7 @@ export const contactSchema = z.object({
   source: z.enum(SOURCES as [string, ...string[]]).optional(),
   tags: z.array(z.string()).optional(),
   notes: z.string().optional(),
+  ownerId: z.string().uuid().nullable().optional(),
 });
 
 export type ContactFormValues = z.infer<typeof contactSchema>;

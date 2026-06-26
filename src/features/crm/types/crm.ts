@@ -88,7 +88,7 @@ export interface ListContactsQuery {
   ownerId?: string;
   page?: number;
   limit?: number;
-  is_archived?: boolean;
+  isArchived?: boolean;
 }
 
 export type Pipeline = Record<ContactStage, number>;
