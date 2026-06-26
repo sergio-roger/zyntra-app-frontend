@@ -5,13 +5,13 @@ export interface CreateContactInput {
   email?: string;
   phone?: string;
   stage?: Contact['stage'];
-  lifecycle_stage_id?: string;
+  lifecycleStageId?: string;
   source?: Contact['source'];
-  owner_id?: string;
+  ownerId?: string | null;
   tags?: string[];
   notes?: string;
-  custom_fields?: Record<string, any>;
-  is_lead?: boolean;
+  customFields?: Record<string, any>;
+  isLead?: boolean;
 }
 
 export type UpdateContactInput = Partial<CreateContactInput>;

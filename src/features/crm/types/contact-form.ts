@@ -5,10 +5,11 @@ export interface ContactFormData {
   email: string;
   phone: string;
   stage: ContactStage | '';
-  lifecycle_stage_id: string;
+  lifecycleStageId: string;
   source: ContactSource;
-  owner_id: string;
+  ownerId: string | null;
   tags: string[];
   notes: string;
-  custom_fields: Record<string, any>;
+  customFields: Record<string, any>;
 }
+

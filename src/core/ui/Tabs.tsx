@@ -12,6 +12,7 @@ interface TabsProps<TKey extends string = string> {
   active: TKey;
   onChange: (key: TKey) => void;
   className?: string;
+  compact?: boolean;
 }
 
 export function Tabs<TKey extends string = string>({
@@ -19,6 +20,7 @@ export function Tabs<TKey extends string = string>({
   active,
   onChange,
   className = '',
+  compact = false,
 }: TabsProps<TKey>) {
   return (
     <div className={`flex border-b border-white/5 ${className}`}>
@@ -27,7 +29,9 @@ export function Tabs<TKey extends string = string>({
           key={tab.key}
           type="button"
           onClick={() => onChange(tab.key)}
-          className={`flex flex-1 items-center justify-center gap-2 py-3 text-sm font-semibold capitalize transition-colors ${
+          className={`flex items-center justify-center gap-2 py-3 text-sm font-semibold capitalize transition-colors ${
+            compact ? 'px-5 min-w-[120px]' : 'flex-1'
+          } ${
             active === tab.key
               ? 'text-indigo-400 border-b-2 border-indigo-500'
               : 'text-slate-500 hover:text-slate-300'

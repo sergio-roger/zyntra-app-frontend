@@ -171,6 +171,7 @@ export const ContactListPage: React.FC = () => {
 
       {/* Global Tabs */}
       <Tabs
+        compact
         active={activeTab}
         onChange={(k) => setActiveTab(k as TabKey)}
         tabs={[

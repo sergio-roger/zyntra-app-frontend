@@ -40,12 +40,12 @@ function formDataFromContact(contact: Contact): ContactFormData {
     email: contact.email ?? '',
     phone: contact.phone ?? '',
     stage: contact.stage ?? 'lead',
-    lifecycle_stage_id: contact.lifecycleStageId ?? '',
+    lifecycleStageId: contact.lifecycleStageId ?? '',
     source: contact.source ?? 'manual',
-    owner_id: contact.ownerId ?? '',
+    ownerId: contact.ownerId ?? null,
     tags: contact.tags?.map((t: any) => (typeof t === 'string' ? t : t.id)) ?? [],
     notes: contact.notes ?? '',
-    custom_fields: contact.customFields ?? {},
+    customFields: contact.customFields ?? {},
   };
 }
 
@@ -56,12 +56,12 @@ function defaultFormData(stages: LifecycleStage[], ownerId?: string | null): Con
     email: '',
     phone: '',
     stage: 'lead',
-    lifecycle_stage_id: firstActiveStage?.id ?? '',
+    lifecycleStageId: firstActiveStage?.id ?? '',
     source: 'manual',
-    owner_id: ownerId ?? '',
+    ownerId: ownerId ?? null,
     tags: [],
     notes: '',
-    custom_fields: {},
+    customFields: {},
   };
 }
 
@@ -195,8 +195,8 @@ export const ContactFormSidebar: React.FC<ContactFormSidebarProps> = ({
                           value: m.id,
                           label: m.id === user?.crm_user_id ? `${m.name} (Yo)` : m.name,
                         }))}
-                        value={formData.owner_id || null}
-                        onChange={(v) => setFormData({ ...formData, owner_id: v ?? '' })}
+                        value={formData.ownerId}
+                        onChange={(v) => setFormData({ ...formData, ownerId: v })}
                         clearable
                         clearLabel="Sin asignar"
                         placeholder="Sin asignar"
@@ -252,9 +252,9 @@ export const ContactFormSidebar: React.FC<ContactFormSidebarProps> = ({
                       <button
                         key={s.id}
                         type="button"
-                        onClick={() => setFormData({ ...formData, lifecycle_stage_id: s.id })}
+                        onClick={() => setFormData({ ...formData, lifecycleStageId: s.id })}
                         className={`flex items-center gap-2 p-3 rounded-xl border text-left transition-all ${
-                          formData.lifecycle_stage_id === s.id 
+                          formData.lifecycleStageId === s.id 
                             ? 'bg-primary/10 border-primary text-white shadow-lg shadow-primary/10' 
                             : 'bg-slate-950/30 border-white/5 text-slate-400 hover:border-white/20'
                         }`}
@@ -322,10 +322,10 @@ export const ContactFormSidebar: React.FC<ContactFormSidebarProps> = ({
                               </label>
                               <select
                                 required={field.required}
-                                value={formData.custom_fields[field.name] || ''}
+                                value={formData.customFields[field.name] || ''}
                                 onChange={(e) => setFormData({
                                   ...formData,
-                                  custom_fields: { ...formData.custom_fields, [field.name]: e.target.value }
+                                  customFields: { ...formData.customFields, [field.name]: e.target.value }
                                 })}
                                 className="w-full bg-slate-950/50 border border-white/10 rounded-xl py-2.5 px-4 text-sm text-white focus:outline-none focus:border-primary/50 transition-all appearance-none"
                               >
@@ -343,10 +343,10 @@ export const ContactFormSidebar: React.FC<ContactFormSidebarProps> = ({
                               <div className="flex items-center gap-3 bg-slate-950/50 border border-white/10 rounded-xl p-3">
                                 <input
                                   type="checkbox"
-                                  checked={!!formData.custom_fields[field.name]}
+                                  checked={!!formData.customFields[field.name]}
                                   onChange={(e) => setFormData({
                                     ...formData,
-                                    custom_fields: { ...formData.custom_fields, [field.name]: e.target.checked }
+                                    customFields: { ...formData.customFields, [field.name]: e.target.checked }
                                   })}
                                   className="h-5 w-5 rounded border-white/10 bg-slate-800 text-primary focus:ring-primary/20"
                                 />
@@ -358,10 +358,10 @@ export const ContactFormSidebar: React.FC<ContactFormSidebarProps> = ({
                               label={field.label}
                               required={field.required}
                               type={field.type === 'number' ? 'number' : field.type === 'date' ? 'date' : 'text'}
-                              value={formData.custom_fields[field.name] || ''}
+                              value={formData.customFields[field.name] || ''}
                               onChange={(e) => setFormData({
                                 ...formData,
-                                custom_fields: { ...formData.custom_fields, [field.name]: e.target.value }
+                                customFields: { ...formData.customFields, [field.name]: e.target.value }
                               })}
                             />
                           )}
