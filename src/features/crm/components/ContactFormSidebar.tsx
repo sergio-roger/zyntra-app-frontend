@@ -1,22 +1,27 @@
 import { useCreateContact, useUpdateContact } from '@crm/hooks/useContacts';
 import { useTags } from '@crm/hooks/useTags';
 import { useCustomFields } from '@crm/hooks/useCustomFields';
-import { Contact, ContactSource, LifecycleStage } from '@crm/types/crm';
-import { 
-  ChevronRight, 
-  Loader2, 
-  Mail, 
-  Phone, 
-  Save, 
-  StickyNote, 
-  User, 
+import { crmApi } from '@crm/api/crm.api';
+import { Contact, ContactSource, CrmMember, LifecycleStage } from '@crm/types/crm';
+import { useAuthStore } from '@features/auth/store/authStore';
+import { useQuery } from '@tanstack/react-query';
+import {
+  ChevronRight,
+  ChevronDown,
+  Loader2,
+  Mail,
+  Phone,
+  Save,
+  StickyNote,
+  User,
+  UserCheck,
   X,
   Tag as TagIcon,
   Settings2,
   Check,
   Target
 } from 'lucide-react';
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { Input } from '@core/ui/Input';
 import { Textarea } from '@core/ui/Textarea';
 
@@ -33,6 +38,20 @@ export const ContactFormSidebar: React.FC<ContactFormSidebarProps> = ({
   stages,
   onClose,
 }) => {
+  const { user } = useAuthStore();
+  const [ownerDropOpen, setOwnerDropOpen] = useState(false);
+  const ownerDropRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    const handler = (e: MouseEvent) => {
+      if (ownerDropRef.current && !ownerDropRef.current.contains(e.target as Node)) {
+        setOwnerDropOpen(false);
+      }
+    };
+    document.addEventListener('mousedown', handler);
+    return () => document.removeEventListener('mousedown', handler);
+  }, []);
+
   const [formData, setFormData] = useState({
     name: '',
     email: '',
@@ -40,6 +59,7 @@ export const ContactFormSidebar: React.FC<ContactFormSidebarProps> = ({
     stage: 'lead' as any,
     lifecycle_stage_id: '',
     source: 'manual' as ContactSource,
+    owner_id: '' as string,
     tags: [] as string[],
     notes: '',
     custom_fields: {} as Record<string, any>,
@@ -49,6 +69,11 @@ export const ContactFormSidebar: React.FC<ContactFormSidebarProps> = ({
 
   const { data: availableTags = [] } = useTags();
   const { data: availableFields = [] } = useCustomFields();
+  const { data: members = [] } = useQuery<CrmMember[]>({
+    queryKey: ['crm-members'],
+    queryFn: () => crmApi.listMembers().then((r) => r.data),
+    staleTime: 5 * 60 * 1000,
+  });
 
   const createMutation = useCreateContact();
   const updateMutation = useUpdateContact();
@@ -63,6 +88,7 @@ export const ContactFormSidebar: React.FC<ContactFormSidebarProps> = ({
         stage: contact.stage || 'lead',
         lifecycle_stage_id: contact.lifecycle_stage_id || '',
         source: contact.source || 'manual',
+        owner_id: contact.owner_id || '',
         tags: contact.tags?.map((t: any) => typeof t === 'string' ? t : t.id) || [],
         notes: contact.notes || '',
         custom_fields: contact.custom_fields || {},
@@ -76,13 +102,14 @@ export const ContactFormSidebar: React.FC<ContactFormSidebarProps> = ({
         stage: 'lead',
         lifecycle_stage_id: firstActiveStage?.id || '',
         source: 'manual',
+        owner_id: user?.crm_user_id || '',
         tags: [],
         notes: '',
         custom_fields: {},
       });
     }
-    setActiveTab('info'); // Reset tab on open/change
-  }, [contact, stages, open]);
+    setActiveTab('info');
+  }, [contact, stages, open, user]);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -179,7 +206,7 @@ export const ContactFormSidebar: React.FC<ContactFormSidebarProps> = ({
                         value={formData.email}
                         onChange={(e) => setFormData({ ...formData, email: e.target.value })}
                       />
-                      
+
                       <Input
                         label="Teléfono"
                         icon={Phone}
@@ -189,6 +216,51 @@ export const ContactFormSidebar: React.FC<ContactFormSidebarProps> = ({
                         onChange={(e) => setFormData({ ...formData, phone: e.target.value })}
                       />
                     </div>
+
+                    {members.length > 0 && (
+                      <div className="space-y-1.5">
+                        <label className="text-xs font-medium text-slate-400 ml-1 flex items-center gap-1.5">
+                          <UserCheck size={12} />
+                          Propietario
+                        </label>
+                        <div className="relative" ref={ownerDropRef}>
+                          <button
+                            type="button"
+                            onClick={() => setOwnerDropOpen((v) => !v)}
+                            className="w-full bg-slate-950/50 border border-white/10 rounded-xl py-2.5 px-4 text-sm text-white focus:outline-none focus:border-primary/50 transition-all flex items-center justify-between cursor-pointer hover:border-white/20"
+                          >
+                            <span className={formData.owner_id ? 'text-white' : 'text-slate-500'}>
+                              {formData.owner_id === user?.crm_user_id
+                                ? 'Propietario (Yo)'
+                                : members.find((m) => m.id === formData.owner_id)?.name ?? 'Sin asignar'}
+                            </span>
+                            <ChevronDown size={14} className={`text-slate-400 transition-transform ${ownerDropOpen ? 'rotate-180' : ''}`} />
+                          </button>
+                          {ownerDropOpen && (
+                            <div className="absolute z-20 w-full mt-1 bg-slate-800 border border-white/10 rounded-xl shadow-xl overflow-hidden">
+                              <button
+                                type="button"
+                                onClick={() => { setFormData({ ...formData, owner_id: '' }); setOwnerDropOpen(false); }}
+                                className={`w-full px-4 py-2.5 text-sm text-left transition-colors hover:bg-white/5 ${!formData.owner_id ? 'text-white bg-primary/10' : 'text-slate-400'}`}
+                              >
+                                Sin asignar
+                              </button>
+                              {members.map((m) => (
+                                <button
+                                  key={m.id}
+                                  type="button"
+                                  onClick={() => { setFormData({ ...formData, owner_id: m.id }); setOwnerDropOpen(false); }}
+                                  className={`w-full px-4 py-2.5 text-sm text-left transition-colors hover:bg-white/5 flex items-center justify-between ${formData.owner_id === m.id ? 'text-white bg-primary/10' : 'text-slate-300'}`}
+                                >
+                                  {m.id === user?.crm_user_id ? `${m.name} (Yo)` : m.name}
+                                  {formData.owner_id === m.id && <Check size={12} className="text-primary shrink-0" />}
+                                </button>
+                              ))}
+                            </div>
+                          )}
+                        </div>
+                      </div>
+                    )}
 
                     {!contact && (
                       <div className="pt-2">

@@ -33,6 +33,11 @@ export interface LifecycleStage {
   description: string | null;
 }
 
+export interface CrmMember {
+  id: string;
+  name: string;
+}
+
 export interface Contact {
   id: string;
   business_id: string;
@@ -45,6 +50,8 @@ export interface Contact {
   source: ContactSource;
   lifecycle_stage_id: string | null;
   lifecycle_stage: LifecycleStage | null;
+  owner_id: string | null;
+  owner: CrmMember | null;
   tags: Tag[];
   notes: string | null;
   custom_fields: Record<string, any> | null;

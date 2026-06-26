@@ -20,6 +20,7 @@ export type User = {
   role: 'admin' | 'manager' | 'agent' | 'superAdmin' | null;
   plan: Plan;
   plan_status: string;
+  crm_user_id?: string | null;
 };
 
 export type LoginCredentials = {

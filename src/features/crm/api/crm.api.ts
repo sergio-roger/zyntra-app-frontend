@@ -3,6 +3,7 @@ import {
   Contact,
   ContactActivity,
   ContactsListResponse,
+  CrmMember,
   ListContactsQuery,
   Pipeline,
   Tag,
@@ -76,6 +77,9 @@ export const crmApi = {
   updateTag: (id: string, input: UpdateTagInput) =>
     api.patch<unknown, { data: Tag }>(`/crm/tags/${id}`, input),
   removeTag: (id: string) => api.delete(`/crm/tags/${id}`),
+
+  // Members (for owner assignment)
+  listMembers: () => api.get<unknown, { data: CrmMember[] }>('/crm/members'),
 
   // Custom Fields
   listFields: () => api.get<unknown, { data: CustomField[] }>('/crm/fields'),

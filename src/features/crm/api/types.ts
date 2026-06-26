@@ -7,6 +7,7 @@ export interface CreateContactInput {
   stage?: Contact['stage'];
   lifecycle_stage_id?: string;
   source?: Contact['source'];
+  owner_id?: string;
   tags?: string[];
   notes?: string;
   custom_fields?: Record<string, any>;
