@@ -85,6 +85,7 @@ export interface ListContactsQuery {
   source?: ContactSource;
   search?: string;
   tag?: string;
+  ownerId?: string;
   page?: number;
   limit?: number;
   is_archived?: boolean;

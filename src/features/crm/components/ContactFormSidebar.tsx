@@ -1,5 +1,6 @@
 import { Input } from '@core/ui/Input';
 import { Select } from '@core/ui/Select';
+import { Tabs } from '@core/ui/Tabs';
 import { Textarea } from '@core/ui/Textarea';
 import { crmApi } from '@crm/api/crm.api';
 import { useCreateContact, useUpdateContact } from '@crm/hooks/useContacts';
@@ -134,30 +135,15 @@ export const ContactFormSidebar: React.FC<ContactFormSidebarProps> = ({
           </div>
 
           {/* Tabs Switcher */}
-          <div className="flex p-1 bg-slate-950/50 mx-6 mt-6 rounded-xl border border-white/5">
-            <button
-              onClick={() => setActiveTab('info')}
-              className={`flex-1 flex items-center justify-center gap-2 py-2 text-xs font-bold uppercase tracking-wider rounded-lg transition-all ${
-                activeTab === 'info' 
-                  ? 'bg-primary text-white shadow-lg shadow-primary/20' 
-                  : 'text-slate-500 hover:text-slate-300'
-              }`}
-            >
-              <User size={14} />
-              Información
-            </button>
-            <button
-              onClick={() => setActiveTab('advanced')}
-              className={`flex-1 flex items-center justify-center gap-2 py-2 text-xs font-bold uppercase tracking-wider rounded-lg transition-all ${
-                activeTab === 'advanced' 
-                  ? 'bg-primary text-white shadow-lg shadow-primary/20' 
-                  : 'text-slate-500 hover:text-slate-300'
-              }`}
-            >
-              <Settings2 size={14} />
-              Avanzado
-            </button>
-          </div>
+          <Tabs
+            active={activeTab}
+            onChange={(k) => setActiveTab(k as 'info' | 'advanced')}
+            className="mt-4"
+            tabs={[
+              { key: 'info', label: 'Información', icon: User },
+              { key: 'advanced', label: 'Avanzado', icon: Settings2 },
+            ]}
+          />
 
           {/* Form Content */}
           <form id="contact-form" onSubmit={handleSubmit} className="flex-1 overflow-y-auto p-6 space-y-8">

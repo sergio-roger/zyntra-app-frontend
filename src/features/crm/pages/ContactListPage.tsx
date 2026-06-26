@@ -3,31 +3,43 @@ import { ContactFormSidebar } from '@crm/components/ContactFormSidebar';
 import { ContactImportModal } from '@crm/components/ContactImportModal';
 import { ContactTable } from '@crm/components/ContactTable';
 import { Pagination } from '@crm/components/Pagination';
-import {
-  useContactsList,
-  useDeleteContact,
-} from '@crm/hooks/useContacts';
+import { useContactsList, useDeleteContact } from '@crm/hooks/useContacts';
 import { Contact, ContactSource, ContactStage, LifecycleStage } from '@crm/types/crm';
 import { useAuthStore } from '@features/auth/store/authStore';
 import api from '@shared/api/axios';
 import { ConfirmModal } from '@shared/components/ConfirmModal';
-import { AlertCircle, FileSpreadsheet, Loader2, Plus } from 'lucide-react';
+import { Tabs } from '@core/ui/Tabs';
+import { AlertCircle, FileSpreadsheet, Loader2, Plus, UserCheck, UserMinus, Users } from 'lucide-react';
 import React, { useEffect, useState } from 'react';
 
+type TabKey = 'all' | 'mine' | 'unassigned';
+
+interface TabFilters {
+  search: string;
+  stage: ContactStage | '';
+  source: ContactSource | '';
+  page: number;
+}
+
+const defaultFilters = (): TabFilters => ({ search: '', stage: '', source: '', page: 1 });
+
 export const ContactListPage: React.FC = () => {
-  const [search, setSearch] = useState('');
-  const [stage, setStage] = useState<ContactStage | ''>('');
-  const [source, setSource] = useState<ContactSource | ''>('');
-  const [page, setPage] = useState(1);
+  const [activeTab, setActiveTab] = useState<TabKey>('all');
+  const [filters, setFilters] = useState<Record<TabKey, TabFilters>>({
+    all: defaultFilters(),
+    mine: defaultFilters(),
+    unassigned: defaultFilters(),
+  });
   const [stages, setStages] = useState<LifecycleStage[]>([]);
 
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const [editing, setEditing] = useState<Contact | null>(null);
-
-  // Confirmation Modal State
   const [isConfirmOpen, setIsConfirmOpen] = useState(false);
   const [isImportOpen, setIsImportOpen] = useState(false);
   const [contactToDelete, setContactToDelete] = useState<Contact | null>(null);
+
+  const currentUser = useAuthStore(s => s.user);
+  const myOwnerId = currentUser?.crm_user_id;
 
   const fetchStages = React.useCallback(async () => {
     try {
@@ -38,43 +50,62 @@ export const ContactListPage: React.FC = () => {
     }
   }, []);
 
-  useEffect(() => {
-    fetchStages();
-  }, [fetchStages]);
+  useEffect(() => { fetchStages(); }, [fetchStages]);
 
   const limit = 20;
-  const { data, isLoading, isError, error, refetch } = useContactsList({
-    search: search || undefined,
-    stage: stage || undefined,
-    source: source || undefined,
-    page,
+
+  const allQuery = useContactsList({
+    search: filters.all.search || undefined,
+    stage: filters.all.stage || undefined,
+    source: filters.all.source || undefined,
+    page: filters.all.page,
     limit,
   });
+
+  const mineQuery = useContactsList({
+    search: filters.mine.search || undefined,
+    stage: filters.mine.stage || undefined,
+    source: filters.mine.source || undefined,
+    ownerId: myOwnerId || undefined,
+    page: filters.mine.page,
+    limit,
+  });
+
+  const unassignedQuery = useContactsList({
+    search: filters.unassigned.search || undefined,
+    stage: filters.unassigned.stage || undefined,
+    source: filters.unassigned.source || undefined,
+    ownerId: 'unassigned',
+    page: filters.unassigned.page,
+    limit,
+  });
+
   const deleteMutation = useDeleteContact();
 
-  const currentUser = useAuthStore(s => s.user);
   const contactLimit = currentUser?.plan?.contact_limit ?? (currentUser as any)?.plan_object?.contact_limit ?? 999999;
-  const isLimitReached = data ? data.total >= contactLimit && contactLimit !== 999999 : false;
+  const isLimitReached = allQuery.data ? allQuery.data.total >= contactLimit && contactLimit !== 999999 : false;
 
-  const openCreate = () => {
-    setEditing(null);
-    setSidebarOpen(true);
-  };
-  const openEdit = (c: Contact) => {
-    setEditing(c);
-    setSidebarOpen(true);
-  };
-  const handleDeleteRequest = (c: Contact) => {
-    setContactToDelete(c);
-    setIsConfirmOpen(true);
+  const setTabFilter = (tab: TabKey, partial: Partial<TabFilters>) => {
+    const resetPage = !('page' in partial);
+    setFilters(prev => ({
+      ...prev,
+      [tab]: { ...prev[tab], ...partial, ...(resetPage ? { page: 1 } : {}) },
+    }));
   };
 
+  const activeQuery = activeTab === 'all' ? allQuery : activeTab === 'mine' ? mineQuery : unassignedQuery;
+  const activeFilters = filters[activeTab];
+
+  const openCreate = () => { setEditing(null); setSidebarOpen(true); };
+  const openEdit = (c: Contact) => { setEditing(c); setSidebarOpen(true); };
+  const handleDeleteRequest = (c: Contact) => { setContactToDelete(c); setIsConfirmOpen(true); };
   const handleConfirmDelete = async () => {
     if (contactToDelete) {
       await deleteMutation.mutateAsync(contactToDelete.id);
       setContactToDelete(null);
     }
   };
+
 
   return (
     <div className="space-y-5 animate-in fade-in duration-500">
@@ -83,7 +114,9 @@ export const ContactListPage: React.FC = () => {
           <h2 className="text-xl font-bold text-white tracking-tight">Gestión de Contactos</h2>
           <p className="text-sm text-slate-400">Gestiona tu base de clientes, leads y prospectos comerciales.</p>
           <div className="text-xs font-semibold text-slate-500">
-            <span className={isLimitReached ? 'text-rose-400 font-bold' : 'text-slate-300'}>{data?.total || 0}</span> / {contactLimit === 999999 ? '∞' : contactLimit} registrados
+            <span className={isLimitReached ? 'text-rose-400 font-bold' : 'text-slate-300'}>{allQuery.data?.total || 0}</span>
+            {' / '}
+            {contactLimit === 999999 ? '∞' : contactLimit} registrados
           </div>
         </div>
         <div className="flex items-center gap-3">
@@ -119,47 +152,45 @@ export const ContactListPage: React.FC = () => {
         </div>
       )}
 
-      <ContactFilters
-        search={search}
-        stage={stage}
-        source={source}
-        stages={stages}
-        onSearchChange={(v) => {
-          setSearch(v);
-          setPage(1);
-        }}
-        onStageChange={(v) => {
-          setStage(v as ContactStage);
-          setPage(1);
-        }}
-        onSourceChange={(v) => {
-          setSource(v);
-          setPage(1);
-        }}
-        onReset={() => {
-          setSearch('');
-          setStage('');
-          setSource('');
-          setPage(1);
-        }}
+      {/* Global Tabs */}
+      <Tabs
+        active={activeTab}
+        onChange={(k) => setActiveTab(k as TabKey)}
+        tabs={[
+          { key: 'all', label: 'Todos', icon: Users, badge: allQuery.data?.total ?? '—' },
+          { key: 'mine', label: 'Mis contactos', icon: UserCheck, badge: mineQuery.data?.total ?? '—' },
+          { key: 'unassigned', label: 'No asignados', icon: UserMinus, badge: unassignedQuery.data?.total ?? '—' },
+        ]}
       />
 
-      {isLoading && (
+      {/* Filters — scoped to the active tab */}
+      <ContactFilters
+        search={activeFilters.search}
+        stage={activeFilters.stage}
+        source={activeFilters.source}
+        stages={stages}
+        onSearchChange={(v) => setTabFilter(activeTab, { search: v })}
+        onStageChange={(v) => setTabFilter(activeTab, { stage: v as ContactStage | '' })}
+        onSourceChange={(v) => setTabFilter(activeTab, { source: v })}
+        onReset={() => setFilters(prev => ({ ...prev, [activeTab]: defaultFilters() }))}
+      />
+
+      {activeQuery.isLoading && (
         <div className="flex flex-col items-center justify-center py-32 space-y-4">
           <Loader2 className="animate-spin text-primary" size={40} />
           <p className="text-sm text-slate-500 font-medium animate-pulse">Cargando base de datos...</p>
         </div>
       )}
 
-      {isError && (
-        <div className="flex items-center gap-4 rounded-2xl border border-rose-500/20 bg-rose-500/5 p-6 text-sm text-rose-300 shadow-lg animate-in shake duration-500">
+      {activeQuery.isError && (
+        <div className="flex items-center gap-4 rounded-2xl border border-rose-500/20 bg-rose-500/5 p-6 text-sm text-rose-300 shadow-lg">
           <AlertCircle size={24} className="text-rose-500" />
           <div className="flex-1">
             <p className="font-bold">Error de sincronización</p>
-            <p className="opacity-70">{(error as Error)?.message}</p>
+            <p className="opacity-70">{(activeQuery.error as Error)?.message}</p>
           </div>
           <button
-            onClick={() => refetch()}
+            onClick={() => activeQuery.refetch()}
             className="rounded-xl border border-rose-500/30 bg-rose-500/10 px-4 py-2 font-bold hover:bg-rose-500/20 transition-colors"
           >
             Reintentar
@@ -167,10 +198,10 @@ export const ContactListPage: React.FC = () => {
         </div>
       )}
 
-      {data && (
+      {activeQuery.data && (
         <div className="animate-in slide-in-from-bottom-4 duration-500">
           <ContactTable
-            contacts={data.items}
+            contacts={activeQuery.data.items}
             onEdit={openEdit}
             onDelete={handleDeleteRequest}
             onSelect={openEdit}
@@ -178,10 +209,10 @@ export const ContactListPage: React.FC = () => {
           />
           <div className="mt-6">
             <Pagination
-              page={data.page}
-              totalPages={data.totalPages}
-              total={data.total}
-              onChange={setPage}
+              page={activeQuery.data.page}
+              totalPages={activeQuery.data.totalPages}
+              total={activeQuery.data.total}
+              onChange={(p) => setTabFilter(activeTab, { page: p })}
             />
           </div>
         </div>
@@ -199,8 +230,7 @@ export const ContactListPage: React.FC = () => {
         onClose={() => setIsImportOpen(false)}
       />
 
-      {/* Confirmation Modal */}
-      <ConfirmModal 
+      <ConfirmModal
         isOpen={isConfirmOpen}
         onClose={() => setIsConfirmOpen(false)}
         onConfirm={handleConfirmDelete}
