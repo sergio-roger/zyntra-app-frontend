@@ -1,5 +1,6 @@
 import api from '@shared/api/axios';
-import { Segment, CreateSegmentInput, UpdateSegmentInput, ContactsListResponse } from '@crm/types/crm';
+import { Segment, CreateSegmentInput, UpdateSegmentInput } from '@crm/types/crm';
+import { mapContactsList } from './crm.api';
 
 const buildQS = (q: Record<string, unknown>): string => {
   const sp = new URLSearchParams();
@@ -27,13 +28,12 @@ export const segmentsApi = {
     api.delete(`/crm/segments/${id}`),
 
   getContacts: (id: string, query: { page?: number; limit?: number } = {}) =>
-    api.get<unknown, { data: ContactsListResponse }>(
-      `/crm/segments/${id}/contacts${buildQS(query)}`,
-    ),
+    api
+      .get<unknown, { data: any }>(`/crm/segments/${id}/contacts${buildQS(query)}`)
+      .then((r) => ({ data: mapContactsList(r.data) })),
 
   previewContacts: (conditions: any[], query: { page?: number; limit?: number } = {}) =>
-    api.post<unknown, { data: ContactsListResponse }>(
-      `/crm/segments/preview${buildQS(query)}`,
-      { conditions },
-    ),
+    api
+      .post<unknown, { data: any }>(`/crm/segments/preview${buildQS(query)}`, { conditions })
+      .then((r) => ({ data: mapContactsList(r.data) })),
 };

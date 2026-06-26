@@ -44,7 +44,7 @@ export const ConvertToDealSidebar: React.FC<ConvertToDealSidebarProps> = ({
 
     setFormData({
       title: lead ? `Negocio con ${lead.name}` : '',
-      value: lead?.deal_value ? Number(lead.deal_value) : 0,
+      value: lead?.dealValue ? Number(lead.dealValue) : 0,
       pipeline_id: defaultPipeline?.id ?? '',
       stage_id: firstStage?.id ?? '',
       expected_close_date: '',
@@ -208,7 +208,7 @@ export const ConvertToDealSidebar: React.FC<ConvertToDealSidebarProps> = ({
                   </div>
                   <div>
                     <span className="text-slate-500">Empresa</span>
-                    <p className="text-white truncate">{lead.company_name || '—'}</p>
+                    <p className="text-white truncate">{lead.companyName || '—'}</p>
                   </div>
                   <div>
                     <span className="text-slate-500">Fuente</span>

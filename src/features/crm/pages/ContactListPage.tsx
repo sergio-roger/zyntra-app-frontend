@@ -40,6 +40,12 @@ export const ContactListPage: React.FC = () => {
 
   const currentUser = useAuthStore(s => s.user);
   const myOwnerId = currentUser?.crm_user_id;
+  const isAdmin = currentUser?.role === 'admin';
+  const canEdit = isAdmin || activeTab === 'mine';
+
+  useEffect(() => {
+    if (!myOwnerId && activeTab === 'mine') setActiveTab('all');
+  }, [myOwnerId, activeTab]);
 
   const fetchStages = React.useCallback(async () => {
     try {
@@ -62,14 +68,17 @@ export const ContactListPage: React.FC = () => {
     limit,
   });
 
-  const mineQuery = useContactsList({
-    search: filters.mine.search || undefined,
-    stage: filters.mine.stage || undefined,
-    source: filters.mine.source || undefined,
-    ownerId: myOwnerId || undefined,
-    page: filters.mine.page,
-    limit,
-  });
+  const mineQuery = useContactsList(
+    {
+      search: filters.mine.search || undefined,
+      stage: filters.mine.stage || undefined,
+      source: filters.mine.source || undefined,
+      ownerId: myOwnerId || 'none',
+      page: filters.mine.page,
+      limit,
+    },
+    { enabled: !!myOwnerId },
+  );
 
   const unassignedQuery = useContactsList({
     search: filters.unassigned.search || undefined,
@@ -97,8 +106,16 @@ export const ContactListPage: React.FC = () => {
   const activeFilters = filters[activeTab];
 
   const openCreate = () => { setEditing(null); setSidebarOpen(true); };
-  const openEdit = (c: Contact) => { setEditing(c); setSidebarOpen(true); };
-  const handleDeleteRequest = (c: Contact) => { setContactToDelete(c); setIsConfirmOpen(true); };
+  const openEdit = (c: Contact) => {
+    if (!canEdit) return;
+    setEditing(c);
+    setSidebarOpen(true);
+  };
+  const handleDeleteRequest = (c: Contact) => {
+    if (!canEdit) return;
+    setContactToDelete(c);
+    setIsConfirmOpen(true);
+  };
   const handleConfirmDelete = async () => {
     if (contactToDelete) {
       await deleteMutation.mutateAsync(contactToDelete.id);
@@ -158,7 +175,7 @@ export const ContactListPage: React.FC = () => {
         onChange={(k) => setActiveTab(k as TabKey)}
         tabs={[
           { key: 'all', label: 'Todos', icon: Users, badge: allQuery.data?.total ?? '—' },
-          { key: 'mine', label: 'Mis contactos', icon: UserCheck, badge: mineQuery.data?.total ?? '—' },
+          ...(myOwnerId ? [{ key: 'mine', label: 'Mis contactos', icon: UserCheck, badge: mineQuery.data?.total ?? '—' }] : []),
           { key: 'unassigned', label: 'No asignados', icon: UserMinus, badge: unassignedQuery.data?.total ?? '—' },
         ]}
       />
@@ -206,6 +223,7 @@ export const ContactListPage: React.FC = () => {
             onDelete={handleDeleteRequest}
             onSelect={openEdit}
             onAction={openCreate}
+            canEdit={canEdit}
           />
           <div className="mt-6">
             <Pagination

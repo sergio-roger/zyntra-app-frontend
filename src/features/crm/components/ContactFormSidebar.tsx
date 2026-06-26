@@ -40,12 +40,12 @@ function formDataFromContact(contact: Contact): ContactFormData {
     email: contact.email ?? '',
     phone: contact.phone ?? '',
     stage: contact.stage ?? 'lead',
-    lifecycle_stage_id: contact.lifecycle_stage_id ?? '',
+    lifecycle_stage_id: contact.lifecycleStageId ?? '',
     source: contact.source ?? 'manual',
-    owner_id: contact.owner_id ?? '',
+    owner_id: contact.ownerId ?? '',
     tags: contact.tags?.map((t: any) => (typeof t === 'string' ? t : t.id)) ?? [],
     notes: contact.notes ?? '',
-    custom_fields: contact.custom_fields ?? {},
+    custom_fields: contact.customFields ?? {},
   };
 }
 

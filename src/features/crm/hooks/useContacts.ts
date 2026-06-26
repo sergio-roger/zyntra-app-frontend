@@ -11,13 +11,14 @@ export const contactsKeys = {
   kanban: ['contacts', 'kanban'] as const,
 };
 
-export const useContactsList = (query: ListContactsQuery) =>
+export const useContactsList = (query: ListContactsQuery, options?: { enabled?: boolean }) =>
   useQuery({
     queryKey: contactsKeys.list(query),
     queryFn: async () => {
       const res = await crmApi.list(query);
       return res.data as ContactsListResponse;
     },
+    enabled: options?.enabled ?? true,
   });
 
 export const usePipeline = () =>

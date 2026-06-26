@@ -9,6 +9,7 @@ interface ContactTableProps {
   onDelete: (c: Contact) => void;
   onSelect: (c: Contact) => void;
   onAction?: () => void;
+  canEdit?: boolean;
 }
 
 const formatDate = (iso: string | null) => {
@@ -22,6 +23,7 @@ export const ContactTable: React.FC<ContactTableProps> = ({
   onDelete,
   onSelect,
   onAction,
+  canEdit = true,
 }) => {
   if (contacts.length === 0) {
     return (
@@ -46,7 +48,7 @@ export const ContactTable: React.FC<ContactTableProps> = ({
             <th className="px-4 py-3">Etapa</th>
             <th className="hidden sm:table-cell px-4 py-3">Ciclo de vida</th>
             <th className="hidden md:table-cell px-4 py-3">Origen</th>
-            <th className="hidden sm:table-cell px-4 py-3">Etiquetas</th>
+            <th className="hidden sm:table-cell px-4 py-3">Propietario</th>
             <th className="hidden md:table-cell px-4 py-3">Último contacto</th>
             <th className="px-4 py-3 text-right">Acciones</th>
           </tr>
@@ -71,19 +73,19 @@ export const ContactTable: React.FC<ContactTableProps> = ({
                 <StageBadge stage={c.stage} />
               </td>
               <td className="hidden sm:table-cell px-4 py-3">
-                {c.lifecycle_stage ? (
+                {c.lifecycleStage ? (
                   <span
                     className="inline-flex items-center gap-1 px-2 py-0.5 rounded text-[10px] font-medium"
                     style={{
-                      backgroundColor: `${c.lifecycle_stage.color}20`,
-                      color: c.lifecycle_stage.color,
-                      border: `1px solid ${c.lifecycle_stage.color}40`,
+                      backgroundColor: `${c.lifecycleStage.color}20`,
+                      color: c.lifecycleStage.color,
+                      border: `1px solid ${c.lifecycleStage.color}40`,
                     }}
                   >
-                    {c.lifecycle_stage.icon && (
-                      <span className="text-[11px] leading-none">{c.lifecycle_stage.icon}</span>
+                    {c.lifecycleStage.icon && (
+                      <span className="text-[11px] leading-none">{c.lifecycleStage.icon}</span>
                     )}
-                    {c.lifecycle_stage.name}
+                    {c.lifecycleStage.name}
                   </span>
                 ) : (
                   <span className="text-slate-600">—</span>
@@ -92,39 +94,27 @@ export const ContactTable: React.FC<ContactTableProps> = ({
               <td className="hidden md:table-cell px-4 py-3">
                 <SourceBadge source={c.source} />
               </td>
-              <td className="hidden sm:table-cell px-4 py-3">
-                <div className="flex flex-wrap gap-1 max-w-[150px]">
-                  {c.tags && c.tags.length > 0 ? (
-                    c.tags.map((tag: any) => (
-                      <span
-                        key={tag.id}
-                        className="text-[10px] px-2 py-0.5 rounded-full text-white font-medium"
-                        style={{ backgroundColor: tag.color }}
-                      >
-                        {tag.name}
-                      </span>
-                    ))
-                  ) : (
-                    <span className="text-slate-600 text-xs">—</span>
-                  )}
-                </div>
+              <td className="hidden sm:table-cell px-4 py-3 text-slate-300">
+                {c.owner ? c.owner.name : <span className="text-slate-600">—</span>}
               </td>
               <td className="hidden md:table-cell px-4 py-3 text-slate-400">
-                {formatDate(c.last_activity_at)}
+                {formatDate(c.lastActivityAt)}
               </td>
               <td className="px-4 py-3 text-right">
                 <div className="inline-flex gap-1">
                   <button
                     onClick={() => onEdit(c)}
+                    disabled={!canEdit}
                     aria-label="Editar"
-                    className="rounded-md p-1.5 text-slate-400 transition-colors hover:bg-white/10 hover:text-indigo-400"
+                    className={`rounded-md p-1.5 transition-colors ${canEdit ? 'text-slate-400 hover:bg-white/10 hover:text-indigo-400' : 'cursor-not-allowed text-slate-700 opacity-40'}`}
                   >
                     <Pencil size={15} />
                   </button>
                   <button
                     onClick={() => onDelete(c)}
+                    disabled={!canEdit}
                     aria-label="Eliminar"
-                    className="rounded-md p-1.5 text-slate-400 transition-colors hover:bg-rose-500/15 hover:text-rose-400"
+                    className={`rounded-md p-1.5 transition-colors ${canEdit ? 'text-slate-400 hover:bg-rose-500/15 hover:text-rose-400' : 'cursor-not-allowed text-slate-700 opacity-40'}`}
                   >
                     <Trash2 size={15} />
                   </button>

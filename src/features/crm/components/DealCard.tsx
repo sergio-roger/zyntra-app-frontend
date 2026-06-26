@@ -73,10 +73,10 @@ export const DealCard: React.FC<DealCardProps> = ({ deal, onClick, isDragging = 
           <span className="truncate">{deal.contact?.name || 'Contacto desconocido'}</span>
         </div>
 
-        {deal.contact?.company_name && (
+        {deal.contact?.companyName && (
           <div className="flex items-center gap-2 text-[11px] text-slate-500">
             <Building2 size={13} className="text-slate-600" />
-            <span className="truncate">{deal.contact.company_name}</span>
+            <span className="truncate">{deal.contact.companyName}</span>
           </div>
         )}
       </div>

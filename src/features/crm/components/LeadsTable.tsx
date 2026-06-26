@@ -124,8 +124,8 @@ export const LeadsTable: React.FC<LeadsTableProps> = ({ leads, onArchive, onConv
                     </div>
                     <div className="min-w-0">
                       <p className="text-white font-semibold text-sm truncate max-w-[140px]">{lead.name}</p>
-                      {lead.company_name && (
-                        <p className="text-slate-500 text-xs truncate max-w-[140px]">{lead.company_name}</p>
+                      {lead.companyName && (
+                        <p className="text-slate-500 text-xs truncate max-w-[140px]">{lead.companyName}</p>
                       )}
                     </div>
                   </div>
@@ -167,7 +167,7 @@ export const LeadsTable: React.FC<LeadsTableProps> = ({ leads, onArchive, onConv
 
                 {/* Created at */}
                 <td className="px-5 py-3.5 hidden lg:table-cell">
-                  <span className="text-slate-500 text-xs">{relativeTime(lead.created_at)}</span>
+                  <span className="text-slate-500 text-xs">{relativeTime(lead.createdAt)}</span>
                 </td>
 
                 {/* Actions */}

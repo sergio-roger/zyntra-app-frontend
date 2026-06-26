@@ -7,8 +7,8 @@ interface ContactCardProps {
 }
 
 export const ContactCard: React.FC<ContactCardProps> = ({ contact }) => {
-  const formattedDate = contact.created_at 
-    ? new Intl.DateTimeFormat('es-ES', { day: '2-digit', month: 'short', year: 'numeric' }).format(new Date(contact.created_at))
+  const formattedDate = contact.createdAt
+    ? new Intl.DateTimeFormat('es-ES', { day: '2-digit', month: 'short', year: 'numeric' }).format(new Date(contact.createdAt))
     : 'Sin fecha';
 
   return (
@@ -16,7 +16,7 @@ export const ContactCard: React.FC<ContactCardProps> = ({ contact }) => {
       <div className="flex items-start justify-between">
         <div className="flex flex-col gap-1">
           <h4 className="text-sm font-semibold text-slate-100 line-clamp-1 group-hover:text-white">
-            {contact.company_name || contact.name}
+            {contact.companyName || contact.name}
           </h4>
           <div className="flex items-center gap-1.5 text-xs text-slate-400">
             <Building2 size={12} />
@@ -32,7 +32,7 @@ export const ContactCard: React.FC<ContactCardProps> = ({ contact }) => {
 
       <div className="flex items-center justify-between border-t border-white/5 pt-3">
         <p className="text-sm font-bold text-white">
-          ${Number(contact.deal_value || 0).toLocaleString()}
+          ${Number(contact.dealValue || 0).toLocaleString()}
         </p>
         <div className="flex items-center gap-1 text-[10px] text-slate-500">
           <Calendar size={10} />

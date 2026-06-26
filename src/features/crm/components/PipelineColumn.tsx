@@ -10,7 +10,7 @@ interface PipelineColumnProps {
 }
 
 export const PipelineColumn: React.FC<PipelineColumnProps> = ({ stage, contacts, accentColor }) => {
-  const totalValue = contacts.reduce((sum, c) => sum + Number(c.deal_value || 0), 0);
+  const totalValue = contacts.reduce((sum, c) => sum + Number(c.dealValue || 0), 0);
 
   return (
     <div className="flex flex-col gap-4 min-w-[280px] w-full max-w-[320px] bg-slate-900/30 rounded-2xl p-4 border border-white/[0.02]">

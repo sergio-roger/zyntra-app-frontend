@@ -10,10 +10,10 @@ export const PipelineStats: React.FC<PipelineStatsProps> = ({ kanbanData }) => {
   const allContacts = Object.values(kanbanData).flat();
   
   const totalOpportunities = allContacts.length;
-  const totalValue = allContacts.reduce((sum, c) => sum + Number(c.deal_value || 0), 0);
+  const totalValue = allContacts.reduce((sum, c) => sum + Number(c.dealValue || 0), 0);
   
   const wonContacts = kanbanData['customer'] || [];
-  const wonValue = wonContacts.reduce((sum, c) => sum + Number(c.deal_value || 0), 0);
+  const wonValue = wonContacts.reduce((sum, c) => sum + Number(c.dealValue || 0), 0);
   
   const conversionRate = totalOpportunities > 0 
     ? Math.round((wonContacts.length / totalOpportunities) * 100) 

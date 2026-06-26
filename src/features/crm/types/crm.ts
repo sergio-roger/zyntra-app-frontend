@@ -40,26 +40,26 @@ export interface CrmMember {
 
 export interface Contact {
   id: string;
-  business_id: string;
+  businessId: string;
   name: string;
   email: string | null;
   phone: string | null;
-  company_name: string | null;
-  deal_value: number;
+  companyName: string | null;
+  dealValue: number;
   stage: ContactStage;
   source: ContactSource;
-  lifecycle_stage_id: string | null;
-  lifecycle_stage: LifecycleStage | null;
-  owner_id: string | null;
+  lifecycleStageId: string | null;
+  lifecycleStage: LifecycleStage | null;
+  ownerId: string | null;
   owner: CrmMember | null;
   tags: Tag[];
   notes: string | null;
-  custom_fields: Record<string, any> | null;
+  customFields: Record<string, any> | null;
   score: number | null;
-  is_archived: boolean;
-  last_activity_at: string | null;
-  created_at: string;
-  updated_at: string;
+  isArchived: boolean;
+  lastActivityAt: string | null;
+  createdAt: string;
+  updatedAt: string;
 }
 
 export interface ContactActivity {

@@ -121,19 +121,19 @@ export const SegmentDetail: React.FC<SegmentDetailProps> = ({ segment, onEdit, o
                         <StageBadge stage={c.stage} />
                       </td>
                       <td className="px-4 py-3">
-                        {c.lifecycle_stage ? (
+                        {c.lifecycleStage ? (
                           <span
                             className="inline-flex items-center gap-1 px-2 py-0.5 rounded text-[10px] font-medium"
                             style={{
-                              backgroundColor: `${c.lifecycle_stage.color}20`,
-                              color: c.lifecycle_stage.color,
-                              border: `1px solid ${c.lifecycle_stage.color}40`,
+                              backgroundColor: `${c.lifecycleStage.color}20`,
+                              color: c.lifecycleStage.color,
+                              border: `1px solid ${c.lifecycleStage.color}40`,
                             }}
                           >
-                            {c.lifecycle_stage.icon && (
-                              <span className="text-[11px] leading-none">{c.lifecycle_stage.icon}</span>
+                            {c.lifecycleStage.icon && (
+                              <span className="text-[11px] leading-none">{c.lifecycleStage.icon}</span>
                             )}
-                            {c.lifecycle_stage.name}
+                            {c.lifecycleStage.name}
                           </span>
                         ) : (
                           <span className="text-slate-600">—</span>

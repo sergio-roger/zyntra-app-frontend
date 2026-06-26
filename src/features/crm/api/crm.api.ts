@@ -39,23 +39,72 @@ const buildQS = (q: Record<string, unknown>): string => {
   return s ? `?${s}` : '';
 };
 
+export const mapContact = (raw: any): Contact => ({
+  id: raw.id,
+  businessId: raw.business_id,
+  name: raw.name,
+  email: raw.email,
+  phone: raw.phone,
+  companyName: raw.company_name,
+  dealValue: raw.deal_value,
+  stage: raw.stage,
+  source: raw.source,
+  lifecycleStageId: raw.lifecycle_stage_id,
+  lifecycleStage: raw.lifecycle_stage,
+  ownerId: raw.owner_id,
+  owner: raw.owner,
+  tags: raw.tags ?? [],
+  notes: raw.notes,
+  customFields: raw.custom_fields,
+  score: raw.score,
+  isArchived: raw.is_archived,
+  lastActivityAt: raw.last_activity_at,
+  createdAt: raw.created_at,
+  updatedAt: raw.updated_at,
+});
+
+export const mapContactsList = (raw: any): ContactsListResponse => ({
+  items: (raw.items ?? []).map(mapContact),
+  total: raw.total,
+  page: raw.page,
+  limit: raw.limit,
+  totalPages: raw.totalPages,
+});
+
 export const crmApi = {
   list: (query: ListContactsQuery = {}) =>
-    api.get<unknown, { data: ContactsListResponse }>(
-      `/crm/contacts${buildQS(query as Record<string, unknown>)}`,
-    ),
+    api
+      .get<unknown, { data: any }>(`/crm/contacts${buildQS(query as Record<string, unknown>)}`)
+      .then((r) => ({ data: mapContactsList(r.data) })),
 
   pipeline: () => api.get<unknown, { data: Pipeline }>('/crm/pipeline'),
 
-  kanban: () => api.get<unknown, { data: Record<ContactStage, Contact[]> }>('/crm/kanban'),
+  kanban: () =>
+    api
+      .get<unknown, { data: any }>('/crm/kanban')
+      .then((r) => ({
+        data: Object.fromEntries(
+          Object.entries(r.data).map(([stage, contacts]) => [
+            stage,
+            (contacts as any[]).map(mapContact),
+          ]),
+        ) as Record<ContactStage, Contact[]>,
+      })),
 
-  get: (id: string) => api.get<unknown, { data: Contact }>(`/crm/contacts/${id}`),
+  get: (id: string) =>
+    api
+      .get<unknown, { data: any }>(`/crm/contacts/${id}`)
+      .then((r) => ({ data: mapContact(r.data) })),
 
   create: (input: CreateContactInput) =>
-    api.post<unknown, { data: Contact }>('/crm/contacts', input),
+    api
+      .post<unknown, { data: any }>('/crm/contacts', input)
+      .then((r) => ({ data: mapContact(r.data) })),
 
   update: (id: string, input: UpdateContactInput) =>
-    api.patch<unknown, { data: Contact }>(`/crm/contacts/${id}`, input),
+    api
+      .patch<unknown, { data: any }>(`/crm/contacts/${id}`, input)
+      .then((r) => ({ data: mapContact(r.data) })),
 
   remove: (id: string) => api.delete(`/crm/contacts/${id}`),
 
