@@ -75,6 +75,7 @@ export interface ContactsListResponse {
 }
 
 export interface ListContactsQuery {
+  lifecycleStageId?: string;
   source?: ContactSource;
   search?: string;
   tag?: string;
@@ -311,4 +312,6 @@ export interface UpdateSegmentInput {
   description?: string;
   conditions?: SegmentCondition[];
 }
+
+export type TabKey = 'all' | 'mine' | 'unassigned';
 

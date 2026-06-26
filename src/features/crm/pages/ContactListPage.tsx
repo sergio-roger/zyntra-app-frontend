@@ -1,26 +1,25 @@
+import { Tabs } from '@core/ui/Tabs';
 import { ContactFilters } from '@crm/components/ContactFilters';
 import { ContactFormSidebar } from '@crm/components/ContactFormSidebar';
 import { ContactImportModal } from '@crm/components/ContactImportModal';
 import { ContactTable } from '@crm/components/ContactTable';
 import { Pagination } from '@crm/components/Pagination';
 import { useContactsList, useDeleteContact } from '@crm/hooks/useContacts';
-import { Contact, ContactSource } from '@crm/types/crm';
+import { Contact, ContactSource, TabKey } from '@crm/types/crm';
 import { useAuthStore } from '@features/auth/store/authStore';
 import { ConfirmModal } from '@shared/components/ConfirmModal';
-import { Tabs } from '@core/ui/Tabs';
 import { AlertCircle, FileSpreadsheet, Loader2, Plus, UserCheck, UserMinus, Users } from 'lucide-react';
 import React, { useEffect, useState } from 'react';
-
-type TabKey = 'all' | 'mine' | 'unassigned';
 
 interface TabFilters {
   search: string;
   source: ContactSource | '';
   ownerId: string;
+  lifecycleStageId: string;
   page: number;
 }
 
-const defaultFilters = (): TabFilters => ({ search: '', source: '', ownerId: '', page: 1 });
+const defaultFilters = (): TabFilters => ({ search: '', source: '', ownerId: '', lifecycleStageId: '', page: 1 });
 
 export const ContactListPage: React.FC = () => {
   const [activeTab, setActiveTab] = useState<TabKey>('all');
@@ -51,6 +50,7 @@ export const ContactListPage: React.FC = () => {
     search: filters.all.search || undefined,
     source: filters.all.source || undefined,
     ownerId: filters.all.ownerId || undefined,
+    lifecycleStageId: filters.all.lifecycleStageId || undefined,
     page: filters.all.page,
     limit,
   });
@@ -59,6 +59,7 @@ export const ContactListPage: React.FC = () => {
     {
       search: filters.mine.search || undefined,
       source: filters.mine.source || undefined,
+      lifecycleStageId: filters.mine.lifecycleStageId || undefined,
       ownerId: myOwnerId || 'none',
       page: filters.mine.page,
       limit,
@@ -69,6 +70,7 @@ export const ContactListPage: React.FC = () => {
   const unassignedQuery = useContactsList({
     search: filters.unassigned.search || undefined,
     source: filters.unassigned.source || undefined,
+    lifecycleStageId: filters.unassigned.lifecycleStageId || undefined,
     ownerId: 'unassigned',
     page: filters.unassigned.page,
     limit,
@@ -168,10 +170,12 @@ export const ContactListPage: React.FC = () => {
         search={activeFilters.search}
         source={activeFilters.source}
         ownerId={activeFilters.ownerId}
+        lifecycleStageId={activeFilters.lifecycleStageId}
         showOwnerFilter={isAdminOrManager && activeTab === 'all'}
         onSearchChange={(v) => setTabFilter(activeTab, { search: v })}
         onSourceChange={(v) => setTabFilter(activeTab, { source: v })}
         onOwnerChange={(v) => setTabFilter(activeTab, { ownerId: v })}
+        onLifecycleStageChange={(v) => setTabFilter(activeTab, { lifecycleStageId: v })}
         onReset={() => setFilters(prev => ({ ...prev, [activeTab]: defaultFilters() }))}
       />
 
