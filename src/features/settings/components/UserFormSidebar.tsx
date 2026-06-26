@@ -14,6 +14,7 @@ import { useRolesList } from '@features/settings/hooks/usePermissions';
 import { CrmUser, UserRole } from '@features/settings/types/settings';
 import { useAuthStore } from '@features/auth/store/authStore';
 import { toastManager } from '@shared/components/toast/toastManager';
+import { getApiErrorMessage } from '@shared/constants/apiErrors';
 
 interface UserFormSidebarProps {
   open: boolean;
@@ -59,12 +60,20 @@ export const UserFormSidebar: React.FC<UserFormSidebarProps> = ({ open, user, is
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (user) {
-      await updateMutation.mutateAsync({ id: user.id, ...formData });
-    } else {
-      await createMutation.mutateAsync(formData);
+    try {
+      if (user) {
+        await updateMutation.mutateAsync({ id: user.id, ...formData });
+      } else {
+        await createMutation.mutateAsync(formData);
+      }
+      onClose();
+    } catch (error) {
+      toastManager.add({
+        title: user ? 'Error al actualizar usuario' : 'Error al crear usuario',
+        description: getApiErrorMessage(error),
+        type: 'error',
+      });
     }
-    onClose();
   };
 
   const getRoleLabel = (role: any) => {
