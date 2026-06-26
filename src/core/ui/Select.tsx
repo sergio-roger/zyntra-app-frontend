@@ -104,7 +104,7 @@ function SelectInner<TValue = string>(
             ${className}
           `}
         >
-          <span className={hasValue ? 'text-white' : 'text-slate-500'}>{triggerLabel}</span>
+          <span className={`truncate ${hasValue ? 'text-white' : 'text-slate-500'}`}>{triggerLabel}</span>
           <ChevronDown
             size={14}
             className={`text-slate-400 shrink-0 transition-transform duration-200 ${open ? 'rotate-180' : ''}`}

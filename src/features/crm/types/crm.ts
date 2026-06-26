@@ -75,7 +75,6 @@ export interface ContactsListResponse {
 }
 
 export interface ListContactsQuery {
-  lifecycleStageId?: string;
   source?: ContactSource;
   search?: string;
   tag?: string;

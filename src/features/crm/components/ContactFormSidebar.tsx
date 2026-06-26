@@ -29,7 +29,6 @@ import React, { useEffect, useState } from 'react';
 interface ContactFormSidebarProps {
   open: boolean;
   contact: Contact | null;
-  stages: LifecycleStage[];
   onClose: () => void;
 }
 
@@ -65,10 +64,15 @@ function defaultFormData(stages: LifecycleStage[], ownerId?: string | null): Con
 export const ContactFormSidebar: React.FC<ContactFormSidebarProps> = ({
   open,
   contact,
-  stages,
   onClose,
 }) => {
   const { user } = useAuthStore();
+
+  const { data: stages = [] } = useQuery<LifecycleStage[]>({
+    queryKey: ['lifecycle-stages'],
+    queryFn: () => import('@shared/api/axios').then(m => m.default.get('/lifecycle/stages').then(r => r.data)),
+    staleTime: 10 * 60 * 1000,
+  });
 
   const [formData, setFormData] = useState<ContactFormData>(() => defaultFormData(stages, user?.crm_user_id));
 

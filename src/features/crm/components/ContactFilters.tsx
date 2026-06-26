@@ -1,38 +1,44 @@
+import { Select } from '@core/ui/Select';
+import { crmApi } from '@crm/api/crm.api';
+import { SOURCES, SOURCE_LABELS, ContactSource, CrmMember } from '@crm/types/crm';
+import { useQuery } from '@tanstack/react-query';
+import { Search, Users, X } from 'lucide-react';
 import React from 'react';
-import { Search, X } from 'lucide-react';
-import {
-  SOURCES,
-  SOURCE_LABELS,
-  ContactSource,
-} from '@crm/types/crm';
-
-interface LifecycleStage {
-  id: string;
-  name: string;
-}
 
 interface ContactFiltersProps {
   search: string;
-  lifecycleStageId: string;
   source: ContactSource | '';
-  stages: LifecycleStage[];
+  ownerId: string;
+  showOwnerFilter: boolean;
   onSearchChange: (v: string) => void;
-  onStageChange: (v: string) => void;
   onSourceChange: (v: ContactSource | '') => void;
+  onOwnerChange: (v: string) => void;
   onReset: () => void;
 }
 
+const sourceOptions = SOURCES.map((s) => ({ value: s, label: SOURCE_LABELS[s] }));
+
 export const ContactFilters: React.FC<ContactFiltersProps> = ({
   search,
-  lifecycleStageId,
   source,
-  stages,
+  ownerId,
+  showOwnerFilter,
   onSearchChange,
-  onStageChange,
   onSourceChange,
+  onOwnerChange,
   onReset,
 }) => {
-  const hasFilters = Boolean(search || lifecycleStageId || source);
+  const { data: members = [] } = useQuery<CrmMember[]>({
+    queryKey: ['crm-members'],
+    queryFn: () => crmApi.listMembers().then((r) => r.data),
+    staleTime: 5 * 60 * 1000,
+    enabled: showOwnerFilter,
+  });
+
+  const ownerOptions = members.map((m) => ({ value: m.id, label: m.name }));
+
+  const hasFilters = Boolean(search || source || ownerId);
+
   return (
     <div className="flex flex-wrap items-center gap-3 rounded-xl border border-white/10 bg-slate-900/50 p-3">
       <div className="relative min-w-[180px] flex-1">
@@ -49,31 +55,32 @@ export const ContactFilters: React.FC<ContactFiltersProps> = ({
         />
       </div>
 
-      <select
-        value={lifecycleStageId}
-        onChange={(e) => onStageChange(e.target.value)}
-        className="rounded-lg border border-white/10 bg-slate-950/60 px-3 py-2 text-sm text-slate-200 outline-none focus:border-indigo-400"
-      >
-        <option value="">Todas las etapas</option>
-        {stages.map((s) => (
-          <option key={s.id} value={s.id}>
-            {s.name}
-          </option>
-        ))}
-      </select>
+      <div className="w-52">
+        <Select
+          options={sourceOptions}
+          value={source || null}
+          onChange={(v) => onSourceChange((v as ContactSource) ?? '')}
+          placeholder="Todos los orígenes"
+          clearable
+          clearLabel="Todos los orígenes"
+          className="py-2 text-sm"
+        />
+      </div>
 
-      <select
-        value={source}
-        onChange={(e) => onSourceChange(e.target.value as ContactSource | '')}
-        className="rounded-lg border border-white/10 bg-slate-950/60 px-3 py-2 text-sm text-slate-200 outline-none focus:border-indigo-400"
-      >
-        <option value="">Todos los orígenes</option>
-        {SOURCES.map((s) => (
-          <option key={s} value={s}>
-            {SOURCE_LABELS[s]}
-          </option>
-        ))}
-      </select>
+      {showOwnerFilter && (
+        <div className="w-52">
+          <Select
+            options={ownerOptions}
+            value={ownerId || null}
+            onChange={(v) => onOwnerChange(v ?? '')}
+            placeholder="Todos los colaboradores"
+            clearable
+            clearLabel="Todos los colaboradores"
+            icon={Users}
+            className="py-2 text-sm"
+          />
+        </div>
+      )}
 
       {hasFilters && (
         <button

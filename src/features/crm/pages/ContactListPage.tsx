@@ -4,9 +4,8 @@ import { ContactImportModal } from '@crm/components/ContactImportModal';
 import { ContactTable } from '@crm/components/ContactTable';
 import { Pagination } from '@crm/components/Pagination';
 import { useContactsList, useDeleteContact } from '@crm/hooks/useContacts';
-import { Contact, ContactSource, LifecycleStage } from '@crm/types/crm';
+import { Contact, ContactSource } from '@crm/types/crm';
 import { useAuthStore } from '@features/auth/store/authStore';
-import api from '@shared/api/axios';
 import { ConfirmModal } from '@shared/components/ConfirmModal';
 import { Tabs } from '@core/ui/Tabs';
 import { AlertCircle, FileSpreadsheet, Loader2, Plus, UserCheck, UserMinus, Users } from 'lucide-react';
@@ -16,12 +15,12 @@ type TabKey = 'all' | 'mine' | 'unassigned';
 
 interface TabFilters {
   search: string;
-  lifecycleStageId: string | '';
   source: ContactSource | '';
+  ownerId: string;
   page: number;
 }
 
-const defaultFilters = (): TabFilters => ({ search: '', lifecycleStageId: '', source: '', page: 1 });
+const defaultFilters = (): TabFilters => ({ search: '', source: '', ownerId: '', page: 1 });
 
 export const ContactListPage: React.FC = () => {
   const [activeTab, setActiveTab] = useState<TabKey>('all');
@@ -30,7 +29,6 @@ export const ContactListPage: React.FC = () => {
     mine: defaultFilters(),
     unassigned: defaultFilters(),
   });
-  const [stages, setStages] = useState<LifecycleStage[]>([]);
 
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const [editing, setEditing] = useState<Contact | null>(null);
@@ -40,30 +38,19 @@ export const ContactListPage: React.FC = () => {
 
   const currentUser = useAuthStore(s => s.user);
   const myOwnerId = currentUser?.crm_user_id;
-  const isAdmin = currentUser?.role === 'admin';
-  const canEdit = isAdmin || activeTab === 'mine';
+  const isAdminOrManager = currentUser?.role === 'admin' || currentUser?.role === 'manager';
+  const canEdit = isAdminOrManager || activeTab === 'mine';
 
   useEffect(() => {
     if (!myOwnerId && activeTab === 'mine') setActiveTab('all');
   }, [myOwnerId, activeTab]);
 
-  const fetchStages = React.useCallback(async () => {
-    try {
-      const response = await api.get('/lifecycle/stages');
-      setStages(response.data);
-    } catch (error) {
-      console.error('Error fetching lifecycle stages:', error);
-    }
-  }, []);
-
-  useEffect(() => { fetchStages(); }, [fetchStages]);
-
   const limit = 20;
 
   const allQuery = useContactsList({
     search: filters.all.search || undefined,
-    lifecycleStageId: filters.all.lifecycleStageId || undefined,
     source: filters.all.source || undefined,
+    ownerId: filters.all.ownerId || undefined,
     page: filters.all.page,
     limit,
   });
@@ -71,7 +58,6 @@ export const ContactListPage: React.FC = () => {
   const mineQuery = useContactsList(
     {
       search: filters.mine.search || undefined,
-      lifecycleStageId: filters.mine.lifecycleStageId || undefined,
       source: filters.mine.source || undefined,
       ownerId: myOwnerId || 'none',
       page: filters.mine.page,
@@ -82,7 +68,6 @@ export const ContactListPage: React.FC = () => {
 
   const unassignedQuery = useContactsList({
     search: filters.unassigned.search || undefined,
-    lifecycleStageId: filters.unassigned.lifecycleStageId || undefined,
     source: filters.unassigned.source || undefined,
     ownerId: 'unassigned',
     page: filters.unassigned.page,
@@ -122,7 +107,6 @@ export const ContactListPage: React.FC = () => {
       setContactToDelete(null);
     }
   };
-
 
   return (
     <div className="space-y-5 animate-in fade-in duration-500">
@@ -169,7 +153,6 @@ export const ContactListPage: React.FC = () => {
         </div>
       )}
 
-      {/* Global Tabs */}
       <Tabs
         compact
         active={activeTab}
@@ -181,15 +164,14 @@ export const ContactListPage: React.FC = () => {
         ]}
       />
 
-      {/* Filters — scoped to the active tab */}
       <ContactFilters
         search={activeFilters.search}
-        lifecycleStageId={activeFilters.lifecycleStageId}
         source={activeFilters.source}
-        stages={stages}
+        ownerId={activeFilters.ownerId}
+        showOwnerFilter={isAdminOrManager && activeTab === 'all'}
         onSearchChange={(v) => setTabFilter(activeTab, { search: v })}
-        onStageChange={(v) => setTabFilter(activeTab, { lifecycleStageId: v })}
         onSourceChange={(v) => setTabFilter(activeTab, { source: v })}
+        onOwnerChange={(v) => setTabFilter(activeTab, { ownerId: v })}
         onReset={() => setFilters(prev => ({ ...prev, [activeTab]: defaultFilters() }))}
       />
 
@@ -240,7 +222,6 @@ export const ContactListPage: React.FC = () => {
       <ContactFormSidebar
         open={sidebarOpen}
         contact={editing}
-        stages={stages}
         onClose={() => setSidebarOpen(false)}
       />
 
