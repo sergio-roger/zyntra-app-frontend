@@ -1,18 +1,20 @@
 import { Select } from '@core/ui/Select';
 import { crmApi } from '@crm/api/crm.api';
-import { SOURCES, SOURCE_LABELS, ContactSource, CrmMember } from '@crm/types/crm';
+import { SOURCES, SOURCE_LABELS, ContactSource, CrmMember, LifecycleStage } from '@crm/types/crm';
 import { useQuery } from '@tanstack/react-query';
-import { Search, Users, X } from 'lucide-react';
+import { Layers, Search, Users, X } from 'lucide-react';
 import React from 'react';
 
 interface ContactFiltersProps {
   search: string;
   source: ContactSource | '';
   ownerId: string;
+  lifecycleStageId: string;
   showOwnerFilter: boolean;
   onSearchChange: (v: string) => void;
   onSourceChange: (v: ContactSource | '') => void;
   onOwnerChange: (v: string) => void;
+  onLifecycleStageChange: (v: string) => void;
   onReset: () => void;
 }
 
@@ -22,10 +24,12 @@ export const ContactFilters: React.FC<ContactFiltersProps> = ({
   search,
   source,
   ownerId,
+  lifecycleStageId,
   showOwnerFilter,
   onSearchChange,
   onSourceChange,
   onOwnerChange,
+  onLifecycleStageChange,
   onReset,
 }) => {
   const { data: members = [] } = useQuery<CrmMember[]>({
@@ -35,9 +39,19 @@ export const ContactFilters: React.FC<ContactFiltersProps> = ({
     enabled: showOwnerFilter,
   });
 
-  const ownerOptions = members.map((m) => ({ value: m.id, label: m.name }));
+  const { data: stages = [] } = useQuery<LifecycleStage[]>({
+    queryKey: ['lifecycle-stages'],
+    queryFn: () =>
+      import('@shared/api/axios').then((m) =>
+        m.default.get('/lifecycle/stages').then((r) => r.data),
+      ),
+    staleTime: 10 * 60 * 1000,
+  });
 
-  const hasFilters = Boolean(search || source || ownerId);
+  const ownerOptions = members.map((m) => ({ value: m.id, label: m.name }));
+  const stageOptions = stages.map((s) => ({ value: s.id, label: `${s.icon ?? ''} ${s.name}`.trim() }));
+
+  const hasFilters = Boolean(search || source || ownerId || lifecycleStageId);
 
   return (
     <div className="flex flex-wrap items-center gap-3 rounded-xl border border-white/10 bg-slate-900/50 p-3">
@@ -63,6 +77,19 @@ export const ContactFilters: React.FC<ContactFiltersProps> = ({
           placeholder="Todos los orígenes"
           clearable
           clearLabel="Todos los orígenes"
+          className="py-2 text-sm"
+        />
+      </div>
+
+      <div className="w-52">
+        <Select
+          options={stageOptions}
+          value={lifecycleStageId || null}
+          onChange={(v) => onLifecycleStageChange(v ?? '')}
+          placeholder="Todos los ciclos"
+          clearable
+          clearLabel="Todos los ciclos"
+          icon={Layers}
           className="py-2 text-sm"
         />
       </div>
