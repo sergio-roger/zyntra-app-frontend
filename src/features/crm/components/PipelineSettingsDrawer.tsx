@@ -26,6 +26,7 @@ import {
 } from "@crm/constants/pipeline-settings";
 import { ConfirmModal } from "@shared/components/ConfirmModal";
 import { toastManager } from "@shared/components/toast/toastManager";
+import { Select } from "@core/ui/Select";
 
 type Tab = "configuracion" | "etapas";
 
@@ -287,21 +288,16 @@ export const PipelineSettingsDrawer: React.FC<PipelineSettingsDrawerProps> = ({
 
               {/* Team */}
               <div className="space-y-1.5">
-                <label className="text-xs font-medium text-slate-400 ml-1 flex items-center gap-1.5">
-                  <Users size={13} /> Equipo asignado
-                </label>
-                <select
-                  value={teamId ?? ""}
-                  onChange={(e) => setTeamId(e.target.value || null)}
-                  className="w-full bg-slate-950/50 border border-white/10 rounded-xl py-2.5 px-4 text-sm text-white focus:outline-none focus:border-indigo-500/50 transition-all appearance-none"
-                >
-                  <option value="">Sin equipo asignado</option>
-                  {teams.map((t) => (
-                    <option key={t.id} value={t.id}>
-                      {t.name}
-                    </option>
-                  ))}
-                </select>
+                <Select
+                  label="Equipo asignado"
+                  icon={Users}
+                  options={teams.map((t) => ({ value: t.id, label: t.name }))}
+                  value={teamId}
+                  onChange={setTeamId}
+                  clearable
+                  clearLabel="Sin equipo asignado"
+                  placeholder="Sin equipo asignado"
+                />
                 {teams.length === 0 && (
                   <p className="text-[10px] text-slate-600 ml-1">
                     No hay equipos configurados aún.

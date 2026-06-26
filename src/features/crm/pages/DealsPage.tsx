@@ -23,6 +23,7 @@ import {
   TrendingUp,
 } from "lucide-react";
 import React, { useEffect, useState } from "react";
+import { Select } from "@core/ui/Select";
 
 const fmt = (value: number, currency = "COP") =>
   new Intl.NumberFormat("es-CO", {
@@ -132,21 +133,16 @@ export const DealsPage: React.FC = () => {
       {/* Pipeline Selector / Selector de Pipelines */}
       {pipelines.length > 0 && (
         <div className="flex flex-wrap items-center gap-3 bg-slate-900/30 border border-white/5 p-3 rounded-2xl">
-          <div className="relative shrink-0">
-            <select
-              value={activePipelineId ?? ""}
-              onChange={(e) => setActivePipelineId(e.target.value)}
-              className="bg-slate-950 border border-white/10 text-slate-200 rounded-xl px-4 py-2 text-sm font-bold focus:outline-none focus:border-indigo-500/50 pr-9 appearance-none transition-all cursor-pointer"
-            >
-              {pipelines.map((p) => (
-                <option key={p.id} value={p.id}>
-                  Pipeline: {p.name}
-                </option>
-              ))}
-            </select>
-            <ChevronDown
-              size={14}
-              className="absolute right-3 top-1/2 -translate-y-1/2 text-slate-400 pointer-events-none"
+          <div className="shrink-0">
+            <Select
+              icon={BarChart3}
+              options={pipelines.map((p) => ({
+                value: p.id,
+                label: `Pipeline: ${p.name}`,
+              }))}
+              value={activePipelineId}
+              onChange={(v) => v && setActivePipelineId(v)}
+              placeholder="Seleccionar pipeline..."
             />
           </div>
 

@@ -1,8 +1,9 @@
 import React, { useState } from 'react';
-import { X, Save, Loader2, FolderPlus } from 'lucide-react';
+import { X, Save, Loader2, FolderPlus, Users } from 'lucide-react';
 import { useCreatePipeline } from '@crm/hooks/useDeals';
 import { useTeamsList } from '@features/settings/hooks/useUsersTeams';
 import { Input } from '@core/ui/Input';
+import { Select } from '@core/ui/Select';
 
 interface PipelineFormModalProps {
   open: boolean;
@@ -26,7 +27,7 @@ const TYPE_LABEL: Record<string, string> = {
 
 export const PipelineFormModal: React.FC<PipelineFormModalProps> = ({ open, onClose }) => {
   const [name, setName] = useState('');
-  const [teamId, setTeamId] = useState<string>('');
+  const [teamId, setTeamId] = useState<string | null>(null);
   const createMutation = useCreatePipeline();
   const { data: teams = [] } = useTeamsList();
 
@@ -39,11 +40,11 @@ export const PipelineFormModal: React.FC<PipelineFormModalProps> = ({ open, onCl
       await createMutation.mutateAsync({
         name: name.trim(),
         is_default: false,
-        team_id: teamId || null,
+        team_id: teamId,
       });
       onClose();
       setName('');
-      setTeamId('');
+      setTeamId(null);
     } catch (err) {
       console.error('Error creating pipeline:', err);
     }
@@ -83,23 +84,16 @@ export const PipelineFormModal: React.FC<PipelineFormModalProps> = ({ open, onCl
           />
 
           {/* Team selector */}
-          <div className="space-y-1.5">
-            <label className="block text-xs font-bold text-slate-400 uppercase tracking-wider ml-1">
-              Equipo responsable <span className="font-normal normal-case text-slate-500">(opcional)</span>
-            </label>
-            <select
-              value={teamId}
-              onChange={(e) => setTeamId(e.target.value)}
-              className="w-full rounded-xl bg-slate-800 border border-white/10 text-sm text-slate-200 px-3 py-2.5 focus:outline-none focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500/50 transition-colors"
-            >
-              <option value="">— Sin equipo asignado —</option>
-              {teams.map((t) => (
-                <option key={t.id} value={t.id}>
-                  {t.name}
-                </option>
-              ))}
-            </select>
-          </div>
+          <Select
+            label="Equipo responsable"
+            icon={Users}
+            options={teams.map((t) => ({ value: t.id, label: t.name }))}
+            value={teamId}
+            onChange={setTeamId}
+            clearable
+            clearLabel="Sin equipo asignado"
+            placeholder="Sin equipo asignado (opcional)"
+          />
 
           {/* Default stages preview */}
           <div className="space-y-2">
