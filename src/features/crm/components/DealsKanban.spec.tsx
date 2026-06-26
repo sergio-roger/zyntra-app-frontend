@@ -91,6 +91,7 @@ const makePipeline = (): DealPipeline => ({
   position: 0,
   stages: [stageA, stageB],
   business_id: 'biz-1',
+  team_id: null,
   deleted_at: null,
   created_at: new Date().toISOString(),
   updated_at: new Date().toISOString(),

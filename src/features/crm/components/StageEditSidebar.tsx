@@ -21,7 +21,7 @@ export const StageEditSidebar: React.FC<StageEditSidebarProps> = ({
   onClose,
 }) => {
   const [name, setName] = useState("");
-  const [color, setColor] = useState(PIPELINE_STAGE_COLORS[0]);
+  const [color, setColor] = useState<string>(PIPELINE_STAGE_COLORS[0]);
   const [type, setType] = useState<StageType>("active");
   const [probability, setProbability] = useState(30);
 

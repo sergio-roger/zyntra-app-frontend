@@ -97,10 +97,11 @@ export const ContactFormSidebar: React.FC<ContactFormSidebarProps> = ({
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
+    const sanitized = { ...formData, stage: formData.stage || undefined };
     if (contact) {
-      await updateMutation.mutateAsync({ id: contact.id, input: formData });
+      await updateMutation.mutateAsync({ id: contact.id, input: sanitized });
     } else {
-      await createMutation.mutateAsync(formData);
+      await createMutation.mutateAsync(sanitized);
     }
     onClose();
   };
