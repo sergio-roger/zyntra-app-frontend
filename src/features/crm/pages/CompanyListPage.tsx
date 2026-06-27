@@ -9,8 +9,11 @@ import { CompanyImportModal } from "@crm/components/CompanyImportModal";
 import { CompanyTable } from "@crm/components/CompanyTable";
 import { Pagination } from "@crm/components/Pagination";
 import { useCompaniesList, useDeleteCompany } from "@crm/hooks/useCompanies";
+import { useCustomFields } from "@crm/hooks/useCustomFields";
+import { useUpdateUserPreference, useUserPreference } from "@crm/hooks/useUserPreferences";
 import { Company } from "@crm/types/company";
 import { ConfirmModal } from "@shared/components/ConfirmModal";
+import { ColumnCustomizerModal, DEFAULT_COMPANY_COLUMNS } from "@crm/components/ColumnCustomizerModal";
 import { useAuthStore } from "@features/auth/store/authStore";
 
 interface Filters {
@@ -42,6 +45,12 @@ export const CompanyListPage: React.FC = () => {
   const [isImportOpen, setIsImportOpen] = useState(false);
   const [isConfirmOpen, setIsConfirmOpen] = useState(false);
   const [companyToDelete, setCompanyToDelete] = useState<Company | null>(null);
+  const [isCustomizerOpen, setIsCustomizerOpen] = useState(false);
+
+  const { data: customFields = [] } = useCustomFields("company");
+  const { data: columnPreference } = useUserPreference("companies_table_columns");
+  const updatePreferenceMutation = useUpdateUserPreference();
+  const currentColumnConfig = columnPreference || DEFAULT_COMPANY_COLUMNS;
 
   const currentUser = useAuthStore((s) => s.user);
   const isAdminOrManager =
@@ -142,6 +151,7 @@ export const CompanyListPage: React.FC = () => {
         onLifecycleStageChange={(v) => set({ lifecycleStageId: v })}
         onDateRangeChange={handleDateRangeChange}
         onExportCsv={() => setIsExportOpen(true)}
+        onCustomizeColumns={() => setIsCustomizerOpen(true)}
         onReset={() => setFilters(defaultFilters())}
       />
 
@@ -177,6 +187,7 @@ export const CompanyListPage: React.FC = () => {
         <div className="animate-in slide-in-from-bottom-4 duration-500">
           <CompanyTable
             companies={query.data.items}
+            columns={currentColumnConfig}
             onEdit={openEdit}
             onDelete={handleDeleteRequest}
             onSelect={openEdit}
@@ -238,6 +249,19 @@ export const CompanyListPage: React.FC = () => {
         description={`¿Estás seguro de eliminar "${companyToDelete?.name}"? La empresa se marcará como eliminada y ya no aparecerá en las listas, pero los datos históricos se conservarán.`}
         confirmText="Eliminar Empresa"
         variant="danger"
+      />
+
+      <ColumnCustomizerModal
+        isOpen={isCustomizerOpen}
+        onClose={() => setIsCustomizerOpen(false)}
+        customFields={customFields}
+        currentConfig={currentColumnConfig}
+        onSave={(newConfig) => {
+          updatePreferenceMutation.mutate({
+            key: "companies_table_columns",
+            value: newConfig,
+          });
+        }}
       />
     </div>
   );

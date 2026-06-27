@@ -10,6 +10,7 @@ import {
   Layers,
   Search,
   SlidersHorizontal,
+  LayoutTemplate,
 } from "lucide-react";
 
 interface CompanyFiltersProps {
@@ -23,6 +24,7 @@ interface CompanyFiltersProps {
   onLifecycleStageChange: (v: string) => void;
   onDateRangeChange: (range: DateRange | null) => void;
   onExportCsv: () => void;
+  onCustomizeColumns?: () => void;
   onReset: () => void;
 }
 
@@ -37,6 +39,7 @@ export const CompanyFilters: React.FC<CompanyFiltersProps> = ({
   onLifecycleStageChange,
   onDateRangeChange,
   onExportCsv,
+  onCustomizeColumns,
   onReset,
 }) => {
   const [showAdvanced, setShowAdvanced] = useState(false);
@@ -89,6 +92,15 @@ export const CompanyFilters: React.FC<CompanyFiltersProps> = ({
         >
           <Download size={14} /> Exportar CSV
         </button>
+
+        {onCustomizeColumns && (
+          <button
+            onClick={onCustomizeColumns}
+            className="inline-flex items-center gap-1.5 whitespace-nowrap rounded-lg border border-white/10 bg-slate-950/40 px-3 py-2 text-xs font-medium text-slate-300 transition-colors hover:border-white/20 hover:bg-white/5"
+          >
+            <LayoutTemplate size={14} /> Columnas
+          </button>
+        )}
 
         <div className="relative">
           <button
