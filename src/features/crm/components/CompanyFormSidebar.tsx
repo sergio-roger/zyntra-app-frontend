@@ -8,7 +8,6 @@ import {
   Loader2,
   Save,
   Tag as TagIcon,
-  Users,
   X,
 } from "lucide-react";
 import { Input } from "@core/ui/Input";
