@@ -27,6 +27,7 @@ import {
   ListFilter,
   Briefcase,
   ShieldCheck,
+  Building2,
 } from "lucide-react";
 import { NavModule } from "@shared/types/nav";
 
@@ -68,6 +69,12 @@ export const NAV_MODULES: NavModule[] = [
         label: "Inbox Leads",
         icon: InboxIcon,
         description: "Todos los leads entrantes.",
+      },
+      {
+        to: "/crm/companies",
+        label: "Empresas",
+        icon: Building2,
+        description: "Gestiona empresas y organizaciones.",
       },
       {
         to: "/crm/deals",

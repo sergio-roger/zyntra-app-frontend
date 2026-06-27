@@ -31,6 +31,11 @@ const DealsPage = lazy(() =>
 const SegmentsPage = lazy(() =>
   import("@crm/pages/SegmentsPage").then((m) => ({ default: m.SegmentsPage })),
 );
+const CompanyListPage = lazy(() =>
+  import("@crm/pages/CompanyListPage").then((m) => ({
+    default: m.CompanyListPage,
+  })),
+);
 
 export const crmRoutes: RouteObject[] = [
   {
@@ -116,6 +121,18 @@ export const crmRoutes: RouteObject[] = [
             <ModuleGuard menuKey="crm_segments">
               <SuspenseLoader>
                 <SegmentsPage />
+              </SuspenseLoader>
+            </ModuleGuard>
+          </PermissionGuard>
+        ),
+      },
+      {
+        path: "companies",
+        element: (
+          <PermissionGuard menuKey="crm_companies">
+            <ModuleGuard menuKey="crm_companies">
+              <SuspenseLoader>
+                <CompanyListPage />
               </SuspenseLoader>
             </ModuleGuard>
           </PermissionGuard>

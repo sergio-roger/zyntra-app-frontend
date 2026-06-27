@@ -14,6 +14,7 @@ const PATH_TO_KEY_MAP: Record<string, string> = {
   "/crm": "crm",
   "/crm/contacts": "crm_contacts",
   "/crm/leads": "crm_leads",
+  "/crm/companies": "crm_companies",
   "/crm/deals": "crm_deals",
   "/crm/tags": "crm_tags",
   "/crm/tasks": "crm_tasks",
