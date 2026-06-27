@@ -333,7 +333,7 @@ export const ContactListPage: React.FC = () => {
           search: activeFilters.search || undefined,
           source: activeFilters.source || undefined,
           ownerId:
-            activeTab === 'mine' ? myOwnerId :
+            activeTab === 'mine' ? (myOwnerId || undefined) :
             activeTab === 'unassigned' ? 'unassigned' :
             activeFilters.ownerId || undefined,
           lifecycleStageId: activeFilters.lifecycleStageId || undefined,

@@ -71,7 +71,7 @@ export const ContactExportModal: React.FC<ContactExportModalProps> = ({
         filters: queryParams as Record<string, unknown>,
         columns: activeColumns,
       });
-      const blob = new Blob([res.data], { type: 'text/csv;charset=utf-8;' });
+      const blob = res instanceof Blob ? res : new Blob([res], { type: 'text/csv;charset=utf-8;' });
       const url = URL.createObjectURL(blob);
       const a = document.createElement('a');
       a.href = url;

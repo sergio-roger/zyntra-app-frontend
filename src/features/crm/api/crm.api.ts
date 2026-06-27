@@ -108,11 +108,15 @@ export const crmApi = {
     api.patch<unknown, { data: Tag }>(`/crm/tags/${id}`, input),
   removeTag: (id: string) => api.delete(`/crm/tags/${id}`),
 
-  exportCsv: (body: {
+  exportCsv: (params: {
     filters: Record<string, unknown>;
     columns: { key: string; label: string }[];
   }) =>
-    api.post<unknown, { data: Blob }>('/crm/contacts/export', body, { responseType: 'blob' }),
+    api.post<unknown, Blob>(
+      '/crm/contacts/export',
+      { ...params.filters, columns: params.columns },
+      { responseType: 'blob' },
+    ),
 
   // Members (for owner assignment)
   listMembers: () => api.get<unknown, { data: CrmMember[] }>('/crm/members'),
