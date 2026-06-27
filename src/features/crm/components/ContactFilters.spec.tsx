@@ -77,6 +77,11 @@ const defaultProps = {
 describe("ContactFilters", () => {
   beforeEach(() => vi.clearAllMocks());
 
+  const openAdvancedFilters = () => {
+    const advancedBtn = screen.getByRole("button", { name: /Filtros avanzados/i });
+    fireEvent.click(advancedBtn);
+  };
+
   it("renders the search input and source selector", () => {
     const Wrapper = createWrapper();
     render(
@@ -88,6 +93,7 @@ describe("ContactFilters", () => {
     expect(
       screen.getByPlaceholderText(/Buscar por nombre/i),
     ).toBeInTheDocument();
+    openAdvancedFilters();
     expect(screen.getByText("Todos los orígenes")).toBeInTheDocument();
   });
 
@@ -99,6 +105,7 @@ describe("ContactFilters", () => {
       </Wrapper>,
     );
 
+    openAdvancedFilters();
     expect(
       screen.queryByText("Todos los colaboradores"),
     ).not.toBeInTheDocument();
@@ -112,6 +119,7 @@ describe("ContactFilters", () => {
       </Wrapper>,
     );
 
+    openAdvancedFilters();
     expect(screen.getByText("Todos los colaboradores")).toBeInTheDocument();
   });
 
@@ -139,7 +147,7 @@ describe("ContactFilters", () => {
       </Wrapper>,
     );
 
-    expect(screen.queryByText("Limpiar")).not.toBeInTheDocument();
+    expect(screen.queryByText(/Limpiar filtros/i)).not.toBeInTheDocument();
   });
 
   it("shows the reset button and calls onReset when clicked", () => {
@@ -151,7 +159,7 @@ describe("ContactFilters", () => {
       </Wrapper>,
     );
 
-    const resetBtn = screen.getByText("Limpiar");
+    const resetBtn = screen.getByRole("button", { name: /Limpiar filtros/i });
     expect(resetBtn).toBeInTheDocument();
     fireEvent.click(resetBtn);
     expect(onReset).toHaveBeenCalledTimes(1);
@@ -165,7 +173,7 @@ describe("ContactFilters", () => {
       </Wrapper>,
     );
 
-    expect(screen.getByText("Limpiar")).toBeInTheDocument();
+    expect(screen.getByRole("button", { name: /Limpiar filtros/i })).toBeInTheDocument();
   });
 
   it("renders the lifecycle stage selector", () => {
@@ -176,6 +184,7 @@ describe("ContactFilters", () => {
       </Wrapper>,
     );
 
+    openAdvancedFilters();
     expect(screen.getByText("Todos los ciclos")).toBeInTheDocument();
   });
 
@@ -187,6 +196,6 @@ describe("ContactFilters", () => {
       </Wrapper>,
     );
 
-    expect(screen.getByText("Limpiar")).toBeInTheDocument();
+    expect(screen.getByRole("button", { name: /Limpiar filtros/i })).toBeInTheDocument();
   });
 });

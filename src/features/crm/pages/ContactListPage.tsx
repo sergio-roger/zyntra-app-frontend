@@ -1,14 +1,23 @@
 import { DateRange } from "@core/ui/DateRangePicker";
 import { Tabs } from "@core/ui/Tabs";
+import {
+  ColumnCustomizerModal,
+  DEFAULT_COLUMNS,
+} from "@crm/components/ColumnCustomizerModal";
 import { ContactCustomFieldsSidebar } from "@crm/components/ContactCustomFieldsSidebar";
 import { ContactExportModal } from "@crm/components/ContactExportModal";
 import { ContactFilters } from "@crm/components/ContactFilters";
-import { CustomFieldFilterSidebar } from "@crm/components/CustomFieldFilterSidebar";
 import { ContactFormSidebar } from "@crm/components/ContactFormSidebar";
 import { ContactImportModal } from "@crm/components/ContactImportModal";
 import { ContactTable } from "@crm/components/ContactTable";
+import { CustomFieldFilterSidebar } from "@crm/components/CustomFieldFilterSidebar";
 import { Pagination } from "@crm/components/Pagination";
 import { useContactsList, useDeleteContact } from "@crm/hooks/useContacts";
+import { useCustomFields } from "@crm/hooks/useCustomFields";
+import {
+  useUpdateUserPreference,
+  useUserPreference,
+} from "@crm/hooks/useUserPreferences";
 import { Contact } from "@crm/types/contact";
 import { TabKey } from "@crm/types/crm";
 import { SegmentCondition } from "@crm/types/segment-condition";
@@ -16,23 +25,13 @@ import { TabFilters } from "@crm/types/tab-filters";
 import { useAuthStore } from "@features/auth/store/authStore";
 import { ConfirmModal } from "@shared/components/ConfirmModal";
 import {
-  ColumnCustomizerModal,
-  DEFAULT_COLUMNS,
-} from "@crm/components/ColumnCustomizerModal";
-import {
-  useUserPreference,
-  useUpdateUserPreference,
-} from "@crm/hooks/useUserPreferences";
-import { useCustomFields } from "@crm/hooks/useCustomFields";
-import {
   AlertCircle,
   FileSpreadsheet,
   Loader2,
   Plus,
-  SlidersHorizontal,
   UserCheck,
   UserMinus,
-  Users,
+  Users
 } from "lucide-react";
 import React, { useEffect, useState } from "react";
 import { useSearchParams } from "react-router-dom";
