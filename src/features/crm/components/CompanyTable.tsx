@@ -1,8 +1,9 @@
-import React from "react";
-import { Building2, ExternalLink, Pencil, Settings2, Trash2 } from "lucide-react";
+import { DEFAULT_COMPANY_COLUMNS } from "@crm/constants/company-columns";
 import { Company } from "@crm/types/company";
 import { EmptyState } from "@shared/components/EmptyState";
-import { ColumnConfig, DEFAULT_COMPANY_COLUMNS } from "./ColumnCustomizerModal";
+import { ColumnConfig } from "@shared/types/column";
+import { Building2, ExternalLink, Pencil, Settings2, Trash2 } from "lucide-react";
+import React from "react";
 
 interface CompanyTableProps {
   companies: Company[];

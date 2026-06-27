@@ -1,12 +1,12 @@
-import React, { useState, useEffect } from "react";
+import { CustomField } from "@crm/types/custom-field";
 import {
-  DndContext,
   closestCenter,
+  DndContext,
+  DragEndEvent,
   KeyboardSensor,
   PointerSensor,
   useSensor,
   useSensors,
-  DragEndEvent,
 } from "@dnd-kit/core";
 import {
   arrayMove,
@@ -16,45 +16,18 @@ import {
   verticalListSortingStrategy,
 } from "@dnd-kit/sortable";
 import { CSS } from "@dnd-kit/utilities";
-import { GripVertical, X, Settings2 } from "lucide-react";
-import { CustomField } from "@crm/types/custom-field";
-
-export interface ColumnConfig {
-  key: string;
-  label: string;
-  visible: boolean;
-}
+import { GripVertical, Settings2, X } from "lucide-react";
+import React, { useEffect, useState } from "react";
+import { ColumnConfig } from "@shared/types/column";
 
 interface ColumnCustomizerModalProps {
   isOpen: boolean;
   onClose: () => void;
   customFields: CustomField[];
   currentConfig: ColumnConfig[];
+  defaultColumns: ColumnConfig[];
   onSave: (config: ColumnConfig[]) => void;
 }
-
-// Default columns definitions
-export const DEFAULT_COLUMNS: ColumnConfig[] = [
-  { key: "name", label: "Nombre", visible: true },
-  { key: "email", label: "Email", visible: true },
-  { key: "phone", label: "Teléfono", visible: true },
-  { key: "lifecycleStage", label: "Ciclo de vida", visible: true },
-  { key: "source", label: "Origen", visible: false },
-  { key: "owner", label: "Propietario", visible: true },
-  { key: "notes", label: "Notas", visible: false },
-  { key: "lastActivityAt", label: "Último contacto", visible: false },
-];
-
-export const DEFAULT_COMPANY_COLUMNS: ColumnConfig[] = [
-  { key: "name", label: "Nombre", visible: true },
-  { key: "identification", label: "Identificación", visible: true },
-  { key: "website", label: "Sitio web", visible: true },
-  { key: "sector", label: "Sector", visible: true },
-  { key: "lifecycleStage", label: "Etapa", visible: true },
-  { key: "numEmployees", label: "Empleados", visible: true },
-  { key: "tags", label: "Etiquetas", visible: true },
-  { key: "createdAt", label: "Registrado", visible: false },
-];
 
 interface SortableItemProps {
   col: ColumnConfig;
@@ -77,7 +50,6 @@ const SortableItem: React.FC<SortableItemProps> = ({ col, onToggleVisible }) => 
     zIndex: isDragging ? 50 : undefined,
   };
 
-  // Name column is always visible and cannot be hidden
   const isNameColumn = col.key === "name";
 
   return (
@@ -133,6 +105,7 @@ export const ColumnCustomizerModal: React.FC<ColumnCustomizerModalProps> = ({
   onClose,
   customFields,
   currentConfig,
+  defaultColumns,
   onSave,
 }) => {
   const [config, setConfig] = useState<ColumnConfig[]>([]);
@@ -143,7 +116,7 @@ export const ColumnCustomizerModal: React.FC<ColumnCustomizerModalProps> = ({
 
     // Build the list of all possible columns
     const allAvailable = [
-      ...DEFAULT_COLUMNS,
+      ...defaultColumns,
       ...customFields
         .filter((cf) => cf.is_active)
         .map((cf) => ({
@@ -208,7 +181,7 @@ export const ColumnCustomizerModal: React.FC<ColumnCustomizerModalProps> = ({
 
   const handleReset = () => {
     const defaultFields = [
-      ...DEFAULT_COLUMNS,
+      ...defaultColumns,
       ...customFields
         .filter((cf) => cf.is_active)
         .map((cf) => ({

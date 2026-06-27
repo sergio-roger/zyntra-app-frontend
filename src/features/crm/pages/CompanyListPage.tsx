@@ -1,5 +1,3 @@
-import React, { useState } from "react";
-import { AlertCircle, FileSpreadsheet, Loader2, Plus } from "lucide-react";
 import { DateRange } from "@core/ui/DateRangePicker";
 import { CompanyCustomFieldsSidebar } from "@crm/components/CompanyCustomFieldsSidebar";
 import { CompanyExportModal } from "@crm/components/CompanyExportModal";
@@ -8,13 +6,16 @@ import { CompanyFormSidebar } from "@crm/components/CompanyFormSidebar";
 import { CompanyImportModal } from "@crm/components/CompanyImportModal";
 import { CompanyTable } from "@crm/components/CompanyTable";
 import { Pagination } from "@crm/components/Pagination";
+import { DEFAULT_COMPANY_COLUMNS } from "@crm/constants/company-columns";
 import { useCompaniesList, useDeleteCompany } from "@crm/hooks/useCompanies";
 import { useCustomFields } from "@crm/hooks/useCustomFields";
 import { useUpdateUserPreference, useUserPreference } from "@crm/hooks/useUserPreferences";
 import { Company } from "@crm/types/company";
-import { ConfirmModal } from "@shared/components/ConfirmModal";
-import { ColumnCustomizerModal, DEFAULT_COMPANY_COLUMNS } from "@crm/components/ColumnCustomizerModal";
 import { useAuthStore } from "@features/auth/store/authStore";
+import { ColumnCustomizerModal } from "@shared/components/ColumnCustomizerModal";
+import { ConfirmModal } from "@shared/components/ConfirmModal";
+import { AlertCircle, FileSpreadsheet, Loader2, Plus } from "lucide-react";
+import React, { useState } from "react";
 
 interface Filters {
   search: string;
@@ -256,6 +257,7 @@ export const CompanyListPage: React.FC = () => {
         onClose={() => setIsCustomizerOpen(false)}
         customFields={customFields}
         currentConfig={currentColumnConfig}
+        defaultColumns={DEFAULT_COMPANY_COLUMNS}
         onSave={(newConfig) => {
           updatePreferenceMutation.mutate({
             key: "companies_table_columns",

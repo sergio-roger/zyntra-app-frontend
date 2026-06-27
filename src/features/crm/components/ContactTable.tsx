@@ -3,7 +3,8 @@ import { Pencil, Settings2, Trash2, User } from "lucide-react";
 import { Contact } from "@crm/types/contact";
 import { SourceBadge } from "./badges";
 import { EmptyState } from "@shared/components/EmptyState";
-import { ColumnConfig, DEFAULT_COLUMNS } from "./ColumnCustomizerModal";
+import { ColumnConfig } from "@shared/types/column";
+import { DEFAULT_COLUMNS } from "@crm/constants/contact-columns";
 
 interface ContactTableProps {
   contacts: Contact[];
