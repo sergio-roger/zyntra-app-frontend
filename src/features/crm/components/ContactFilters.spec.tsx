@@ -45,12 +45,16 @@ const defaultProps = {
   lifecycleStageId: '',
   createdAtFrom: '',
   createdAtTo: '',
+  lastActivityAtFrom: '',
+  lastActivityAtTo: '',
   showOwnerFilter: false,
   onSearchChange: vi.fn(),
   onSourceChange: vi.fn(),
   onOwnerChange: vi.fn(),
   onLifecycleStageChange: vi.fn(),
   onDateRangeChange: vi.fn(),
+  onLastActivityDateChange: vi.fn(),
+  onExportCsv: vi.fn(),
   onReset: vi.fn(),
 };
 

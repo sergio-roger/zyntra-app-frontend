@@ -7,5 +7,7 @@ export interface TabFilters {
   lifecycleStageId: string;
   createdAtFrom: string;
   createdAtTo: string;
+  lastActivityAtFrom: string;
+  lastActivityAtTo: string;
   page: number;
 }

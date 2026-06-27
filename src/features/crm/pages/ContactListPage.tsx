@@ -1,5 +1,6 @@
 import { DateRange } from '@core/ui/DateRangePicker';
 import { Tabs } from '@core/ui/Tabs';
+import { crmApi } from '@crm/api/crm.api';
 import { ContactFilters } from '@crm/components/ContactFilters';
 import { ContactFormSidebar } from '@crm/components/ContactFormSidebar';
 import { ContactImportModal } from '@crm/components/ContactImportModal';
@@ -21,6 +22,8 @@ const defaultFilters = (): TabFilters => ({
   lifecycleStageId: '',
   createdAtFrom: '',
   createdAtTo: '',
+  lastActivityAtFrom: '',
+  lastActivityAtTo: '',
   page: 1,
 });
 
@@ -56,6 +59,8 @@ export const ContactListPage: React.FC = () => {
     lifecycleStageId: filters.all.lifecycleStageId || undefined,
     createdAtFrom: filters.all.createdAtFrom || undefined,
     createdAtTo: filters.all.createdAtTo || undefined,
+    lastActivityAtFrom: filters.all.lastActivityAtFrom || undefined,
+    lastActivityAtTo: filters.all.lastActivityAtTo || undefined,
     page: filters.all.page,
     limit,
   });
@@ -68,6 +73,8 @@ export const ContactListPage: React.FC = () => {
       ownerId: myOwnerId || 'none',
       createdAtFrom: filters.mine.createdAtFrom || undefined,
       createdAtTo: filters.mine.createdAtTo || undefined,
+      lastActivityAtFrom: filters.mine.lastActivityAtFrom || undefined,
+      lastActivityAtTo: filters.mine.lastActivityAtTo || undefined,
       page: filters.mine.page,
       limit,
     },
@@ -81,6 +88,8 @@ export const ContactListPage: React.FC = () => {
     ownerId: 'unassigned',
     createdAtFrom: filters.unassigned.createdAtFrom || undefined,
     createdAtTo: filters.unassigned.createdAtTo || undefined,
+    lastActivityAtFrom: filters.unassigned.lastActivityAtFrom || undefined,
+    lastActivityAtTo: filters.unassigned.lastActivityAtTo || undefined,
     page: filters.unassigned.page,
     limit,
   });
@@ -103,6 +112,56 @@ export const ContactListPage: React.FC = () => {
       createdAtFrom: range?.from ?? '',
       createdAtTo: range?.to ?? '',
     });
+  };
+
+  const handleLastActivityDateChange = (range: DateRange | null) => {
+    setTabFilter(activeTab, {
+      lastActivityAtFrom: range?.from ?? '',
+      lastActivityAtTo: range?.to ?? '',
+    });
+  };
+
+  const handleExportCsv = async () => {
+    const f = filters[activeTab];
+    const ownerIdParam =
+      activeTab === 'mine' ? myOwnerId :
+      activeTab === 'unassigned' ? 'unassigned' :
+      f.ownerId || undefined;
+
+    const { data } = await crmApi.list({
+      search: f.search || undefined,
+      source: f.source || undefined,
+      ownerId: ownerIdParam || undefined,
+      lifecycleStageId: f.lifecycleStageId || undefined,
+      createdAtFrom: f.createdAtFrom || undefined,
+      createdAtTo: f.createdAtTo || undefined,
+      limit: 9999,
+      page: 1,
+    });
+
+    const headers = ['Nombre', 'Email', 'Teléfono', 'Empresa', 'Fuente', 'Etapa', 'Propietario', 'Creado'];
+    const rows = data.items.map((c) => [
+      c.name,
+      c.email ?? '',
+      c.phone ?? '',
+      c.companyName ?? '',
+      c.source ?? '',
+      c.lifecycleStage?.name ?? '',
+      c.owner?.name ?? '',
+      new Date(c.createdAt).toLocaleDateString('es-EC'),
+    ]);
+
+    const csv = [headers, ...rows]
+      .map((row) => row.map((cell) => `"${String(cell).replace(/"/g, '""')}"`).join(','))
+      .join('\n');
+
+    const blob = new Blob(['﻿' + csv], { type: 'text/csv;charset=utf-8;' });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = `contactos_${new Date().toISOString().slice(0, 10)}.csv`;
+    a.click();
+    URL.revokeObjectURL(url);
   };
 
   const activeQuery = activeTab === 'all' ? allQuery : activeTab === 'mine' ? mineQuery : unassignedQuery;
@@ -189,12 +248,16 @@ export const ContactListPage: React.FC = () => {
         lifecycleStageId={activeFilters.lifecycleStageId}
         createdAtFrom={activeFilters.createdAtFrom}
         createdAtTo={activeFilters.createdAtTo}
+        lastActivityAtFrom={activeFilters.lastActivityAtFrom}
+        lastActivityAtTo={activeFilters.lastActivityAtTo}
         showOwnerFilter={isAdminOrManager && activeTab === 'all'}
         onSearchChange={(v) => setTabFilter(activeTab, { search: v })}
         onSourceChange={(v) => setTabFilter(activeTab, { source: v })}
         onOwnerChange={(v) => setTabFilter(activeTab, { ownerId: v })}
         onLifecycleStageChange={(v) => setTabFilter(activeTab, { lifecycleStageId: v })}
         onDateRangeChange={handleDateRangeChange}
+        onLastActivityDateChange={handleLastActivityDateChange}
+        onExportCsv={handleExportCsv}
         onReset={() => setFilters(prev => ({ ...prev, [activeTab]: defaultFilters() }))}
       />
 
