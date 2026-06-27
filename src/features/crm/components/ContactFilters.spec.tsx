@@ -55,7 +55,7 @@ const defaultProps = {
   onLifecycleStageChange: vi.fn(),
   onDateRangeChange: vi.fn(),
   onLastActivityDateChange: vi.fn(),
-  onCustomFieldConditionsChange: vi.fn(),
+  onOpenCustomFieldFilters: vi.fn(),
   onExportCsv: vi.fn(),
   onReset: vi.fn(),
 };

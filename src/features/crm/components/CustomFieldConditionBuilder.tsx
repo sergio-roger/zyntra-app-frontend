@@ -1,3 +1,4 @@
+import { Select } from '@core/ui/Select';
 import { useCustomFields } from '@crm/hooks/useCustomFields';
 import { SegmentCondition } from '@crm/types/segment-condition';
 import { Plus, Trash2 } from 'lucide-react';
@@ -7,9 +8,6 @@ interface CustomFieldConditionBuilderProps {
   conditions: SegmentCondition[];
   onChange: (conditions: SegmentCondition[]) => void;
 }
-
-const selectCls =
-  'flex-1 min-w-0 rounded-lg border border-slate-700/60 bg-slate-950/70 px-2 py-1.5 text-xs text-slate-200 outline-none focus:border-indigo-400 focus:ring-1 focus:ring-indigo-400/20 transition-all cursor-pointer';
 
 export const CustomFieldConditionBuilder: React.FC<CustomFieldConditionBuilderProps> = ({
   conditions,
@@ -40,13 +38,18 @@ export const CustomFieldConditionBuilder: React.FC<CustomFieldConditionBuilderPr
     onChange(next);
   };
 
+  const fieldOptions = activeFields.map((f) => ({
+    value: `custom_fields.${f.name}`,
+    label: f.label,
+  }));
+
   return (
-    <div className="w-full space-y-2 border-t border-white/5 pt-3">
+    <div className="w-full space-y-2">
       <div className="flex items-center justify-between">
         <span className="text-[10px] font-bold uppercase tracking-wider text-slate-500">
           Campos personalizados
           {conditions.length > 0 && (
-            <span className="ml-2 text-[9px] font-black bg-indigo-500/15 text-indigo-400 border border-indigo-500/20 px-1.5 py-0.5 rounded-full">
+            <span className="ml-2 rounded-full border border-indigo-500/20 bg-indigo-500/15 px-1.5 py-0.5 text-[9px] font-black text-indigo-400">
               {conditions.length}
             </span>
           )}
@@ -54,7 +57,7 @@ export const CustomFieldConditionBuilder: React.FC<CustomFieldConditionBuilderPr
         <button
           type="button"
           onClick={add}
-          className="inline-flex items-center gap-1 text-[10px] font-bold text-indigo-400 hover:text-indigo-300 transition-colors"
+          className="inline-flex items-center gap-1 text-[10px] font-bold text-indigo-400 transition-colors hover:text-indigo-300"
         >
           <Plus size={11} /> Añadir condición
         </button>
@@ -66,77 +69,82 @@ export const CustomFieldConditionBuilder: React.FC<CustomFieldConditionBuilderPr
         const hideValue = cond.operator === 'is_empty' || cond.operator === 'is_not_empty';
         const isNumeric = cf?.type === 'number';
 
+        const operatorOptions = isNumeric
+          ? [
+              { value: 'equals', label: '= igual' },
+              { value: 'greater_than', label: '> mayor' },
+              { value: 'less_than', label: '< menor' },
+            ]
+          : cf?.type === 'checkbox'
+          ? [{ value: 'equals', label: 'es' }]
+          : [
+              { value: 'equals', label: 'igual a' },
+              { value: 'not_equals', label: 'distinto de' },
+              { value: 'contains', label: 'contiene' },
+              { value: 'is_empty', label: 'vacío' },
+              { value: 'is_not_empty', label: 'no vacío' },
+            ];
+
         return (
           <div
             key={i}
-            className="flex items-center gap-2 rounded-lg border border-slate-700/50 bg-slate-900/40 p-2 group"
+            className="group flex items-center gap-2 rounded-lg border border-slate-700/50 bg-slate-900/40 p-2"
           >
-            <select
-              value={cond.field}
-              onChange={(e) => update(i, { field: e.target.value, operator: 'equals', value: '' })}
-              className={selectCls}
-            >
-              {activeFields.map((f) => (
-                <option key={f.id} value={`custom_fields.${f.name}`}>
-                  {f.label}
-                </option>
-              ))}
-            </select>
+            <div className="min-w-0 flex-1">
+              <Select
+                options={fieldOptions}
+                value={cond.field}
+                onChange={(v) =>
+                  update(i, { field: v ?? fieldOptions[0]?.value, operator: 'equals', value: '' })
+                }
+                className="py-1.5 text-xs"
+              />
+            </div>
 
-            <select
-              value={cond.operator}
-              onChange={(e) =>
-                update(i, { operator: e.target.value as SegmentCondition['operator'], value: '' })
-              }
-              className={selectCls}
-            >
-              {isNumeric ? (
-                <>
-                  <option value="equals">= igual</option>
-                  <option value="greater_than">&gt; mayor</option>
-                  <option value="less_than">&lt; menor</option>
-                </>
-              ) : cf?.type === 'checkbox' ? (
-                <option value="equals">es</option>
-              ) : (
-                <>
-                  <option value="equals">igual a</option>
-                  <option value="not_equals">distinto de</option>
-                  <option value="contains">contiene</option>
-                  <option value="is_empty">vacío</option>
-                  <option value="is_not_empty">no vacío</option>
-                </>
-              )}
-            </select>
+            <div className="min-w-0 flex-1">
+              <Select
+                options={operatorOptions}
+                value={cond.operator}
+                onChange={(v) =>
+                  update(i, {
+                    operator: (v as SegmentCondition['operator']) ?? 'equals',
+                    value: '',
+                  })
+                }
+                className="py-1.5 text-xs"
+              />
+            </div>
 
             {!hideValue && (
               cf?.type === 'select' && cf.options ? (
-                <select
-                  value={cond.value}
-                  onChange={(e) => update(i, { value: e.target.value })}
-                  className={selectCls}
-                >
-                  <option value="">Elige...</option>
-                  {cf.options.map((opt) => (
-                    <option key={opt} value={opt}>{opt}</option>
-                  ))}
-                </select>
+                <div className="min-w-0 flex-1">
+                  <Select
+                    options={cf.options.map((opt) => ({ value: opt, label: opt }))}
+                    value={cond.value || null}
+                    onChange={(v) => update(i, { value: v ?? '' })}
+                    placeholder="Elige..."
+                    className="py-1.5 text-xs"
+                  />
+                </div>
               ) : cf?.type === 'checkbox' ? (
-                <select
-                  value={String(cond.value)}
-                  onChange={(e) => update(i, { value: e.target.value === 'true' })}
-                  className={selectCls}
-                >
-                  <option value="true">Sí</option>
-                  <option value="false">No</option>
-                </select>
+                <div className="min-w-0 flex-1">
+                  <Select
+                    options={[
+                      { value: 'true', label: 'Sí' },
+                      { value: 'false', label: 'No' },
+                    ]}
+                    value={String(cond.value)}
+                    onChange={(v) => update(i, { value: v === 'true' })}
+                    className="py-1.5 text-xs"
+                  />
+                </div>
               ) : (
                 <input
                   type={isNumeric ? 'number' : cf?.type === 'date' ? 'date' : 'text'}
                   value={cond.value ?? ''}
                   onChange={(e) => update(i, { value: e.target.value })}
                   placeholder="Valor..."
-                  className="flex-1 min-w-0 rounded-lg border border-slate-700/60 bg-slate-950/70 px-2 py-1.5 text-xs text-slate-200 outline-none focus:border-indigo-400 placeholder-slate-600 transition-all"
+                  className="min-w-0 flex-1 rounded-lg border border-slate-700/60 bg-slate-950/70 px-2 py-1.5 text-xs text-slate-200 placeholder-slate-600 outline-none transition-all focus:border-indigo-400"
                 />
               )
             )}
@@ -145,7 +153,7 @@ export const CustomFieldConditionBuilder: React.FC<CustomFieldConditionBuilderPr
             <button
               type="button"
               onClick={() => remove(i)}
-              className="shrink-0 p-1.5 rounded text-slate-600 hover:text-rose-400 hover:bg-rose-500/10 transition-all opacity-0 group-hover:opacity-100"
+              className="shrink-0 rounded p-1.5 text-slate-600 opacity-0 transition-all hover:bg-rose-500/10 hover:text-rose-400 group-hover:opacity-100"
             >
               <Trash2 size={13} />
             </button>

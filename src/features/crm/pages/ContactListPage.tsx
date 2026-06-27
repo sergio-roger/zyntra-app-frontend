@@ -3,6 +3,7 @@ import { Tabs } from '@core/ui/Tabs';
 import { crmApi } from '@crm/api/crm.api';
 import { ContactCustomFieldsSidebar } from '@crm/components/ContactCustomFieldsSidebar';
 import { ContactFilters } from '@crm/components/ContactFilters';
+import { CustomFieldFilterSidebar } from '@crm/components/CustomFieldFilterSidebar';
 import { ContactFormSidebar } from '@crm/components/ContactFormSidebar';
 import { ContactImportModal } from '@crm/components/ContactImportModal';
 import { ContactTable } from '@crm/components/ContactTable';
@@ -44,6 +45,7 @@ export const ContactListPage: React.FC = () => {
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const [editing, setEditing] = useState<Contact | null>(null);
   const [customFieldsContact, setCustomFieldsContact] = useState<Contact | null>(null);
+  const [customFieldFilterOpen, setCustomFieldFilterOpen] = useState(false);
   const [isConfirmOpen, setIsConfirmOpen] = useState(false);
   const [isImportOpen, setIsImportOpen] = useState(false);
   const [contactToDelete, setContactToDelete] = useState<Contact | null>(null);
@@ -276,7 +278,7 @@ export const ContactListPage: React.FC = () => {
         onLifecycleStageChange={(v) => setTabFilter(activeTab, { lifecycleStageId: v })}
         onDateRangeChange={handleDateRangeChange}
         onLastActivityDateChange={handleLastActivityDateChange}
-        onCustomFieldConditionsChange={handleCustomFieldConditionsChange}
+        onOpenCustomFieldFilters={() => setCustomFieldFilterOpen(true)}
         onExportCsv={handleExportCsv}
         onReset={() => setFilters(prev => ({ ...prev, [activeTab]: defaultFilters() }))}
       />
@@ -336,6 +338,13 @@ export const ContactListPage: React.FC = () => {
         open={customFieldsContact !== null}
         contact={customFieldsContact}
         onClose={() => setCustomFieldsContact(null)}
+      />
+
+      <CustomFieldFilterSidebar
+        open={customFieldFilterOpen}
+        conditions={activeFilters.customFieldConditions}
+        onChange={handleCustomFieldConditionsChange}
+        onClose={() => setCustomFieldFilterOpen(false)}
       />
 
       <ContactImportModal
