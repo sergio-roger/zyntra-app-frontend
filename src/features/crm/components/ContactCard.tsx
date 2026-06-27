@@ -16,7 +16,7 @@ export const ContactCard: React.FC<ContactCardProps> = ({ contact }) => {
       <div className="flex items-start justify-between">
         <div className="flex flex-col gap-1">
           <h4 className="text-sm font-semibold text-slate-100 line-clamp-1 group-hover:text-white">
-            {contact.companyName || contact.name}
+            {contact.empresa?.name || contact.name}
           </h4>
           <div className="flex items-center gap-1.5 text-xs text-slate-400">
             <Building2 size={12} />

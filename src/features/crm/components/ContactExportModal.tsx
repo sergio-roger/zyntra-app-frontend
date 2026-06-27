@@ -9,7 +9,7 @@ const STANDARD_COLUMNS: ExportColumn[] = [
   { key: 'name', label: 'Nombre' },
   { key: 'email', label: 'Email' },
   { key: 'phone', label: 'Teléfono' },
-  { key: 'companyName', label: 'Empresa' },
+  { key: 'empresa', label: 'Empresa' },
   { key: 'source', label: 'Origen' },
   { key: 'lifecycleStage', label: 'Etapa del ciclo' },
   { key: 'ownerName', label: 'Propietario' },
