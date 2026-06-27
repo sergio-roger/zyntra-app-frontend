@@ -3,13 +3,14 @@ import { crmApi } from "@crm/api/crm.api";
 
 export const tagsKeys = {
   all: ["crm", "tags"] as const,
+  filtered: (entityType?: string) => ["crm", "tags", entityType || "all"] as const,
 };
 
-export const useTags = () =>
+export const useTags = (entityType?: string) =>
   useQuery({
-    queryKey: tagsKeys.all,
+    queryKey: tagsKeys.filtered(entityType),
     queryFn: async () => {
-      const res = await crmApi.listTags();
+      const res = await crmApi.listTags(entityType);
       return res.data;
     },
   });
@@ -21,6 +22,7 @@ export const useCreateTag = () => {
       name: string;
       color?: string;
       description?: string;
+      entity_type?: string;
     }) => crmApi.createTag(input),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: tagsKeys.all });
@@ -39,6 +41,7 @@ export const useUpdateTag = () => {
       name?: string;
       color?: string;
       description?: string;
+      entity_type?: string;
     }) => crmApi.updateTag(id, input),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: tagsKeys.all });

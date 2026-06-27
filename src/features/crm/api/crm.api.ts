@@ -108,7 +108,10 @@ export const crmApi = {
     ),
 
   // Tags
-  listTags: () => api.get<unknown, { data: Tag[] }>("/crm/tags"),
+  listTags: (entityType?: string) =>
+    api.get<unknown, { data: Tag[] }>("/crm/tags", {
+      params: entityType ? { entity_type: entityType } : undefined,
+    }),
   createTag: (input: CreateTagInput) =>
     api.post<unknown, { data: Tag }>("/crm/tags", input),
   updateTag: (id: string, input: UpdateTagInput) =>

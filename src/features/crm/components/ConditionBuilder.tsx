@@ -17,7 +17,7 @@ export const ConditionBuilder: React.FC<ConditionBuilderProps> = ({
   conditions,
   onChange,
 }) => {
-  const { data: tags = [] } = useTags();
+  const { data: tags = [] } = useTags("contact");
   const { data: customFields = [] } = useCustomFields();
   const [stages, setStages] = React.useState<any[]>([]);
 

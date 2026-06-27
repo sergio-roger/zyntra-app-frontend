@@ -6,4 +6,5 @@ export interface Tag {
   id: string;
   name: string;
   updated_at: string;
+  entity_type: string;
 }

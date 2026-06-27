@@ -3,6 +3,7 @@ import { useRemoveTag, useTags } from "@crm/hooks/useTags";
 import { Tag } from "@crm/types/tag";
 import { ConfirmModal } from "@shared/components/ConfirmModal";
 import { EmptyState } from "@shared/components/EmptyState";
+import { Tabs } from "@core/ui/Tabs";
 import {
   AlertCircle,
   Edit2,
@@ -15,8 +16,14 @@ import {
 import React, { useState } from "react";
 
 export const TagsPage: React.FC = () => {
-  const { data: tags, isLoading, isError, error } = useTags();
+  const [activeTab, setActiveTab] = useState<"contact" | "company">("contact");
+  const { data: tags, isLoading, isError, error } = useTags(activeTab);
   const removeMutation = useRemoveTag();
+
+  const tabItems = [
+    { key: "contact" as const, label: "Contactos" },
+    { key: "company" as const, label: "Empresas" },
+  ];
 
   const [search, setSearch] = useState("");
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
@@ -69,17 +76,26 @@ export const TagsPage: React.FC = () => {
         </button>
       </div>
 
-      <div className="relative max-w-md">
-        <Search
-          className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-500"
-          size={16}
-        />
-        <input
-          type="text"
-          placeholder="Buscar etiquetas..."
-          value={search}
-          onChange={(e) => setSearch(e.target.value)}
-          className="w-full pl-10 pr-4 py-2 rounded-xl bg-slate-900/50 border border-white/5 text-sm text-slate-300 focus:outline-none focus:ring-2 focus:ring-indigo-500/40"
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-white/5 pb-2">
+        <div className="relative max-w-md flex-1">
+          <Search
+            className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-500"
+            size={16}
+          />
+          <input
+            type="text"
+            placeholder="Buscar etiquetas..."
+            value={search}
+            onChange={(e) => setSearch(e.target.value)}
+            className="w-full pl-10 pr-4 py-2 rounded-xl bg-slate-900/50 border border-white/5 text-sm text-slate-300 focus:outline-none focus:ring-2 focus:ring-indigo-500/40"
+          />
+        </div>
+        <Tabs
+          tabs={tabItems}
+          active={activeTab}
+          onChange={setActiveTab}
+          compact
+          className="border-b-0"
         />
       </div>
 
@@ -165,6 +181,7 @@ export const TagsPage: React.FC = () => {
       <TagFormSidebar
         open={isSidebarOpen}
         tag={editingTag}
+        defaultEntityType={activeTab}
         onClose={() => setIsSidebarOpen(false)}
       />
 

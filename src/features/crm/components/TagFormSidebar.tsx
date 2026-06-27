@@ -16,12 +16,14 @@ import React, { useEffect, useState } from "react";
 interface TagFormSidebarProps {
   open: boolean;
   tag: Tag | null;
+  defaultEntityType?: string;
   onClose: () => void;
 }
 
 export const TagFormSidebar: React.FC<TagFormSidebarProps> = ({
   open,
   tag,
+  defaultEntityType,
   onClose,
 }) => {
   const [formData, setFormData] = useState({
@@ -55,7 +57,10 @@ export const TagFormSidebar: React.FC<TagFormSidebarProps> = ({
     if (tag) {
       await updateMutation.mutateAsync({ id: tag.id, ...formData });
     } else {
-      await createMutation.mutateAsync(formData);
+      await createMutation.mutateAsync({
+        ...formData,
+        entity_type: defaultEntityType || "contact",
+      });
     }
     onClose();
   };

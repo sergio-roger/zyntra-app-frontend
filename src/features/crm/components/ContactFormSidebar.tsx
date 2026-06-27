@@ -88,7 +88,7 @@ export const ContactFormSidebar: React.FC<ContactFormSidebarProps> = ({
 
   const [activeTab, setActiveTab] = useState<"info" | "advanced">("info");
 
-  const { data: availableTags = [] } = useTags();
+  const { data: availableTags = [] } = useTags("contact");
   const { data: members = [] } = useQuery<CrmMember[]>({
     queryKey: ["crm-members"],
     queryFn: () => crmApi.listMembers().then((r) => r.data),

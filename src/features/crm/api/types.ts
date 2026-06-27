@@ -2,16 +2,16 @@ import { ActivityType } from "@crm/types/crm";
 import { Contact } from "@crm/types/contact";
 
 export interface CreateContactInput {
-  name: string;
-  email?: string;
-  phone?: string;
-  lifecycleStageId?: string;
-  source?: Contact["source"];
-  ownerId?: string | null;
-  tags?: string[];
-  notes?: string;
   customFields?: Record<string, any>;
+  email?: string;
   isLead?: boolean;
+  lifecycleStageId?: string;
+  name: string;
+  notes?: string;
+  ownerId?: string | null;
+  phone?: string;
+  source?: Contact["source"];
+  tags?: string[];
 }
 
 export type UpdateContactInput = Partial<CreateContactInput>;
@@ -23,19 +23,20 @@ export interface CreateActivityInput {
 }
 
 export interface CreateTagInput {
-  name: string;
   color?: string;
   description?: string;
+  entity_type?: string;
+  name: string;
 }
 
 export type UpdateTagInput = Partial<CreateTagInput>;
 
 export interface CreateCustomFieldInput {
-  name: string;
   label: string;
-  type: string;
+  name: string;
   options?: string[];
   required?: boolean;
+  type: string;
 }
 
 export type UpdateCustomFieldInput = Partial<
