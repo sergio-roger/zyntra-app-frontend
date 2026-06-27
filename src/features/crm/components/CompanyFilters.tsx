@@ -1,4 +1,3 @@
-import React, { useState } from "react";
 import { DateRange, DateRangePicker } from "@core/ui/DateRangePicker";
 import { Select } from "@core/ui/Select";
 import { useSectorTypes } from "@crm/hooks/useCompanies";
@@ -8,10 +7,11 @@ import {
   Download,
   FilterX,
   Layers,
+  LayoutTemplate,
   Search,
   SlidersHorizontal,
-  LayoutTemplate,
 } from "lucide-react";
+import React, { useState } from "react";
 
 interface CompanyFiltersProps {
   search: string;
