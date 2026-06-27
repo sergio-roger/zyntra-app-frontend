@@ -43,11 +43,14 @@ const defaultProps = {
   source: '' as const,
   ownerId: '',
   lifecycleStageId: '',
+  createdAtFrom: '',
+  createdAtTo: '',
   showOwnerFilter: false,
   onSearchChange: vi.fn(),
   onSourceChange: vi.fn(),
   onOwnerChange: vi.fn(),
   onLifecycleStageChange: vi.fn(),
+  onDateRangeChange: vi.fn(),
   onReset: vi.fn(),
 };
 

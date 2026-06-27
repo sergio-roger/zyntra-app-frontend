@@ -24,3 +24,4 @@ export * from './segment-condition';
 export * from './tag';
 export * from './update-deal-input';
 export * from './update-segment-input';
+export * from './tab-filters';

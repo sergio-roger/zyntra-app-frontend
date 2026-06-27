@@ -1,4 +1,5 @@
 import { Select } from '@core/ui/Select';
+import { DateRange, DateRangePicker } from '@core/ui/DateRangePicker';
 import { crmApi } from '@crm/api/crm.api';
 import { SOURCES, SOURCE_LABELS, ContactSource } from '@crm/types/crm';
 import { CrmMember } from '@crm/types/crm-member';
@@ -12,11 +13,14 @@ interface ContactFiltersProps {
   source: ContactSource | '';
   ownerId: string;
   lifecycleStageId: string;
+  createdAtFrom: string;
+  createdAtTo: string;
   showOwnerFilter: boolean;
   onSearchChange: (v: string) => void;
   onSourceChange: (v: ContactSource | '') => void;
   onOwnerChange: (v: string) => void;
   onLifecycleStageChange: (v: string) => void;
+  onDateRangeChange: (range: DateRange | null) => void;
   onReset: () => void;
 }
 
@@ -27,11 +31,14 @@ export const ContactFilters: React.FC<ContactFiltersProps> = ({
   source,
   ownerId,
   lifecycleStageId,
+  createdAtFrom,
+  createdAtTo,
   showOwnerFilter,
   onSearchChange,
   onSourceChange,
   onOwnerChange,
   onLifecycleStageChange,
+  onDateRangeChange,
   onReset,
 }) => {
   const { data: members = [] } = useQuery<CrmMember[]>({
@@ -53,7 +60,10 @@ export const ContactFilters: React.FC<ContactFiltersProps> = ({
   const ownerOptions = members.map((m) => ({ value: m.id, label: m.name }));
   const stageOptions = stages.map((s) => ({ value: s.id, label: `${s.icon ?? ''} ${s.name}`.trim() }));
 
-  const hasFilters = Boolean(search || source || ownerId || lifecycleStageId);
+  const dateRangeValue: DateRange | null =
+    createdAtFrom && createdAtTo ? { from: createdAtFrom, to: createdAtTo } : null;
+
+  const hasFilters = Boolean(search || source || ownerId || lifecycleStageId || createdAtFrom || createdAtTo);
 
   return (
     <div className="flex flex-wrap items-center gap-3 rounded-xl border border-white/10 bg-slate-900/50 p-3">
@@ -110,6 +120,14 @@ export const ContactFilters: React.FC<ContactFiltersProps> = ({
           />
         </div>
       )}
+
+      <div className="w-52">
+        <DateRangePicker
+          label="Fecha de inicio"
+          value={dateRangeValue}
+          onChange={onDateRangeChange}
+        />
+      </div>
 
       {hasFilters && (
         <button

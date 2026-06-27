@@ -3,6 +3,8 @@ import { ContactSource } from './contact';
 export type TabKey = 'all' | 'mine' | 'unassigned';
 
 export interface ListContactsQuery {
+  createdAtFrom?: string;
+  createdAtTo?: string;
   isArchived?: boolean;
   lifecycleStageId?: string;
   limit?: number;
