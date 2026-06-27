@@ -1,4 +1,6 @@
-import { ContactSource } from '@crm/types/crm';
+import { ContactSource } from './contact';
+
+export type TabKey = 'all' | 'mine' | 'unassigned';
 
 export interface ListContactsQuery {
   isArchived?: boolean;

@@ -1,17 +1,17 @@
-import React, { useEffect, useState } from 'react';
-import { 
-  X, 
-  Check, 
-  Loader2, 
-  Tag as TagIcon,
-  Type,
-  Palette,
-  AlignLeft
-} from 'lucide-react';
 import { Input } from '@core/ui/Input';
 import { Textarea } from '@core/ui/Textarea';
 import { useCreateTag, useUpdateTag } from '@crm/hooks/useTags';
 import { Tag } from '@crm/types/tag';
+import {
+  AlignLeft,
+  Check,
+  Loader2,
+  Palette,
+  Tag as TagIcon,
+  Type,
+  X
+} from 'lucide-react';
+import React, { useEffect, useState } from 'react';
 
 interface TagFormSidebarProps {
   open: boolean;

@@ -1,56 +1,3 @@
-import { CreateDealInput } from './create-deal-input';
-
-export type ContactSource =
-  | 'manual'
-  | 'chatbot'
-  | 'whatsapp'
-  | 'instagram'
-  | 'email'
-  | 'form'
-  | 'import';
-
-export type ActivityType =
-  | 'note'
-  | 'call'
-  | 'email'
-  | 'stage_change'
-  | 'chat'
-  | 'ai_suggestion';
-
-export type ActivityCreatedBy = 'system' | 'user' | 'ai';
-
-export const SOURCES: ContactSource[] = [
-  'manual',
-  'chatbot',
-  'whatsapp',
-  'instagram',
-  'email',
-  'form',
-  'import',
-];
-
-export type CustomFieldType = 'text' | 'number' | 'date' | 'select' | 'checkbox' | 'url';
-
-export const SOURCE_LABELS: Record<ContactSource, string> = {
-  chatbot: 'Chatbot',
-  email: 'Email',
-  form: 'Formulario',
-  import: 'Importación',
-  instagram: 'Instagram',
-  manual: 'Manual',
-  whatsapp: 'WhatsApp',
-};
-
-export type TaskStatus = 'pending' | 'completed' | 'cancelled';
-export type TaskPriority = 'low' | 'medium' | 'high';
-
-export type DealStageType = 'active' | 'won' | 'lost';
-export type DealStatus = 'open' | 'won' | 'lost' | 'abandoned';
-
-export type UpdateDealInput = Partial<CreateDealInput>;
-
-export type TabKey = 'all' | 'mine' | 'unassigned';
-
 export * from './contact';
 export * from './contact-activity';
 export * from './contacts-list-response';
@@ -75,5 +22,5 @@ export * from './pipeline-forecast';
 export * from './segment';
 export * from './segment-condition';
 export * from './tag';
+export * from './update-deal-input';
 export * from './update-segment-input';
-

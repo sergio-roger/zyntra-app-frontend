@@ -1,15 +1,15 @@
-import React, { useState } from 'react';
-import {
-  Loader2,
-  AlertCircle,
-  Search,
-  Inbox,
-  RefreshCw,
-} from 'lucide-react';
-import { useLeadsList, useArchiveLead } from '@crm/hooks/useLeads';
-import { LeadsTable } from '@crm/components/LeadsTable';
 import { ConvertToDealSidebar } from '@crm/components/ConvertToDealSidebar';
+import { LeadsTable } from '@crm/components/LeadsTable';
+import { useArchiveLead, useLeadsList } from '@crm/hooks/useLeads';
 import { Contact } from '@crm/types/contact';
+import {
+  AlertCircle,
+  Inbox,
+  Loader2,
+  RefreshCw,
+  Search,
+} from 'lucide-react';
+import React, { useState } from 'react';
 
 export const InboxLeadsPage: React.FC = () => {
   const [search, setSearch] = useState('');

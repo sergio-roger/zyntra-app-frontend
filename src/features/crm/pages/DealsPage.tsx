@@ -1,5 +1,6 @@
-import { DealFormSidebar } from "@crm/components/DealFormSidebar";
+import { Select } from "@core/ui/Select";
 import { DealDetailSidebar } from "@crm/components/DealDetailSidebar";
+import { DealFormSidebar } from "@crm/components/DealFormSidebar";
 import { DealsKanban } from "@crm/components/DealsKanban";
 import { PipelineFormModal } from "@crm/components/PipelineFormModal";
 import { PipelineSettingsDrawer } from "@crm/components/PipelineSettingsDrawer";
@@ -25,7 +26,6 @@ import {
   TrendingUp,
 } from "lucide-react";
 import React, { useEffect, useState } from "react";
-import { Select } from "@core/ui/Select";
 
 const fmt = (value: number, currency = "COP") =>
   new Intl.NumberFormat("es-CO", {

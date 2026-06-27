@@ -1,4 +1,4 @@
-import { CustomFieldType } from '@crm/types/crm';
+export type CustomFieldType = 'text' | 'number' | 'date' | 'select' | 'checkbox' | 'url';
 
 export interface CustomField {
   business_id: string;

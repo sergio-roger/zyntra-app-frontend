@@ -1,5 +1,7 @@
-import { TaskStatus, TaskPriority } from '@crm/types/crm';
 import { Contact } from './contact';
+
+export type TaskStatus = 'pending' | 'completed' | 'cancelled';
+export type TaskPriority = 'low' | 'medium' | 'high';
 
 export interface CrmTask {
   assigned_to: string | null;

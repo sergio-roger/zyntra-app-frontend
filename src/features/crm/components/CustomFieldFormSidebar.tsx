@@ -1,3 +1,4 @@
+import { Input } from '@core/ui/Input';
 import { useCreateField, useUpdateField } from '@crm/hooks/useCustomFields';
 import { CustomFieldType } from '@crm/types/crm';
 import { CustomField } from '@crm/types/custom-field';
@@ -8,7 +9,6 @@ import {
   X
 } from 'lucide-react';
 import React, { useEffect, useState } from 'react';
-import { Input } from '@core/ui/Input';
 
 interface CustomFieldFormSidebarProps {
   open: boolean;

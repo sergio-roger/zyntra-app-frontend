@@ -1,21 +1,21 @@
-import React, { useEffect, useState } from 'react';
-import { 
-  X, 
-  Check, 
-  Loader2, 
-  Calendar,
-  Type,
-  AlignLeft,
-  AlertCircle,
-  Flag,
-  User
-} from 'lucide-react';
 import { Input } from '@core/ui/Input';
 import { Textarea } from '@core/ui/Textarea';
-import { useCreateTask, useUpdateTask } from '@crm/hooks/useCrmTasks';
 import { useContactsList } from '@crm/hooks/useContacts';
+import { useCreateTask, useUpdateTask } from '@crm/hooks/useCrmTasks';
 import { TaskPriority } from '@crm/types/crm';
 import { CrmTask } from '@crm/types/crm-task';
+import {
+  AlertCircle,
+  AlignLeft,
+  Calendar,
+  Check,
+  Flag,
+  Loader2,
+  Type,
+  User,
+  X
+} from 'lucide-react';
+import React, { useEffect, useState } from 'react';
 
 interface TaskFormSidebarProps {
   open: boolean;

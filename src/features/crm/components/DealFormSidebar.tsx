@@ -1,13 +1,13 @@
-import React, { useEffect, useState } from 'react';
-import { X, Save, Loader2, Briefcase, DollarSign, User, TrendingUp, Calendar, AlertCircle, ChevronDown } from 'lucide-react';
-import { useCreateDeal, useUpdateDeal, usePipelines } from '@crm/hooks/useDeals';
-import { useContactsList } from '@crm/hooks/useContacts';
 import { Input } from '@core/ui/Input';
 import { Textarea } from '@core/ui/Textarea';
+import { useContactsList } from '@crm/hooks/useContacts';
+import { useCreateDeal, usePipelines, useUpdateDeal } from '@crm/hooks/useDeals';
+import { CreateDealInput } from '@crm/types/create-deal-input';
 import { Deal } from '@crm/types/deal';
 import { DealPipeline } from '@crm/types/deal-pipeline';
 import { DealPipelineStage } from '@crm/types/deal-pipeline-stage';
-import { CreateDealInput } from '@crm/types/create-deal-input';
+import { AlertCircle, Briefcase, Calendar, ChevronDown, DollarSign, Loader2, Save, TrendingUp, User, X } from 'lucide-react';
+import React, { useEffect, useState } from 'react';
 
 interface DealFormSidebarProps {
   open: boolean;

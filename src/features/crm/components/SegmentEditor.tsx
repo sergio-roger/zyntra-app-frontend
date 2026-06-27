@@ -1,9 +1,9 @@
-import React, { useState, useEffect } from 'react';
-import { Loader2, Save, X } from 'lucide-react';
 import { ConditionBuilder } from '@crm/components/ConditionBuilder';
 import { SegmentPreviewPanel } from '@crm/components/SegmentPreviewPanel';
 import { Segment } from '@crm/types/segment';
 import { SegmentCondition } from '@crm/types/segment-condition';
+import { Loader2, Save, X } from 'lucide-react';
+import React, { useEffect, useState } from 'react';
 
 interface SegmentEditorProps {
   segment: Segment | null;

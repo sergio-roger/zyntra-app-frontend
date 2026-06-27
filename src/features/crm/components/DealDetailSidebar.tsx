@@ -1,35 +1,35 @@
-import React, { useEffect, useState } from "react";
-import {
-  X,
-  Save,
-  Loader2,
-  Briefcase,
-  DollarSign,
-  User,
-  TrendingUp,
-  Calendar,
-  AlertCircle,
-  ChevronDown,
-  Clock,
-  CheckCircle2,
-  Trash2,
-} from "lucide-react";
-import {
-  useUpdateDeal,
-  useDeleteDeal,
-  usePipelines,
-  useDealHistory,
-} from "@crm/hooks/useDeals";
-import { ConfirmModal } from "@shared/components/ConfirmModal";
-import { toastManager } from "@shared/components/toast/toastManager";
-import { useContactsList } from "@crm/hooks/useContacts";
 import { Input } from "@core/ui/Input";
 import { Textarea } from "@core/ui/Textarea";
+import { useContactsList } from "@crm/hooks/useContacts";
+import {
+  useDealHistory,
+  useDeleteDeal,
+  usePipelines,
+  useUpdateDeal,
+} from "@crm/hooks/useDeals";
+import { CreateDealInput } from "@crm/types/create-deal-input";
 import { Deal } from "@crm/types/deal";
 import { DealPipeline } from "@crm/types/deal-pipeline";
 import { DealPipelineStage } from "@crm/types/deal-pipeline-stage";
-import { CreateDealInput } from "@crm/types/create-deal-input";
 import { DealStageHistoryRecord } from "@crm/types/deal-stage-history-record";
+import { ConfirmModal } from "@shared/components/ConfirmModal";
+import { toastManager } from "@shared/components/toast/toastManager";
+import {
+  AlertCircle,
+  Briefcase,
+  Calendar,
+  CheckCircle2,
+  ChevronDown,
+  Clock,
+  DollarSign,
+  Loader2,
+  Save,
+  Trash2,
+  TrendingUp,
+  User,
+  X,
+} from "lucide-react";
+import React, { useEffect, useState } from "react";
 
 type Tab = "detalle" | "historial";
 

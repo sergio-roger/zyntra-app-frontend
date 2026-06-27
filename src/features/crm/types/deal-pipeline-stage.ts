@@ -1,4 +1,4 @@
-import { DealStageType } from '@crm/types/crm';
+export type DealStageType = 'active' | 'won' | 'lost';
 
 export interface DealPipelineStage {
   color: string;

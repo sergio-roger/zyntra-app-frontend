@@ -1,32 +1,32 @@
-import React, { useEffect, useState } from "react";
-import {
-  X,
-  Settings2,
-  Plus,
-  Trash2,
-  Loader2,
-  GripVertical,
-  Check,
-  Save,
-  Star,
-  Users,
-} from "lucide-react";
-import {
-  useCreateStage,
-  useUpdateStage,
-  useDeleteStage,
-  useUpdatePipeline,
-} from "@crm/hooks/useDeals";
-import { useTeamsList } from "@features/settings/hooks/useUsersTeams";
-import { DealPipeline } from "@crm/types/deal-pipeline";
-import { EditableStage, StageType } from "@crm/types/pipeline-settings";
+import { Select } from "@core/ui/Select";
 import {
   PIPELINE_STAGE_COLORS,
   STAGE_TYPE_LABELS,
 } from "@crm/constants/pipeline-settings";
+import {
+  useCreateStage,
+  useDeleteStage,
+  useUpdatePipeline,
+  useUpdateStage,
+} from "@crm/hooks/useDeals";
+import { DealPipeline } from "@crm/types/deal-pipeline";
+import { EditableStage, StageType } from "@crm/types/pipeline-settings";
+import { useTeamsList } from "@features/settings/hooks/useUsersTeams";
 import { ConfirmModal } from "@shared/components/ConfirmModal";
 import { toastManager } from "@shared/components/toast/toastManager";
-import { Select } from "@core/ui/Select";
+import {
+  Check,
+  GripVertical,
+  Loader2,
+  Plus,
+  Save,
+  Settings2,
+  Star,
+  Trash2,
+  Users,
+  X,
+} from "lucide-react";
+import React, { useEffect, useState } from "react";
 
 type Tab = "configuracion" | "etapas";
 

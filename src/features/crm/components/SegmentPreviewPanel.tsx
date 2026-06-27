@@ -1,7 +1,7 @@
-import React from 'react';
-import { Loader2, Users } from 'lucide-react';
 import { usePreviewContacts } from '@crm/hooks/useSegments';
 import { SegmentCondition } from '@crm/types/segment-condition';
+import { Loader2, Users } from 'lucide-react';
+import React from 'react';
 
 interface SegmentPreviewPanelProps {
   conditions: SegmentCondition[];

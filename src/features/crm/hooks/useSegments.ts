@@ -1,7 +1,7 @@
-import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { segmentsApi } from '@crm/api/segments.api';
 import { CreateSegmentInput } from '@crm/types/create-segment-input';
 import { UpdateSegmentInput } from '@crm/types/update-segment-input';
+import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 
 export const segmentsKeys = {
   all: ['segments'] as const,
