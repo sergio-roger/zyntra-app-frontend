@@ -1,9 +1,11 @@
 import { Select } from '@core/ui/Select';
 import { DateRange, DateRangePicker } from '@core/ui/DateRangePicker';
 import { crmApi } from '@crm/api/crm.api';
+import { CustomFieldConditionBuilder } from '@crm/components/CustomFieldConditionBuilder';
 import { SOURCES, SOURCE_LABELS, ContactSource } from '@crm/types/crm';
 import { CrmMember } from '@crm/types/crm-member';
 import { LifecycleStage } from '@crm/types/lifecycle-stage';
+import { SegmentCondition } from '@crm/types/segment-condition';
 import { useQuery } from '@tanstack/react-query';
 import { Download, FilterX, Layers, Search, SlidersHorizontal, Users } from 'lucide-react';
 import React, { useState } from 'react';
@@ -17,6 +19,7 @@ interface ContactFiltersProps {
   createdAtTo: string;
   lastActivityAtFrom: string;
   lastActivityAtTo: string;
+  customFieldConditions: SegmentCondition[];
   showOwnerFilter: boolean;
   onSearchChange: (v: string) => void;
   onSourceChange: (v: ContactSource | '') => void;
@@ -24,6 +27,7 @@ interface ContactFiltersProps {
   onLifecycleStageChange: (v: string) => void;
   onDateRangeChange: (range: DateRange | null) => void;
   onLastActivityDateChange: (range: DateRange | null) => void;
+  onCustomFieldConditionsChange: (conditions: SegmentCondition[]) => void;
   onExportCsv: () => void;
   onReset: () => void;
 }
@@ -39,6 +43,7 @@ export const ContactFilters: React.FC<ContactFiltersProps> = ({
   createdAtTo,
   lastActivityAtFrom,
   lastActivityAtTo,
+  customFieldConditions,
   showOwnerFilter,
   onSearchChange,
   onSourceChange,
@@ -46,6 +51,7 @@ export const ContactFilters: React.FC<ContactFiltersProps> = ({
   onLifecycleStageChange,
   onDateRangeChange,
   onLastActivityDateChange,
+  onCustomFieldConditionsChange,
   onExportCsv,
   onReset,
 }) => {
@@ -76,7 +82,7 @@ export const ContactFilters: React.FC<ContactFiltersProps> = ({
   const lastActivityDateValue: DateRange | null =
     lastActivityAtFrom && lastActivityAtTo ? { from: lastActivityAtFrom, to: lastActivityAtTo } : null;
 
-  const hasAdvancedFilters = Boolean(source || ownerId || lifecycleStageId || createdAtFrom || createdAtTo || lastActivityAtFrom || lastActivityAtTo);
+  const hasAdvancedFilters = Boolean(source || ownerId || lifecycleStageId || createdAtFrom || createdAtTo || lastActivityAtFrom || lastActivityAtTo || customFieldConditions.length > 0);
   const hasFilters = Boolean(search || hasAdvancedFilters);
 
   return (
@@ -188,6 +194,11 @@ export const ContactFilters: React.FC<ContactFiltersProps> = ({
               onChange={onLastActivityDateChange}
             />
           </div>
+
+          <CustomFieldConditionBuilder
+            conditions={customFieldConditions}
+            onChange={onCustomFieldConditionsChange}
+          />
         </div>
       )}
 

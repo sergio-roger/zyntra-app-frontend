@@ -47,6 +47,7 @@ const defaultProps = {
   createdAtTo: '',
   lastActivityAtFrom: '',
   lastActivityAtTo: '',
+  customFieldConditions: [],
   showOwnerFilter: false,
   onSearchChange: vi.fn(),
   onSourceChange: vi.fn(),
@@ -54,6 +55,7 @@ const defaultProps = {
   onLifecycleStageChange: vi.fn(),
   onDateRangeChange: vi.fn(),
   onLastActivityDateChange: vi.fn(),
+  onCustomFieldConditionsChange: vi.fn(),
   onExportCsv: vi.fn(),
   onReset: vi.fn(),
 };

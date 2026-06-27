@@ -15,4 +15,5 @@ export interface ListContactsQuery {
   search?: string;
   source?: ContactSource;
   tag?: string;
+  customFieldFilters?: string;
 }

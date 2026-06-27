@@ -1,6 +1,7 @@
 import { DateRange } from '@core/ui/DateRangePicker';
 import { Tabs } from '@core/ui/Tabs';
 import { crmApi } from '@crm/api/crm.api';
+import { ContactCustomFieldsSidebar } from '@crm/components/ContactCustomFieldsSidebar';
 import { ContactFilters } from '@crm/components/ContactFilters';
 import { ContactFormSidebar } from '@crm/components/ContactFormSidebar';
 import { ContactImportModal } from '@crm/components/ContactImportModal';
@@ -9,6 +10,7 @@ import { Pagination } from '@crm/components/Pagination';
 import { useContactsList, useDeleteContact } from '@crm/hooks/useContacts';
 import { Contact } from '@crm/types/contact';
 import { TabKey } from '@crm/types/crm';
+import { SegmentCondition } from '@crm/types/segment-condition';
 import { TabFilters } from '@crm/types/tab-filters';
 import { useAuthStore } from '@features/auth/store/authStore';
 import { ConfirmModal } from '@shared/components/ConfirmModal';
@@ -24,8 +26,12 @@ const defaultFilters = (): TabFilters => ({
   createdAtTo: '',
   lastActivityAtFrom: '',
   lastActivityAtTo: '',
+  customFieldConditions: [],
   page: 1,
 });
+
+const serializeConditions = (conditions: SegmentCondition[]): string | undefined =>
+  conditions.length > 0 ? JSON.stringify(conditions) : undefined;
 
 export const ContactListPage: React.FC = () => {
   const [activeTab, setActiveTab] = useState<TabKey>('all');
@@ -37,6 +43,7 @@ export const ContactListPage: React.FC = () => {
 
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const [editing, setEditing] = useState<Contact | null>(null);
+  const [customFieldsContact, setCustomFieldsContact] = useState<Contact | null>(null);
   const [isConfirmOpen, setIsConfirmOpen] = useState(false);
   const [isImportOpen, setIsImportOpen] = useState(false);
   const [contactToDelete, setContactToDelete] = useState<Contact | null>(null);
@@ -61,6 +68,7 @@ export const ContactListPage: React.FC = () => {
     createdAtTo: filters.all.createdAtTo || undefined,
     lastActivityAtFrom: filters.all.lastActivityAtFrom || undefined,
     lastActivityAtTo: filters.all.lastActivityAtTo || undefined,
+    customFieldFilters: serializeConditions(filters.all.customFieldConditions),
     page: filters.all.page,
     limit,
   });
@@ -75,6 +83,7 @@ export const ContactListPage: React.FC = () => {
       createdAtTo: filters.mine.createdAtTo || undefined,
       lastActivityAtFrom: filters.mine.lastActivityAtFrom || undefined,
       lastActivityAtTo: filters.mine.lastActivityAtTo || undefined,
+      customFieldFilters: serializeConditions(filters.mine.customFieldConditions),
       page: filters.mine.page,
       limit,
     },
@@ -90,6 +99,7 @@ export const ContactListPage: React.FC = () => {
     createdAtTo: filters.unassigned.createdAtTo || undefined,
     lastActivityAtFrom: filters.unassigned.lastActivityAtFrom || undefined,
     lastActivityAtTo: filters.unassigned.lastActivityAtTo || undefined,
+    customFieldFilters: serializeConditions(filters.unassigned.customFieldConditions),
     page: filters.unassigned.page,
     limit,
   });
@@ -119,6 +129,14 @@ export const ContactListPage: React.FC = () => {
       lastActivityAtFrom: range?.from ?? '',
       lastActivityAtTo: range?.to ?? '',
     });
+  };
+
+  const handleCustomFieldConditionsChange = (conditions: SegmentCondition[]) => {
+    setTabFilter(activeTab, { customFieldConditions: conditions });
+  };
+
+  const handleOpenCustomFields = (c: Contact) => {
+    setCustomFieldsContact(c);
   };
 
   const handleExportCsv = async () => {
@@ -250,6 +268,7 @@ export const ContactListPage: React.FC = () => {
         createdAtTo={activeFilters.createdAtTo}
         lastActivityAtFrom={activeFilters.lastActivityAtFrom}
         lastActivityAtTo={activeFilters.lastActivityAtTo}
+        customFieldConditions={activeFilters.customFieldConditions}
         showOwnerFilter={isAdminOrManager && activeTab === 'all'}
         onSearchChange={(v) => setTabFilter(activeTab, { search: v })}
         onSourceChange={(v) => setTabFilter(activeTab, { source: v })}
@@ -257,6 +276,7 @@ export const ContactListPage: React.FC = () => {
         onLifecycleStageChange={(v) => setTabFilter(activeTab, { lifecycleStageId: v })}
         onDateRangeChange={handleDateRangeChange}
         onLastActivityDateChange={handleLastActivityDateChange}
+        onCustomFieldConditionsChange={handleCustomFieldConditionsChange}
         onExportCsv={handleExportCsv}
         onReset={() => setFilters(prev => ({ ...prev, [activeTab]: defaultFilters() }))}
       />
@@ -291,6 +311,7 @@ export const ContactListPage: React.FC = () => {
             onEdit={openEdit}
             onDelete={handleDeleteRequest}
             onSelect={openEdit}
+            onCustomFields={handleOpenCustomFields}
             onAction={openCreate}
             canEdit={canEdit}
           />
@@ -309,6 +330,12 @@ export const ContactListPage: React.FC = () => {
         open={sidebarOpen}
         contact={editing}
         onClose={() => setSidebarOpen(false)}
+      />
+
+      <ContactCustomFieldsSidebar
+        open={customFieldsContact !== null}
+        contact={customFieldsContact}
+        onClose={() => setCustomFieldsContact(null)}
       />
 
       <ContactImportModal

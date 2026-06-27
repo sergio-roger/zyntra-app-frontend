@@ -1,4 +1,4 @@
-import { Pencil, Trash2, User } from 'lucide-react';
+import { Pencil, Settings2, Trash2, User } from 'lucide-react';
 import { Contact } from '@crm/types/contact';
 import { SourceBadge } from './badges';
 import { EmptyState } from '@shared/components/EmptyState';
@@ -8,6 +8,7 @@ interface ContactTableProps {
   onEdit: (c: Contact) => void;
   onDelete: (c: Contact) => void;
   onSelect: (c: Contact) => void;
+  onCustomFields?: (c: Contact) => void;
   onAction?: () => void;
   canEdit?: boolean;
 }
@@ -22,6 +23,7 @@ export const ContactTable: React.FC<ContactTableProps> = ({
   onEdit,
   onDelete,
   onSelect,
+  onCustomFields,
   onAction,
   canEdit = true,
 }) => {
@@ -98,6 +100,15 @@ export const ContactTable: React.FC<ContactTableProps> = ({
               </td>
               <td className="px-4 py-3 text-right">
                 <div className="inline-flex gap-1">
+                  {onCustomFields && (
+                    <button
+                      onClick={() => onCustomFields(c)}
+                      aria-label="Campos personalizados"
+                      className="rounded-md p-1.5 text-slate-400 transition-colors hover:bg-white/10 hover:text-violet-400"
+                    >
+                      <Settings2 size={15} />
+                    </button>
+                  )}
                   <button
                     onClick={() => onEdit(c)}
                     disabled={!canEdit}
