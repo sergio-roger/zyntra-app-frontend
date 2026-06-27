@@ -1,7 +1,7 @@
 import { DateRange } from '@core/ui/DateRangePicker';
 import { Tabs } from '@core/ui/Tabs';
-import { crmApi } from '@crm/api/crm.api';
 import { ContactCustomFieldsSidebar } from '@crm/components/ContactCustomFieldsSidebar';
+import { ContactExportModal } from '@crm/components/ContactExportModal';
 import { ContactFilters } from '@crm/components/ContactFilters';
 import { CustomFieldFilterSidebar } from '@crm/components/CustomFieldFilterSidebar';
 import { ContactFormSidebar } from '@crm/components/ContactFormSidebar';
@@ -17,6 +17,7 @@ import { useAuthStore } from '@features/auth/store/authStore';
 import { ConfirmModal } from '@shared/components/ConfirmModal';
 import { AlertCircle, FileSpreadsheet, Loader2, Plus, UserCheck, UserMinus, Users } from 'lucide-react';
 import React, { useEffect, useState } from 'react';
+import { useSearchParams } from 'react-router-dom';
 
 const defaultFilters = (): TabFilters => ({
   search: '',
@@ -46,9 +47,12 @@ export const ContactListPage: React.FC = () => {
   const [editing, setEditing] = useState<Contact | null>(null);
   const [customFieldsContact, setCustomFieldsContact] = useState<Contact | null>(null);
   const [customFieldFilterOpen, setCustomFieldFilterOpen] = useState(false);
+  const [isExportOpen, setIsExportOpen] = useState(false);
   const [isConfirmOpen, setIsConfirmOpen] = useState(false);
   const [isImportOpen, setIsImportOpen] = useState(false);
   const [contactToDelete, setContactToDelete] = useState<Contact | null>(null);
+
+  const [, setSearchParams] = useSearchParams();
 
   const currentUser = useAuthStore(s => s.user);
   const myOwnerId = currentUser?.crm_user_id;
@@ -58,6 +62,22 @@ export const ContactListPage: React.FC = () => {
   useEffect(() => {
     if (!myOwnerId && activeTab === 'mine') setActiveTab('all');
   }, [myOwnerId, activeTab]);
+
+  useEffect(() => {
+    const f = filters[activeTab];
+    const params: Record<string, string> = { tab: activeTab };
+    if (f.search) params.search = f.search;
+    if (f.source) params.source = f.source;
+    if (f.ownerId) params.ownerId = f.ownerId;
+    if (f.lifecycleStageId) params.lifecycleStageId = f.lifecycleStageId;
+    if (f.createdAtFrom) params.createdAtFrom = f.createdAtFrom;
+    if (f.createdAtTo) params.createdAtTo = f.createdAtTo;
+    if (f.lastActivityAtFrom) params.lastActivityAtFrom = f.lastActivityAtFrom;
+    if (f.lastActivityAtTo) params.lastActivityAtTo = f.lastActivityAtTo;
+    if (f.customFieldConditions.length > 0) params.cf = JSON.stringify(f.customFieldConditions);
+    if (f.page > 1) params.page = String(f.page);
+    setSearchParams(params, { replace: true });
+  }, [filters, activeTab, setSearchParams]);
 
   const limit = 20;
 
@@ -141,48 +161,6 @@ export const ContactListPage: React.FC = () => {
     setCustomFieldsContact(c);
   };
 
-  const handleExportCsv = async () => {
-    const f = filters[activeTab];
-    const ownerIdParam =
-      activeTab === 'mine' ? myOwnerId :
-      activeTab === 'unassigned' ? 'unassigned' :
-      f.ownerId || undefined;
-
-    const { data } = await crmApi.list({
-      search: f.search || undefined,
-      source: f.source || undefined,
-      ownerId: ownerIdParam || undefined,
-      lifecycleStageId: f.lifecycleStageId || undefined,
-      createdAtFrom: f.createdAtFrom || undefined,
-      createdAtTo: f.createdAtTo || undefined,
-      limit: 9999,
-      page: 1,
-    });
-
-    const headers = ['Nombre', 'Email', 'Teléfono', 'Empresa', 'Fuente', 'Etapa', 'Propietario', 'Creado'];
-    const rows = data.items.map((c) => [
-      c.name,
-      c.email ?? '',
-      c.phone ?? '',
-      c.companyName ?? '',
-      c.source ?? '',
-      c.lifecycleStage?.name ?? '',
-      c.owner?.name ?? '',
-      new Date(c.createdAt).toLocaleDateString('es-EC'),
-    ]);
-
-    const csv = [headers, ...rows]
-      .map((row) => row.map((cell) => `"${String(cell).replace(/"/g, '""')}"`).join(','))
-      .join('\n');
-
-    const blob = new Blob(['﻿' + csv], { type: 'text/csv;charset=utf-8;' });
-    const url = URL.createObjectURL(blob);
-    const a = document.createElement('a');
-    a.href = url;
-    a.download = `contactos_${new Date().toISOString().slice(0, 10)}.csv`;
-    a.click();
-    URL.revokeObjectURL(url);
-  };
 
   const activeQuery = activeTab === 'all' ? allQuery : activeTab === 'mine' ? mineQuery : unassignedQuery;
   const activeFilters = filters[activeTab];
@@ -279,7 +257,7 @@ export const ContactListPage: React.FC = () => {
         onDateRangeChange={handleDateRangeChange}
         onLastActivityDateChange={handleLastActivityDateChange}
         onOpenCustomFieldFilters={() => setCustomFieldFilterOpen(true)}
-        onExportCsv={handleExportCsv}
+        onExportCsv={() => setIsExportOpen(true)}
         onReset={() => setFilters(prev => ({ ...prev, [activeTab]: defaultFilters() }))}
       />
 
@@ -345,6 +323,26 @@ export const ContactListPage: React.FC = () => {
         conditions={activeFilters.customFieldConditions}
         onChange={handleCustomFieldConditionsChange}
         onClose={() => setCustomFieldFilterOpen(false)}
+      />
+
+      <ContactExportModal
+        open={isExportOpen}
+        onClose={() => setIsExportOpen(false)}
+        total={activeQuery.data?.total ?? 0}
+        queryParams={{
+          search: activeFilters.search || undefined,
+          source: activeFilters.source || undefined,
+          ownerId:
+            activeTab === 'mine' ? myOwnerId :
+            activeTab === 'unassigned' ? 'unassigned' :
+            activeFilters.ownerId || undefined,
+          lifecycleStageId: activeFilters.lifecycleStageId || undefined,
+          createdAtFrom: activeFilters.createdAtFrom || undefined,
+          createdAtTo: activeFilters.createdAtTo || undefined,
+          lastActivityAtFrom: activeFilters.lastActivityAtFrom || undefined,
+          lastActivityAtTo: activeFilters.lastActivityAtTo || undefined,
+          customFieldFilters: serializeConditions(activeFilters.customFieldConditions),
+        }}
       />
 
       <ContactImportModal
