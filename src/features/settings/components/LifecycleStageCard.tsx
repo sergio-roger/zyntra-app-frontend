@@ -1,6 +1,6 @@
+import { Badge } from '@core/ui/Badge';
+import { GripVertical, Lock, MoreHorizontal, Settings2, Trash2 } from 'lucide-react';
 import React from 'react';
-import { GripVertical, MoreHorizontal, Trash2, Settings2, Lock } from 'lucide-react';
-import { Badge } from '../../../core/ui/Badge';
 
 interface LifecycleStage {
   id?: string;
