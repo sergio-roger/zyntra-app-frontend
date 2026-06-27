@@ -1,6 +1,8 @@
 import { Select } from '@core/ui/Select';
 import { crmApi } from '@crm/api/crm.api';
-import { SOURCES, SOURCE_LABELS, ContactSource, CrmMember, LifecycleStage } from '@crm/types/crm';
+import { SOURCES, SOURCE_LABELS, ContactSource } from '@crm/types/crm';
+import { CrmMember } from '@crm/types/crm-member';
+import { LifecycleStage } from '@crm/types/lifecycle-stage';
 import { useQuery } from '@tanstack/react-query';
 import { Layers, Search, Users, X } from 'lucide-react';
 import React from 'react';

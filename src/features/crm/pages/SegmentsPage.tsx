@@ -7,7 +7,8 @@ import {
   useSegmentsList,
   useUpdateSegment,
 } from '@crm/hooks/useSegments';
-import { Segment, SegmentCondition } from '@crm/types/crm';
+import { Segment } from '@crm/types/segment';
+import { SegmentCondition } from '@crm/types/segment-condition';
 import { ConfirmModal } from '@shared/components/ConfirmModal';
 import { EmptyState } from '@shared/components/EmptyState';
 import { Users } from 'lucide-react';

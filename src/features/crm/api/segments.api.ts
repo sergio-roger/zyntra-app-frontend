@@ -1,5 +1,7 @@
 import api from '@shared/api/axios';
-import { Segment, CreateSegmentInput, UpdateSegmentInput } from '@crm/types/crm';
+import { Segment } from '@crm/types/segment';
+import { CreateSegmentInput } from '@crm/types/create-segment-input';
+import { UpdateSegmentInput } from '@crm/types/update-segment-input';
 import { mapContactsList } from './crm.api';
 
 const buildQS = (q: Record<string, unknown>): string => {

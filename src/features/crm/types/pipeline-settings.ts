@@ -1,4 +1,4 @@
-import { DealPipelineStage } from '@crm/types/crm';
+import { DealPipelineStage } from '@crm/types/deal-pipeline-stage';
 
 export type StageType = 'active' | 'won' | 'lost';
 

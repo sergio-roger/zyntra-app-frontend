@@ -6,7 +6,10 @@ import { DealsKanban } from '@crm/components/DealsKanban';
 import { useKanbanStore } from '@crm/store/kanbanStore';
 import { dealsKeys } from '@crm/hooks/useDeals';
 import * as dealsApiModule from '@crm/api/deals.api';
-import { KanbanResponse, Deal, DealPipelineStage, DealPipeline } from '@crm/types/crm';
+import { KanbanResponse } from '@crm/types/kanban-response';
+import { Deal } from '@crm/types/deal';
+import { DealPipelineStage } from '@crm/types/deal-pipeline-stage';
+import { DealPipeline } from '@crm/types/deal-pipeline';
 
 // ─── Mocks ───────────────────────────────────────────────────────────────────
 

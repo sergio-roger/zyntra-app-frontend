@@ -1,7 +1,9 @@
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { dealsApi } from '@crm/api/deals.api';
 import { pipelinesApi } from '@crm/api/pipelines.api';
-import { ListDealsQuery, CreateDealInput, UpdateDealInput } from '@crm/types/crm';
+import { UpdateDealInput } from '@crm/types/crm';
+import { ListDealsQuery } from '@crm/types/list-deals-query';
+import { CreateDealInput } from '@crm/types/create-deal-input';
 
 export const pipelineKeys = {
   all: ['pipelines'] as const,

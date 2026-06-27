@@ -1,5 +1,6 @@
 import api from '@shared/api/axios';
-import { ConvertToDealInput, Deal } from '@crm/types/crm';
+import { ConvertToDealInput } from '@crm/types/convert-to-deal-input';
+import { Deal } from '@crm/types/deal';
 import { mapContact, mapContactsList } from '@crm/api/crm.api';
 
 const buildQS = (q: Record<string, unknown>): string => {

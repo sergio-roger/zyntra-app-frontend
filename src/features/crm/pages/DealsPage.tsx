@@ -9,7 +9,9 @@ import {
   usePipelineForecast,
   usePipelines,
 } from "@crm/hooks/useDeals";
-import { Deal, DealPipeline, DealPipelineStage } from "@crm/types/crm";
+import { Deal } from "@crm/types/deal";
+import { DealPipeline } from "@crm/types/deal-pipeline";
+import { DealPipelineStage } from "@crm/types/deal-pipeline-stage";
 import {
   AlertCircle,
   BarChart3,

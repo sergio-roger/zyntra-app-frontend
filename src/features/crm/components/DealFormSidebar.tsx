@@ -4,7 +4,10 @@ import { useCreateDeal, useUpdateDeal, usePipelines } from '@crm/hooks/useDeals'
 import { useContactsList } from '@crm/hooks/useContacts';
 import { Input } from '@core/ui/Input';
 import { Textarea } from '@core/ui/Textarea';
-import { Deal, DealPipeline, DealPipelineStage, CreateDealInput } from '@crm/types/crm';
+import { Deal } from '@crm/types/deal';
+import { DealPipeline } from '@crm/types/deal-pipeline';
+import { DealPipelineStage } from '@crm/types/deal-pipeline-stage';
+import { CreateDealInput } from '@crm/types/create-deal-input';
 
 interface DealFormSidebarProps {
   open: boolean;

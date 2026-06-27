@@ -2,11 +2,11 @@ import React, { useState, useEffect } from 'react';
 import { Edit2, Filter, Loader2, Pencil, Tag, Users } from 'lucide-react';
 import { EmptyState } from '@shared/components/EmptyState';
 import { useSegmentContacts } from '@crm/hooks/useSegments';
-import { Segment, Contact, LifecycleStage } from '@crm/types/crm';
+import { Segment } from '@crm/types/segment';
+import { Contact } from '@crm/types/contact';
 import { Pagination } from '@crm/components/Pagination';
 import { SourceBadge } from '@crm/components/badges';
 import { ContactFormSidebar } from '@crm/components/ContactFormSidebar';
-import api from '@shared/api/axios';
 
 interface SegmentDetailProps {
   segment: Segment;
@@ -18,19 +18,12 @@ export const SegmentDetail: React.FC<SegmentDetailProps> = ({ segment, onEdit, o
   const [page, setPage] = useState(1);
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const [editingContact, setEditingContact] = useState<Contact | null>(null);
-  const [stages, setStages] = useState<LifecycleStage[]>([]);
 
   const { data, isLoading } = useSegmentContacts(segment.id, { page, limit: 10 });
 
   useEffect(() => {
     setPage(1);
   }, [segment.id]);
-
-  useEffect(() => {
-    api.get('/lifecycle/stages')
-      .then((r) => setStages(r.data))
-      .catch(() => {});
-  }, []);
 
   const openContactEdit = (c: Contact) => {
     setEditingContact(c);
@@ -179,7 +172,6 @@ export const SegmentDetail: React.FC<SegmentDetailProps> = ({ segment, onEdit, o
           onRefresh();
         }}
         contact={editingContact}
-        stages={stages}
       />
     </div>
   );

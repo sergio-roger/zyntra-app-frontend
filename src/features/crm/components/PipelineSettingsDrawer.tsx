@@ -18,7 +18,7 @@ import {
   useUpdatePipeline,
 } from "@crm/hooks/useDeals";
 import { useTeamsList } from "@features/settings/hooks/useUsersTeams";
-import { DealPipeline } from "@crm/types/crm";
+import { DealPipeline } from "@crm/types/deal-pipeline";
 import { EditableStage, StageType } from "@crm/types/pipeline-settings";
 import {
   PIPELINE_STAGE_COLORS,

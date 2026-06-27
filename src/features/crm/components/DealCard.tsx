@@ -1,7 +1,7 @@
 import React from 'react';
 import { useDraggable } from '@dnd-kit/core';
 import { Calendar, User, Building2, TrendingUp, GripVertical } from 'lucide-react';
-import { Deal } from '@crm/types/crm';
+import { Deal } from '@crm/types/deal';
 
 interface DealCardProps {
   deal: Deal;

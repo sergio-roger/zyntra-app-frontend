@@ -1,5 +1,5 @@
 import { Pencil, Trash2, User } from 'lucide-react';
-import { Contact } from '@crm/types/crm';
+import { Contact } from '@crm/types/contact';
 import { SourceBadge } from './badges';
 import { EmptyState } from '@shared/components/EmptyState';
 

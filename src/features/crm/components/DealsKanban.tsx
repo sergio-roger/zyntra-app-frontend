@@ -1,6 +1,8 @@
 import { dealsApi } from "@crm/api/deals.api";
 import { dealsKeys } from "@crm/hooks/useDeals";
-import { Deal, DealPipelineStage, KanbanResponse } from "@crm/types/crm";
+import { Deal } from "@crm/types/deal";
+import { DealPipelineStage } from "@crm/types/deal-pipeline-stage";
+import { KanbanResponse } from "@crm/types/kanban-response";
 import {
   CollisionDetection,
   DndContext,

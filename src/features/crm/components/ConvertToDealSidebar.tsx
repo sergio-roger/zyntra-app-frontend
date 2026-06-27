@@ -1,10 +1,12 @@
-import React, { useEffect, useState } from 'react';
-import { ArrowRightCircle, Briefcase, Calendar, ChevronDown, DollarSign, Loader2, X } from 'lucide-react';
-import { useConvertToDeal } from '@crm/hooks/useLeads';
-import { usePipelines } from '@crm/hooks/useDeals';
 import { Input } from '@core/ui/Input';
 import { Textarea } from '@core/ui/Textarea';
-import { Contact, ConvertToDealInput, DealPipelineStage } from '@crm/types/crm';
+import { usePipelines } from '@crm/hooks/useDeals';
+import { useConvertToDeal } from '@crm/hooks/useLeads';
+import { Contact } from '@crm/types/contact';
+import { ConvertToDealInput } from '@crm/types/convert-to-deal-input';
+import { DealPipelineStage } from '@crm/types/deal-pipeline-stage';
+import { ArrowRightCircle, Briefcase, Calendar, ChevronDown, DollarSign, Loader2, X } from 'lucide-react';
+import React, { useEffect, useState } from 'react';
 
 interface ConvertToDealSidebarProps {
   open: boolean;
@@ -34,7 +36,6 @@ export const ConvertToDealSidebar: React.FC<ConvertToDealSidebarProps> = ({
   const { data: pipelines = [] } = usePipelines();
   const convertMutation = useConvertToDeal();
 
-  // Set defaults when the sidebar opens
   useEffect(() => {
     if (!open) return;
 

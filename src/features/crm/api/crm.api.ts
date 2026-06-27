@@ -1,13 +1,11 @@
 import api from '@shared/api/axios';
-import {
-  Contact,
-  ContactActivity,
-  ContactsListResponse,
-  CrmMember,
-  ListContactsQuery,
-  Tag,
-  CustomField,
-} from '@crm/types/crm';
+import { Contact } from '@crm/types/contact';
+import { ContactActivity } from '@crm/types/contact-activity';
+import { ContactsListResponse } from '@crm/types/contacts-list-response';
+import { CrmMember } from '@crm/types/crm-member';
+import { ListContactsQuery } from '@crm/types/list-contacts-query';
+import { Tag } from '@crm/types/tag';
+import { CustomField } from '@crm/types/custom-field';
 import {
   CreateContactInput,
   UpdateContactInput,

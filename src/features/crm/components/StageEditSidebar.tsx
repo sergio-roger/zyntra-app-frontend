@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { X, Save, Loader2, Layers } from "lucide-react";
 import { useUpdateStage } from "@crm/hooks/useDeals";
-import { DealPipelineStage } from "@crm/types/crm";
+import { DealPipelineStage } from "@crm/types/deal-pipeline-stage";
 import { StageType } from "@crm/types/pipeline-settings";
 import {
   PIPELINE_STAGE_COLORS,

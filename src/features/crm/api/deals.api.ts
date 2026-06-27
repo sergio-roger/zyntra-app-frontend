@@ -1,12 +1,10 @@
 import api from '@shared/api/axios';
-import {
-  Deal,
-  ListDealsQuery,
-  CreateDealInput,
-  UpdateDealInput,
-  KanbanResponse,
-  DealStageHistoryRecord,
-} from '@crm/types/crm';
+import { UpdateDealInput } from '@crm/types/crm';
+import { Deal } from '@crm/types/deal';
+import { ListDealsQuery } from '@crm/types/list-deals-query';
+import { CreateDealInput } from '@crm/types/create-deal-input';
+import { KanbanResponse } from '@crm/types/kanban-response';
+import { DealStageHistoryRecord } from '@crm/types/deal-stage-history-record';
 
 const buildQS = (q: Record<string, unknown>): string => {
   const sp = new URLSearchParams();

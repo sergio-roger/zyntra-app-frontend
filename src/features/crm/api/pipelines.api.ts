@@ -1,9 +1,7 @@
 import api from '@shared/api/axios';
-import {
-  DealPipeline,
-  DealPipelineStage,
-  PipelineForecast,
-} from '@crm/types/crm';
+import { DealPipeline } from '@crm/types/deal-pipeline';
+import { DealPipelineStage } from '@crm/types/deal-pipeline-stage';
+import { PipelineForecast } from '@crm/types/pipeline-forecast';
 
 export interface CreatePipelineInput {
   name: string;

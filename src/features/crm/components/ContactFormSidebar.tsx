@@ -7,7 +7,9 @@ import { useCreateContact, useUpdateContact } from '@crm/hooks/useContacts';
 import { useCustomFields } from '@crm/hooks/useCustomFields';
 import { useTags } from '@crm/hooks/useTags';
 import { ContactFormData } from '@crm/types/contact-form';
-import { Contact, CrmMember, LifecycleStage } from '@crm/types/crm';
+import { Contact } from '@crm/types/contact';
+import { CrmMember } from '@crm/types/crm-member';
+import { LifecycleStage } from '@crm/types/lifecycle-stage';
 import { useAuthStore } from '@features/auth/store/authStore';
 import { useQuery } from '@tanstack/react-query';
 import {

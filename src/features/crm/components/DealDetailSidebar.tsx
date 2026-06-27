@@ -25,13 +25,11 @@ import { toastManager } from "@shared/components/toast/toastManager";
 import { useContactsList } from "@crm/hooks/useContacts";
 import { Input } from "@core/ui/Input";
 import { Textarea } from "@core/ui/Textarea";
-import {
-  Deal,
-  DealPipeline,
-  DealPipelineStage,
-  CreateDealInput,
-  DealStageHistoryRecord,
-} from "@crm/types/crm";
+import { Deal } from "@crm/types/deal";
+import { DealPipeline } from "@crm/types/deal-pipeline";
+import { DealPipelineStage } from "@crm/types/deal-pipeline-stage";
+import { CreateDealInput } from "@crm/types/create-deal-input";
+import { DealStageHistoryRecord } from "@crm/types/deal-stage-history-record";
 
 type Tab = "detalle" | "historial";
 

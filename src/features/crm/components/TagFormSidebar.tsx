@@ -11,7 +11,7 @@ import {
 import { Input } from '@core/ui/Input';
 import { Textarea } from '@core/ui/Textarea';
 import { useCreateTag, useUpdateTag } from '@crm/hooks/useTags';
-import { Tag } from '@crm/types/crm';
+import { Tag } from '@crm/types/tag';
 
 interface TagFormSidebarProps {
   open: boolean;

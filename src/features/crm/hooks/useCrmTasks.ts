@@ -1,6 +1,8 @@
-import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
+import { CreateTaskInput } from '@crm/types/create-task-input';
+import { TaskStatus } from '@crm/types/crm';
+import { CrmTask } from '@crm/types/crm-task';
 import api from '@shared/api/axios';
-import { CrmTask, CreateTaskInput, TaskStatus } from '@crm/types/crm';
+import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 
 export function useCrmTasks(filters: { status?: TaskStatus; contact_id?: string } = {}) {
   return useQuery<CrmTask[]>({
@@ -21,7 +23,7 @@ export function useCreateTask() {
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['crm-tasks'] });
-      queryClient.invalidateQueries({ queryKey: ['contacts'] }); // Activities might change
+      queryClient.invalidateQueries({ queryKey: ['contacts'] });
     },
   });
 }

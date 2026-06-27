@@ -13,7 +13,8 @@ import {
 import { useCrmTasks, useUpdateTask, useDeleteTask } from '@crm/hooks/useCrmTasks';
 import { TaskFormSidebar } from '@crm/components/TaskFormSidebar';
 import { ConfirmModal } from '@shared/components/ConfirmModal';
-import { CrmTask, TaskStatus } from '@crm/types/crm';
+import { TaskStatus } from '@crm/types/crm';
+import { CrmTask } from '@crm/types/crm-task';
 
 export const TasksPage: React.FC = () => {
   const [statusFilter, setStatusFilter] = useState<TaskStatus | ''>('pending');

@@ -1,18 +1,18 @@
-import React, { useState } from 'react';
-import { 
-  Tag as TagIcon, 
-  Plus, 
-  Search, 
-  Edit2, 
-  Trash2, 
-  Loader2, 
-  AlertCircle
-} from 'lucide-react';
-import { useTags, useRemoveTag } from '@crm/hooks/useTags';
 import { TagFormSidebar } from '@crm/components/TagFormSidebar';
+import { useRemoveTag, useTags } from '@crm/hooks/useTags';
+import { Tag } from '@crm/types/tag';
 import { ConfirmModal } from '@shared/components/ConfirmModal';
 import { EmptyState } from '@shared/components/EmptyState';
-import { Tag } from '@crm/types/crm';
+import {
+  AlertCircle,
+  Edit2,
+  Loader2,
+  Plus,
+  Search,
+  Tag as TagIcon,
+  Trash2
+} from 'lucide-react';
+import React, { useState } from 'react';
 
 export const TagsPage: React.FC = () => {
   const { data: tags, isLoading, isError, error } = useTags();
@@ -22,7 +22,6 @@ export const TagsPage: React.FC = () => {
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
   const [editingTag, setEditingTag] = useState<Tag | null>(null);
   
-  // Confirmation Modal State
   const [isConfirmOpen, setIsConfirmOpen] = useState(false);
   const [tagToDelete, setTagToDelete] = useState<string | null>(null);
 

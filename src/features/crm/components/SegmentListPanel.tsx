@@ -1,7 +1,9 @@
 import React, { useState } from 'react';
 import { Plus, Users, Loader2, ChevronDown, Filter, Edit2, Trash2 } from 'lucide-react';
 import { EmptyState } from '@shared/components/EmptyState';
-import { Segment, SegmentCondition, SOURCE_LABELS } from '@crm/types/crm';
+import { SOURCE_LABELS } from '@crm/types/crm';
+import { Segment } from '@crm/types/segment';
+import { SegmentCondition } from '@crm/types/segment-condition';
 
 const FIELD_LABELS: Record<string, string> = {
   source: 'Origen',

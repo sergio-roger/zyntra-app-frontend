@@ -1,5 +1,6 @@
 import { useCreateField, useUpdateField } from '@crm/hooks/useCustomFields';
-import { CustomField, CustomFieldType } from '@crm/types/crm';
+import { CustomFieldType } from '@crm/types/crm';
+import { CustomField } from '@crm/types/custom-field';
 import {
   Check,
   Loader2,
@@ -7,7 +8,6 @@ import {
   X
 } from 'lucide-react';
 import React, { useEffect, useState } from 'react';
-
 import { Input } from '@core/ui/Input';
 
 interface CustomFieldFormSidebarProps {

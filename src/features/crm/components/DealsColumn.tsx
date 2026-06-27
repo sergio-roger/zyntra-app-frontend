@@ -2,7 +2,8 @@ import React from "react";
 import { useDroppable } from "@dnd-kit/core";
 import { Pencil } from "lucide-react";
 import { DealCard } from "./DealCard";
-import { Deal, DealPipelineStage } from "@crm/types/crm";
+import { Deal } from "@crm/types/deal";
+import { DealPipelineStage } from "@crm/types/deal-pipeline-stage";
 
 interface DealsColumnProps {
   stage: DealPipelineStage;
