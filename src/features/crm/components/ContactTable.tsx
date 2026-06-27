@@ -1,10 +1,13 @@
+import React from "react";
 import { Pencil, Settings2, Trash2, User } from "lucide-react";
 import { Contact } from "@crm/types/contact";
 import { SourceBadge } from "./badges";
 import { EmptyState } from "@shared/components/EmptyState";
+import { ColumnConfig, DEFAULT_COLUMNS } from "./ColumnCustomizerModal";
 
 interface ContactTableProps {
   contacts: Contact[];
+  columns?: ColumnConfig[];
   onEdit: (c: Contact) => void;
   onDelete: (c: Contact) => void;
   onSelect: (c: Contact) => void;
@@ -18,8 +21,82 @@ const formatDate = (iso: string | null) => {
   return new Date(iso).toLocaleDateString();
 };
 
+const getCustomFieldValue = (c: Contact, colKey: string) => {
+  const val = c.customFields?.[colKey];
+  if (val === undefined || val === null || val === "") return <span className="text-slate-600">—</span>;
+  if (typeof val === "boolean") {
+    return (
+      <span
+        className={`inline-flex px-1.5 py-0.5 rounded text-[10px] font-bold ${
+          val ? "bg-emerald-500/10 text-emerald-400" : "bg-slate-800 text-slate-400"
+        }`}
+      >
+        {val ? "Sí" : "No"}
+      </span>
+    );
+  }
+  if (Array.isArray(val)) {
+    return <span className="text-slate-300">{val.join(", ")}</span>;
+  }
+  return <span className="text-slate-300">{String(val)}</span>;
+};
+
+const RENDERERS: Record<
+  string,
+  (c: Contact, onSelect?: (c: Contact) => void) => React.ReactNode
+> = {
+  name: (c, onSelect) => (
+    <button
+      onClick={() => onSelect?.(c)}
+      className="text-left font-medium text-slate-100 hover:text-indigo-400"
+    >
+      {c.name}
+    </button>
+  ),
+  email: (c) => <span className="text-slate-300">{c.email ?? "—"}</span>,
+  phone: (c) => <span className="text-slate-300">{c.phone ?? "—"}</span>,
+  lifecycleStage: (c) => {
+    if (!c.lifecycleStage) return <span className="text-slate-600">—</span>;
+    return (
+      <span
+        className="inline-flex items-center gap-1 px-2 py-0.5 rounded text-[10px] font-medium"
+        style={{
+          backgroundColor: `${c.lifecycleStage.color}20`,
+          color: c.lifecycleStage.color,
+          border: `1px solid ${c.lifecycleStage.color}40`,
+        }}
+      >
+        {c.lifecycleStage.icon && (
+          <span className="text-[11px] leading-none">
+            {c.lifecycleStage.icon}
+          </span>
+        )}
+        {c.lifecycleStage.name}
+      </span>
+    );
+  },
+  source: (c) => <SourceBadge source={c.source} />,
+  owner: (c) => (
+    <span className="text-slate-300">
+      {c.owner ? c.owner.name : <span className="text-slate-600">—</span>}
+    </span>
+  ),
+  notes: (c) => (
+    <span
+      className="text-slate-400 text-xs block max-w-[220px] truncate"
+      title={c.notes ?? ""}
+    >
+      {c.notes ?? <span className="text-slate-600">—</span>}
+    </span>
+  ),
+  lastActivityAt: (c) => (
+    <span className="text-slate-400">{formatDate(c.lastActivityAt)}</span>
+  ),
+};
+
 export const ContactTable: React.FC<ContactTableProps> = ({
   contacts,
+  columns = DEFAULT_COLUMNS,
   onEdit,
   onDelete,
   onSelect,
@@ -39,19 +116,20 @@ export const ContactTable: React.FC<ContactTableProps> = ({
     );
   }
 
+  // Filter only visible columns configuration
+  const visibleCols = columns.filter((col) => col.visible);
+
   return (
     <div className="overflow-x-auto rounded-xl border border-white/10 bg-slate-900/50">
-      <table className="w-full text-left text-sm">
+      <table className="w-full text-left text-sm border-collapse">
         <thead className="border-b border-white/10 bg-slate-900/80 text-xs text-slate-400 uppercase">
           <tr>
-            <th className="px-4 py-3">Nombre</th>
-            <th className="hidden md:table-cell px-4 py-3">Email</th>
-            <th className="hidden sm:table-cell px-4 py-3">Teléfono</th>
-            <th className="hidden sm:table-cell px-4 py-3">Ciclo de vida</th>
-            <th className="hidden md:table-cell px-4 py-3">Origen</th>
-            <th className="hidden sm:table-cell px-4 py-3">Propietario</th>
-            <th className="hidden md:table-cell px-4 py-3">Último contacto</th>
-            <th className="px-4 py-3 text-right">Acciones</th>
+            {visibleCols.map((col) => (
+              <th key={col.key} className="px-4 py-3 font-semibold">
+                {col.label.replace(" (Campo Personalizado)", "")}
+              </th>
+            ))}
+            <th className="px-4 py-3 text-right font-semibold">Acciones</th>
           </tr>
         </thead>
         <tbody>
@@ -60,56 +138,15 @@ export const ContactTable: React.FC<ContactTableProps> = ({
               key={c.id}
               className="border-b border-white/5 transition-colors last:border-0 hover:bg-white/5"
             >
-              <td className="px-4 py-3">
-                <button
-                  onClick={() => onSelect(c)}
-                  className="text-left font-medium text-slate-100 hover:text-indigo-400"
-                >
-                  {c.name}
-                </button>
-              </td>
-              <td className="hidden md:table-cell px-4 py-3 text-slate-300">
-                {c.email ?? "—"}
-              </td>
-              <td className="hidden sm:table-cell px-4 py-3 text-slate-300">
-                {c.phone ?? "—"}
-              </td>
-              <td className="hidden sm:table-cell px-4 py-3">
-                {c.lifecycleStage ? (
-                  <span
-                    className="inline-flex items-center gap-1 px-2 py-0.5 rounded text-[10px] font-medium"
-                    style={{
-                      backgroundColor: `${c.lifecycleStage.color}20`,
-                      color: c.lifecycleStage.color,
-                      border: `1px solid ${c.lifecycleStage.color}40`,
-                    }}
-                  >
-                    {c.lifecycleStage.icon && (
-                      <span className="text-[11px] leading-none">
-                        {c.lifecycleStage.icon}
-                      </span>
-                    )}
-                    {c.lifecycleStage.name}
-                  </span>
-                ) : (
-                  <span className="text-slate-600">—</span>
-                )}
-              </td>
-              <td className="hidden md:table-cell px-4 py-3">
-                <SourceBadge source={c.source} />
-              </td>
-              <td className="hidden sm:table-cell px-4 py-3 text-slate-300">
-                {c.owner ? (
-                  c.owner.name
-                ) : (
-                  <span className="text-slate-600">—</span>
-                )}
-              </td>
-              <td className="hidden md:table-cell px-4 py-3 text-slate-400">
-                {formatDate(c.lastActivityAt)}
-              </td>
-              <td className="px-4 py-3 text-right">
-                <div className="inline-flex gap-1">
+              {visibleCols.map((col) => (
+                <td key={col.key} className="px-4 py-3 align-middle">
+                  {RENDERERS[col.key]
+                    ? RENDERERS[col.key](c, onSelect)
+                    : getCustomFieldValue(c, col.key)}
+                </td>
+              ))}
+              <td className="px-4 py-3 text-right align-middle">
+                <div className="inline-flex gap-1 justify-end">
                   {onCustomFields && (
                     <button
                       onClick={() => onCustomFields(c)}
@@ -123,7 +160,11 @@ export const ContactTable: React.FC<ContactTableProps> = ({
                     onClick={() => onEdit(c)}
                     disabled={!canEdit}
                     aria-label="Editar"
-                    className={`rounded-md p-1.5 transition-colors ${canEdit ? "text-slate-400 hover:bg-white/10 hover:text-indigo-400" : "cursor-not-allowed text-slate-700 opacity-40"}`}
+                    className={`rounded-md p-1.5 transition-colors ${
+                      canEdit
+                        ? "text-slate-400 hover:bg-white/10 hover:text-indigo-400"
+                        : "cursor-not-allowed text-slate-700 opacity-40"
+                    }`}
                   >
                     <Pencil size={15} />
                   </button>
@@ -131,7 +172,11 @@ export const ContactTable: React.FC<ContactTableProps> = ({
                     onClick={() => onDelete(c)}
                     disabled={!canEdit}
                     aria-label="Eliminar"
-                    className={`rounded-md p-1.5 transition-colors ${canEdit ? "text-slate-400 hover:bg-rose-500/15 hover:text-rose-400" : "cursor-not-allowed text-slate-700 opacity-40"}`}
+                    className={`rounded-md p-1.5 transition-colors ${
+                      canEdit
+                        ? "text-slate-400 hover:bg-rose-500/15 hover:text-rose-400"
+                        : "cursor-not-allowed text-slate-700 opacity-40"
+                    }`}
                   >
                     <Trash2 size={15} />
                   </button>

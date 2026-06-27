@@ -16,10 +16,20 @@ import { TabFilters } from "@crm/types/tab-filters";
 import { useAuthStore } from "@features/auth/store/authStore";
 import { ConfirmModal } from "@shared/components/ConfirmModal";
 import {
+  ColumnCustomizerModal,
+  DEFAULT_COLUMNS,
+} from "@crm/components/ColumnCustomizerModal";
+import {
+  useUserPreference,
+  useUpdateUserPreference,
+} from "@crm/hooks/useUserPreferences";
+import { useCustomFields } from "@crm/hooks/useCustomFields";
+import {
   AlertCircle,
   FileSpreadsheet,
   Loader2,
   Plus,
+  SlidersHorizontal,
   UserCheck,
   UserMinus,
   Users,
@@ -62,6 +72,13 @@ export const ContactListPage: React.FC = () => {
   const [isConfirmOpen, setIsConfirmOpen] = useState(false);
   const [isImportOpen, setIsImportOpen] = useState(false);
   const [contactToDelete, setContactToDelete] = useState<Contact | null>(null);
+  const [isCustomizerOpen, setIsCustomizerOpen] = useState(false);
+
+  const { data: customFields = [] } = useCustomFields();
+  const { data: columnPreference } = useUserPreference("contacts_table_columns");
+  const updatePreferenceMutation = useUpdateUserPreference();
+
+  const currentColumnConfig = columnPreference || DEFAULT_COLUMNS;
 
   const [, setSearchParams] = useSearchParams();
 
@@ -323,6 +340,7 @@ export const ContactListPage: React.FC = () => {
         onLastActivityDateChange={handleLastActivityDateChange}
         onOpenCustomFieldFilters={() => setCustomFieldFilterOpen(true)}
         onExportCsv={() => setIsExportOpen(true)}
+        onCustomizeColumns={() => setIsCustomizerOpen(true)}
         onReset={() =>
           setFilters((prev) => ({ ...prev, [activeTab]: defaultFilters() }))
         }
@@ -359,6 +377,7 @@ export const ContactListPage: React.FC = () => {
         <div className="animate-in slide-in-from-bottom-4 duration-500">
           <ContactTable
             contacts={activeQuery.data.items}
+            columns={currentColumnConfig}
             onEdit={openEdit}
             onDelete={handleDeleteRequest}
             onSelect={openEdit}
@@ -433,6 +452,19 @@ export const ContactListPage: React.FC = () => {
         description={`¿Estás seguro de eliminar a ${contactToDelete?.name}? El contacto se marcará como eliminado y ya no aparecerá en tus listas, pero sus datos históricos se conservarán por seguridad.`}
         confirmText="Eliminar Contacto"
         variant="danger"
+      />
+
+      <ColumnCustomizerModal
+        isOpen={isCustomizerOpen}
+        onClose={() => setIsCustomizerOpen(false)}
+        customFields={customFields}
+        currentConfig={currentColumnConfig}
+        onSave={async (newConfig) => {
+          await updatePreferenceMutation.mutateAsync({
+            key: "contacts_table_columns",
+            value: newConfig,
+          });
+        }}
       />
     </div>
   );

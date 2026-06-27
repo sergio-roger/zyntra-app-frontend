@@ -118,6 +118,12 @@ export const crmApi = {
     api.patch<unknown, { data: Tag }>(`/crm/tags/${id}`, input),
   removeTag: (id: string) => api.delete(`/crm/tags/${id}`),
 
+  // User Preferences
+  getUserPreference: (key: string) =>
+    api.get<unknown, { data: { data: any } }>(`/auth/user/preferences/${key}`),
+  updateUserPreference: (key: string, value: any) =>
+    api.put<unknown, { data: { data: any } }>(`/auth/user/preferences/${key}`, { value }),
+
   exportCsv: (params: {
     filters: Record<string, unknown>;
     columns: { key: string; label: string }[];

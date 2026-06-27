@@ -11,6 +11,7 @@ import {
   FilterX,
   Layers,
   Search,
+  Settings2,
   SlidersHorizontal,
   Users,
   Variable,
@@ -36,6 +37,7 @@ interface ContactFiltersProps {
   onLastActivityDateChange: (range: DateRange | null) => void;
   onOpenCustomFieldFilters: () => void;
   onExportCsv: () => void;
+  onCustomizeColumns?: () => void;
   onReset: () => void;
 }
 
@@ -63,6 +65,7 @@ export const ContactFilters: React.FC<ContactFiltersProps> = ({
   onLastActivityDateChange,
   onOpenCustomFieldFilters,
   onExportCsv,
+  onCustomizeColumns,
   onReset,
 }) => {
   const [showAdvanced, setShowAdvanced] = useState(false);
@@ -136,6 +139,15 @@ export const ContactFilters: React.FC<ContactFiltersProps> = ({
         >
           <Download size={14} /> Exportar CSV
         </button>
+
+        {onCustomizeColumns && (
+          <button
+            onClick={onCustomizeColumns}
+            className="inline-flex items-center gap-1.5 whitespace-nowrap rounded-lg border border-white/10 bg-slate-950/40 px-3 py-2 text-xs font-medium text-slate-300 transition-colors hover:border-white/20 hover:bg-white/5"
+          >
+            <Settings2 size={14} /> Columnas
+          </button>
+        )}
 
         <div className="relative">
           <button
