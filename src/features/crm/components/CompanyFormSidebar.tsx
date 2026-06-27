@@ -15,8 +15,9 @@ import { Input } from "@core/ui/Input";
 import { Select } from "@core/ui/Select";
 import { Tabs } from "@core/ui/Tabs";
 import { Textarea } from "@core/ui/Textarea";
-import { useCreateCompany, useUpdateCompany, useSectorTypes } from "@crm/hooks/useCompanies";
+import { useCreateCompany, useUpdateCompany, useIndustrys } from "@crm/hooks/useCompanies";
 import { useTags } from "@crm/hooks/useTags";
+import { useCrmUsers } from "@crm/hooks/useCrmUsers";
 import { Company, CompanyFormData } from "@crm/types/company";
 import { LifecycleStage } from "@crm/types/lifecycle-stage";
 import { Check } from "lucide-react";
@@ -32,11 +33,13 @@ function defaultFormData(): CompanyFormData {
   return {
     name: "",
     identification: "",
+    tax_type: "RUC",
     website: "",
-    num_employees: "",
+    employee_range: "",
     description: "",
-    sector_type_id: "",
+    industry_id: "",
     lifecycle_stage_id: "",
+    owner_id: "",
     tag_ids: [],
     custom_fields: {},
   };
@@ -46,11 +49,13 @@ function formDataFromCompany(c: Company): CompanyFormData {
   return {
     name: c.name,
     identification: c.identification ?? "",
+    tax_type: c.tax_type ?? "RUC",
     website: c.website ?? "",
-    num_employees: c.num_employees !== null && c.num_employees !== undefined ? String(c.num_employees) : "",
+    employee_range: c.employee_range ?? "",
     description: c.description ?? "",
-    sector_type_id: c.sector_type_id ?? "",
+    industry_id: c.industry_id ?? "",
     lifecycle_stage_id: c.lifecycle_stage_id ?? "",
+    owner_id: c.owner_id ?? "",
     tag_ids: (c.tags ?? []).map((t) => t.id),
     custom_fields: c.custom_fields ?? {},
   };
@@ -64,7 +69,8 @@ export const CompanyFormSidebar: React.FC<CompanyFormSidebarProps> = ({
   const [formData, setFormData] = useState<CompanyFormData>(defaultFormData);
   const [activeTab, setActiveTab] = useState<"info" | "advanced">("info");
 
-  const { data: sectorTypes = [] } = useSectorTypes();
+  const { data: industries = [] } = useIndustrys();
+  const { data: users = [] } = useCrmUsers();
   const { data: stages = [] } = useQuery<LifecycleStage[]>({
     queryKey: ["lifecycle-stages"],
     queryFn: () =>
@@ -93,11 +99,13 @@ export const CompanyFormSidebar: React.FC<CompanyFormSidebarProps> = ({
     const payload = {
       name: formData.name,
       identification: formData.identification || undefined,
+      tax_type: formData.tax_type || undefined,
       website: formData.website || undefined,
-      num_employees: formData.num_employees ? Number(formData.num_employees) : undefined,
+      employee_range: formData.employee_range || undefined,
       description: formData.description || undefined,
-      sector_type_id: formData.sector_type_id || undefined,
+      industry_id: formData.industry_id || undefined,
       lifecycle_stage_id: formData.lifecycle_stage_id || undefined,
+      owner_id: formData.owner_id || undefined,
       tag_ids: formData.tag_ids,
       custom_fields: Object.keys(formData.custom_fields).length > 0
         ? formData.custom_fields
@@ -112,7 +120,23 @@ export const CompanyFormSidebar: React.FC<CompanyFormSidebarProps> = ({
     onClose();
   };
 
-  const sectorOptions = sectorTypes.map((s) => ({ value: s.id, label: s.name }));
+  const industryOptions = industries.map((s) => ({ value: s.id, label: s.name }));
+  const ownerOptions = users.map((u) => ({ value: u.id, label: u.name }));
+  
+  const taxTypeOptions = [
+    { value: "RUC", label: "RUC" },
+    { value: "NIF", label: "NIF" },
+    { value: "DNI", label: "DNI" },
+    { value: "PASAPORTE", label: "Pasaporte" },
+  ];
+
+  const employeeRangeOptions = [
+    { value: "1-10", label: "1-10 empleados" },
+    { value: "11-50", label: "11-50 empleados" },
+    { value: "51-200", label: "51-200 empleados" },
+    { value: "201-500", label: "201-500 empleados" },
+    { value: "501+", label: "501+ empleados" },
+  ];
 
   return (
     <>
@@ -179,13 +203,25 @@ export const CompanyFormSidebar: React.FC<CompanyFormSidebarProps> = ({
                       value={formData.name}
                       onChange={(e) => set({ name: e.target.value })}
                     />
-                    <Input
-                      label="RUC / Identificación"
-                      icon={Hash}
-                      placeholder="Ej: 0912345678001"
-                      value={formData.identification}
-                      onChange={(e) => set({ identification: e.target.value })}
-                    />
+                    <div className="flex gap-2">
+                      <div className="w-1/3">
+                        <Select
+                          options={taxTypeOptions}
+                          value={formData.tax_type}
+                          onChange={(v) => set({ tax_type: v ?? "RUC" })}
+                          label="Tipo"
+                        />
+                      </div>
+                      <div className="flex-1">
+                        <Input
+                          label="Identificación"
+                          icon={Hash}
+                          placeholder="Ej: 0912345678001"
+                          value={formData.identification}
+                          onChange={(e) => set({ identification: e.target.value })}
+                        />
+                      </div>
+                    </div>
                     <Input
                       label="Sitio web"
                       icon={Globe}
@@ -194,25 +230,37 @@ export const CompanyFormSidebar: React.FC<CompanyFormSidebarProps> = ({
                       value={formData.website}
                       onChange={(e) => set({ website: e.target.value })}
                     />
-                    <Input
-                      label="Número de empleados"
-                      icon={Users}
-                      type="number"
-                      min={1}
-                      placeholder="Ej: 50"
-                      value={formData.num_employees}
-                      onChange={(e) => set({ num_employees: e.target.value })}
+                    <Select
+                      label="Rango de empleados"
+                      options={employeeRangeOptions}
+                      value={formData.employee_range || null}
+                      onChange={(v) => set({ employee_range: v ?? "" })}
+                      clearable
+                      clearLabel="Sin definir"
+                      placeholder="Selecciona el tamaño"
                     />
 
-                    {sectorOptions.length > 0 && (
+                    {industryOptions.length > 0 && (
                       <Select
-                        label="Sector / Industria"
-                        options={sectorOptions}
-                        value={formData.sector_type_id || null}
-                        onChange={(v) => set({ sector_type_id: v ?? "" })}
+                        label="Industria"
+                        options={industryOptions}
+                        value={formData.industry_id || null}
+                        onChange={(v) => set({ industry_id: v ?? "" })}
                         clearable
-                        clearLabel="Sin sector"
-                        placeholder="Selecciona un sector"
+                        clearLabel="Sin industria"
+                        placeholder="Selecciona una industria"
+                      />
+                    )}
+                    
+                    {ownerOptions.length > 0 && (
+                      <Select
+                        label="Propietario de la empresa"
+                        options={ownerOptions}
+                        value={formData.owner_id || null}
+                        onChange={(v) => set({ owner_id: v ?? "" })}
+                        clearable
+                        clearLabel="Sin propietario"
+                        placeholder="Asignar a un usuario..."
                       />
                     )}
                   </div>

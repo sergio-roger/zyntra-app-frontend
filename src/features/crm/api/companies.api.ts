@@ -21,11 +21,14 @@ const mapCompany = (raw: any): Company => ({
   business_id: raw.business_id,
   name: raw.name,
   identification: raw.identification ?? null,
+  tax_type: raw.tax_type ?? null,
   website: raw.website ?? null,
-  num_employees: raw.num_employees ?? null,
+  employee_range: raw.employee_range ?? null,
   description: raw.description ?? null,
-  sector_type_id: raw.sector_type_id ?? null,
-  sector_type: raw.sector_type ?? null,
+  industry_id: raw.industry_id ?? null,
+  industry: raw.industry ?? null,
+  owner_id: raw.owner_id ?? null,
+  owner: raw.owner ?? null,
   lifecycle_stage_id: raw.lifecycle_stage_id ?? null,
   lifecycle_stage: raw.lifecycle_stage ?? null,
   tags: raw.tags ?? [],
@@ -42,10 +45,7 @@ const mapList = (raw: any): CompaniesListResponse => ({
   totalPages: raw.totalPages,
 });
 
-export type CreateCompanyInput = Omit<
-  CompanyFormData,
-  "num_employees"
-> & { num_employees?: number };
+export type CreateCompanyInput = Omit<CompanyFormData, never>;
 
 export type UpdateCompanyInput = Partial<CreateCompanyInput>;
 
@@ -84,9 +84,9 @@ export const companiesApi = {
       { responseType: "blob" },
     ),
 
-  import: (rows: Array<{ name: string; identification?: string; website?: string; num_employees?: number; description?: string }>) =>
+  import: (rows: Array<{ name: string; identification?: string; website?: string; employee_range?: string; description?: string }>) =>
     api.post<unknown, { data: { count: number } }>("/crm/companies/import", rows),
 
-  listSectorTypes: () =>
-    api.get<unknown, { data: any[] }>("/crm/sector-types"),
+  listIndustries: () =>
+    api.get<unknown, { data: any[] }>("/crm/industries"),
 };

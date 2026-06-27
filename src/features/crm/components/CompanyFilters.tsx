@@ -1,6 +1,6 @@
 import { DateRange, DateRangePicker } from "@core/ui/DateRangePicker";
 import { Select } from "@core/ui/Select";
-import { useSectorTypes } from "@crm/hooks/useCompanies";
+import { useIndustrys } from "@crm/hooks/useCompanies";
 import { LifecycleStage } from "@crm/types/lifecycle-stage";
 import { useQuery } from "@tanstack/react-query";
 import {
@@ -15,12 +15,12 @@ import React, { useState } from "react";
 
 interface CompanyFiltersProps {
   search: string;
-  sectorTypeId: string;
+  industryId: string;
   lifecycleStageId: string;
   createdAtFrom: string;
   createdAtTo: string;
   onSearchChange: (v: string) => void;
-  onSectorTypeChange: (v: string) => void;
+  onIndustryChange: (v: string) => void;
   onLifecycleStageChange: (v: string) => void;
   onDateRangeChange: (range: DateRange | null) => void;
   onExportCsv: () => void;
@@ -30,12 +30,12 @@ interface CompanyFiltersProps {
 
 export const CompanyFilters: React.FC<CompanyFiltersProps> = ({
   search,
-  sectorTypeId,
+  industryId,
   lifecycleStageId,
   createdAtFrom,
   createdAtTo,
   onSearchChange,
-  onSectorTypeChange,
+  onIndustryChange,
   onLifecycleStageChange,
   onDateRangeChange,
   onExportCsv,
@@ -44,7 +44,7 @@ export const CompanyFilters: React.FC<CompanyFiltersProps> = ({
 }) => {
   const [showAdvanced, setShowAdvanced] = useState(false);
 
-  const { data: sectorTypes = [] } = useSectorTypes();
+  const { data: industryTypes = [] } = useIndustrys();
   const { data: stages = [] } = useQuery<LifecycleStage[]>({
     queryKey: ["lifecycle-stages"],
     queryFn: () =>
@@ -54,7 +54,7 @@ export const CompanyFilters: React.FC<CompanyFiltersProps> = ({
     staleTime: 10 * 60 * 1000,
   });
 
-  const sectorOptions = sectorTypes.map((s) => ({ value: s.id, label: s.name }));
+  const industryOptions = industryTypes.map((s) => ({ value: s.id, label: s.name }));
   const stageOptions = stages.map((s) => ({
     value: s.id,
     label: `${s.icon ?? ""} ${s.name}`.trim(),
@@ -64,7 +64,7 @@ export const CompanyFilters: React.FC<CompanyFiltersProps> = ({
     createdAtFrom && createdAtTo ? { from: createdAtFrom, to: createdAtTo } : null;
 
   const hasAdvancedFilters = Boolean(
-    sectorTypeId || lifecycleStageId || createdAtFrom || createdAtTo,
+    industryId || lifecycleStageId || createdAtFrom || createdAtTo,
   );
   const hasFilters = Boolean(search || hasAdvancedFilters);
 
@@ -133,12 +133,12 @@ export const CompanyFilters: React.FC<CompanyFiltersProps> = ({
         <div className="mt-3 flex flex-wrap items-center gap-3 border-t border-white/5 pt-3 animate-in fade-in slide-in-from-top-1 duration-150">
           <div className="w-48">
             <Select
-              options={sectorOptions}
-              value={sectorTypeId || null}
-              onChange={(v) => onSectorTypeChange(v ?? "")}
-              placeholder="Todos los sectores"
+              options={industryOptions}
+              value={industryId || null}
+              onChange={(v) => onIndustryChange(v ?? "")}
+              placeholder="Todas las industrias"
               clearable
-              clearLabel="Todos los sectores"
+              clearLabel="Todas las industrias"
               className="py-2 text-sm"
             />
           </div>

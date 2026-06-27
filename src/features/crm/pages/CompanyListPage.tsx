@@ -19,7 +19,7 @@ import React, { useState } from "react";
 
 interface Filters {
   search: string;
-  sectorTypeId: string;
+  industryId: string;
   lifecycleStageId: string;
   createdAtFrom: string;
   createdAtTo: string;
@@ -28,7 +28,7 @@ interface Filters {
 
 const defaultFilters = (): Filters => ({
   search: "",
-  sectorTypeId: "",
+  industryId: "",
   lifecycleStageId: "",
   createdAtFrom: "",
   createdAtTo: "",
@@ -68,7 +68,7 @@ export const CompanyListPage: React.FC = () => {
 
   const query = useCompaniesList({
     search: filters.search || undefined,
-    sector_type_id: filters.sectorTypeId || undefined,
+    industry_id: filters.industryId || undefined,
     lifecycle_stage_id: filters.lifecycleStageId || undefined,
     createdAtFrom: filters.createdAtFrom || undefined,
     createdAtTo: filters.createdAtTo || undefined,
@@ -143,12 +143,12 @@ export const CompanyListPage: React.FC = () => {
       {/* Filters */}
       <CompanyFilters
         search={filters.search}
-        sectorTypeId={filters.sectorTypeId}
+        industryId={filters.industryId}
         lifecycleStageId={filters.lifecycleStageId}
         createdAtFrom={filters.createdAtFrom}
         createdAtTo={filters.createdAtTo}
         onSearchChange={(v) => set({ search: v })}
-        onSectorTypeChange={(v) => set({ sectorTypeId: v })}
+        onIndustryChange={(v) => set({ industryId: v })}
         onLifecycleStageChange={(v) => set({ lifecycleStageId: v })}
         onDateRangeChange={handleDateRangeChange}
         onExportCsv={() => setIsExportOpen(true)}
@@ -228,7 +228,7 @@ export const CompanyListPage: React.FC = () => {
         total={query.data?.total ?? 0}
         queryParams={{
           search: filters.search || undefined,
-          sector_type_id: filters.sectorTypeId || undefined,
+          industry_id: filters.industryTypeId || undefined,
           lifecycle_stage_id: filters.lifecycleStageId || undefined,
           createdAtFrom: filters.createdAtFrom || undefined,
           createdAtTo: filters.createdAtTo || undefined,

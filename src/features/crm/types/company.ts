@@ -1,23 +1,21 @@
 import { Tag } from "./tag";
 import { LifecycleStage } from "./lifecycle-stage";
-
-export interface SectorType {
-  id: string;
-  name: string;
-  description: string | null;
-  is_active: boolean;
-}
+import { Industry } from "./industry";
+import { CrmMember } from "./crm-member";
 
 export interface Company {
   id: string;
   business_id: string;
   name: string;
   identification: string | null;
+  tax_type: string | null;
   website: string | null;
-  num_employees: number | null;
+  employee_range: string | null;
   description: string | null;
-  sector_type_id: string | null;
-  sector_type: SectorType | null;
+  industry_id: string | null;
+  industry: Industry | null;
+  owner_id: string | null;
+  owner: CrmMember | null;
   lifecycle_stage_id: string | null;
   lifecycle_stage: LifecycleStage | null;
   tags: Tag[];
@@ -29,19 +27,22 @@ export interface Company {
 export interface CompanyFormData {
   name: string;
   identification: string;
+  tax_type: string;
   website: string;
-  num_employees: string;
+  employee_range: string;
   description: string;
-  sector_type_id: string;
+  industry_id: string;
   lifecycle_stage_id: string;
+  owner_id: string;
   tag_ids: string[];
   custom_fields: Record<string, any>;
 }
 
 export interface ListCompaniesQuery {
   search?: string;
-  sector_type_id?: string;
+  industry_id?: string;
   lifecycle_stage_id?: string;
+  owner_id?: string;
   createdAtFrom?: string;
   createdAtTo?: string;
   page?: number;

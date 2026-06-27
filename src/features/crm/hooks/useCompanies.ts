@@ -10,7 +10,7 @@ export const companiesKeys = {
   all: ["companies"] as const,
   list: (query: ListCompaniesQuery) => ["companies", "list", query] as const,
   detail: (id: string) => ["companies", "detail", id] as const,
-  sectorTypes: ["companies", "sector-types"] as const,
+  industries: ["companies", "industries"] as const,
 };
 
 const invalidateLists = (qc: ReturnType<typeof useQueryClient>) => {
@@ -40,11 +40,11 @@ export const useCompany = (id: string | null) =>
     },
   });
 
-export const useSectorTypes = () =>
+export const useIndustrys = () =>
   useQuery({
-    queryKey: companiesKeys.sectorTypes,
+    queryKey: companiesKeys.industries,
     queryFn: async () => {
-      const res = await companiesApi.listSectorTypes();
+      const res = await companiesApi.listIndustries();
       return res.data as Array<{ id: string; name: string }>;
     },
     staleTime: 10 * 60 * 1000,
