@@ -4,6 +4,7 @@ import { useUpdateContact } from "@crm/hooks/useContacts";
 import { Contact } from "@crm/types/contact";
 import { Loader2, Save, Settings2, X } from "lucide-react";
 import React, { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
 
 interface ContactCustomFieldsSidebarProps {
   open: boolean;
@@ -17,6 +18,7 @@ export const ContactCustomFieldsSidebar: React.FC<
   const { data: fields = [] } = useCustomFields();
   const updateMutation = useUpdateContact();
   const [values, setValues] = useState<Record<string, any>>({});
+  const navigate = useNavigate();
 
   useEffect(() => {
     setValues(contact?.customFields ?? {});
@@ -63,11 +65,25 @@ export const ContactCustomFieldsSidebar: React.FC<
 
           <div className="flex-1 overflow-y-auto p-6">
             {activeFields.length === 0 ? (
-              <div className="flex flex-col items-center justify-center py-16 opacity-30 border-2 border-dashed border-white/10 rounded-2xl">
-                <Settings2 size={24} className="mb-2" />
-                <p className="text-sm text-slate-500">
-                  No hay campos personalizados activos
+              <div className="flex flex-col items-center justify-center py-16 px-4 text-center border-2 border-dashed border-white/10 rounded-2xl">
+                <div className="h-12 w-12 rounded-2xl bg-indigo-500/10 flex items-center justify-center text-indigo-400 mb-4 animate-pulse">
+                  <Settings2 size={24} />
+                </div>
+                <h3 className="text-sm font-bold text-white mb-1">
+                  No hay campos personalizados
+                </h3>
+                <p className="text-xs text-slate-400 max-w-xs mb-6">
+                  Aún no has configurado campos personalizados activos. Configura campos para poder asociarlos a tus contactos.
                 </p>
+                <button
+                  onClick={() => {
+                    navigate("/crm/fields");
+                    onClose();
+                  }}
+                  className="px-5 py-2.5 text-xs font-bold text-white bg-indigo-600 hover:bg-indigo-500 rounded-xl transition-all shadow-lg shadow-indigo-500/20 active:scale-95 animate-bounce"
+                >
+                  Configurar campos
+                </button>
               </div>
             ) : (
               <div className="space-y-4">
