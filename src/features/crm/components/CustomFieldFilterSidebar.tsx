@@ -24,7 +24,7 @@ export const CustomFieldFilterSidebar: React.FC<CustomFieldFilterSidebarProps> =
       />
     )}
     <div
-      className={`fixed inset-y-0 right-0 z-50 flex w-[460px] max-w-full flex-col border-l border-white/10 bg-slate-900 shadow-2xl transition-transform duration-300 ease-in-out ${
+      className={`fixed inset-y-0 right-0 z-50 !mt-0 flex w-[460px] max-w-full flex-col border-l border-white/10 bg-slate-900 shadow-2xl transition-transform duration-300 ease-in-out ${
         open ? 'translate-x-0' : 'translate-x-full'
       }`}
     >
