@@ -1,15 +1,15 @@
-import api from '@shared/api/axios';
-import { ConvertToDealInput } from '@crm/types/convert-to-deal-input';
-import { Deal } from '@crm/types/deal';
-import { mapContact, mapContactsList } from '@crm/api/crm.api';
+import api from "@shared/api/axios";
+import { ConvertToDealInput } from "@crm/types/convert-to-deal-input";
+import { Deal } from "@crm/types/deal";
+import { mapContact, mapContactsList } from "@crm/api/crm.api";
 
 const buildQS = (q: Record<string, unknown>): string => {
   const sp = new URLSearchParams();
   for (const [k, v] of Object.entries(q)) {
-    if (v !== undefined && v !== null && v !== '') sp.set(k, String(v));
+    if (v !== undefined && v !== null && v !== "") sp.set(k, String(v));
   }
   const s = sp.toString();
-  return s ? `?${s}` : '';
+  return s ? `?${s}` : "";
 };
 
 export interface ListLeadsQuery {
@@ -23,9 +23,10 @@ export interface ListLeadsQuery {
 export const leadsApi = {
   list: (query: ListLeadsQuery = {}) =>
     api
-      .get<unknown, { data: any }>(
-        `/crm/contacts${buildQS({ ...query, isArchived: false } as Record<string, unknown>)}`,
-      )
+      .get<
+        unknown,
+        { data: any }
+      >(`/crm/contacts${buildQS({ ...query, isArchived: false } as Record<string, unknown>)}`)
       .then((r) => ({ data: mapContactsList(r.data) })),
 
   archive: (id: string) =>
@@ -34,5 +35,8 @@ export const leadsApi = {
       .then((r) => ({ data: mapContact(r.data) })),
 
   convertToDeal: (id: string, input: ConvertToDealInput) =>
-    api.post<unknown, { data: Deal }>(`/crm/contacts/${id}/convert-to-deal`, input),
+    api.post<unknown, { data: Deal }>(
+      `/crm/contacts/${id}/convert-to-deal`,
+      input,
+    ),
 };

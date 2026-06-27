@@ -1,15 +1,23 @@
-import { useMenusList, useRolePermissions, useUpdatePermissions } from '@features/settings/hooks/usePermissions';
-import { Menu } from '@features/settings/types/settings';
-import { toastManager } from '@shared/components/toast/toastManager';
+import {
+  useMenusList,
+  useRolePermissions,
+  useUpdatePermissions,
+} from "@features/settings/hooks/usePermissions";
+import { Menu } from "@features/settings/types/settings";
+import { toastManager } from "@shared/components/toast/toastManager";
 
 interface UsePermissionMatrixParams {
   roleKey: string;
   readOnly?: boolean;
 }
 
-type ToggleStrategy = (menu: Menu, allMenus: Menu[], currentIds: string[]) => string[];
+type ToggleStrategy = (
+  menu: Menu,
+  allMenus: Menu[],
+  currentIds: string[],
+) => string[];
 
-const toggleStrategies: Record<'check' | 'uncheck', ToggleStrategy> = {
+const toggleStrategies: Record<"check" | "uncheck", ToggleStrategy> = {
   check: (menu, allMenus, currentIds) => {
     const nextIds = new Set(currentIds);
     nextIds.add(menu.id);
@@ -35,9 +43,13 @@ const toggleStrategies: Record<'check' | 'uncheck', ToggleStrategy> = {
   },
 };
 
-export function usePermissionMatrix({ roleKey, readOnly = false }: UsePermissionMatrixParams) {
+export function usePermissionMatrix({
+  roleKey,
+  readOnly = false,
+}: UsePermissionMatrixParams) {
   const { data: allMenus, isLoading: loadingMenus } = useMenusList();
-  const { data: rolePerms, isLoading: loadingPerms } = useRolePermissions(roleKey);
+  const { data: rolePerms, isLoading: loadingPerms } =
+    useRolePermissions(roleKey);
   const updateMutation = useUpdatePermissions(roleKey);
 
   const isLoading = loadingMenus || loadingPerms;
@@ -50,15 +62,19 @@ export function usePermissionMatrix({ roleKey, readOnly = false }: UsePermission
     const menu = allMenus.find((m) => m.id === menuId);
     if (!menu) return;
 
-    const strategyKey = checked ? 'check' : 'uncheck';
-    const nextIds = toggleStrategies[strategyKey](menu, allMenus, activeMenuIds);
+    const strategyKey = checked ? "check" : "uncheck";
+    const nextIds = toggleStrategies[strategyKey](
+      menu,
+      allMenus,
+      activeMenuIds,
+    );
 
     updateMutation.mutate(nextIds, {
       onError: () => {
         toastManager.add({
-          title: 'Error al actualizar permisos',
-          description: 'No se pudo guardar la configuración. Intenta de nuevo.',
-          type: 'error',
+          title: "Error al actualizar permisos",
+          description: "No se pudo guardar la configuración. Intenta de nuevo.",
+          type: "error",
         });
       },
     });

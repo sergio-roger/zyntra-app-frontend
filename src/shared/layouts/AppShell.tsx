@@ -1,21 +1,21 @@
-import { useAuthStore } from '@features/auth/store/authStore';
-import { Breadcrumbs } from '@shared/components/Breadcrumbs';
-import { SideRail } from '@shared/layouts/SideRail';
-import { SubSidebar } from '@shared/layouts/SubSidebar';
-import { findActiveModule } from '@shared/layouts/nav.config';
-import { NavModule } from '@shared/types/nav';
-import { Bell, LayoutDashboard, Menu, Search, Zap } from 'lucide-react';
-import React, { useEffect, useState } from 'react';
-import { Outlet, useLocation } from 'react-router-dom';
+import { useAuthStore } from "@features/auth/store/authStore";
+import { Breadcrumbs } from "@shared/components/Breadcrumbs";
+import { SideRail } from "@shared/layouts/SideRail";
+import { SubSidebar } from "@shared/layouts/SubSidebar";
+import { findActiveModule } from "@shared/layouts/nav.config";
+import { NavModule } from "@shared/types/nav";
+import { Bell, LayoutDashboard, Menu, Search, Zap } from "lucide-react";
+import React, { useEffect, useState } from "react";
+import { Outlet, useLocation } from "react-router-dom";
 
 const DEFAULT_MODULE: NavModule = {
-  key: 'dashboard',
-  label: 'Zyntra',
+  key: "dashboard",
+  label: "Zyntra",
   icon: LayoutDashboard,
-  match: '/dashboard',
-  to: '/dashboard',
-  description: '',
-  color: '',
+  match: "/dashboard",
+  to: "/dashboard",
+  description: "",
+  color: "",
 };
 
 export const AppShell: React.FC = () => {
@@ -26,7 +26,10 @@ export const AppShell: React.FC = () => {
   const activeModule = findActiveModule(pathname);
 
   useEffect(() => {
-    if (activeModule && (!activeModule.children || activeModule.children.length === 0)) {
+    if (
+      activeModule &&
+      (!activeModule.children || activeModule.children.length === 0)
+    ) {
       const timer = setTimeout(() => {
         setIsSubSidebarOpen(false);
         setIsMobileRailOpen(false);
@@ -98,8 +101,12 @@ export const AppShell: React.FC = () => {
             {user?.plan && (
               <div className="flex items-center gap-1.5 bg-gradient-to-r from-primary/10 via-secondary/5 to-transparent border border-primary/20 px-2.5 py-1 rounded-full text-xs font-medium shadow-sm">
                 <Zap size={11} className="text-primary animate-pulse" />
-                <span className="text-base-content/60 font-semibold text-[10px] hidden sm:inline">Plan:</span>
-                <span className="text-primary font-extrabold text-[11px]">{user.plan.name}</span>
+                <span className="text-base-content/60 font-semibold text-[10px] hidden sm:inline">
+                  Plan:
+                </span>
+                <span className="text-primary font-extrabold text-[11px]">
+                  {user.plan.name}
+                </span>
               </div>
             )}
             {/* Search */}
@@ -110,7 +117,9 @@ export const AppShell: React.FC = () => {
                 placeholder="Buscar…"
                 className="grow text-sm placeholder:text-base-content/40"
               />
-              <kbd className="kbd kbd-xs bg-base-300/50 border-base-content/10">⌘K</kbd>
+              <kbd className="kbd kbd-xs bg-base-300/50 border-base-content/10">
+                ⌘K
+              </kbd>
             </label>
 
             {/* Notifications */}
@@ -118,7 +127,9 @@ export const AppShell: React.FC = () => {
               aria-label="Notificaciones"
               className="btn btn-ghost btn-sm btn-circle indicator"
             >
-              <span className="indicator-item badge badge-primary badge-xs">3</span>
+              <span className="indicator-item badge badge-primary badge-xs">
+                3
+              </span>
               <Bell size={18} />
             </button>
           </div>

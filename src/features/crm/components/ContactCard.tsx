@@ -1,6 +1,6 @@
-import React from 'react';
-import { Calendar, Building2 } from 'lucide-react';
-import { Contact } from '@crm/types/contact';
+import React from "react";
+import { Calendar, Building2 } from "lucide-react";
+import { Contact } from "@crm/types/contact";
 
 interface ContactCardProps {
   contact: Contact;
@@ -8,8 +8,12 @@ interface ContactCardProps {
 
 export const ContactCard: React.FC<ContactCardProps> = ({ contact }) => {
   const formattedDate = contact.createdAt
-    ? new Intl.DateTimeFormat('es-ES', { day: '2-digit', month: 'short', year: 'numeric' }).format(new Date(contact.createdAt))
-    : 'Sin fecha';
+    ? new Intl.DateTimeFormat("es-ES", {
+        day: "2-digit",
+        month: "short",
+        year: "numeric",
+      }).format(new Date(contact.createdAt))
+    : "Sin fecha";
 
   return (
     <div className="group relative flex flex-col gap-3 rounded-xl border border-white/5 bg-slate-800/40 p-4 transition-all hover:bg-slate-800/60 hover:shadow-lg hover:shadow-black/20">
@@ -23,7 +27,7 @@ export const ContactCard: React.FC<ContactCardProps> = ({ contact }) => {
             <span className="line-clamp-1">{contact.name}</span>
           </div>
         </div>
-        {contact.lifecycleStage?.name?.toLowerCase().includes('client') && (
+        {contact.lifecycleStage?.name?.toLowerCase().includes("client") && (
           <span className="rounded-md bg-emerald-500/20 px-1.5 py-0.5 text-[10px] font-bold text-emerald-400 uppercase tracking-tight">
             Ganado
           </span>
@@ -45,10 +49,10 @@ export const ContactCard: React.FC<ContactCardProps> = ({ contact }) => {
           {contact.name.charAt(0).toUpperCase()}
         </div>
         {contact.tags?.slice(0, 2).map((tag: any) => (
-          <span 
-            key={tag.id} 
+          <span
+            key={tag.id}
             className="px-1.5 py-0.5 rounded text-[10px] font-medium text-white shadow-sm"
-            style={{ backgroundColor: tag.color || '#475569' }}
+            style={{ backgroundColor: tag.color || "#475569" }}
           >
             {tag.name}
           </span>

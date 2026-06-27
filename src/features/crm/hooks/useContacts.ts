@@ -1,16 +1,23 @@
-import { CreateContactInput, crmApi, UpdateContactInput } from '@crm/api/crm.api';
-import { ContactsListResponse } from '@crm/types/contacts-list-response';
-import { ListContactsQuery } from '@crm/types/list-contacts-query';
-import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
+import {
+  CreateContactInput,
+  crmApi,
+  UpdateContactInput,
+} from "@crm/api/crm.api";
+import { ContactsListResponse } from "@crm/types/contacts-list-response";
+import { ListContactsQuery } from "@crm/types/list-contacts-query";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 
 export const contactsKeys = {
-  all: ['contacts'] as const,
-  list: (query: ListContactsQuery) => ['contacts', 'list', query] as const,
-  detail: (id: string) => ['contacts', 'detail', id] as const,
-  activities: (id: string) => ['contacts', id, 'activities'] as const,
+  all: ["contacts"] as const,
+  list: (query: ListContactsQuery) => ["contacts", "list", query] as const,
+  detail: (id: string) => ["contacts", "detail", id] as const,
+  activities: (id: string) => ["contacts", id, "activities"] as const,
 };
 
-export const useContactsList = (query: ListContactsQuery, options?: { enabled?: boolean }) =>
+export const useContactsList = (
+  query: ListContactsQuery,
+  options?: { enabled?: boolean },
+) =>
   useQuery({
     queryKey: contactsKeys.list(query),
     queryFn: async () => {
@@ -23,7 +30,7 @@ export const useContactsList = (query: ListContactsQuery, options?: { enabled?: 
 export const useContact = (id: string | null) =>
   useQuery({
     enabled: Boolean(id),
-    queryKey: contactsKeys.detail(id ?? ''),
+    queryKey: contactsKeys.detail(id ?? ""),
     queryFn: async () => {
       const res = await crmApi.get(id as string);
       return res.data;
@@ -33,7 +40,7 @@ export const useContact = (id: string | null) =>
 export const useContactActivities = (id: string | null) =>
   useQuery({
     enabled: Boolean(id),
-    queryKey: contactsKeys.activities(id ?? ''),
+    queryKey: contactsKeys.activities(id ?? ""),
     queryFn: async () => {
       const res = await crmApi.listActivities(id as string);
       return res.data;

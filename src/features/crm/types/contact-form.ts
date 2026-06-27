@@ -1,4 +1,4 @@
-import { ContactSource } from '@crm/types/crm';
+import { ContactSource } from "@crm/types/crm";
 
 export interface ContactFormData {
   name: string;
@@ -11,4 +11,3 @@ export interface ContactFormData {
   notes: string;
   customFields: Record<string, any>;
 }
-

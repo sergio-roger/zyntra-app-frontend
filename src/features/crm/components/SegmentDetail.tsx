@@ -1,12 +1,12 @@
-import React, { useState, useEffect } from 'react';
-import { Edit2, Filter, Loader2, Pencil, Tag, Users } from 'lucide-react';
-import { EmptyState } from '@shared/components/EmptyState';
-import { useSegmentContacts } from '@crm/hooks/useSegments';
-import { Segment } from '@crm/types/segment';
-import { Contact } from '@crm/types/contact';
-import { Pagination } from '@crm/components/Pagination';
-import { SourceBadge } from '@crm/components/badges';
-import { ContactFormSidebar } from '@crm/components/ContactFormSidebar';
+import React, { useState, useEffect } from "react";
+import { Edit2, Filter, Loader2, Pencil, Tag, Users } from "lucide-react";
+import { EmptyState } from "@shared/components/EmptyState";
+import { useSegmentContacts } from "@crm/hooks/useSegments";
+import { Segment } from "@crm/types/segment";
+import { Contact } from "@crm/types/contact";
+import { Pagination } from "@crm/components/Pagination";
+import { SourceBadge } from "@crm/components/badges";
+import { ContactFormSidebar } from "@crm/components/ContactFormSidebar";
 
 interface SegmentDetailProps {
   segment: Segment;
@@ -14,12 +14,19 @@ interface SegmentDetailProps {
   onRefresh: () => void;
 }
 
-export const SegmentDetail: React.FC<SegmentDetailProps> = ({ segment, onEdit, onRefresh }) => {
+export const SegmentDetail: React.FC<SegmentDetailProps> = ({
+  segment,
+  onEdit,
+  onRefresh,
+}) => {
   const [page, setPage] = useState(1);
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const [editingContact, setEditingContact] = useState<Contact | null>(null);
 
-  const { data, isLoading } = useSegmentContacts(segment.id, { page, limit: 10 });
+  const { data, isLoading } = useSegmentContacts(segment.id, {
+    page,
+    limit: 10,
+  });
 
   useEffect(() => {
     setPage(1);
@@ -35,17 +42,19 @@ export const SegmentDetail: React.FC<SegmentDetailProps> = ({ segment, onEdit, o
       {/* Header */}
       <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between px-6 pt-5 pb-4 border-b border-slate-700/40 gap-3">
         <div className="min-w-0">
-          <h2 className="text-lg font-black text-white leading-tight truncate">{segment.name}</h2>
+          <h2 className="text-lg font-black text-white leading-tight truncate">
+            {segment.name}
+          </h2>
           <p className="text-xs text-slate-400 mt-0.5">
-            {segment.description || 'Sin descripción.'}
+            {segment.description || "Sin descripción."}
           </p>
           {segment.conditions?.length > 0 && (
             <div className="flex items-center gap-1.5 mt-2">
               <Filter size={10} className="text-slate-500" />
               <span className="text-[10px] text-slate-500 font-medium">
                 {segment.conditions.length} regla
-                {segment.conditions.length !== 1 ? 's' : ''} activa
-                {segment.conditions.length !== 1 ? 's' : ''}
+                {segment.conditions.length !== 1 ? "s" : ""} activa
+                {segment.conditions.length !== 1 ? "s" : ""}
               </span>
             </div>
           )}
@@ -99,13 +108,19 @@ export const SegmentDetail: React.FC<SegmentDetailProps> = ({ segment, onEdit, o
                       className="group border-b border-slate-800/40 transition-colors last:border-0 hover:bg-white/5"
                     >
                       <td className="px-4 py-3">
-                        <span className="font-bold text-slate-100">{c.name}</span>
+                        <span className="font-bold text-slate-100">
+                          {c.name}
+                        </span>
                       </td>
                       <td className="px-4 py-3">
                         <div className="flex flex-col">
-                          <span className="text-slate-200 text-xs">{c.email ?? '—'}</span>
+                          <span className="text-slate-200 text-xs">
+                            {c.email ?? "—"}
+                          </span>
                           {c.phone && (
-                            <span className="text-slate-500 text-[10px] mt-0.5">{c.phone}</span>
+                            <span className="text-slate-500 text-[10px] mt-0.5">
+                              {c.phone}
+                            </span>
                           )}
                         </div>
                       </td>
@@ -120,7 +135,9 @@ export const SegmentDetail: React.FC<SegmentDetailProps> = ({ segment, onEdit, o
                             }}
                           >
                             {c.lifecycleStage.icon && (
-                              <span className="text-[11px] leading-none">{c.lifecycleStage.icon}</span>
+                              <span className="text-[11px] leading-none">
+                                {c.lifecycleStage.icon}
+                              </span>
                             )}
                             {c.lifecycleStage.name}
                           </span>

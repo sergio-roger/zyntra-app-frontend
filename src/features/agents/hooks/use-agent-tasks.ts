@@ -1,17 +1,19 @@
-import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
-import { agentsApi } from '../api/agents.api';
-import { AgentTaskStatus } from '@features/agents/types/agents';
+import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
+import { agentsApi } from "../api/agents.api";
+import { AgentTaskStatus } from "@features/agents/types/agents";
 
 export const useAgentTasks = () => {
   const queryClient = useQueryClient();
 
   const tasksQuery = useQuery({
-    queryKey: ['agent-tasks'],
+    queryKey: ["agent-tasks"],
     queryFn: agentsApi.getTasks,
     refetchInterval: (query) => {
       // Si hay alguna tarea pendiente o ejecutándose, hacemos polling cada 3 segundos
       const hasPending = query.state.data?.some(
-        (t) => t.status === AgentTaskStatus.PENDING || t.status === AgentTaskStatus.RUNNING
+        (t) =>
+          t.status === AgentTaskStatus.PENDING ||
+          t.status === AgentTaskStatus.RUNNING,
       );
       return hasPending ? 3000 : false;
     },
@@ -20,7 +22,7 @@ export const useAgentTasks = () => {
   const createTaskMutation = useMutation({
     mutationFn: agentsApi.createTask,
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ['agent-tasks'] });
+      queryClient.invalidateQueries({ queryKey: ["agent-tasks"] });
     },
   });
 

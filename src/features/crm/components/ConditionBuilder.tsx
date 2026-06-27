@@ -1,9 +1,9 @@
-import React from 'react';
-import { Plus, Trash2, Filter } from 'lucide-react';
-import { useTags } from '@crm/hooks/useTags';
-import { useCustomFields } from '@crm/hooks/useCustomFields';
-import { SOURCES, SOURCE_LABELS } from '@crm/types/crm';
-import { SegmentCondition } from '@crm/types/segment-condition';
+import React from "react";
+import { Plus, Trash2, Filter } from "lucide-react";
+import { useTags } from "@crm/hooks/useTags";
+import { useCustomFields } from "@crm/hooks/useCustomFields";
+import { SOURCES, SOURCE_LABELS } from "@crm/types/crm";
+import { SegmentCondition } from "@crm/types/segment-condition";
 
 interface ConditionBuilderProps {
   conditions: SegmentCondition[];
@@ -11,23 +11,30 @@ interface ConditionBuilderProps {
 }
 
 const selectCls =
-  'w-full rounded-lg border border-slate-700/60 bg-slate-950/70 px-3 py-2 text-sm text-slate-200 outline-none focus:border-indigo-400 focus:ring-1 focus:ring-indigo-400/20 transition-all cursor-pointer';
+  "w-full rounded-lg border border-slate-700/60 bg-slate-950/70 px-3 py-2 text-sm text-slate-200 outline-none focus:border-indigo-400 focus:ring-1 focus:ring-indigo-400/20 transition-all cursor-pointer";
 
-export const ConditionBuilder: React.FC<ConditionBuilderProps> = ({ conditions, onChange }) => {
+export const ConditionBuilder: React.FC<ConditionBuilderProps> = ({
+  conditions,
+  onChange,
+}) => {
   const { data: tags = [] } = useTags();
   const { data: customFields = [] } = useCustomFields();
   const [stages, setStages] = React.useState<any[]>([]);
 
   React.useEffect(() => {
-    import('@shared/api/axios').then(({ default: api }) => {
-      api.get('/lifecycle/stages')
+    import("@shared/api/axios").then(({ default: api }) => {
+      api
+        .get("/lifecycle/stages")
         .then((r) => setStages(r.data))
         .catch((e) => console.error(e));
     });
   }, []);
 
   const handleAddCondition = () => {
-    onChange([...conditions, { field: 'source', operator: 'equals', value: '' }]);
+    onChange([
+      ...conditions,
+      { field: "source", operator: "equals", value: "" },
+    ]);
   };
 
   const handleRemoveCondition = (index: number) => {
@@ -40,18 +47,24 @@ export const ConditionBuilder: React.FC<ConditionBuilderProps> = ({ conditions, 
     const next = [...conditions];
     next[index] = {
       field,
-      operator: field === 'deal_value' ? 'greater_than' : 'equals',
-      value: '',
+      operator: field === "deal_value" ? "greater_than" : "equals",
+      value: "",
     };
     onChange(next);
   };
 
-  const handleOperatorChange = (index: number, operator: SegmentCondition['operator']) => {
+  const handleOperatorChange = (
+    index: number,
+    operator: SegmentCondition["operator"],
+  ) => {
     const next = [...conditions];
     next[index] = {
       ...next[index],
       operator,
-      value: operator === 'is_empty' || operator === 'is_not_empty' ? '' : next[index].value,
+      value:
+        operator === "is_empty" || operator === "is_not_empty"
+          ? ""
+          : next[index].value,
     };
     onChange(next);
   };
@@ -95,25 +108,34 @@ export const ConditionBuilder: React.FC<ConditionBuilderProps> = ({ conditions, 
         >
           <div className="flex flex-col items-center gap-2">
             <div className="h-8 w-8 rounded-full bg-slate-800 group-hover:bg-indigo-500/15 flex items-center justify-center transition-colors">
-              <Plus size={15} className="text-slate-500 group-hover:text-indigo-400 transition-colors" />
+              <Plus
+                size={15}
+                className="text-slate-500 group-hover:text-indigo-400 transition-colors"
+              />
             </div>
             <p className="text-xs text-slate-500 group-hover:text-slate-400 transition-colors leading-relaxed">
               Sin reglas — incluye a todos los contactos.
               <br />
-              <span className="text-indigo-400/70">Haz clic para añadir la primera.</span>
+              <span className="text-indigo-400/70">
+                Haz clic para añadir la primera.
+              </span>
             </p>
           </div>
         </button>
       ) : (
         <div className="space-y-1">
           {conditions.map((cond, index) => {
-            const isCustomField = cond.field.startsWith('custom_fields.');
+            const isCustomField = cond.field.startsWith("custom_fields.");
             const selectedCustomField = isCustomField
-              ? customFields.find((cf) => `custom_fields.${cf.name}` === cond.field)
+              ? customFields.find(
+                  (cf) => `custom_fields.${cf.name}` === cond.field,
+                )
               : null;
-            const hideValue = cond.operator === 'is_empty' || cond.operator === 'is_not_empty';
+            const hideValue =
+              cond.operator === "is_empty" || cond.operator === "is_not_empty";
             const isNumeric =
-              cond.field === 'deal_value' || selectedCustomField?.type === 'number';
+              cond.field === "deal_value" ||
+              selectedCustomField?.type === "number";
 
             return (
               <div key={index}>
@@ -132,7 +154,9 @@ export const ConditionBuilder: React.FC<ConditionBuilderProps> = ({ conditions, 
                 <div className="flex items-start gap-3 rounded-xl border border-slate-700/50 bg-slate-900/40 hover:bg-slate-900/60 p-3 transition-all group">
                   {/* Number badge */}
                   <div className="shrink-0 mt-[9px] h-5 w-5 rounded-full bg-slate-800 border border-slate-700/60 flex items-center justify-center">
-                    <span className="text-[9px] font-black text-slate-500">{index + 1}</span>
+                    <span className="text-[9px] font-black text-slate-500">
+                      {index + 1}
+                    </span>
                   </div>
 
                   {/* Inputs */}
@@ -154,7 +178,10 @@ export const ConditionBuilder: React.FC<ConditionBuilderProps> = ({ conditions, 
                       {customFields.length > 0 && (
                         <optgroup label="Campos Personalizados">
                           {customFields.map((cf) => (
-                            <option key={cf.id} value={`custom_fields.${cf.name}`}>
+                            <option
+                              key={cf.id}
+                              value={`custom_fields.${cf.name}`}
+                            >
                               {cf.label}
                             </option>
                           ))}
@@ -166,7 +193,10 @@ export const ConditionBuilder: React.FC<ConditionBuilderProps> = ({ conditions, 
                     <select
                       value={cond.operator}
                       onChange={(e) =>
-                        handleOperatorChange(index, e.target.value as SegmentCondition['operator'])
+                        handleOperatorChange(
+                          index,
+                          e.target.value as SegmentCondition["operator"],
+                        )
                       }
                       className={selectCls}
                     >
@@ -190,14 +220,18 @@ export const ConditionBuilder: React.FC<ConditionBuilderProps> = ({ conditions, 
                     {/* Value */}
                     {hideValue ? (
                       <div className="flex items-center px-3 py-2 rounded-lg border border-slate-700/30 bg-slate-950/30">
-                        <span className="text-xs text-slate-600 italic">sin valor requerido</span>
+                        <span className="text-xs text-slate-600 italic">
+                          sin valor requerido
+                        </span>
                       </div>
                     ) : (
                       <div>
-                        {cond.field === 'source' ? (
+                        {cond.field === "source" ? (
                           <select
                             value={cond.value}
-                            onChange={(e) => handleValueChange(index, e.target.value)}
+                            onChange={(e) =>
+                              handleValueChange(index, e.target.value)
+                            }
                             className={selectCls}
                           >
                             <option value="">Selecciona origen</option>
@@ -207,10 +241,12 @@ export const ConditionBuilder: React.FC<ConditionBuilderProps> = ({ conditions, 
                               </option>
                             ))}
                           </select>
-                        ) : cond.field === 'lifecycleStageId' ? (
+                        ) : cond.field === "lifecycleStageId" ? (
                           <select
                             value={cond.value}
-                            onChange={(e) => handleValueChange(index, e.target.value)}
+                            onChange={(e) =>
+                              handleValueChange(index, e.target.value)
+                            }
                             className={selectCls}
                           >
                             <option value="">Selecciona etapa</option>
@@ -220,10 +256,12 @@ export const ConditionBuilder: React.FC<ConditionBuilderProps> = ({ conditions, 
                               </option>
                             ))}
                           </select>
-                        ) : cond.field === 'tags' ? (
+                        ) : cond.field === "tags" ? (
                           <select
                             value={cond.value}
-                            onChange={(e) => handleValueChange(index, e.target.value)}
+                            onChange={(e) =>
+                              handleValueChange(index, e.target.value)
+                            }
                             className={selectCls}
                           >
                             <option value="">Selecciona etiqueta</option>
@@ -233,10 +271,13 @@ export const ConditionBuilder: React.FC<ConditionBuilderProps> = ({ conditions, 
                               </option>
                             ))}
                           </select>
-                        ) : selectedCustomField?.type === 'select' && selectedCustomField.options ? (
+                        ) : selectedCustomField?.type === "select" &&
+                          selectedCustomField.options ? (
                           <select
                             value={cond.value}
-                            onChange={(e) => handleValueChange(index, e.target.value)}
+                            onChange={(e) =>
+                              handleValueChange(index, e.target.value)
+                            }
                             className={selectCls}
                           >
                             <option value="">Selecciona opción</option>
@@ -248,9 +289,11 @@ export const ConditionBuilder: React.FC<ConditionBuilderProps> = ({ conditions, 
                           </select>
                         ) : (
                           <input
-                            type={isNumeric ? 'number' : 'text'}
+                            type={isNumeric ? "number" : "text"}
                             value={cond.value}
-                            onChange={(e) => handleValueChange(index, e.target.value)}
+                            onChange={(e) =>
+                              handleValueChange(index, e.target.value)
+                            }
                             placeholder="Escribe un valor…"
                             className="w-full rounded-lg border border-slate-700/60 bg-slate-950/70 px-3 py-2 text-sm text-slate-200 outline-none focus:border-indigo-400 focus:ring-1 focus:ring-indigo-400/20 placeholder-slate-600 transition-all"
                           />

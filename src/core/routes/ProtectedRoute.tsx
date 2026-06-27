@@ -1,7 +1,7 @@
-import React from 'react';
-import { Navigate, useLocation } from 'react-router-dom';
-import { FullScreenLoader } from '@shared/components/FullScreenLoader';
-import { useAuthStore } from '@features/auth/store/authStore';
+import React from "react";
+import { Navigate, useLocation } from "react-router-dom";
+import { FullScreenLoader } from "@shared/components/FullScreenLoader";
+import { useAuthStore } from "@features/auth/store/authStore";
 
 interface ProtectedRouteProps {
   children: React.ReactNode;
@@ -22,9 +22,15 @@ interface PublicOnlyRouteProps {
   children: React.ReactNode;
 }
 
-export const PublicOnlyRoute: React.FC<PublicOnlyRouteProps> = ({ children }) => {
+export const PublicOnlyRoute: React.FC<PublicOnlyRouteProps> = ({
+  children,
+}) => {
   const { isAuthenticated, isLoading } = useAuthStore();
 
   if (isLoading) return <FullScreenLoader />;
-  return isAuthenticated ? <Navigate to="/dashboard" replace /> : <>{children}</>;
+  return isAuthenticated ? (
+    <Navigate to="/dashboard" replace />
+  ) : (
+    <>{children}</>
+  );
 };

@@ -1,5 +1,5 @@
-import React from 'react';
-import { LucideIcon, Plus } from 'lucide-react';
+import React from "react";
+import { LucideIcon, Plus } from "lucide-react";
 
 interface EmptyStateProps {
   icon: LucideIcon;
@@ -21,7 +21,7 @@ export const EmptyState: React.FC<EmptyStateProps> = ({
       <div className="relative mb-6">
         {/* Glow effect */}
         <div className="absolute inset-0 bg-primary/20 blur-2xl rounded-full scale-150 animate-pulse" />
-        
+
         <div className="relative flex h-20 w-20 items-center justify-center rounded-3xl bg-slate-900 border border-white/10 shadow-2xl">
           <Icon size={40} className="text-primary" strokeWidth={1.5} />
         </div>
@@ -30,7 +30,7 @@ export const EmptyState: React.FC<EmptyStateProps> = ({
       <h3 className="text-xl font-bold text-white mb-2 tracking-tight">
         {title}
       </h3>
-      
+
       <p className="max-w-xs text-sm text-slate-400 leading-relaxed mb-8">
         {description}
       </p>

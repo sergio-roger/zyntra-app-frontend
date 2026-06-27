@@ -1,4 +1,4 @@
-import api from '@shared/api/axios';
+import api from "@shared/api/axios";
 
 interface ChatPreviewRequest {
   message: string;
@@ -51,7 +51,7 @@ export interface ConversationDetail extends Conversation {
  */
 const unwrap = <T>(envelope: unknown): T => {
   const e = envelope as { data?: T } | T;
-  if (e && typeof e === 'object' && 'data' in (e as object)) {
+  if (e && typeof e === "object" && "data" in (e as object)) {
     return (e as { data: T }).data;
   }
   return e as T;
@@ -59,19 +59,21 @@ const unwrap = <T>(envelope: unknown): T => {
 
 export const aiApi = {
   preview: async (data: ChatPreviewRequest): Promise<{ response: string }> =>
-    unwrap(await api.post('/ai/preview', data)),
+    unwrap(await api.post("/ai/preview", data)),
 
   getConfig: async (): Promise<ChatbotConfig> =>
-    unwrap(await api.get('/chatbot/config')),
+    unwrap(await api.get("/chatbot/config")),
 
   getOrCreateConfig: async (): Promise<ChatbotConfig> =>
-    unwrap(await api.post('/chatbot/config/ensure')),
+    unwrap(await api.post("/chatbot/config/ensure")),
 
-  updateConfig: async (updates: Partial<ChatbotConfig>): Promise<ChatbotConfig> =>
-    unwrap(await api.put('/chatbot/config', updates)),
+  updateConfig: async (
+    updates: Partial<ChatbotConfig>,
+  ): Promise<ChatbotConfig> =>
+    unwrap(await api.put("/chatbot/config", updates)),
 
   getConversations: async (): Promise<Conversation[]> =>
-    unwrap(await api.get('/chat/conversations')),
+    unwrap(await api.get("/chat/conversations")),
 
   getConversationDetail: async (id: string): Promise<ConversationDetail> =>
     unwrap(await api.get(`/chat/conversations/${id}`)),

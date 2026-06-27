@@ -1,4 +1,4 @@
-import { TaskPriority } from './crm-task';
+import { TaskPriority } from "./crm-task";
 
 export interface CreateTaskInput {
   contact_id?: string;

@@ -1,4 +1,4 @@
-import { DealPipelineStage } from './deal-pipeline-stage';
+import { DealPipelineStage } from "./deal-pipeline-stage";
 
 export interface DealPipeline {
   business_id: string;

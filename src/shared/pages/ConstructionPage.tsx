@@ -1,6 +1,6 @@
-import React from 'react';
-import { Hammer, ArrowLeft, LayoutDashboard } from 'lucide-react';
-import { useNavigate } from 'react-router-dom';
+import React from "react";
+import { Hammer, ArrowLeft, LayoutDashboard } from "lucide-react";
+import { useNavigate } from "react-router-dom";
 
 const ConstructionPage: React.FC = () => {
   const navigate = useNavigate();
@@ -13,26 +13,28 @@ const ConstructionPage: React.FC = () => {
           <Hammer className="h-20 w-20 text-primary animate-bounce" />
         </div>
       </div>
-      
+
       <h1 className="text-4xl font-black text-base-content mb-4 tracking-tight">
-        ¡Estamos construyendo algo <span className="text-primary italic">increíble</span>!
+        ¡Estamos construyendo algo{" "}
+        <span className="text-primary italic">increíble</span>!
       </h1>
-      
+
       <p className="text-base-content/60 max-w-md mx-auto mb-10 text-lg leading-relaxed">
-        Esta sección está siendo desarrollada por nuestro equipo de ingeniería para ofrecerte la mejor experiencia posible. Estará lista muy pronto.
+        Esta sección está siendo desarrollada por nuestro equipo de ingeniería
+        para ofrecerte la mejor experiencia posible. Estará lista muy pronto.
       </p>
-      
+
       <div className="flex flex-wrap items-center justify-center gap-4">
-        <button 
+        <button
           onClick={() => navigate(-1)}
           className="btn btn-ghost gap-2 px-8"
         >
           <ArrowLeft size={18} />
           Volver atrás
         </button>
-        
-        <button 
-          onClick={() => navigate('/dashboard')}
+
+        <button
+          onClick={() => navigate("/dashboard")}
           className="btn btn-primary gap-2 px-8 shadow-lg shadow-primary/20"
         >
           <LayoutDashboard size={18} />

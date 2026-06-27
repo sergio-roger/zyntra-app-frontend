@@ -1,6 +1,6 @@
-import { create } from 'zustand';
-import { persist } from 'zustand/middleware';
-import { AuthState } from './authStore.types';
+import { create } from "zustand";
+import { persist } from "zustand/middleware";
+import { AuthState } from "./authStore.types";
 
 export const useAuthStore = create<AuthState>()(
   persist(
@@ -30,7 +30,7 @@ export const useAuthStore = create<AuthState>()(
         }),
     }),
     {
-      name: 'auth-storage',
+      name: "auth-storage",
     },
   ),
 );

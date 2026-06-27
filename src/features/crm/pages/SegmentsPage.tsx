@@ -1,18 +1,18 @@
-import { SegmentDetail } from '@crm/components/SegmentDetail';
-import { SegmentEditor } from '@crm/components/SegmentEditor';
-import { SegmentListPanel } from '@crm/components/SegmentListPanel';
+import { SegmentDetail } from "@crm/components/SegmentDetail";
+import { SegmentEditor } from "@crm/components/SegmentEditor";
+import { SegmentListPanel } from "@crm/components/SegmentListPanel";
 import {
   useCreateSegment,
   useDeleteSegment,
   useSegmentsList,
   useUpdateSegment,
-} from '@crm/hooks/useSegments';
-import { Segment } from '@crm/types/segment';
-import { SegmentCondition } from '@crm/types/segment-condition';
-import { ConfirmModal } from '@shared/components/ConfirmModal';
-import { EmptyState } from '@shared/components/EmptyState';
-import { Users } from 'lucide-react';
-import React, { useState } from 'react';
+} from "@crm/hooks/useSegments";
+import { Segment } from "@crm/types/segment";
+import { SegmentCondition } from "@crm/types/segment-condition";
+import { ConfirmModal } from "@shared/components/ConfirmModal";
+import { EmptyState } from "@shared/components/EmptyState";
+import { Users } from "lucide-react";
+import React, { useState } from "react";
 
 export const SegmentsPage: React.FC = () => {
   const { data: segments = [], isLoading, refetch } = useSegmentsList();
@@ -20,12 +20,17 @@ export const SegmentsPage: React.FC = () => {
   const updateMutation = useUpdateSegment();
   const deleteMutation = useDeleteSegment();
 
-  const [selectedSegmentId, setSelectedSegmentId] = useState<string | null>(null);
+  const [selectedSegmentId, setSelectedSegmentId] = useState<string | null>(
+    null,
+  );
   const [isEditing, setIsEditing] = useState(false);
   const [isCreating, setIsCreating] = useState(false);
-  const [deletingSegmentId, setDeletingSegmentId] = useState<string | null>(null);
+  const [deletingSegmentId, setDeletingSegmentId] = useState<string | null>(
+    null,
+  );
 
-  const selectedSegment = segments.find((s) => s.id === selectedSegmentId) ?? null;
+  const selectedSegment =
+    segments.find((s) => s.id === selectedSegmentId) ?? null;
   const isPending = createMutation.isPending || updateMutation.isPending;
 
   const handleSelect = (id: string) => {

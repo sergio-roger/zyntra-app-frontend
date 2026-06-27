@@ -1,9 +1,9 @@
-import { CustomFieldConditionBuilder } from '@crm/components/CustomFieldConditionBuilder';
-import { useCustomFields } from '@crm/hooks/useCustomFields';
-import { SegmentCondition } from '@crm/types/segment-condition';
-import { FilterX, Settings2, X } from 'lucide-react';
-import React from 'react';
-import { useNavigate } from 'react-router-dom';
+import { CustomFieldConditionBuilder } from "@crm/components/CustomFieldConditionBuilder";
+import { useCustomFields } from "@crm/hooks/useCustomFields";
+import { SegmentCondition } from "@crm/types/segment-condition";
+import { FilterX, Settings2, X } from "lucide-react";
+import React from "react";
+import { useNavigate } from "react-router-dom";
 
 interface CustomFieldFilterSidebarProps {
   open: boolean;
@@ -12,12 +12,9 @@ interface CustomFieldFilterSidebarProps {
   onClose: () => void;
 }
 
-export const CustomFieldFilterSidebar: React.FC<CustomFieldFilterSidebarProps> = ({
-  open,
-  conditions,
-  onChange,
-  onClose,
-}) => {
+export const CustomFieldFilterSidebar: React.FC<
+  CustomFieldFilterSidebarProps
+> = ({ open, conditions, onChange, onClose }) => {
   const { data: fields = [] } = useCustomFields();
   const activeFields = fields.filter((f) => f.is_active);
   const navigate = useNavigate();
@@ -34,13 +31,17 @@ export const CustomFieldFilterSidebar: React.FC<CustomFieldFilterSidebarProps> =
       )}
       <div
         className={`fixed inset-y-0 right-0 z-50 !mt-0 flex w-[460px] max-w-full flex-col border-l border-white/10 bg-slate-900 shadow-2xl transition-transform duration-300 ease-in-out ${
-          open ? 'translate-x-0' : 'translate-x-full'
+          open ? "translate-x-0" : "translate-x-full"
         }`}
       >
         <div className="flex items-center justify-between border-b border-white/10 px-5 py-4">
           <div>
-            <h2 className="text-sm font-bold text-white">Filtros de campos personalizados</h2>
-            <p className="mt-0.5 text-xs text-slate-400">Define condiciones para filtrar contactos</p>
+            <h2 className="text-sm font-bold text-white">
+              Filtros de campos personalizados
+            </h2>
+            <p className="mt-0.5 text-xs text-slate-400">
+              Define condiciones para filtrar contactos
+            </p>
           </div>
           <button
             onClick={onClose}
@@ -55,13 +56,16 @@ export const CustomFieldFilterSidebar: React.FC<CustomFieldFilterSidebarProps> =
             <div className="h-12 w-12 rounded-2xl bg-indigo-500/10 flex items-center justify-center text-indigo-400 mb-4">
               <Settings2 size={24} />
             </div>
-            <h3 className="text-sm font-bold text-white mb-1">No hay campos personalizados</h3>
+            <h3 className="text-sm font-bold text-white mb-1">
+              No hay campos personalizados
+            </h3>
             <p className="text-xs text-slate-400 max-w-xs mb-6">
-              Aún no has configurado campos personalizados en tu CRM. Configura campos para poder filtrar tus contactos.
+              Aún no has configurado campos personalizados en tu CRM. Configura
+              campos para poder filtrar tus contactos.
             </p>
             <button
               onClick={() => {
-                navigate('/crm/fields');
+                navigate("/crm/fields");
                 onClose();
               }}
               className="px-5 py-2.5 text-xs font-bold text-white bg-indigo-600 hover:bg-indigo-500 rounded-xl transition-all shadow-lg shadow-indigo-500/20 active:scale-95 animate-pulse"
@@ -72,14 +76,17 @@ export const CustomFieldFilterSidebar: React.FC<CustomFieldFilterSidebarProps> =
         ) : (
           <>
             <div className="flex-1 overflow-y-auto p-5">
-              <CustomFieldConditionBuilder conditions={conditions} onChange={onChange} />
+              <CustomFieldConditionBuilder
+                conditions={conditions}
+                onChange={onChange}
+              />
             </div>
 
             <div className="flex items-center justify-between border-t border-white/10 px-5 py-4">
               <span className="text-xs text-slate-400">
                 {conditions.length === 0
-                  ? 'Sin condiciones activas'
-                  : `${conditions.length} condición${conditions.length !== 1 ? 'es' : ''} activa${conditions.length !== 1 ? 's' : ''}`}
+                  ? "Sin condiciones activas"
+                  : `${conditions.length} condición${conditions.length !== 1 ? "es" : ""} activa${conditions.length !== 1 ? "s" : ""}`}
               </span>
               <div className="flex items-center gap-2">
                 {conditions.length > 0 && (

@@ -1,9 +1,9 @@
-import React, { useState } from 'react';
-import { X, Save, Loader2, FolderPlus, Users } from 'lucide-react';
-import { useCreatePipeline } from '@crm/hooks/useDeals';
-import { useTeamsList } from '@features/settings/hooks/useUsersTeams';
-import { Input } from '@core/ui/Input';
-import { Select } from '@core/ui/Select';
+import React, { useState } from "react";
+import { X, Save, Loader2, FolderPlus, Users } from "lucide-react";
+import { useCreatePipeline } from "@crm/hooks/useDeals";
+import { useTeamsList } from "@features/settings/hooks/useUsersTeams";
+import { Input } from "@core/ui/Input";
+import { Select } from "@core/ui/Select";
 
 interface PipelineFormModalProps {
   open: boolean;
@@ -11,22 +11,45 @@ interface PipelineFormModalProps {
 }
 
 const DEFAULT_STAGES = [
-  { name: 'Prospección', color: '#4f46e5', probability_percent: 10,  type: 'active' },
-  { name: 'Contactado',  color: '#06b6d4', probability_percent: 20,  type: 'active' },
-  { name: 'Propuesta',   color: '#f59e0b', probability_percent: 40,  type: 'active' },
-  { name: 'Negociación', color: '#8b5cf6', probability_percent: 60,  type: 'active' },
-  { name: 'Ganado',      color: '#10b981', probability_percent: 100, type: 'won'    },
-  { name: 'Perdido',     color: '#ef4444', probability_percent: 0,   type: 'lost'   },
+  {
+    name: "Prospección",
+    color: "#4f46e5",
+    probability_percent: 10,
+    type: "active",
+  },
+  {
+    name: "Contactado",
+    color: "#06b6d4",
+    probability_percent: 20,
+    type: "active",
+  },
+  {
+    name: "Propuesta",
+    color: "#f59e0b",
+    probability_percent: 40,
+    type: "active",
+  },
+  {
+    name: "Negociación",
+    color: "#8b5cf6",
+    probability_percent: 60,
+    type: "active",
+  },
+  { name: "Ganado", color: "#10b981", probability_percent: 100, type: "won" },
+  { name: "Perdido", color: "#ef4444", probability_percent: 0, type: "lost" },
 ] as const;
 
 const TYPE_LABEL: Record<string, string> = {
-  active: 'Activa',
-  won: 'Ganado',
-  lost: 'Perdido',
+  active: "Activa",
+  won: "Ganado",
+  lost: "Perdido",
 };
 
-export const PipelineFormModal: React.FC<PipelineFormModalProps> = ({ open, onClose }) => {
-  const [name, setName] = useState('');
+export const PipelineFormModal: React.FC<PipelineFormModalProps> = ({
+  open,
+  onClose,
+}) => {
+  const [name, setName] = useState("");
   const [teamId, setTeamId] = useState<string | null>(null);
   const createMutation = useCreatePipeline();
   const { data: teams = [] } = useTeamsList();
@@ -43,10 +66,10 @@ export const PipelineFormModal: React.FC<PipelineFormModalProps> = ({ open, onCl
         team_id: teamId,
       });
       onClose();
-      setName('');
+      setName("");
       setTeamId(null);
     } catch (err) {
-      console.error('Error creating pipeline:', err);
+      console.error("Error creating pipeline:", err);
     }
   };
 
@@ -66,10 +89,15 @@ export const PipelineFormModal: React.FC<PipelineFormModalProps> = ({ open, onCl
             </div>
             <div>
               <h3 className="text-lg font-bold text-white">Nuevo Pipeline</h3>
-              <p className="text-xs text-slate-400">Crea un flujo de ventas para organizar tus tratos.</p>
+              <p className="text-xs text-slate-400">
+                Crea un flujo de ventas para organizar tus tratos.
+              </p>
             </div>
           </div>
-          <button onClick={onClose} className="p-2 hover:bg-white/5 rounded-full transition-colors text-slate-400 hover:text-white">
+          <button
+            onClick={onClose}
+            className="p-2 hover:bg-white/5 rounded-full transition-colors text-slate-400 hover:text-white"
+          >
             <X size={18} />
           </button>
         </div>
@@ -102,12 +130,17 @@ export const PipelineFormModal: React.FC<PipelineFormModalProps> = ({ open, onCl
             </p>
             <div className="rounded-xl border border-white/5 bg-slate-950/40 divide-y divide-white/[0.04] overflow-hidden">
               {DEFAULT_STAGES.map((s) => (
-                <div key={s.name} className="flex items-center gap-3 px-4 py-2.5">
+                <div
+                  key={s.name}
+                  className="flex items-center gap-3 px-4 py-2.5"
+                >
                   <span
                     className="h-2.5 w-2.5 rounded-full shrink-0"
                     style={{ backgroundColor: s.color }}
                   />
-                  <span className="flex-1 text-sm text-slate-200 font-medium">{s.name}</span>
+                  <span className="flex-1 text-sm text-slate-200 font-medium">
+                    {s.name}
+                  </span>
                   <span
                     className="text-[10px] font-bold px-1.5 py-0.5 rounded-full border"
                     style={{
@@ -118,12 +151,15 @@ export const PipelineFormModal: React.FC<PipelineFormModalProps> = ({ open, onCl
                   >
                     {TYPE_LABEL[s.type]}
                   </span>
-                  <span className="text-[10px] text-slate-500 w-9 text-right">{s.probability_percent}%</span>
+                  <span className="text-[10px] text-slate-500 w-9 text-right">
+                    {s.probability_percent}%
+                  </span>
                 </div>
               ))}
             </div>
             <p className="text-[11px] text-slate-500 ml-1">
-              Puedes editar, reordenar o eliminar etapas desde el botón ⚙ del pipeline.
+              Puedes editar, reordenar o eliminar etapas desde el botón ⚙ del
+              pipeline.
             </p>
           </div>
 
@@ -141,7 +177,11 @@ export const PipelineFormModal: React.FC<PipelineFormModalProps> = ({ open, onCl
               disabled={createMutation.isPending || !name.trim()}
               className="flex-[2] px-4 py-2.5 rounded-xl bg-indigo-600 hover:bg-indigo-500 text-white text-sm font-semibold shadow-lg shadow-indigo-600/30 disabled:opacity-50 transition-all flex items-center justify-center gap-2 active:scale-95"
             >
-              {createMutation.isPending ? <Loader2 className="animate-spin" size={18} /> : <Save size={18} />}
+              {createMutation.isPending ? (
+                <Loader2 className="animate-spin" size={18} />
+              ) : (
+                <Save size={18} />
+              )}
               Crear Pipeline
             </button>
           </div>

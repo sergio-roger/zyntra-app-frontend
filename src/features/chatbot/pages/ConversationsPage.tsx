@@ -1,11 +1,17 @@
-import { aiApi, Conversation, ConversationDetail } from '@features/chatbot/api/aiApi';
-import { Clock, Loader2, RefreshCw, User } from 'lucide-react';
-import React, { useEffect, useState } from 'react';
+import {
+  aiApi,
+  Conversation,
+  ConversationDetail,
+} from "@features/chatbot/api/aiApi";
+import { Clock, Loader2, RefreshCw, User } from "lucide-react";
+import React, { useEffect, useState } from "react";
 
 export const ConversationsPage: React.FC = () => {
   const [conversations, setConversations] = useState<Conversation[]>([]);
   const [loading, setLoading] = useState(true);
-  const [selectedConv, setSelectedConv] = useState<ConversationDetail | null>(null);
+  const [selectedConv, setSelectedConv] = useState<ConversationDetail | null>(
+    null,
+  );
   const [loadingDetail, setLoadingDetail] = useState(false);
 
   const loadConversations = React.useCallback(async () => {
@@ -14,7 +20,7 @@ export const ConversationsPage: React.FC = () => {
       const data = await aiApi.getConversations();
       setConversations(data);
     } catch (err) {
-      console.error('Error loading conversations:', err);
+      console.error("Error loading conversations:", err);
     } finally {
       setLoading(false);
     }
@@ -33,31 +39,31 @@ export const ConversationsPage: React.FC = () => {
       const data = await aiApi.getConversationDetail(id);
       setSelectedConv(data);
     } catch (err) {
-      console.error('Error loading conversation:', err);
+      console.error("Error loading conversation:", err);
     } finally {
       setLoadingDetail(false);
     }
   };
 
   const formatDate = (dateStr?: string) => {
-    if (!dateStr) return '';
+    if (!dateStr) return "";
     const date = new Date(dateStr);
-    return date.toLocaleDateString('es', {
-      day: 'numeric',
-      month: 'short',
-      hour: '2-digit',
-      minute: '2-digit',
+    return date.toLocaleDateString("es", {
+      day: "numeric",
+      month: "short",
+      hour: "2-digit",
+      minute: "2-digit",
     });
   };
 
   const getStatusBadge = (status: string) => {
     const badges: Record<string, string> = {
-      open: 'badge-success',
-      closed: 'badge-ghost',
-      bot: 'badge-warning',
-      human: 'badge-info',
+      open: "badge-success",
+      closed: "badge-ghost",
+      bot: "badge-warning",
+      human: "badge-info",
     };
-    return badges[status] || 'badge-ghost';
+    return badges[status] || "badge-ghost";
   };
 
   if (loading) {
@@ -73,19 +79,20 @@ export const ConversationsPage: React.FC = () => {
       <div className="flex items-center justify-between">
         <div>
           <h1 className="text-2xl font-bold">Conversaciones</h1>
-          <p className="text-base-content/60">
-            Chats atendidos por tu chatbot
-          </p>
+          <p className="text-base-content/60">Chats atendidos por tu chatbot</p>
         </div>
         <button className="btn btn-outline btn-sm" onClick={loadConversations}>
           <RefreshCw size={16} />
         </button>
       </div>
 
-      <div className="grid gap-6 lg:grid-cols-3" style={{ gridTemplateColumns: '1fr 2fr' }}>
+      <div
+        className="grid gap-6 lg:grid-cols-3"
+        style={{ gridTemplateColumns: "1fr 2fr" }}
+      >
         <div className="card bg-base-200 p-4">
           <h2 className="font-semibold mb-4">Recientes</h2>
-          
+
           {conversations.length === 0 ? (
             <p className="text-sm text-base-content/60">
               No hay conversaciones aún
@@ -96,7 +103,9 @@ export const ConversationsPage: React.FC = () => {
                 <button
                   key={conv.id}
                   className={`w-full text-left p-3 rounded-lg hover:bg-base-300 transition ${
-                    selectedConv?.id === conv.id ? 'bg-primary/20 border border-primary' : ''
+                    selectedConv?.id === conv.id
+                      ? "bg-primary/20 border border-primary"
+                      : ""
                   }`}
                   onClick={() => selectConversation(conv.id)}
                 >
@@ -105,7 +114,9 @@ export const ConversationsPage: React.FC = () => {
                       <User size={14} />
                       {conv.contact_name}
                     </span>
-                    <span className={`badge badge-sm ${getStatusBadge(conv.status)}`}>
+                    <span
+                      className={`badge badge-sm ${getStatusBadge(conv.status)}`}
+                    >
                       {conv.status}
                     </span>
                   </div>
@@ -121,7 +132,7 @@ export const ConversationsPage: React.FC = () => {
 
         <div className="card bg-base-200 p-4 lg:col-span-2">
           <h2 className="font-semibold mb-4">Detalle</h2>
-          
+
           {!selectedConv ? (
             <p className="text-sm text-base-content/60">
               Selecciona una conversación para ver los mensajes
@@ -134,8 +145,12 @@ export const ConversationsPage: React.FC = () => {
             <div>
               <div className="flex items-center justify-between mb-4 pb-4 border-b border-base-300">
                 <div>
-                  <span className="font-medium">{selectedConv.contact_name}</span>
-                  <span className={`badge badge-sm ml-2 ${getStatusBadge(selectedConv.status)}`}>
+                  <span className="font-medium">
+                    {selectedConv.contact_name}
+                  </span>
+                  <span
+                    className={`badge badge-sm ml-2 ${getStatusBadge(selectedConv.status)}`}
+                  >
                     {selectedConv.status}
                   </span>
                 </div>
@@ -149,7 +164,7 @@ export const ConversationsPage: React.FC = () => {
                   <div
                     key={msg.id}
                     className={`chat ${
-                      msg.role === 'user' ? 'chat-end' : 'chat-start'
+                      msg.role === "user" ? "chat-end" : "chat-start"
                     }`}
                   >
                     <div className="chat-bubble chat-bubble-primary">

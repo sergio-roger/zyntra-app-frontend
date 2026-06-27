@@ -1,4 +1,10 @@
-export type CustomFieldType = 'text' | 'number' | 'date' | 'select' | 'checkbox' | 'url';
+export type CustomFieldType =
+  | "text"
+  | "number"
+  | "date"
+  | "select"
+  | "checkbox"
+  | "url";
 
 export interface CustomField {
   business_id: string;

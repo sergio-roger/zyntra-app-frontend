@@ -1,7 +1,7 @@
-import { usePreviewContacts } from '@crm/hooks/useSegments';
-import { SegmentCondition } from '@crm/types/segment-condition';
-import { Loader2, Users } from 'lucide-react';
-import React from 'react';
+import { usePreviewContacts } from "@crm/hooks/useSegments";
+import { SegmentCondition } from "@crm/types/segment-condition";
+import { Loader2, Users } from "lucide-react";
+import React from "react";
 
 interface SegmentPreviewPanelProps {
   conditions: SegmentCondition[];
@@ -15,13 +15,15 @@ export const SegmentPreviewPanel: React.FC<SegmentPreviewPanelProps> = ({
   const { data, isLoading } = usePreviewContacts(
     conditions,
     { page: 1, limit: 5 },
-    enabled
+    enabled,
   );
 
   return (
     <div className="rounded-xl border border-slate-700/50 bg-slate-950/30 p-4 flex flex-col gap-4 min-h-[280px] xl:h-full">
       <div className="border-b border-slate-700/40 pb-3">
-        <h4 className="text-xs font-bold uppercase tracking-wider text-slate-400">Vista Previa</h4>
+        <h4 className="text-xs font-bold uppercase tracking-wider text-slate-400">
+          Vista Previa
+        </h4>
         <p className="text-[10px] text-slate-500 mt-0.5 leading-relaxed">
           Primeros 5 contactos que coinciden.
         </p>
@@ -30,7 +32,9 @@ export const SegmentPreviewPanel: React.FC<SegmentPreviewPanelProps> = ({
       {isLoading ? (
         <div className="flex flex-col items-center justify-center flex-1 gap-2">
           <Loader2 className="animate-spin text-indigo-500" size={24} />
-          <p className="text-[10px] text-slate-500 animate-pulse">Calculando…</p>
+          <p className="text-[10px] text-slate-500 animate-pulse">
+            Calculando…
+          </p>
         </div>
       ) : !data || data.items.length === 0 ? (
         <div className="flex flex-col items-center justify-center flex-1 text-center gap-2">
@@ -54,7 +58,7 @@ export const SegmentPreviewPanel: React.FC<SegmentPreviewPanelProps> = ({
                 <div className="min-w-0 mr-2">
                   <p className="font-bold text-white truncate">{c.name}</p>
                   <p className="text-[10px] text-slate-500 mt-0.5 truncate">
-                    {c.email || c.phone || 'Sin contacto'}
+                    {c.email || c.phone || "Sin contacto"}
                   </p>
                 </div>
                 {c.lifecycleStage ? (

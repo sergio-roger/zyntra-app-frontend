@@ -1,17 +1,27 @@
-import React, { useState, useEffect } from 'react';
-import { Bot, Globe, MessageSquare, Settings, Send, Loader2, Plus, X, HelpCircle } from 'lucide-react';
-import { aiApi, ChatbotConfig } from '@features/chatbot/api/aiApi';
+import React, { useState, useEffect } from "react";
+import {
+  Bot,
+  Globe,
+  MessageSquare,
+  Settings,
+  Send,
+  Loader2,
+  Plus,
+  X,
+  HelpCircle,
+} from "lucide-react";
+import { aiApi, ChatbotConfig } from "@features/chatbot/api/aiApi";
 
 const defaultConfig: ChatbotConfig = {
-  id: '',
-  business_id: '',
-  name: 'Asistente Zyntra',
-  tone: 'friendly',
-  welcome_message: '¡Hola! ¿En qué puedo ayudarte hoy?',
-  locale: 'es',
+  id: "",
+  business_id: "",
+  name: "Asistente Zyntra",
+  tone: "friendly",
+  welcome_message: "¡Hola! ¿En qué puedo ayudarte hoy?",
+  locale: "es",
   is_active: true,
-  system_prompt_extra: '',
-  active_channels: ['web'],
+  system_prompt_extra: "",
+  active_channels: ["web"],
   theme: {},
   faqs: [],
 };
@@ -22,8 +32,8 @@ export const ChatbotPage: React.FC = () => {
   const [saving, setSaving] = useState(false);
   const [saved, setSaved] = useState(false);
   const [previewLoading, setPreviewLoading] = useState(false);
-  const [previewMessage, setPreviewMessage] = useState('');
-  const [previewResponse, setPreviewResponse] = useState('');
+  const [previewMessage, setPreviewMessage] = useState("");
+  const [previewResponse, setPreviewResponse] = useState("");
 
   const loadConfig = React.useCallback(async () => {
     try {
@@ -50,7 +60,7 @@ export const ChatbotPage: React.FC = () => {
       setSaved(true);
       setTimeout(() => setSaved(false), 2000);
     } catch (err) {
-      console.error('Error saving:', err);
+      console.error("Error saving:", err);
     } finally {
       setSaving(false);
     }
@@ -69,9 +79,9 @@ export const ChatbotPage: React.FC = () => {
           system_prompt_extra: config.system_prompt_extra,
         },
       });
-      setPreviewResponse(data.response || 'Sin respuesta');
+      setPreviewResponse(data.response || "Sin respuesta");
     } catch {
-      setPreviewResponse('Error al conectar con la IA');
+      setPreviewResponse("Error al conectar con la IA");
     } finally {
       setPreviewLoading(false);
     }
@@ -149,7 +159,9 @@ export const ChatbotPage: React.FC = () => {
                 type="checkbox"
                 className="toggle toggle-primary"
                 checked={config.is_active}
-                onChange={(e) => setConfig({ ...config, is_active: e.target.checked })}
+                onChange={(e) =>
+                  setConfig({ ...config, is_active: e.target.checked })
+                }
               />
             </label>
           </div>
@@ -169,7 +181,9 @@ export const ChatbotPage: React.FC = () => {
               className="textarea textarea-bordered"
               rows={3}
               value={config.welcome_message}
-              onChange={(e) => setConfig({ ...config, welcome_message: e.target.value })}
+              onChange={(e) =>
+                setConfig({ ...config, welcome_message: e.target.value })
+              }
             />
           </div>
 
@@ -182,7 +196,9 @@ export const ChatbotPage: React.FC = () => {
               rows={2}
               placeholder="Instrucciones extra para el chatbot..."
               value={config.system_prompt_extra}
-              onChange={(e) => setConfig({ ...config, system_prompt_extra: e.target.value })}
+              onChange={(e) =>
+                setConfig({ ...config, system_prompt_extra: e.target.value })
+              }
             />
           </div>
         </div>
@@ -197,12 +213,8 @@ export const ChatbotPage: React.FC = () => {
             <span className="badge badge-primary gap-2">
               <Globe size={14} /> Web
             </span>
-            <span className="badge badge-outline gap-2">
-              WhatsApp
-            </span>
-            <span className="badge badge-outline gap-2">
-              Instagram
-            </span>
+            <span className="badge badge-outline gap-2">WhatsApp</span>
+            <span className="badge badge-outline gap-2">Instagram</span>
           </div>
         </div>
 
@@ -213,71 +225,88 @@ export const ChatbotPage: React.FC = () => {
           </div>
 
           <p className="text-sm text-base-content/60">
-            Configura el prompt del sistema, integraciones y más opciones avanzadas.
+            Configura el prompt del sistema, integraciones y más opciones
+            avanzadas.
           </p>
         </div>
       </div>
 
-        <div className="card bg-base-200 p-6">
-          <div className="flex items-center justify-between mb-4">
-            <div className="flex items-center gap-3">
-              <HelpCircle size={20} className="text-warning" />
-              <h2 className="text-lg font-semibold">Preguntas Frecuentes (FAQs)</h2>
-            </div>
-            <button
-              className="btn btn-sm btn-outline"
-              onClick={() => setConfig({ ...config, faqs: [...(config.faqs || []), { question: '', answer: '' }] })}
-            >
-              <Plus size={14} className="mr-1" /> Agregar
-            </button>
+      <div className="card bg-base-200 p-6">
+        <div className="flex items-center justify-between mb-4">
+          <div className="flex items-center gap-3">
+            <HelpCircle size={20} className="text-warning" />
+            <h2 className="text-lg font-semibold">
+              Preguntas Frecuentes (FAQs)
+            </h2>
           </div>
+          <button
+            className="btn btn-sm btn-outline"
+            onClick={() =>
+              setConfig({
+                ...config,
+                faqs: [...(config.faqs || []), { question: "", answer: "" }],
+              })
+            }
+          >
+            <Plus size={14} className="mr-1" /> Agregar
+          </button>
+        </div>
 
-          {(config.faqs || []).length === 0 ? (
-            <p className="text-sm text-base-content/60">
-              Agrega preguntas y respuestas frecuentes para que el chatbot pueda atender mejor.
-            </p>
-          ) : (
-            <div className="space-y-4">
-              {(config.faqs || []).map((faq, index) => (
-                <div key={index} className="flex gap-2 items-start">
-                  <div className="flex-1 grid gap-2">
-                    <input
-                      type="text"
-                      className="input input-bordered input-sm"
-                      placeholder="Pregunta"
-                      value={faq.question}
-                      onChange={(e) => {
-                        const newFaqs = [...(config.faqs || [])];
-                        newFaqs[index] = { ...newFaqs[index], question: e.target.value };
-                        setConfig({ ...config, faqs: newFaqs });
-                      }}
-                    />
-                    <input
-                      type="text"
-                      className="input input-bordered input-sm"
-                      placeholder="Respuesta"
-                      value={faq.answer}
-                      onChange={(e) => {
-                        const newFaqs = [...(config.faqs || [])];
-                        newFaqs[index] = { ...newFaqs[index], answer: e.target.value };
-                        setConfig({ ...config, faqs: newFaqs });
-                      }}
-                    />
-                  </div>
-                  <button
-                    className="btn btn-sm btn-ghost text-error"
-                    onClick={() => {
-                      const newFaqs = (config.faqs || []).filter((_, i) => i !== index);
+        {(config.faqs || []).length === 0 ? (
+          <p className="text-sm text-base-content/60">
+            Agrega preguntas y respuestas frecuentes para que el chatbot pueda
+            atender mejor.
+          </p>
+        ) : (
+          <div className="space-y-4">
+            {(config.faqs || []).map((faq, index) => (
+              <div key={index} className="flex gap-2 items-start">
+                <div className="flex-1 grid gap-2">
+                  <input
+                    type="text"
+                    className="input input-bordered input-sm"
+                    placeholder="Pregunta"
+                    value={faq.question}
+                    onChange={(e) => {
+                      const newFaqs = [...(config.faqs || [])];
+                      newFaqs[index] = {
+                        ...newFaqs[index],
+                        question: e.target.value,
+                      };
                       setConfig({ ...config, faqs: newFaqs });
                     }}
-                  >
-                    <X size={14} />
-                  </button>
+                  />
+                  <input
+                    type="text"
+                    className="input input-bordered input-sm"
+                    placeholder="Respuesta"
+                    value={faq.answer}
+                    onChange={(e) => {
+                      const newFaqs = [...(config.faqs || [])];
+                      newFaqs[index] = {
+                        ...newFaqs[index],
+                        answer: e.target.value,
+                      };
+                      setConfig({ ...config, faqs: newFaqs });
+                    }}
+                  />
                 </div>
-              ))}
-            </div>
-          )}
-        </div>
+                <button
+                  className="btn btn-sm btn-ghost text-error"
+                  onClick={() => {
+                    const newFaqs = (config.faqs || []).filter(
+                      (_, i) => i !== index,
+                    );
+                    setConfig({ ...config, faqs: newFaqs });
+                  }}
+                >
+                  <X size={14} />
+                </button>
+              </div>
+            ))}
+          </div>
+        )}
+      </div>
 
       <div className="divider">Vista Previa</div>
 
@@ -290,7 +319,7 @@ export const ChatbotPage: React.FC = () => {
             placeholder="Escribe un mensaje..."
             value={previewMessage}
             onChange={(e) => setPreviewMessage(e.target.value)}
-            onKeyDown={(e) => e.key === 'Enter' && handlePreview()}
+            onKeyDown={(e) => e.key === "Enter" && handlePreview()}
           />
           <button
             className="btn btn-primary"
@@ -316,8 +345,18 @@ export const ChatbotPage: React.FC = () => {
       </div>
 
       <div className="flex justify-end">
-        <button className="btn btn-primary" onClick={handleSave} disabled={saving}>
-          {saving ? <Loader2 size={18} className="animate-spin" /> : saved ? '¡Guardado!' : 'Guardar cambios'}
+        <button
+          className="btn btn-primary"
+          onClick={handleSave}
+          disabled={saving}
+        >
+          {saving ? (
+            <Loader2 size={18} className="animate-spin" />
+          ) : saved ? (
+            "¡Guardado!"
+          ) : (
+            "Guardar cambios"
+          )}
         </button>
       </div>
     </div>

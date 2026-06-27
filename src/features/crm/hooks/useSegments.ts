@@ -1,14 +1,16 @@
-import { segmentsApi } from '@crm/api/segments.api';
-import { CreateSegmentInput } from '@crm/types/create-segment-input';
-import { UpdateSegmentInput } from '@crm/types/update-segment-input';
-import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
+import { segmentsApi } from "@crm/api/segments.api";
+import { CreateSegmentInput } from "@crm/types/create-segment-input";
+import { UpdateSegmentInput } from "@crm/types/update-segment-input";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 
 export const segmentsKeys = {
-  all: ['segments'] as const,
-  lists: () => ['segments', 'list'] as const,
-  detail: (id: string) => ['segments', 'detail', id] as const,
-  contacts: (id: string, query: { page?: number; limit?: number }) => ['segments', 'contacts', id, query] as const,
-  preview: (conditions: any[], query: { page?: number; limit?: number }) => ['segments', 'preview', conditions, query] as const,
+  all: ["segments"] as const,
+  lists: () => ["segments", "list"] as const,
+  detail: (id: string) => ["segments", "detail", id] as const,
+  contacts: (id: string, query: { page?: number; limit?: number }) =>
+    ["segments", "contacts", id, query] as const,
+  preview: (conditions: any[], query: { page?: number; limit?: number }) =>
+    ["segments", "preview", conditions, query] as const,
 };
 
 export const useSegmentsList = () =>
@@ -30,7 +32,10 @@ export const useSegmentDetail = (id: string) =>
     enabled: !!id,
   });
 
-export const useSegmentContacts = (id: string, query: { page?: number; limit?: number } = {}) =>
+export const useSegmentContacts = (
+  id: string,
+  query: { page?: number; limit?: number } = {},
+) =>
   useQuery({
     queryKey: segmentsKeys.contacts(id, query),
     queryFn: async () => {
@@ -40,7 +45,11 @@ export const useSegmentContacts = (id: string, query: { page?: number; limit?: n
     enabled: !!id,
   });
 
-export const usePreviewContacts = (conditions: any[], query: { page?: number; limit?: number } = {}, enabled = true) =>
+export const usePreviewContacts = (
+  conditions: any[],
+  query: { page?: number; limit?: number } = {},
+  enabled = true,
+) =>
   useQuery({
     queryKey: segmentsKeys.preview(conditions, query),
     queryFn: async () => {
@@ -66,7 +75,13 @@ export const useCreateSegment = () => {
 export const useUpdateSegment = () => {
   const qc = useQueryClient();
   return useMutation({
-    mutationFn: async ({ id, input }: { id: string; input: UpdateSegmentInput }) => {
+    mutationFn: async ({
+      id,
+      input,
+    }: {
+      id: string;
+      input: UpdateSegmentInput;
+    }) => {
       const res = await segmentsApi.update(id, input);
       return res.data;
     },

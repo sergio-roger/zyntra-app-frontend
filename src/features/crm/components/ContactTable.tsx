@@ -1,7 +1,7 @@
-import { Pencil, Settings2, Trash2, User } from 'lucide-react';
-import { Contact } from '@crm/types/contact';
-import { SourceBadge } from './badges';
-import { EmptyState } from '@shared/components/EmptyState';
+import { Pencil, Settings2, Trash2, User } from "lucide-react";
+import { Contact } from "@crm/types/contact";
+import { SourceBadge } from "./badges";
+import { EmptyState } from "@shared/components/EmptyState";
 
 interface ContactTableProps {
   contacts: Contact[];
@@ -14,7 +14,7 @@ interface ContactTableProps {
 }
 
 const formatDate = (iso: string | null) => {
-  if (!iso) return '—';
+  if (!iso) return "—";
   return new Date(iso).toLocaleDateString();
 };
 
@@ -29,7 +29,7 @@ export const ContactTable: React.FC<ContactTableProps> = ({
 }) => {
   if (contacts.length === 0) {
     return (
-      <EmptyState 
+      <EmptyState
         icon={User}
         title="No se encontraron contactos"
         description="No hay registros que coincidan con los filtros seleccionados o tu base de datos está vacía."
@@ -68,8 +68,12 @@ export const ContactTable: React.FC<ContactTableProps> = ({
                   {c.name}
                 </button>
               </td>
-              <td className="hidden md:table-cell px-4 py-3 text-slate-300">{c.email ?? '—'}</td>
-              <td className="hidden sm:table-cell px-4 py-3 text-slate-300">{c.phone ?? '—'}</td>
+              <td className="hidden md:table-cell px-4 py-3 text-slate-300">
+                {c.email ?? "—"}
+              </td>
+              <td className="hidden sm:table-cell px-4 py-3 text-slate-300">
+                {c.phone ?? "—"}
+              </td>
               <td className="hidden sm:table-cell px-4 py-3">
                 {c.lifecycleStage ? (
                   <span
@@ -81,7 +85,9 @@ export const ContactTable: React.FC<ContactTableProps> = ({
                     }}
                   >
                     {c.lifecycleStage.icon && (
-                      <span className="text-[11px] leading-none">{c.lifecycleStage.icon}</span>
+                      <span className="text-[11px] leading-none">
+                        {c.lifecycleStage.icon}
+                      </span>
                     )}
                     {c.lifecycleStage.name}
                   </span>
@@ -93,7 +99,11 @@ export const ContactTable: React.FC<ContactTableProps> = ({
                 <SourceBadge source={c.source} />
               </td>
               <td className="hidden sm:table-cell px-4 py-3 text-slate-300">
-                {c.owner ? c.owner.name : <span className="text-slate-600">—</span>}
+                {c.owner ? (
+                  c.owner.name
+                ) : (
+                  <span className="text-slate-600">—</span>
+                )}
               </td>
               <td className="hidden md:table-cell px-4 py-3 text-slate-400">
                 {formatDate(c.lastActivityAt)}
@@ -113,7 +123,7 @@ export const ContactTable: React.FC<ContactTableProps> = ({
                     onClick={() => onEdit(c)}
                     disabled={!canEdit}
                     aria-label="Editar"
-                    className={`rounded-md p-1.5 transition-colors ${canEdit ? 'text-slate-400 hover:bg-white/10 hover:text-indigo-400' : 'cursor-not-allowed text-slate-700 opacity-40'}`}
+                    className={`rounded-md p-1.5 transition-colors ${canEdit ? "text-slate-400 hover:bg-white/10 hover:text-indigo-400" : "cursor-not-allowed text-slate-700 opacity-40"}`}
                   >
                     <Pencil size={15} />
                   </button>
@@ -121,7 +131,7 @@ export const ContactTable: React.FC<ContactTableProps> = ({
                     onClick={() => onDelete(c)}
                     disabled={!canEdit}
                     aria-label="Eliminar"
-                    className={`rounded-md p-1.5 transition-colors ${canEdit ? 'text-slate-400 hover:bg-rose-500/15 hover:text-rose-400' : 'cursor-not-allowed text-slate-700 opacity-40'}`}
+                    className={`rounded-md p-1.5 transition-colors ${canEdit ? "text-slate-400 hover:bg-rose-500/15 hover:text-rose-400" : "cursor-not-allowed text-slate-700 opacity-40"}`}
                   >
                     <Trash2 size={15} />
                   </button>

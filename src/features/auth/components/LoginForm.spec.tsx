@@ -51,9 +51,7 @@ describe("LoginForm", () => {
     fireEvent.click(screen.getByRole("button", { name: /iniciar sesión/i }));
 
     await waitFor(() => {
-      expect(
-        screen.getByText(/El email es requerido/i),
-      ).toBeInTheDocument();
+      expect(screen.getByText(/El email es requerido/i)).toBeInTheDocument();
       expect(
         screen.getByText(/La contraseña es requerida/i),
       ).toBeInTheDocument();

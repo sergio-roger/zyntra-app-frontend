@@ -1,16 +1,16 @@
 export enum AgentTaskStatus {
-  PENDING = 'pending',
-  RUNNING = 'running',
-  COMPLETED = 'completed',
-  FAILED = 'failed',
+  PENDING = "pending",
+  RUNNING = "running",
+  COMPLETED = "completed",
+  FAILED = "failed",
 }
 
 export enum AgentTaskType {
-  CONTENT = 'content',
-  SOCIAL = 'social',
-  CHATBOT = 'chatbot',
-  CRM_ANALYSIS = 'crm_analysis',
-  REPORT = 'report',
+  CONTENT = "content",
+  SOCIAL = "social",
+  CHATBOT = "chatbot",
+  CRM_ANALYSIS = "crm_analysis",
+  REPORT = "report",
 }
 
 export interface AgentTask {

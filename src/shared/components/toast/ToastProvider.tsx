@@ -1,8 +1,8 @@
-import React from 'react';
-import { Toast } from '@base-ui/react/toast';
-import { X, AlertCircle, CheckCircle, Info, AlertTriangle } from 'lucide-react';
-import { toastManager } from './toastManager';
-import './toast.css';
+import React from "react";
+import { Toast } from "@base-ui/react/toast";
+import { X, AlertCircle, CheckCircle, Info, AlertTriangle } from "lucide-react";
+import { toastManager } from "./toastManager";
+import "./toast.css";
 
 /** Re-usable Toast viewport — renders all stacked toasts. */
 function ToastList() {
@@ -12,14 +12,14 @@ function ToastList() {
     <Toast.Root
       key={toast.id}
       toast={toast}
-      className={`toast-root toast-${String(toast.type ?? 'info')}`}
+      className={`toast-root toast-${String(toast.type ?? "info")}`}
     >
       <Toast.Content className="toast-content">
         <span className="toast-icon" aria-hidden>
-          {toast.type === 'error' && <AlertCircle size={18} />}
-          {toast.type === 'success' && <CheckCircle size={18} />}
-          {toast.type === 'warning' && <AlertTriangle size={18} />}
-          {(!toast.type || toast.type === 'info') && <Info size={18} />}
+          {toast.type === "error" && <AlertCircle size={18} />}
+          {toast.type === "success" && <CheckCircle size={18} />}
+          {toast.type === "warning" && <AlertTriangle size={18} />}
+          {(!toast.type || toast.type === "info") && <Info size={18} />}
         </span>
 
         <div className="toast-text">

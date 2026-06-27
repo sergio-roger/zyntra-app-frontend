@@ -1,4 +1,4 @@
-import { SegmentCondition } from './segment-condition';
+import { SegmentCondition } from "./segment-condition";
 
 export interface Segment {
   business_id: string;

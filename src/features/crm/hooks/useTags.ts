@@ -1,8 +1,8 @@
-import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
-import { crmApi } from '@crm/api/crm.api';
+import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
+import { crmApi } from "@crm/api/crm.api";
 
 export const tagsKeys = {
-  all: ['crm', 'tags'] as const,
+  all: ["crm", "tags"] as const,
 };
 
 export const useTags = () =>
@@ -17,8 +17,11 @@ export const useTags = () =>
 export const useCreateTag = () => {
   const queryClient = useQueryClient();
   return useMutation({
-    mutationFn: (input: { name: string; color?: string; description?: string }) =>
-      crmApi.createTag(input),
+    mutationFn: (input: {
+      name: string;
+      color?: string;
+      description?: string;
+    }) => crmApi.createTag(input),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: tagsKeys.all });
     },
@@ -28,8 +31,15 @@ export const useCreateTag = () => {
 export const useUpdateTag = () => {
   const queryClient = useQueryClient();
   return useMutation({
-    mutationFn: ({ id, ...input }: { id: string; name?: string; color?: string; description?: string }) =>
-      crmApi.updateTag(id, input),
+    mutationFn: ({
+      id,
+      ...input
+    }: {
+      id: string;
+      name?: string;
+      color?: string;
+      description?: string;
+    }) => crmApi.updateTag(id, input),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: tagsKeys.all });
     },

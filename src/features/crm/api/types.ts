@@ -1,12 +1,12 @@
-import { ActivityType } from '@crm/types/crm';
-import { Contact } from '@crm/types/contact';
+import { ActivityType } from "@crm/types/crm";
+import { Contact } from "@crm/types/contact";
 
 export interface CreateContactInput {
   name: string;
   email?: string;
   phone?: string;
   lifecycleStageId?: string;
-  source?: Contact['source'];
+  source?: Contact["source"];
   ownerId?: string | null;
   tags?: string[];
   notes?: string;
@@ -38,6 +38,8 @@ export interface CreateCustomFieldInput {
   required?: boolean;
 }
 
-export type UpdateCustomFieldInput = Partial<Omit<CreateCustomFieldInput, 'name' | 'type'>> & {
+export type UpdateCustomFieldInput = Partial<
+  Omit<CreateCustomFieldInput, "name" | "type">
+> & {
   is_active?: boolean;
 };

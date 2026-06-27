@@ -1,7 +1,7 @@
-import { Link } from 'react-router-dom';
-import { NAV_MODULES } from '@shared/layouts/nav.config';
+import { Link } from "react-router-dom";
+import { NAV_MODULES } from "@shared/layouts/nav.config";
 
-const cards = NAV_MODULES.filter(m => m.key !== 'dashboard');
+const cards = NAV_MODULES.filter((m) => m.key !== "dashboard");
 
 export const Dashboard = () => (
   <div className="p-6">

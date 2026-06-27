@@ -1,6 +1,6 @@
-import { useState } from 'react';
-import { Copy, Check, ExternalLink, Code } from 'lucide-react';
-import { useAuthStore } from '@features/auth/store/authStore';
+import { useState } from "react";
+import { Copy, Check, ExternalLink, Code } from "lucide-react";
+import { useAuthStore } from "@features/auth/store/authStore";
 
 export const EmbedPage: React.FC = () => {
   const [copied, setCopied] = useState(false);
@@ -8,7 +8,7 @@ export const EmbedPage: React.FC = () => {
 
   const snippet = businessId
     ? `<script src="https://cdn.zyntra.app/widget/v1.js" data-business-id="${businessId}" defer></script>`
-    : '';
+    : "";
 
   const handleCopy = async () => {
     if (!snippet) return;
@@ -46,7 +46,11 @@ export const EmbedPage: React.FC = () => {
             onClick={handleCopy}
             className="absolute top-2 right-2 btn btn-sm btn-ghost"
           >
-            {copied ? <Check size={16} className="text-success" /> : <Copy size={16} />}
+            {copied ? (
+              <Check size={16} className="text-success" />
+            ) : (
+              <Copy size={16} />
+            )}
           </button>
         </div>
 
@@ -58,7 +62,8 @@ export const EmbedPage: React.FC = () => {
       <div className="card bg-base-200 p-6">
         <h2 className="font-semibold mb-4">Vista previa</h2>
         <p className="text-base-content/60 text-sm">
-          Para ver el widget en acción, visita tu sitio web con el código insertado.
+          Para ver el widget en acción, visita tu sitio web con el código
+          insertado.
         </p>
 
         <a
@@ -66,7 +71,7 @@ export const EmbedPage: React.FC = () => {
           className="mt-4 btn btn-outline btn-sm gap-2"
           onClick={(e) => {
             e.preventDefault();
-            window.open('https://docs.zyntra.app/widget', '_blank');
+            window.open("https://docs.zyntra.app/widget", "_blank");
           }}
         >
           <ExternalLink size={14} />
@@ -79,7 +84,11 @@ export const EmbedPage: React.FC = () => {
 
         <div className="form-control">
           <label className="cursor-pointer justify-start gap-3">
-            <input type="checkbox" className="toggle toggle-primary" defaultChecked />
+            <input
+              type="checkbox"
+              className="toggle toggle-primary"
+              defaultChecked
+            />
             <span className="label-text">Widget activo por defecto</span>
           </label>
         </div>
@@ -87,7 +96,9 @@ export const EmbedPage: React.FC = () => {
         <div className="form-control mt-4">
           <label className="cursor-pointer justify-start gap-3">
             <input type="checkbox" className="toggle toggle-primary" />
-            <span className="label-text">Mostrar solo en páginas específicas</span>
+            <span className="label-text">
+              Mostrar solo en páginas específicas
+            </span>
           </label>
         </div>
       </div>

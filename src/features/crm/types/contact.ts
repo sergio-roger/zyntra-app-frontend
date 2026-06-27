@@ -1,34 +1,34 @@
-import { LifecycleStage } from './lifecycle-stage';
-import { CrmMember } from './crm-member';
-import { Tag } from './tag';
+import { LifecycleStage } from "./lifecycle-stage";
+import { CrmMember } from "./crm-member";
+import { Tag } from "./tag";
 
 export type ContactSource =
-  | 'manual'
-  | 'chatbot'
-  | 'whatsapp'
-  | 'instagram'
-  | 'email'
-  | 'form'
-  | 'import';
+  | "manual"
+  | "chatbot"
+  | "whatsapp"
+  | "instagram"
+  | "email"
+  | "form"
+  | "import";
 
 export const SOURCES: ContactSource[] = [
-  'manual',
-  'chatbot',
-  'whatsapp',
-  'instagram',
-  'email',
-  'form',
-  'import',
+  "manual",
+  "chatbot",
+  "whatsapp",
+  "instagram",
+  "email",
+  "form",
+  "import",
 ];
 
 export const SOURCE_LABELS: Record<ContactSource, string> = {
-  chatbot: 'Chatbot',
-  email: 'Email',
-  form: 'Formulario',
-  import: 'Importación',
-  instagram: 'Instagram',
-  manual: 'Manual',
-  whatsapp: 'WhatsApp',
+  chatbot: "Chatbot",
+  email: "Email",
+  form: "Formulario",
+  import: "Importación",
+  instagram: "Instagram",
+  manual: "Manual",
+  whatsapp: "WhatsApp",
 };
 
 export interface ContactCompany {

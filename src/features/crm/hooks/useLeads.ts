@@ -1,10 +1,10 @@
-import { leadsApi, ListLeadsQuery } from '@crm/api/leads.api';
-import { ConvertToDealInput } from '@crm/types/convert-to-deal-input';
-import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
+import { leadsApi, ListLeadsQuery } from "@crm/api/leads.api";
+import { ConvertToDealInput } from "@crm/types/convert-to-deal-input";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 
 export const leadsKeys = {
-  all: ['leads'] as const,
-  list: (query: ListLeadsQuery) => ['leads', 'list', query] as const,
+  all: ["leads"] as const,
+  list: (query: ListLeadsQuery) => ["leads", "list", query] as const,
 };
 
 export const useLeadsList = (query: ListLeadsQuery = {}) =>
@@ -35,7 +35,7 @@ export const useConvertToDeal = () => {
       leadsApi.convertToDeal(id, input),
     onSuccess: () => {
       invalidateLeads(qc);
-      qc.invalidateQueries({ queryKey: ['deals'] });
+      qc.invalidateQueries({ queryKey: ["deals"] });
     },
   });
 };

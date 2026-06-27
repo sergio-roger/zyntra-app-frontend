@@ -1,41 +1,51 @@
-import React, { useState } from 'react';
-import { Plus, Users, Loader2, ChevronDown, Filter, Edit2, Trash2 } from 'lucide-react';
-import { EmptyState } from '@shared/components/EmptyState';
-import { SOURCE_LABELS } from '@crm/types/crm';
-import { Segment } from '@crm/types/segment';
-import { SegmentCondition } from '@crm/types/segment-condition';
+import React, { useState } from "react";
+import {
+  Plus,
+  Users,
+  Loader2,
+  ChevronDown,
+  Filter,
+  Edit2,
+  Trash2,
+} from "lucide-react";
+import { EmptyState } from "@shared/components/EmptyState";
+import { SOURCE_LABELS } from "@crm/types/crm";
+import { Segment } from "@crm/types/segment";
+import { SegmentCondition } from "@crm/types/segment-condition";
 
 const FIELD_LABELS: Record<string, string> = {
-  source: 'Origen',
-  lifecycleStageId: 'Ciclo de vida',
-  deal_value: 'Valor trato',
-  tags: 'Etiqueta',
+  source: "Origen",
+  lifecycleStageId: "Ciclo de vida",
+  deal_value: "Valor trato",
+  tags: "Etiqueta",
 };
 
 const OP_LABELS: Record<string, string> = {
-  equals: '=',
-  not_equals: '≠',
-  contains: 'contiene',
-  greater_than: '>',
-  less_than: '<',
-  in: 'en',
-  is_empty: 'vacío',
-  is_not_empty: 'no vacío',
+  equals: "=",
+  not_equals: "≠",
+  contains: "contiene",
+  greater_than: ">",
+  less_than: "<",
+  in: "en",
+  is_empty: "vacío",
+  is_not_empty: "no vacío",
 };
 
 function conditionSummary(c: SegmentCondition, stages: any[]) {
-  const field = c.field.startsWith('custom_fields.')
-    ? c.field.replace('custom_fields.', '')
+  const field = c.field.startsWith("custom_fields.")
+    ? c.field.replace("custom_fields.", "")
     : (FIELD_LABELS[c.field] ?? c.field);
   const op = OP_LABELS[c.operator] ?? c.operator;
-  let value = '';
-  if (c.operator !== 'is_empty' && c.operator !== 'is_not_empty') {
-    if (c.field === 'lifecycleStageId') {
+  let value = "";
+  if (c.operator !== "is_empty" && c.operator !== "is_not_empty") {
+    if (c.field === "lifecycleStageId") {
       const stageObj = stages.find((s) => s.id === c.value);
-      value = stageObj ? stageObj.name : String(c.value ?? '');
-    }
-    else if (c.field === 'source') value = (SOURCE_LABELS as Record<string, string>)[c.value] ?? String(c.value ?? '');
-    else value = String(c.value ?? '');
+      value = stageObj ? stageObj.name : String(c.value ?? "");
+    } else if (c.field === "source")
+      value =
+        (SOURCE_LABELS as Record<string, string>)[c.value] ??
+        String(c.value ?? "");
+    else value = String(c.value ?? "");
   }
   return { field, op, value };
 }
@@ -63,8 +73,9 @@ export const SegmentListPanel: React.FC<SegmentListPanelProps> = ({
   const [stages, setStages] = useState<any[]>([]);
 
   React.useEffect(() => {
-    import('@shared/api/axios').then(({ default: api }) => {
-      api.get('/lifecycle/stages')
+    import("@shared/api/axios").then(({ default: api }) => {
+      api
+        .get("/lifecycle/stages")
         .then((r) => setStages(r.data))
         .catch((e) => console.error(e));
     });
@@ -90,7 +101,9 @@ export const SegmentListPanel: React.FC<SegmentListPanelProps> = ({
           <div className="h-6 w-6 rounded-md bg-indigo-500/15 flex items-center justify-center">
             <Users size={13} className="text-indigo-400" />
           </div>
-          <h3 className="text-sm font-black text-white tracking-tight">Segmentos</h3>
+          <h3 className="text-sm font-black text-white tracking-tight">
+            Segmentos
+          </h3>
           {segments.length > 0 && (
             <span className="text-[10px] font-black bg-slate-800 text-slate-400 px-1.5 py-0.5 rounded-full">
               {segments.length}
@@ -130,8 +143,8 @@ export const SegmentListPanel: React.FC<SegmentListPanelProps> = ({
                   onClick={() => onSelect(seg.id)}
                   className={`group flex items-center gap-2.5 px-3 py-2.5 rounded-xl cursor-pointer transition-all border ${
                     active
-                      ? 'bg-indigo-600/10 border-indigo-500/20 text-white'
-                      : 'border-transparent hover:bg-slate-900/50 text-slate-300 hover:text-white'
+                      ? "bg-indigo-600/10 border-indigo-500/20 text-white"
+                      : "border-transparent hover:bg-slate-900/50 text-slate-300 hover:text-white"
                   }`}
                 >
                   {/* Chevron — toggles rule expansion */}
@@ -139,29 +152,36 @@ export const SegmentListPanel: React.FC<SegmentListPanelProps> = ({
                     onClick={(e) => toggleExpand(seg.id, e)}
                     className={`shrink-0 p-0.5 rounded transition-all ${
                       hasConditions
-                        ? 'opacity-100 hover:text-indigo-400'
-                        : 'opacity-0 pointer-events-none'
+                        ? "opacity-100 hover:text-indigo-400"
+                        : "opacity-0 pointer-events-none"
                     }`}
-                    title={expanded ? 'Ocultar reglas' : 'Ver reglas'}
+                    title={expanded ? "Ocultar reglas" : "Ver reglas"}
                   >
                     <ChevronDown
                       size={12}
                       className={`transition-transform duration-200 ${
-                        expanded ? 'rotate-0 text-indigo-400' : '-rotate-90 text-slate-500 group-hover:text-slate-400'
+                        expanded
+                          ? "rotate-0 text-indigo-400"
+                          : "-rotate-90 text-slate-500 group-hover:text-slate-400"
                       }`}
                     />
                   </button>
 
                   <div className="min-w-0 flex-1">
-                    <p className="text-sm font-bold truncate leading-tight">{seg.name}</p>
+                    <p className="text-sm font-bold truncate leading-tight">
+                      {seg.name}
+                    </p>
                     {seg.description && (
-                      <p className="text-[10px] text-slate-500 truncate mt-0.5">{seg.description}</p>
+                      <p className="text-[10px] text-slate-500 truncate mt-0.5">
+                        {seg.description}
+                      </p>
                     )}
                     {hasConditions && !expanded && (
                       <div className="flex items-center gap-1 mt-1">
                         <Filter size={9} className="text-slate-600" />
                         <span className="text-[9px] text-slate-600 font-medium">
-                          {seg.conditions.length} regla{seg.conditions.length !== 1 ? 's' : ''}
+                          {seg.conditions.length} regla
+                          {seg.conditions.length !== 1 ? "s" : ""}
                         </span>
                       </div>
                     )}
@@ -169,14 +189,20 @@ export const SegmentListPanel: React.FC<SegmentListPanelProps> = ({
 
                   <div className="flex items-center gap-0.5 shrink-0 opacity-0 group-hover:opacity-100 transition-opacity">
                     <button
-                      onClick={(e) => { e.stopPropagation(); onEdit(seg); }}
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        onEdit(seg);
+                      }}
                       className="p-1.5 rounded-md text-slate-500 hover:text-white hover:bg-white/8 transition-colors"
                       title="Editar"
                     >
                       <Edit2 size={11} />
                     </button>
                     <button
-                      onClick={(e) => { e.stopPropagation(); onDelete(seg.id); }}
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        onDelete(seg.id);
+                      }}
                       className="p-1.5 rounded-md text-slate-500 hover:text-rose-400 hover:bg-rose-500/10 transition-colors"
                       title="Eliminar"
                     >
@@ -194,12 +220,18 @@ export const SegmentListPanel: React.FC<SegmentListPanelProps> = ({
                       const isLast = i === seg.conditions.length - 1;
                       const multiNode = seg.conditions.length > 1;
                       return (
-                        <div key={i} className="relative flex items-center gap-1.5 text-[10px] py-[5px] pl-7">
+                        <div
+                          key={i}
+                          className="relative flex items-center gap-1.5 text-[10px] py-[5px] pl-7"
+                        >
                           {/* Vertical tree line */}
                           {multiNode && (
                             <div
                               className="absolute left-[7px] w-px bg-slate-700/50"
-                              style={{ top: isFirst ? '50%' : 0, bottom: isLast ? '50%' : 0 }}
+                              style={{
+                                top: isFirst ? "50%" : 0,
+                                bottom: isLast ? "50%" : 0,
+                              }}
                             />
                           )}
                           {/* Horizontal branch */}
@@ -207,13 +239,21 @@ export const SegmentListPanel: React.FC<SegmentListPanelProps> = ({
                           {/* Node dot */}
                           <div
                             className={`absolute left-[18px] top-1/2 -translate-y-1/2 w-[5px] h-[5px] rounded-full ${
-                              isLast ? 'bg-indigo-500/60 ring-1 ring-indigo-500/20' : 'bg-slate-600'
+                              isLast
+                                ? "bg-indigo-500/60 ring-1 ring-indigo-500/20"
+                                : "bg-slate-600"
                             }`}
                           />
-                          <span className="text-slate-300 font-semibold">{field}</span>
-                          <span className="text-slate-600 text-[9px]">{op}</span>
+                          <span className="text-slate-300 font-semibold">
+                            {field}
+                          </span>
+                          <span className="text-slate-600 text-[9px]">
+                            {op}
+                          </span>
                           {value && (
-                            <span className="text-indigo-300 font-bold truncate max-w-[72px]">{value}</span>
+                            <span className="text-indigo-300 font-bold truncate max-w-[72px]">
+                              {value}
+                            </span>
                           )}
                         </div>
                       );
