@@ -4,6 +4,8 @@ import { CustomFieldType } from '@crm/types/crm';
 import { CustomField } from '@crm/types/custom-field';
 import { ConfirmModal } from '@shared/components/ConfirmModal';
 import { EmptyState } from '@shared/components/EmptyState';
+import { toastManager } from '@shared/components/toast/toastManager';
+import { AxiosError } from 'axios';
 import {
   AlertCircle,
   Calendar,
@@ -60,8 +62,36 @@ export const CustomFieldsPage: React.FC = () => {
 
   const handleConfirmDelete = async () => {
     if (fieldToDelete) {
-      await removeMutation.mutateAsync(fieldToDelete);
-      setFieldToDelete(null);
+      try {
+        await removeMutation.mutateAsync(fieldToDelete);
+        toastManager.add({
+          title: 'Campo eliminado',
+          description: 'El campo personalizado ha sido eliminado.',
+          type: 'success',
+        });
+      } catch (err) {
+        let errorMsg = 'No se pudo eliminar el campo personalizado.';
+        if (err instanceof AxiosError) {
+          const data = err.response?.data as any;
+          if (
+            data?.message === 'field_has_data' ||
+            data?.errors?.[0]?.description === 'field_has_data'
+          ) {
+            errorMsg =
+              'No se puede eliminar el campo porque tiene datos registrados en algunos contactos.';
+          } else if (typeof data?.message === 'string') {
+            errorMsg = data.message;
+          }
+        }
+        toastManager.add({
+          title: 'Error al eliminar',
+          description: errorMsg,
+          type: 'error',
+        });
+      } finally {
+        setFieldToDelete(null);
+        setIsConfirmOpen(false);
+      }
     }
   };
 
