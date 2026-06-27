@@ -31,15 +31,15 @@ export const SOURCE_LABELS: Record<ContactSource, string> = {
   whatsapp: 'WhatsApp',
 };
 
-export interface ContactEmpresa {
+export interface ContactCompany {
   id: string;
   name: string;
 }
 
 export interface Contact {
   businessId: string;
-  empresa: ContactEmpresa | null;
-  empresaId: string | null;
+  company: ContactCompany | null;
+  companyId: string | null;
   createdAt: string;
   customFields: Record<string, any> | null;
   dealValue: number;

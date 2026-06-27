@@ -124,8 +124,8 @@ export const LeadsTable: React.FC<LeadsTableProps> = ({ leads, onArchive, onConv
                     </div>
                     <div className="min-w-0">
                       <p className="text-white font-semibold text-sm truncate max-w-[140px]">{lead.name}</p>
-                      {lead.empresa?.name && (
-                        <p className="text-slate-500 text-xs truncate max-w-[140px]">{lead.empresa.name}</p>
+                      {lead.company?.name && (
+                        <p className="text-slate-500 text-xs truncate max-w-[140px]">{lead.company.name}</p>
                       )}
                     </div>
                   </div>

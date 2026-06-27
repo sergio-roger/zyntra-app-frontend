@@ -209,7 +209,7 @@ export const ConvertToDealSidebar: React.FC<ConvertToDealSidebarProps> = ({
                   </div>
                   <div>
                     <span className="text-slate-500">Empresa</span>
-                    <p className="text-white truncate">{lead.empresa?.name || '—'}</p>
+                    <p className="text-white truncate">{lead.company?.name || '—'}</p>
                   </div>
                   <div>
                     <span className="text-slate-500">Fuente</span>

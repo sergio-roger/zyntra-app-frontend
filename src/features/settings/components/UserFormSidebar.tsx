@@ -133,7 +133,7 @@ export const UserFormSidebar: React.FC<UserFormSidebarProps> = ({ open, user, is
               disabled={!!user}
               value={formData.email}
               onChange={(e) => setFormData({ ...formData, email: e.target.value })}
-              placeholder="juan@empresa.com"
+              placeholder="juan@company.com"
             />
 
             <Select
