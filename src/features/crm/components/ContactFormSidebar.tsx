@@ -4,7 +4,6 @@ import { Tabs } from '@core/ui/Tabs';
 import { Textarea } from '@core/ui/Textarea';
 import { crmApi } from '@crm/api/crm.api';
 import { useCreateContact, useUpdateContact } from '@crm/hooks/useContacts';
-import { useCustomFields } from '@crm/hooks/useCustomFields';
 import { useTags } from '@crm/hooks/useTags';
 import { ContactFormData } from '@crm/types/contact-form';
 import { Contact } from '@crm/types/contact';
@@ -81,7 +80,6 @@ export const ContactFormSidebar: React.FC<ContactFormSidebarProps> = ({
   const [activeTab, setActiveTab] = useState<'info' | 'advanced'>('info');
 
   const { data: availableTags = [] } = useTags();
-  const { data: availableFields = [] } = useCustomFields();
   const { data: members = [] } = useQuery<CrmMember[]>({
     queryKey: ['crm-members'],
     queryFn: () => crmApi.listMembers().then((r) => r.data),
@@ -279,77 +277,6 @@ export const ContactFormSidebar: React.FC<ContactFormSidebarProps> = ({
               </div>
             ) : (
               <div className="space-y-8 animate-in fade-in slide-in-from-left-4 duration-300">
-                {/* Custom Fields Section */}
-                {availableFields.length > 0 ? (
-                  <div className="space-y-4">
-                    <div className="flex items-center gap-2 text-primary font-semibold text-xs uppercase tracking-wider">
-                      <Settings2 size={14} />
-                      Campos Personalizados
-                    </div>
-                    <div className="space-y-3">
-                      {availableFields.map((field) => (
-                        <div key={field.id}>
-                          {field.type === 'select' ? (
-                            <div className="space-y-1.5">
-                              <label className="text-xs font-medium text-slate-400 ml-1">
-                                {field.label} {field.required && '*'}
-                              </label>
-                              <select
-                                required={field.required}
-                                value={formData.customFields[field.name] || ''}
-                                onChange={(e) => setFormData({
-                                  ...formData,
-                                  customFields: { ...formData.customFields, [field.name]: e.target.value }
-                                })}
-                                className="w-full bg-slate-950/50 border border-white/10 rounded-xl py-2.5 px-4 text-sm text-white focus:outline-none focus:border-primary/50 transition-all appearance-none"
-                              >
-                                <option value="">Seleccionar...</option>
-                                {field.options?.map((opt) => (
-                                  <option key={opt} value={opt}>{opt}</option>
-                                ))}
-                              </select>
-                            </div>
-                          ) : field.type === 'checkbox' ? (
-                            <div className="space-y-1.5">
-                              <label className="text-xs font-medium text-slate-400 ml-1">
-                                {field.label} {field.required && '*'}
-                              </label>
-                              <div className="flex items-center gap-3 bg-slate-950/50 border border-white/10 rounded-xl p-3">
-                                <input
-                                  type="checkbox"
-                                  checked={!!formData.customFields[field.name]}
-                                  onChange={(e) => setFormData({
-                                    ...formData,
-                                    customFields: { ...formData.customFields, [field.name]: e.target.checked }
-                                  })}
-                                  className="h-5 w-5 rounded border-white/10 bg-slate-800 text-primary focus:ring-primary/20"
-                                />
-                                <span className="text-sm text-slate-300">Habilitado</span>
-                              </div>
-                            </div>
-                          ) : (
-                            <Input
-                              label={field.label}
-                              required={field.required}
-                              type={field.type === 'number' ? 'number' : field.type === 'date' ? 'date' : 'text'}
-                              value={formData.customFields[field.name] || ''}
-                              onChange={(e) => setFormData({
-                                ...formData,
-                                customFields: { ...formData.customFields, [field.name]: e.target.value }
-                              })}
-                            />
-                          )}
-                        </div>
-                      ))}
-                    </div>
-                  </div>
-                ) : (
-                  <div className="flex flex-col items-center justify-center py-10 opacity-30 border-2 border-dashed border-white/10 rounded-2xl">
-                    <Settings2 size={24} className="mb-2" />
-                    <p className="text-xs text-slate-500">No hay campos personalizados</p>
-                  </div>
-                )}
-
                 {/* Additional Info */}
                 <div className="space-y-4">
                   <Textarea
