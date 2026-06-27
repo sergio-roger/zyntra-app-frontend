@@ -138,7 +138,10 @@ export const crmApi = {
   listMembers: () => api.get<unknown, { data: CrmMember[] }>("/crm/members"),
 
   // Custom Fields
-  listFields: () => api.get<unknown, { data: CustomField[] }>("/crm/fields"),
+  listFields: (entityType?: string) =>
+    api.get<unknown, { data: CustomField[] }>(
+      entityType ? `/crm/fields?entity_type=${entityType}` : "/crm/fields",
+    ),
   createField: (input: CreateCustomFieldInput) =>
     api.post<unknown, { data: CustomField }>("/crm/fields", input),
   updateField: (id: string, input: UpdateCustomFieldInput) =>

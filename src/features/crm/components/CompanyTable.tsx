@@ -1,5 +1,5 @@
 import React from "react";
-import { Building2, ExternalLink, Pencil, Trash2 } from "lucide-react";
+import { Building2, ExternalLink, Pencil, Settings2, Trash2 } from "lucide-react";
 import { Company } from "@crm/types/company";
 import { EmptyState } from "@shared/components/EmptyState";
 
@@ -8,6 +8,7 @@ interface CompanyTableProps {
   onEdit: (c: Company) => void;
   onDelete: (c: Company) => void;
   onSelect: (c: Company) => void;
+  onCustomFields?: (c: Company) => void;
   onAction?: () => void;
   canEdit?: boolean;
 }
@@ -22,6 +23,7 @@ export const CompanyTable: React.FC<CompanyTableProps> = ({
   onEdit,
   onDelete,
   onSelect,
+  onCustomFields,
   onAction,
   canEdit = true,
 }) => {
@@ -169,6 +171,15 @@ export const CompanyTable: React.FC<CompanyTableProps> = ({
               {/* Actions */}
               <td className="px-4 py-3 text-right align-middle">
                 <div className="inline-flex gap-1 justify-end">
+                  {onCustomFields && (
+                    <button
+                      onClick={() => onCustomFields(c)}
+                      aria-label="Campos personalizados"
+                      className="rounded-md p-1.5 text-slate-400 transition-colors hover:bg-white/10 hover:text-indigo-400"
+                    >
+                      <Settings2 size={15} />
+                    </button>
+                  )}
                   <button
                     onClick={() => onEdit(c)}
                     disabled={!canEdit}

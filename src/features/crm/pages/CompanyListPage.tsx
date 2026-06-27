@@ -1,7 +1,7 @@
 import React, { useState } from "react";
-import { useSearchParams } from "react-router-dom";
-import { AlertCircle, Building2, FileSpreadsheet, Loader2, Plus } from "lucide-react";
+import { AlertCircle, FileSpreadsheet, Loader2, Plus } from "lucide-react";
 import { DateRange } from "@core/ui/DateRangePicker";
+import { CompanyCustomFieldsSidebar } from "@crm/components/CompanyCustomFieldsSidebar";
 import { CompanyExportModal } from "@crm/components/CompanyExportModal";
 import { CompanyFilters } from "@crm/components/CompanyFilters";
 import { CompanyFormSidebar } from "@crm/components/CompanyFormSidebar";
@@ -35,10 +35,9 @@ const LIMIT = 20;
 
 export const CompanyListPage: React.FC = () => {
   const [filters, setFilters] = useState<Filters>(defaultFilters());
-  const [, setSearchParams] = useSearchParams();
-
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const [editing, setEditing] = useState<Company | null>(null);
+  const [customFieldsCompany, setCustomFieldsCompany] = useState<Company | null>(null);
   const [isExportOpen, setIsExportOpen] = useState(false);
   const [isImportOpen, setIsImportOpen] = useState(false);
   const [isConfirmOpen, setIsConfirmOpen] = useState(false);
@@ -181,6 +180,7 @@ export const CompanyListPage: React.FC = () => {
             onEdit={openEdit}
             onDelete={handleDeleteRequest}
             onSelect={openEdit}
+            onCustomFields={(c) => setCustomFieldsCompany(c)}
             onAction={openCreate}
             canEdit={isAdminOrManager}
           />
@@ -194,6 +194,13 @@ export const CompanyListPage: React.FC = () => {
           </div>
         </div>
       )}
+
+      {/* Custom Fields Sidebar */}
+      <CompanyCustomFieldsSidebar
+        open={customFieldsCompany !== null}
+        company={customFieldsCompany}
+        onClose={() => setCustomFieldsCompany(null)}
+      />
 
       {/* Form Sidebar */}
       <CompanyFormSidebar

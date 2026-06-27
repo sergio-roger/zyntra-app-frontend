@@ -9,6 +9,7 @@ export type CustomFieldType =
 export interface CustomField {
   business_id: string;
   created_at: string;
+  entity_type: "contact" | "company";
   id: string;
   is_active: boolean;
   label: string;

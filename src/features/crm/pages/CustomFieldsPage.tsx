@@ -8,6 +8,7 @@ import { toastManager } from "@shared/components/toast/toastManager";
 import { AxiosError } from "axios";
 import {
   AlertCircle,
+  Building2,
   Calendar,
   CheckSquare,
   Hash,
@@ -18,8 +19,12 @@ import {
   Settings2,
   Trash2,
   Type,
+  UserRound,
 } from "lucide-react";
 import React, { useState } from "react";
+import { Tabs, TabItem } from "@core/ui/Tabs";
+
+type EntityTab = "contact" | "company";
 
 const FIELD_TYPE_ICONS: Record<CustomFieldType, any> = {
   text: Type,
@@ -40,13 +45,12 @@ const FIELD_TYPE_LABELS: Record<CustomFieldType, string> = {
 };
 
 export const CustomFieldsPage: React.FC = () => {
-  const { data: fields, isLoading, isError, error } = useCustomFields();
+  const [activeTab, setActiveTab] = useState<EntityTab>("contact");
+  const { data: fields, isLoading, isError, error } = useCustomFields(activeTab);
   const removeMutation = useRemoveField();
 
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
   const [editingField, setEditingField] = useState<CustomField | null>(null);
-
-  // Confirmation Modal State
   const [isConfirmOpen, setIsConfirmOpen] = useState(false);
   const [fieldToDelete, setFieldToDelete] = useState<string | null>(null);
 
@@ -73,12 +77,12 @@ export const CustomFieldsPage: React.FC = () => {
         let errorMsg = "No se pudo eliminar el campo personalizado.";
         if (err instanceof AxiosError) {
           const data = err.response?.data as any;
+          const entityLabel = activeTab === "company" ? "empresas" : "contactos";
           if (
             data?.message === "field_has_data" ||
             data?.errors?.[0]?.description === "field_has_data"
           ) {
-            errorMsg =
-              "No se puede eliminar el campo porque tiene datos registrados en algunos contactos.";
+            errorMsg = `No se puede eliminar el campo porque tiene datos registrados en algunos ${entityLabel}.`;
           } else if (typeof data?.message === "string") {
             errorMsg = data.message;
           }
@@ -95,6 +99,11 @@ export const CustomFieldsPage: React.FC = () => {
     }
   };
 
+  const tabs: { key: EntityTab; label: string; icon: any }[] = [
+    { key: "contact", label: "Contactos", icon: UserRound },
+    { key: "company", label: "Empresas", icon: Building2 },
+  ];
+
   return (
     <div className="flex flex-col gap-6 p-1">
       <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
@@ -103,7 +112,7 @@ export const CustomFieldsPage: React.FC = () => {
             Campos Personalizados
           </h2>
           <p className="text-sm text-slate-400">
-            Personaliza la información que guardas de tus contactos.
+            Extiende la información que guardas de tus contactos y empresas.
           </p>
         </div>
 
@@ -114,6 +123,17 @@ export const CustomFieldsPage: React.FC = () => {
           <Plus size={18} />
           <span>Nuevo Campo</span>
         </button>
+      </div>
+
+      {/* Tabs */}
+      <div className="flex flex-col sm:flex-row sm:items-center justify-end gap-4 border-b border-white/5 pb-2">
+        <Tabs
+          tabs={tabs as TabItem<EntityTab>[]}
+          active={activeTab}
+          onChange={setActiveTab}
+          compact
+          className="border-b-0"
+        />
       </div>
 
       {isLoading ? (
@@ -205,7 +225,7 @@ export const CustomFieldsPage: React.FC = () => {
             <EmptyState
               icon={Settings2}
               title="No hay campos personalizados"
-              description="Aún no has creado campos personalizados para extender la información de tus contactos."
+              description={`Aún no has creado campos personalizados para ${activeTab === "company" ? "empresas" : "contactos"}.`}
               actionLabel="Crear mi primer campo"
               onAction={() => handleOpenSidebar()}
             />
@@ -213,20 +233,19 @@ export const CustomFieldsPage: React.FC = () => {
         </div>
       )}
 
-      {/* Sidebar for Create/Edit */}
       <CustomFieldFormSidebar
         open={isSidebarOpen}
         field={editingField}
+        entityType={activeTab}
         onClose={() => setIsSidebarOpen(false)}
       />
 
-      {/* Confirmation Modal */}
       <ConfirmModal
         isOpen={isConfirmOpen}
         onClose={() => setIsConfirmOpen(false)}
         onConfirm={handleConfirmDelete}
         title="Eliminar Campo Personalizado"
-        description="¿Estás seguro de eliminar este campo? Esta acción ocultará el campo de todos tus contactos. Recuerda que la eliminación es lógica y los datos históricos se mantienen en la base de datos."
+        description="¿Estás seguro de eliminar este campo? Esta acción ocultará el campo. Los datos históricos se conservan en la base de datos."
         confirmText="Eliminar"
         variant="danger"
       />

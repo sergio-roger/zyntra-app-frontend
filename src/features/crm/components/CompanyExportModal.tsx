@@ -10,6 +10,7 @@ import {
   X,
 } from "lucide-react";
 import { companiesApi } from "@crm/api/companies.api";
+import { useCustomFields } from "@crm/hooks/useCustomFields";
 import { ExportCompanyColumn } from "@crm/types/company";
 import { ListCompaniesQuery } from "@crm/types/company";
 
@@ -42,6 +43,21 @@ export const CompanyExportModal: React.FC<CompanyExportModalProps> = ({
   total,
   queryParams,
 }) => {
+  const { data: customFieldDefs = [] } = useCustomFields("company");
+
+  const customColumns = useMemo<ExportCompanyColumn[]>(
+    () =>
+      customFieldDefs
+        .filter((f) => f.is_active)
+        .map((f) => ({ key: `cf_${f.name}`, label: f.label })),
+    [customFieldDefs],
+  );
+
+  const ALL_COLUMNS = useMemo(
+    () => [...STANDARD_COLUMNS, ...customColumns],
+    [customColumns],
+  );
+
   const [activeColumns, setActiveColumns] =
     useState<ExportCompanyColumn[]>(STANDARD_COLUMNS);
   const [filename, setFilename] = useState(defaultFilename);
@@ -60,8 +76,8 @@ export const CompanyExportModal: React.FC<CompanyExportModalProps> = ({
   );
 
   const availableColumns = useMemo(
-    () => STANDARD_COLUMNS.filter((c) => !activeKeys.has(c.key)),
-    [activeKeys],
+    () => ALL_COLUMNS.filter((c) => !activeKeys.has(c.key)),
+    [ALL_COLUMNS, activeKeys],
   );
 
   const move = (index: number, dir: -1 | 1) => {

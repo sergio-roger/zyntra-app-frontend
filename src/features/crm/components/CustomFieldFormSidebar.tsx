@@ -8,6 +8,7 @@ import React, { useEffect, useState } from "react";
 interface CustomFieldFormSidebarProps {
   open: boolean;
   field: CustomField | null;
+  entityType?: "contact" | "company";
   onClose: () => void;
 }
 
@@ -23,6 +24,7 @@ const FIELD_TYPE_LABELS: Record<CustomFieldType, string> = {
 export const CustomFieldFormSidebar: React.FC<CustomFieldFormSidebarProps> = ({
   open,
   field,
+  entityType = "contact",
   onClose,
 }) => {
   const [formData, setFormData] = useState({
@@ -85,7 +87,7 @@ export const CustomFieldFormSidebar: React.FC<CustomFieldFormSidebarProps> = ({
         required: formData.required,
       });
     } else {
-      await createMutation.mutateAsync(formData);
+      await createMutation.mutateAsync({ ...formData, entity_type: entityType });
     }
     onClose();
   };

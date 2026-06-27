@@ -1,36 +1,38 @@
 import { Input } from "@core/ui/Input";
 import { useCustomFields } from "@crm/hooks/useCustomFields";
-import { useUpdateContact } from "@crm/hooks/useContacts";
-import { Contact } from "@crm/types/contact";
+import { useUpdateCompany } from "@crm/hooks/useCompanies";
+import { Company } from "@crm/types/company";
 import { Loader2, Save, Settings2, X } from "lucide-react";
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 
-interface ContactCustomFieldsSidebarProps {
+interface CompanyCustomFieldsSidebarProps {
   open: boolean;
-  contact: Contact | null;
+  company: Company | null;
   onClose: () => void;
 }
 
-export const ContactCustomFieldsSidebar: React.FC<
-  ContactCustomFieldsSidebarProps
-> = ({ open, contact, onClose }) => {
-  const { data: fields = [] } = useCustomFields("contact");
-  const updateMutation = useUpdateContact();
+export const CompanyCustomFieldsSidebar: React.FC<CompanyCustomFieldsSidebarProps> = ({
+  open,
+  company,
+  onClose,
+}) => {
+  const { data: fields = [] } = useCustomFields("company");
+  const updateMutation = useUpdateCompany();
   const [values, setValues] = useState<Record<string, any>>({});
   const navigate = useNavigate();
 
   useEffect(() => {
-    setValues(contact?.customFields ?? {});
-  }, [contact, open]);
+    setValues(company?.custom_fields ?? {});
+  }, [company, open]);
 
   const activeFields = fields.filter((f) => f.is_active);
 
   const handleSave = async () => {
-    if (!contact) return;
+    if (!company) return;
     await updateMutation.mutateAsync({
-      id: contact.id,
-      input: { customFields: values },
+      id: company.id,
+      input: { custom_fields: values },
     });
     onClose();
   };
@@ -53,7 +55,7 @@ export const ContactCustomFieldsSidebar: React.FC<
               <h3 className="text-xl font-bold text-white">
                 Campos personalizados
               </h3>
-              <p className="text-sm text-slate-400 mt-1">{contact?.name}</p>
+              <p className="text-sm text-slate-400 mt-1">{company?.name}</p>
             </div>
             <button
               onClick={onClose}
@@ -73,7 +75,7 @@ export const ContactCustomFieldsSidebar: React.FC<
                   No hay campos personalizados
                 </h3>
                 <p className="text-xs text-slate-400 max-w-xs mb-6">
-                  Aún no has configurado campos personalizados activos. Configura campos para poder asociarlos a tus contactos.
+                  Aún no has configurado campos personalizados para empresas. Ve a Campos para crearlos.
                 </p>
                 <button
                   onClick={() => {
