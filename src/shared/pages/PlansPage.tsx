@@ -98,6 +98,12 @@ export const PlansPage: React.FC = () => {
       impulse: "3 canales",
       core: "Ilimitados",
     },
+    {
+      name: "Límite de pipelines",
+      brand: false,
+      impulse: "2",
+      core: "5",
+    },
 
     { category: "Inteligencia Artificial", isHeader: true },
     {
