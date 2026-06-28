@@ -1,10 +1,12 @@
 import { DateRange, DateRangePicker } from '@core/ui/DateRangePicker';
 import { Select } from '@core/ui/Select';
+import { EMPLOYEE_RANGE_OPTIONS } from '@crm/constants/company-options';
 import { useIndustrys } from '@crm/hooks/useCompanies';
 import { useCrmMembers } from '@crm/hooks/useCrmMembers';
 import { useLifecycleStages } from '@crm/hooks/useLifecycleStages';
 import { SegmentCondition } from '@crm/types/segment-condition';
 import {
+  Building2,
   Download,
   FilterX,
   Layers,
@@ -21,6 +23,7 @@ interface CompanyFiltersProps {
   industryId: string;
   ownerId: string;
   lifecycleStageId: string;
+  employeeRange: string;
   createdAtFrom: string;
   createdAtTo: string;
   customFieldConditions: SegmentCondition[];
@@ -29,6 +32,7 @@ interface CompanyFiltersProps {
   onIndustryChange: (v: string) => void;
   onOwnerChange?: (v: string) => void;
   onLifecycleStageChange: (v: string) => void;
+  onEmployeeRangeChange: (v: string) => void;
   onDateRangeChange: (range: DateRange | null) => void;
   onOpenCustomFieldFilters: () => void;
   onExportCsv: () => void;
@@ -41,6 +45,7 @@ export const CompanyFilters: React.FC<CompanyFiltersProps> = ({
   industryId,
   ownerId,
   lifecycleStageId,
+  employeeRange,
   createdAtFrom,
   createdAtTo,
   customFieldConditions,
@@ -49,6 +54,7 @@ export const CompanyFilters: React.FC<CompanyFiltersProps> = ({
   onIndustryChange,
   onOwnerChange,
   onLifecycleStageChange,
+  onEmployeeRangeChange,
   onDateRangeChange,
   onOpenCustomFieldFilters,
   onExportCsv,
@@ -72,9 +78,9 @@ export const CompanyFilters: React.FC<CompanyFiltersProps> = ({
     createdAtFrom && createdAtTo ? { from: createdAtFrom, to: createdAtTo } : null;
 
   const hasAdvancedFilters = Boolean(
-    industryId || ownerId || lifecycleStageId || createdAtFrom || createdAtTo,
+    industryId || ownerId || lifecycleStageId || employeeRange || createdAtFrom || createdAtTo || customFieldConditions.length > 0,
   );
-  const hasFilters = Boolean(search || hasAdvancedFilters || customFieldConditions.length > 0);
+  const hasFilters = Boolean(search || hasAdvancedFilters);
 
   return (
     <div className="rounded-xl border border-white/10 bg-slate-900/50 p-3">
@@ -126,24 +132,6 @@ export const CompanyFilters: React.FC<CompanyFiltersProps> = ({
           )}
         </div>
 
-        <div className="relative">
-          <button
-            onClick={onOpenCustomFieldFilters}
-            className={`inline-flex items-center gap-1.5 whitespace-nowrap rounded-lg border px-3 py-2 text-xs font-medium transition-colors ${
-              customFieldConditions.length > 0
-                ? 'border-indigo-500/40 bg-indigo-500/10 text-indigo-300 hover:bg-indigo-500/20'
-                : 'border-white/10 bg-slate-950/40 text-slate-300 hover:border-white/20 hover:bg-white/5'
-            }`}
-          >
-            <Variable size={14} /> Otros campos
-          </button>
-          {customFieldConditions.length > 0 && (
-            <span className="absolute -top-1 -right-1 flex h-4 w-4 items-center justify-center rounded-full bg-indigo-500 text-[9px] font-black text-white ring-2 ring-slate-900">
-              {customFieldConditions.length}
-            </span>
-          )}
-        </div>
-
         {hasFilters && (
           <button
             onClick={onReset}
@@ -182,6 +170,19 @@ export const CompanyFilters: React.FC<CompanyFiltersProps> = ({
             />
           </div>
 
+          <div className="w-48">
+            <Select
+              options={EMPLOYEE_RANGE_OPTIONS}
+              value={employeeRange || null}
+              onChange={(v) => onEmployeeRangeChange(v ?? '')}
+              placeholder="Todos los empleados"
+              clearable
+              clearLabel="Todos los empleados"
+              icon={Building2}
+              className="py-2 text-sm"
+            />
+          </div>
+
           {showOwnerFilter && (
             <div className="w-48">
               <Select
@@ -203,6 +204,24 @@ export const CompanyFilters: React.FC<CompanyFiltersProps> = ({
               value={dateRangeValue}
               onChange={onDateRangeChange}
             />
+          </div>
+
+          <div className="relative">
+            <button
+              onClick={onOpenCustomFieldFilters}
+              className={`inline-flex items-center gap-1.5 whitespace-nowrap rounded-lg border px-3 py-2 text-xs font-medium transition-colors ${
+                customFieldConditions.length > 0
+                  ? 'border-indigo-500/40 bg-indigo-500/10 text-indigo-300 hover:bg-indigo-500/20'
+                  : 'border-white/10 bg-slate-950/40 text-slate-300 hover:border-white/20 hover:bg-white/5'
+              }`}
+            >
+              <Variable size={14} /> Otros campos
+            </button>
+            {customFieldConditions.length > 0 && (
+              <span className="absolute -top-1 -right-1 flex h-4 w-4 items-center justify-center rounded-full bg-indigo-500 text-[9px] font-black text-white ring-2 ring-slate-900">
+                {customFieldConditions.length}
+              </span>
+            )}
           </div>
         </div>
       )}

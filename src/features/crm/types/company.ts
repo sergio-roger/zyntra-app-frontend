@@ -43,6 +43,7 @@ export interface ListCompaniesQuery {
   createdAtFrom?: string;
   createdAtTo?: string;
   customFieldFilters?: string;
+  employeeRange?: string;
   industryId?: string;
   lifecycleStageId?: string;
   limit?: number;

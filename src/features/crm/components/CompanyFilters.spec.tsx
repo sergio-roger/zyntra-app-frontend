@@ -42,6 +42,7 @@ const defaultProps = {
   industryId: '',
   ownerId: '',
   lifecycleStageId: '',
+  employeeRange: '',
   createdAtFrom: '',
   createdAtTo: '',
   customFieldConditions: [],
@@ -49,6 +50,7 @@ const defaultProps = {
   onIndustryChange: vi.fn(),
   onOwnerChange: vi.fn(),
   onLifecycleStageChange: vi.fn(),
+  onEmployeeRangeChange: vi.fn(),
   onDateRangeChange: vi.fn(),
   onOpenCustomFieldFilters: vi.fn(),
   onExportCsv: vi.fn(),
@@ -75,12 +77,14 @@ describe('CompanyFilters', () => {
     expect(onSearchChange).toHaveBeenCalledWith('Acme');
   });
 
-  it('renders select inputs when advanced filters button is clicked', () => {
+  it('renders select inputs and Otros campos button when advanced filters are opened', () => {
     render(<CompanyFilters {...defaultProps} />, { wrapper: createWrapper() });
     const advancedBtn = screen.getByText('Filtros avanzados');
     fireEvent.click(advancedBtn);
     expect(screen.getByText('Todas las industrias')).toBeInTheDocument();
     expect(screen.getByText('Todas las etapas')).toBeInTheDocument();
+    expect(screen.getByText('Todos los empleados')).toBeInTheDocument();
+    expect(screen.getByText('Otros campos')).toBeInTheDocument();
   });
 
   it('calls onExportCsv when export button is clicked', () => {

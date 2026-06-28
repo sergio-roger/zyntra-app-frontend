@@ -28,6 +28,7 @@ const defaultFilters = (): CompanyListFilters => ({
   industryId: '',
   ownerId: '',
   lifecycleStageId: '',
+  employeeRange: '',
   createdAtFrom: '',
   createdAtTo: '',
   customFieldConditions: [],
@@ -79,6 +80,7 @@ export const CompanyListPage: React.FC = () => {
     if (f.industryId) params.industryId = f.industryId;
     if (f.ownerId) params.ownerId = f.ownerId;
     if (f.lifecycleStageId) params.lifecycleStageId = f.lifecycleStageId;
+    if (f.employeeRange) params.employeeRange = f.employeeRange;
     if (f.createdAtFrom) params.createdAtFrom = f.createdAtFrom;
     if (f.createdAtTo) params.createdAtTo = f.createdAtTo;
     if (f.customFieldConditions.length > 0)
@@ -92,6 +94,7 @@ export const CompanyListPage: React.FC = () => {
     industryId: filters.all.industryId || undefined,
     ownerId: filters.all.ownerId || undefined,
     lifecycleStageId: filters.all.lifecycleStageId || undefined,
+    employeeRange: filters.all.employeeRange || undefined,
     createdAtFrom: filters.all.createdAtFrom || undefined,
     createdAtTo: filters.all.createdAtTo || undefined,
     customFieldFilters: serializeConditions(filters.all.customFieldConditions),
@@ -104,6 +107,7 @@ export const CompanyListPage: React.FC = () => {
       search: filters.mine.search || undefined,
       industryId: filters.mine.industryId || undefined,
       lifecycleStageId: filters.mine.lifecycleStageId || undefined,
+      employeeRange: filters.mine.employeeRange || undefined,
       ownerId: myOwnerId || 'none',
       createdAtFrom: filters.mine.createdAtFrom || undefined,
       createdAtTo: filters.mine.createdAtTo || undefined,
@@ -118,6 +122,7 @@ export const CompanyListPage: React.FC = () => {
     search: filters.unassigned.search || undefined,
     industryId: filters.unassigned.industryId || undefined,
     lifecycleStageId: filters.unassigned.lifecycleStageId || undefined,
+    employeeRange: filters.unassigned.employeeRange || undefined,
     ownerId: 'unassigned',
     createdAtFrom: filters.unassigned.createdAtFrom || undefined,
     createdAtTo: filters.unassigned.createdAtTo || undefined,
@@ -250,6 +255,7 @@ export const CompanyListPage: React.FC = () => {
         industryId={activeFilters.industryId}
         ownerId={activeFilters.ownerId}
         lifecycleStageId={activeFilters.lifecycleStageId}
+        employeeRange={activeFilters.employeeRange}
         createdAtFrom={activeFilters.createdAtFrom}
         createdAtTo={activeFilters.createdAtTo}
         customFieldConditions={activeFilters.customFieldConditions}
@@ -259,6 +265,9 @@ export const CompanyListPage: React.FC = () => {
         onOwnerChange={(v) => setTabFilter(activeTab, { ownerId: v })}
         onLifecycleStageChange={(v) =>
           setTabFilter(activeTab, { lifecycleStageId: v })
+        }
+        onEmployeeRangeChange={(v) =>
+          setTabFilter(activeTab, { employeeRange: v })
         }
         onDateRangeChange={handleDateRangeChange}
         onOpenCustomFieldFilters={() => setIsCustomFieldSidebarOpen(true)}
@@ -353,6 +362,7 @@ export const CompanyListPage: React.FC = () => {
           industryId: activeFilters.industryId || undefined,
           ownerId: activeFilters.ownerId || undefined,
           lifecycleStageId: activeFilters.lifecycleStageId || undefined,
+          employeeRange: activeFilters.employeeRange || undefined,
           createdAtFrom: activeFilters.createdAtFrom || undefined,
           createdAtTo: activeFilters.createdAtTo || undefined,
           customFieldFilters: serializeConditions(activeFilters.customFieldConditions),
