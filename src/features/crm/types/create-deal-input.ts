@@ -1,5 +1,6 @@
 export interface CreateDealInput {
   assignedToId?: string;
+  companyId?: string;
   contactId: string;
   currency?: string;
   description?: string;

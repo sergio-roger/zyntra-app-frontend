@@ -1,5 +1,6 @@
 import { DealFormFields } from '@crm/components/DealFormFields';
 import { Contact } from '@crm/types/contact';
+import { Company } from '@crm/types/company';
 import {
   useCreateDeal,
   usePipelines,
@@ -48,6 +49,7 @@ export const DealFormSidebar: React.FC<DealFormSidebarProps> = ({
     null,
   );
   const [selectedContact, setSelectedContact] = useState<Contact | null>(null);
+  const [selectedCompany, setSelectedCompany] = useState<Company | null>(null);
 
   const { data: pipelines = [] } = usePipelines();
 
@@ -69,6 +71,7 @@ export const DealFormSidebar: React.FC<DealFormSidebarProps> = ({
         null;
       setSelectedPipeline(pipeline);
       setSelectedContact(deal.contact ?? null);
+      setSelectedCompany(null);
       setFormData({
         title: deal.title,
         description: deal.description || '',
@@ -77,6 +80,7 @@ export const DealFormSidebar: React.FC<DealFormSidebarProps> = ({
         pipelineId: deal.pipelineId,
         stageId: deal.stageId,
         contactId: deal.contactId,
+        companyId: deal.companyId ?? undefined,
         assignedToId: deal.assignedToId ?? undefined,
         teamId: deal.teamId ?? undefined,
         probability: deal.probability,
@@ -115,6 +119,7 @@ export const DealFormSidebar: React.FC<DealFormSidebarProps> = ({
         probability: activeStage?.probability_percent ?? 10,
       });
       setSelectedContact(null);
+      setSelectedCompany(null);
     }
   }, [deal, open, pipelines, defaultPipelineId, stageOverrideId]);
 
@@ -197,8 +202,13 @@ export const DealFormSidebar: React.FC<DealFormSidebarProps> = ({
               onChange={(patch) => setFormData({ ...formData, ...patch })}
               selectedContact={selectedContact}
               onContactChange={(id, contact) => {
-                setFormData({ ...formData, contactId: id });
+                setFormData((f) => ({ ...f, contactId: id }));
                 setSelectedContact(contact);
+              }}
+              selectedCompany={selectedCompany}
+              onCompanyChange={(id, company) => {
+                setFormData((f) => ({ ...f, companyId: id || undefined }));
+                setSelectedCompany(company);
               }}
               pipelines={pipelines}
               stages={stages}
