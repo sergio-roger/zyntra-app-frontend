@@ -1,13 +1,13 @@
 import { DealStatus } from '@crm/types/crm';
 
 export interface ListDealsQuery {
-  assigned_to_id?: string;
-  contact_id?: string;
+  assignedToId?: string;
+  contactId?: string;
   limit?: number;
   page?: number;
-  pipeline_id?: string;
+  pipelineId?: string;
   search?: string;
-  stage_id?: string;
+  stageId?: string;
   status?: DealStatus;
-  team_id?: string;
+  teamId?: string;
 }

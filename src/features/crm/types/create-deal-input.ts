@@ -1,13 +1,13 @@
 export interface CreateDealInput {
-  assigned_to_id?: string;
-  contact_id: string;
+  assignedToId?: string;
+  contactId: string;
   currency?: string;
   description?: string;
-  expected_close_date?: string;
-  pipeline_id: string;
+  expectedCloseDate?: string;
+  pipelineId: string;
   probability?: number;
-  stage_id: string;
-  team_id?: string;
+  stageId: string;
+  teamId?: string;
   title: string;
   value: number;
 }

@@ -7,5 +7,6 @@ export interface Segment {
   description: string | null;
   id: string;
   name: string;
+  type: 'dynamic' | 'static';
   updatedAt: string;
 }

@@ -6,6 +6,7 @@ import { CrmMember } from '@crm/types/crm-member';
 import { LifecycleStage } from '@crm/types/lifecycle-stage';
 import { SegmentCondition } from '@crm/types/segment-condition';
 import { useQuery } from '@tanstack/react-query';
+import { useLifecycleStages } from '@crm/hooks/useLifecycleStages';
 import {
   Download,
   FilterX,
@@ -77,14 +78,7 @@ export const ContactFilters: React.FC<ContactFiltersProps> = ({
     enabled: showOwnerFilter,
   });
 
-  const { data: stages = [] } = useQuery<LifecycleStage[]>({
-    queryKey: ['lifecycle-stages'],
-    queryFn: () =>
-      import('@shared/api/axios').then((m) =>
-        m.default.get('/lifecycle/stages').then((r) => r.data),
-      ),
-    staleTime: 10 * 60 * 1000,
-  });
+  const { data: stages = [] } = useLifecycleStages();
 
   const ownerOptions = members.map((m) => ({ value: m.id, label: m.name }));
   const stageOptions = stages.map((s) => ({

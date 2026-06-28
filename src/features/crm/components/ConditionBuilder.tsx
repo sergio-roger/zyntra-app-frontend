@@ -4,6 +4,7 @@ import { useTags } from '@crm/hooks/useTags';
 import { useCustomFields } from '@crm/hooks/useCustomFields';
 import { SOURCES, SOURCE_LABELS } from '@crm/types/crm';
 import { SegmentCondition } from '@crm/types/segment-condition';
+import { useLifecycleStages } from '@crm/hooks/useLifecycleStages';
 
 interface ConditionBuilderProps {
   conditions: SegmentCondition[];
@@ -19,16 +20,7 @@ export const ConditionBuilder: React.FC<ConditionBuilderProps> = ({
 }) => {
   const { data: tags = [] } = useTags('contact');
   const { data: customFields = [] } = useCustomFields();
-  const [stages, setStages] = React.useState<any[]>([]);
-
-  React.useEffect(() => {
-    import('@shared/api/axios').then(({ default: api }) => {
-      api
-        .get('/lifecycle/stages')
-        .then((r) => setStages(r.data))
-        .catch((e) => console.error(e));
-    });
-  }, []);
+  const { data: stages = [] } = useLifecycleStages();
 
   const handleAddCondition = () => {
     onChange([

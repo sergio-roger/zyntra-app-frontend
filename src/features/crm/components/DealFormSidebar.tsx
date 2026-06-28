@@ -1,5 +1,5 @@
-import { Input } from '@core/ui/Input';
-import { Textarea } from '@core/ui/Textarea';
+import { DealFormFields } from '@crm/components/DealFormFields';
+import { Contact } from '@crm/types/contact';
 import { useContactsList } from '@crm/hooks/useContacts';
 import {
   useCreateDeal,
@@ -36,11 +36,11 @@ const emptyForm = (): CreateDealInput => ({
   title: '',
   value: 0,
   currency: 'USD',
-  pipeline_id: '',
-  stage_id: '',
-  contact_id: '',
+  pipelineId: '',
+  stageId: '',
+  contactId: '',
   probability: 10,
-  expected_close_date: '',
+  expectedCloseDate: '',
   description: '',
 });
 
@@ -55,10 +55,9 @@ export const DealFormSidebar: React.FC<DealFormSidebarProps> = ({
   const [selectedPipeline, setSelectedPipeline] = useState<DealPipeline | null>(
     null,
   );
+  const [selectedContact, setSelectedContact] = useState<Contact | null>(null);
 
-  const { data: contactsData } = useContactsList({ limit: 100 });
   const { data: pipelines = [] } = usePipelines();
-  const contacts = contactsData?.items || [];
 
   const createMutation = useCreateDeal();
   const updateMutation = useUpdateDeal();
@@ -74,22 +73,23 @@ export const DealFormSidebar: React.FC<DealFormSidebarProps> = ({
     if (deal) {
       const pipeline =
         deal.pipeline ??
-        pipelines.find((p) => p.id === deal.pipeline_id) ??
+        pipelines.find((p) => p.id === deal.pipelineId) ??
         null;
       setSelectedPipeline(pipeline);
+      setSelectedContact(deal.contact ?? null);
       setFormData({
         title: deal.title,
         description: deal.description || '',
         value: Number(deal.value),
         currency: deal.currency || 'USD',
-        pipeline_id: deal.pipeline_id,
-        stage_id: deal.stage_id,
-        contact_id: deal.contact_id,
-        assigned_to_id: deal.assigned_to_id ?? undefined,
-        team_id: deal.team_id ?? undefined,
+        pipelineId: deal.pipelineId,
+        stageId: deal.stageId,
+        contactId: deal.contactId,
+        assignedToId: deal.assignedToId ?? undefined,
+        teamId: deal.teamId ?? undefined,
         probability: deal.probability,
-        expected_close_date: deal.expected_close_date
-          ? deal.expected_close_date.split('T')[0]
+        expectedCloseDate: deal.expectedCloseDate
+          ? deal.expectedCloseDate.split('T')[0]
           : '',
       });
     } else {
@@ -118,10 +118,11 @@ export const DealFormSidebar: React.FC<DealFormSidebarProps> = ({
 
       setFormData({
         ...emptyForm(),
-        pipeline_id: targetPipeline?.id ?? '',
-        stage_id: activeStage?.id ?? '',
+        pipelineId: targetPipeline?.id ?? '',
+        stageId: activeStage?.id ?? '',
         probability: activeStage?.probability_percent ?? 10,
       });
+      setSelectedContact(null);
     }
   }, [deal, open, pipelines, defaultPipelineId, stageOverrideId]);
 
@@ -132,8 +133,8 @@ export const DealFormSidebar: React.FC<DealFormSidebarProps> = ({
     const firstStage = pipeline?.stages?.[0];
     setFormData((f) => ({
       ...f,
-      pipeline_id: pipelineId,
-      stage_id: firstStage?.id ?? '',
+      pipelineId: pipelineId,
+      stageId: firstStage?.id ?? '',
       probability: firstStage?.probability_percent ?? f.probability,
     }));
   };
@@ -143,7 +144,7 @@ export const DealFormSidebar: React.FC<DealFormSidebarProps> = ({
     const stage = stages.find((s) => s.id === stageId);
     setFormData((f) => ({
       ...f,
-      stage_id: stageId,
+      stageId: stageId,
       probability: stage?.probability_percent ?? f.probability,
     }));
   };
@@ -199,155 +200,18 @@ export const DealFormSidebar: React.FC<DealFormSidebarProps> = ({
             onSubmit={handleSubmit}
             className="flex-1 overflow-y-auto p-6 space-y-5"
           >
-            <Input
-              label="Título del negocio"
-              icon={Briefcase}
-              required
-              placeholder="Ej: Implementación CRM Corporativo"
-              value={formData.title}
-              onChange={(e) =>
-                setFormData({ ...formData, title: e.target.value })
-              }
-            />
-
-            {/* Contact */}
-            <div className="space-y-1.5">
-              <label className="text-xs font-medium text-slate-400 ml-1 flex items-center gap-1.5">
-                <User size={14} /> Contacto vinculado *
-              </label>
-              <div className="relative">
-                <select
-                  required
-                  value={formData.contact_id}
-                  onChange={(e) =>
-                    setFormData({ ...formData, contact_id: e.target.value })
-                  }
-                  className="w-full bg-slate-950/50 border border-white/10 rounded-xl py-2.5 px-4 pr-9 text-sm text-white focus:outline-none focus:border-primary/50 transition-all appearance-none"
-                >
-                  <option value="">Seleccionar contacto...</option>
-                  {contacts.map((c) => (
-                    <option key={c.id} value={c.id}>
-                      {c.name} ({c.email || 'Sin email'})
-                    </option>
-                  ))}
-                </select>
-                <ChevronDown
-                  size={14}
-                  className="absolute right-3 top-1/2 -translate-y-1/2 text-slate-500 pointer-events-none"
-                />
-              </div>
-              {contacts.length === 0 && (
-                <p className="text-[10px] text-amber-500 mt-1 flex items-center gap-1">
-                  <AlertCircle size={12} /> No hay contactos disponibles.
-                </p>
-              )}
-            </div>
-
-            {/* Pipeline selector */}
-            <div className="space-y-1.5">
-              <label className="text-xs font-medium text-slate-400 ml-1">
-                Pipeline *
-              </label>
-              <div className="relative">
-                <select
-                  required
-                  value={formData.pipeline_id}
-                  onChange={(e) => handlePipelineChange(e.target.value)}
-                  className="w-full bg-slate-950/50 border border-white/10 rounded-xl py-2.5 px-4 pr-9 text-sm text-white focus:outline-none focus:border-primary/50 transition-all appearance-none"
-                >
-                  <option value="">Seleccionar pipeline...</option>
-                  {pipelines.map((p) => (
-                    <option key={p.id} value={p.id}>
-                      {p.name}
-                      {p.is_default ? ' (principal)' : ''}
-                    </option>
-                  ))}
-                </select>
-                <ChevronDown
-                  size={14}
-                  className="absolute right-3 top-1/2 -translate-y-1/2 text-slate-500 pointer-events-none"
-                />
-              </div>
-            </div>
-
-            {/* Stage selector */}
-            <div className="space-y-1.5">
-              <label className="text-xs font-medium text-slate-400 ml-1">
-                Etapa *
-              </label>
-              <div className="relative">
-                <select
-                  required
-                  value={formData.stage_id}
-                  onChange={(e) => handleStageChange(e.target.value)}
-                  disabled={stages.length === 0}
-                  className="w-full bg-slate-950/50 border border-white/10 rounded-xl py-2.5 px-4 pr-9 text-sm text-white focus:outline-none focus:border-primary/50 transition-all appearance-none disabled:opacity-40"
-                >
-                  <option value="">Seleccionar etapa...</option>
-                  {stages.map((s) => (
-                    <option key={s.id} value={s.id}>
-                      {s.name} ({s.probability_percent}%)
-                    </option>
-                  ))}
-                </select>
-                <ChevronDown
-                  size={14}
-                  className="absolute right-3 top-1/2 -translate-y-1/2 text-slate-500 pointer-events-none"
-                />
-              </div>
-            </div>
-
-            {/* Value + Probability */}
-            <div className="grid grid-cols-2 gap-4">
-              <Input
-                label="Valor estimado"
-                icon={DollarSign}
-                type="number"
-                required
-                placeholder="0.00"
-                value={formData.value}
-                onChange={(e) =>
-                  setFormData({ ...formData, value: Number(e.target.value) })
-                }
-              />
-              <Input
-                label="Probabilidad (%)"
-                icon={TrendingUp}
-                type="number"
-                min="0"
-                max="100"
-                value={formData.probability}
-                onChange={(e) =>
-                  setFormData({
-                    ...formData,
-                    probability: Number(e.target.value),
-                  })
-                }
-              />
-            </div>
-
-            {/* Close date */}
-            <Input
-              label="Fecha de cierre estimada"
-              icon={Calendar}
-              type="date"
-              value={formData.expected_close_date ?? ''}
-              onChange={(e) =>
-                setFormData({
-                  ...formData,
-                  expected_close_date: e.target.value,
-                })
-              }
-            />
-
-            <Textarea
-              label="Descripción / Notas"
-              placeholder="Detalles sobre el alcance, requerimientos, etc."
-              rows={4}
-              value={formData.description ?? ''}
-              onChange={(e) =>
-                setFormData({ ...formData, description: e.target.value })
-              }
+            <DealFormFields
+              formData={formData}
+              onChange={(patch) => setFormData({ ...formData, ...patch })}
+              selectedContact={selectedContact}
+              onContactChange={(id, contact) => {
+                setFormData({ ...formData, contactId: id });
+                setSelectedContact(contact);
+              }}
+              pipelines={pipelines}
+              stages={stages}
+              onPipelineChange={handlePipelineChange}
+              onStageChange={handleStageChange}
             />
           </form>
 
@@ -366,9 +230,9 @@ export const DealFormSidebar: React.FC<DealFormSidebarProps> = ({
               disabled={
                 isSaving ||
                 !formData.title ||
-                !formData.contact_id ||
-                !formData.pipeline_id ||
-                !formData.stage_id
+                !formData.contactId ||
+                !formData.pipelineId ||
+                !formData.stageId
               }
               className="flex-[2] px-4 py-2.5 rounded-xl bg-primary text-white text-sm font-semibold shadow-lg shadow-primary/20 hover:opacity-90 disabled:opacity-50 transition-all flex items-center justify-center gap-2"
             >

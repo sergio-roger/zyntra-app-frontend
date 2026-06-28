@@ -4,4 +4,5 @@ export interface UpdateSegmentInput {
   conditions?: SegmentCondition[];
   description?: string;
   name?: string;
+  type?: 'dynamic' | 'static';
 }

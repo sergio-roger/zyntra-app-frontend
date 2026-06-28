@@ -19,6 +19,7 @@ import { TaskFormSidebar } from '@crm/components/TaskFormSidebar';
 import { ConfirmModal } from '@shared/components/ConfirmModal';
 import { TaskStatus } from '@crm/types/crm';
 import { CrmTask } from '@crm/types/crm-task';
+import { useSearchParams, useNavigate } from 'react-router-dom';
 
 export const TasksPage: React.FC = () => {
   const [statusFilter, setStatusFilter] = useState<TaskStatus | ''>('pending');
@@ -28,6 +29,12 @@ export const TasksPage: React.FC = () => {
   const [isConfirmOpen, setIsConfirmOpen] = useState(false);
   const [taskToDelete, setTaskToDelete] = useState<CrmTask | null>(null);
 
+  const [searchParams] = useSearchParams();
+  const navigate = useNavigate();
+  
+  const dealIdFilter = searchParams.get('dealId');
+  const contactIdFilter = searchParams.get('contactId');
+
   const {
     data: tasks = [],
     isLoading,
@@ -35,6 +42,8 @@ export const TasksPage: React.FC = () => {
     error,
   } = useCrmTasks({
     status: statusFilter || undefined,
+    dealId: dealIdFilter || undefined,
+    contactId: contactIdFilter || undefined,
   });
 
   const updateMutation = useUpdateTask();
@@ -85,6 +94,10 @@ export const TasksPage: React.FC = () => {
     return new Date(date) < new Date() && statusFilter !== 'completed';
   };
 
+  const clearFilters = () => {
+    navigate('/crm/tasks');
+  };
+
   return (
     <div className="space-y-6 animate-in fade-in duration-500">
       <div className="flex flex-wrap items-center justify-between gap-3">
@@ -103,6 +116,23 @@ export const TasksPage: React.FC = () => {
           <Plus size={18} /> Nueva Tarea
         </button>
       </div>
+
+      {(dealIdFilter || contactIdFilter) && (
+        <div className="flex items-center justify-between p-4 bg-indigo-500/10 border border-indigo-500/20 rounded-xl">
+          <div className="flex items-center gap-3">
+            <Filter size={18} className="text-indigo-400" />
+            <p className="text-sm text-indigo-300 font-medium">
+              Viendo tareas filtradas por {dealIdFilter ? 'negocio' : 'contacto'}.
+            </p>
+          </div>
+          <button
+            onClick={clearFilters}
+            className="text-xs font-bold text-indigo-400 hover:text-indigo-300 transition-colors"
+          >
+            Quitar filtro
+          </button>
+        </div>
+      )}
 
       {/* Filters */}
       <div className="flex gap-2 p-1 bg-slate-950/50 rounded-2xl border border-white/5 w-fit">
@@ -203,7 +233,7 @@ export const TasksPage: React.FC = () => {
                   >
                     {task.priority}
                   </span>
-                  {isOverdue(task.due_date) && (
+                  {isOverdue(task.dueDate) && (
                     <span className="flex items-center gap-1 text-[10px] font-bold text-rose-400 uppercase tracking-wider animate-pulse">
                       <Clock size={12} /> Vencida
                     </span>
@@ -219,7 +249,7 @@ export const TasksPage: React.FC = () => {
                 <div className="flex flex-wrap items-center gap-4 pt-2 text-[11px] text-slate-500">
                   <div className="flex items-center gap-1.5">
                     <Calendar size={14} className="text-slate-600" />
-                    {new Date(task.due_date).toLocaleString()}
+                    {new Date(task.dueDate).toLocaleString()}
                   </div>
                   {task.contact && (
                     <div className="flex items-center gap-1.5 text-indigo-400">
@@ -246,6 +276,8 @@ export const TasksPage: React.FC = () => {
       <TaskFormSidebar
         open={sidebarOpen}
         task={editingTask}
+        contactId={contactIdFilter ?? undefined}
+        dealId={dealIdFilter ?? undefined}
         onClose={() => setSidebarOpen(false)}
       />
 

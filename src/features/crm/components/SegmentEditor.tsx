@@ -11,6 +11,7 @@ interface SegmentEditorProps {
   onSave: (data: {
     name: string;
     description: string;
+    type: 'dynamic' | 'static';
     conditions: SegmentCondition[];
   }) => void;
   onCancel: () => void;
@@ -24,6 +25,7 @@ export const SegmentEditor: React.FC<SegmentEditorProps> = ({
 }) => {
   const [name, setName] = useState(segment?.name ?? '');
   const [description, setDescription] = useState(segment?.description ?? '');
+  const [type, setType] = useState<'dynamic' | 'static'>(segment?.type ?? 'dynamic');
   const [conditions, setConditions] = useState<SegmentCondition[]>(
     segment?.conditions ?? [],
   );
@@ -31,6 +33,7 @@ export const SegmentEditor: React.FC<SegmentEditorProps> = ({
   useEffect(() => {
     setName(segment?.name ?? '');
     setDescription(segment?.description ?? '');
+    setType(segment?.type ?? 'dynamic');
     setConditions(segment?.conditions ?? []);
   }, [segment?.id]);
 
@@ -39,7 +42,7 @@ export const SegmentEditor: React.FC<SegmentEditorProps> = ({
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     if (!name.trim()) return;
-    onSave({ name: name.trim(), description: description.trim(), conditions });
+    onSave({ name: name.trim(), description: description.trim(), type, conditions });
   };
 
   return (
@@ -116,12 +119,36 @@ export const SegmentEditor: React.FC<SegmentEditorProps> = ({
               </div>
             </div>
 
-            <div className="rounded-xl border border-slate-700/50 bg-slate-950/20 p-4">
-              <ConditionBuilder
-                conditions={conditions}
-                onChange={setConditions}
-              />
+            <div className="flex items-center gap-3 p-3 rounded-xl border border-slate-700/40 bg-slate-950/30">
+              <span className="text-xs font-bold text-slate-400 uppercase tracking-wider">
+                Tipo
+              </span>
+              <div className="flex gap-2 ml-auto">
+                {(['dynamic', 'static'] as const).map((t) => (
+                  <button
+                    key={t}
+                    type="button"
+                    onClick={() => setType(t)}
+                    className={`px-3 py-1.5 rounded-lg text-xs font-bold transition-all ${
+                      type === t
+                        ? 'bg-indigo-600 text-white'
+                        : 'bg-slate-800 text-slate-400 hover:bg-slate-700'
+                    }`}
+                  >
+                    {t === 'dynamic' ? 'Dinámico' : 'Estático'}
+                  </button>
+                ))}
+              </div>
             </div>
+
+            {type === 'dynamic' && (
+              <div className="rounded-xl border border-slate-700/50 bg-slate-950/20 p-4">
+                <ConditionBuilder
+                  conditions={conditions}
+                  onChange={setConditions}
+                />
+              </div>
+            )}
           </div>
 
           {/* Preview */}

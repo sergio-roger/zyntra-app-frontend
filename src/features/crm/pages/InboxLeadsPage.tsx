@@ -1,5 +1,6 @@
 import { ConvertToDealSidebar } from '@crm/components/ConvertToDealSidebar';
 import { LeadsTable } from '@crm/components/LeadsTable';
+import { Pagination } from '@crm/components/Pagination';
 import { useArchiveLead, useLeadsList } from '@crm/hooks/useLeads';
 import { Contact } from '@crm/types/contact';
 import { AlertCircle, Inbox, Loader2, RefreshCw, Search } from 'lucide-react';
@@ -10,8 +11,12 @@ export const InboxLeadsPage: React.FC = () => {
   const [selectedLead, setSelectedLead] = useState<Contact | null>(null);
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
 
+  const [page, setPage] = useState(1);
+
   const { data, isLoading, isError, error, refetch } = useLeadsList({
     search: search || undefined,
+    page,
+    limit: 20,
   });
   const archiveMutation = useArchiveLead();
 
@@ -142,11 +147,17 @@ export const InboxLeadsPage: React.FC = () => {
 
       {/* Table */}
       {!isLoading && !isError && (
-        <div className="animate-in fade-in slide-in-from-bottom-4 duration-500">
+        <div className="animate-in fade-in slide-in-from-bottom-4 duration-500 flex flex-col gap-4">
           <LeadsTable
             leads={leads}
             onArchive={handleArchive}
             onConvert={handleConvert}
+          />
+          <Pagination
+            page={page}
+            totalPages={data?.totalPages ?? 1}
+            total={total}
+            onChange={setPage}
           />
         </div>
       )}

@@ -12,6 +12,7 @@ import { EmptyState } from '@shared/components/EmptyState';
 import { SOURCE_LABELS } from '@crm/types/crm';
 import { Segment } from '@crm/types/segment';
 import { SegmentCondition } from '@crm/types/segment-condition';
+import { useLifecycleStages } from '@crm/hooks/useLifecycleStages';
 
 const FIELD_LABELS: Record<string, string> = {
   source: 'Origen',
@@ -70,16 +71,7 @@ export const SegmentListPanel: React.FC<SegmentListPanelProps> = ({
   onDelete,
 }) => {
   const [expandedIds, setExpandedIds] = useState<Set<string>>(new Set());
-  const [stages, setStages] = useState<any[]>([]);
-
-  React.useEffect(() => {
-    import('@shared/api/axios').then(({ default: api }) => {
-      api
-        .get('/lifecycle/stages')
-        .then((r) => setStages(r.data))
-        .catch((e) => console.error(e));
-    });
-  }, []);
+  const { data: stages = [] } = useLifecycleStages();
 
   const toggleExpand = (id: string, e: React.MouseEvent) => {
     e.stopPropagation();
@@ -176,15 +168,24 @@ export const SegmentListPanel: React.FC<SegmentListPanelProps> = ({
                         {seg.description}
                       </p>
                     )}
-                    {hasConditions && !expanded && (
-                      <div className="flex items-center gap-1 mt-1">
-                        <Filter size={9} className="text-slate-600" />
-                        <span className="text-[9px] text-slate-600 font-medium">
-                          {seg.conditions.length} regla
-                          {seg.conditions.length !== 1 ? 's' : ''}
-                        </span>
-                      </div>
-                    )}
+                    <div className="flex items-center gap-2 mt-1">
+                      <span className={`text-[9px] font-bold px-1.5 py-0.5 rounded-md ${
+                        seg.type === 'static'
+                          ? 'bg-slate-800 text-slate-400'
+                          : 'bg-indigo-500/20 text-indigo-400'
+                      }`}>
+                        {seg.type === 'static' ? 'Estático' : 'Dinámico'}
+                      </span>
+                      {hasConditions && !expanded && (
+                        <div className="flex items-center gap-1">
+                          <Filter size={9} className="text-slate-600" />
+                          <span className="text-[9px] text-slate-600 font-medium">
+                            {seg.conditions.length} regla
+                            {seg.conditions.length !== 1 ? 's' : ''}
+                          </span>
+                        </div>
+                      )}
+                    </div>
                   </div>
 
                   <div className="flex items-center gap-0.5 shrink-0 opacity-0 group-hover:opacity-100 transition-opacity">

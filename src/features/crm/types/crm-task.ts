@@ -4,13 +4,14 @@ export type TaskStatus = 'pending' | 'completed' | 'cancelled';
 export type TaskPriority = 'low' | 'medium' | 'high';
 
 export interface CrmTask {
-  assigned_to: string | null;
+  assignedTo: string | null;
   businessId: string;
-  contact_id: string | null;
   contact?: Contact;
+  contactId: string | null;
   createdAt: string;
+  dealId?: string | null;
   description: string | null;
-  due_date: string;
+  dueDate: string;
   id: string;
   priority: TaskPriority;
   status: TaskStatus;

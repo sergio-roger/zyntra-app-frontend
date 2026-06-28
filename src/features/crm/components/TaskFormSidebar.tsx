@@ -20,7 +20,8 @@ import React, { useEffect, useState } from 'react';
 interface TaskFormSidebarProps {
   open: boolean;
   task: CrmTask | null;
-  contactId?: string; // If provided, pre-select this contact
+  contactId?: string;
+  dealId?: string;
   onClose: () => void;
 }
 
@@ -28,18 +29,22 @@ export const TaskFormSidebar: React.FC<TaskFormSidebarProps> = ({
   open,
   task,
   contactId,
+  dealId,
   onClose,
 }) => {
   const [formData, setFormData] = useState({
     title: '',
     description: '',
-    due_date: '',
+    dueDate: '',
     priority: 'medium' as TaskPriority,
-    contact_id: '',
+    contactId: '',
+    dealId: '',
   });
 
   const { data: contactsData } = useContactsList({ limit: 100 });
   const contacts = contactsData?.items || [];
+  // Optionally, we could fetch deals here to show a deal selector if not provided. 
+  // For now we just pass it to the API.
 
   const createMutation = useCreateTask();
   const updateMutation = useUpdateTask();
@@ -50,20 +55,22 @@ export const TaskFormSidebar: React.FC<TaskFormSidebarProps> = ({
       setFormData({
         title: task.title,
         description: task.description || '',
-        due_date: new Date(task.due_date).toISOString().slice(0, 16), // datetime-local format
+        dueDate: new Date(task.dueDate).toISOString().slice(0, 16), // datetime-local format
         priority: task.priority,
-        contact_id: task.contact_id || '',
+        contactId: task.contactId || '',
+        dealId: task.dealId || '',
       });
     } else {
       setFormData({
         title: '',
         description: '',
-        due_date: new Date(Date.now() + 86400000).toISOString().slice(0, 16), // Tomorrow
+        dueDate: new Date(Date.now() + 86400000).toISOString().slice(0, 16), // Tomorrow
         priority: 'medium',
-        contact_id: contactId || '',
+        contactId: contactId || '',
+        dealId: dealId || '',
       });
     }
-  }, [task, contactId, open]);
+  }, [task, contactId, dealId, open]);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -135,9 +142,9 @@ export const TaskFormSidebar: React.FC<TaskFormSidebarProps> = ({
                 icon={Calendar}
                 type="datetime-local"
                 required
-                value={formData.due_date}
+                value={formData.dueDate}
                 onChange={(e) =>
-                  setFormData({ ...formData, due_date: e.target.value })
+                  setFormData({ ...formData, dueDate: e.target.value })
                 }
               />
 
@@ -169,9 +176,9 @@ export const TaskFormSidebar: React.FC<TaskFormSidebarProps> = ({
                 Vincular Contacto
               </label>
               <select
-                value={formData.contact_id}
+                value={formData.contactId}
                 onChange={(e) =>
-                  setFormData({ ...formData, contact_id: e.target.value })
+                  setFormData({ ...formData, contactId: e.target.value })
                 }
                 className="w-full bg-slate-950/50 border border-white/10 rounded-xl py-2.5 px-4 text-sm text-white focus:outline-none focus:border-primary/50 transition-all appearance-none cursor-pointer"
               >

@@ -26,7 +26,7 @@ export const leadsApi = {
       .get<
         unknown,
         { data: any }
-      >(`/crm/contacts${buildQS({ ...query, isArchived: false } as Record<string, unknown>)}`)
+      >(`/crm/contacts${buildQS({ ...query } as Record<string, unknown>)}`)
       .then((r) => ({ data: mapContactsList(r.data) })),
 
   archive: (id: string) =>

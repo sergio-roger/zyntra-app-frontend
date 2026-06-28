@@ -1,10 +1,10 @@
 import { TaskPriority } from './crm-task';
 
 export interface CreateTaskInput {
-  contact_id?: string;
-  deal_id?: string;
+  contactId?: string;
+  dealId?: string;
   description?: string;
-  due_date: string;
+  dueDate: string;
   priority?: TaskPriority;
   title: string;
 }

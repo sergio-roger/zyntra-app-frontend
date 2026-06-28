@@ -67,7 +67,7 @@ export const CompanyFormSidebar: React.FC<CompanyFormSidebarProps> = ({
   onClose,
 }) => {
   const { user: currentUser } = useAuthStore();
-  const isAdmin = currentUser?.role === 'admin' || currentUser?.role === 'manager'; // Adjust based on your role constants
+  const isAdmin = currentUser?.role === 'admin' || currentUser?.role === 'manager';
   
   const [formData, setFormData] = useState<CompanyFormData>(defaultFormData);
   const [activeTab, setActiveTab] = useState<'info' | 'advanced'>('info');
