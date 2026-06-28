@@ -16,9 +16,9 @@ import {
   verticalListSortingStrategy,
 } from "@dnd-kit/sortable";
 import { CSS } from "@dnd-kit/utilities";
+import { ColumnConfig } from "@shared/types/column";
 import { GripVertical, Settings2, X } from "lucide-react";
 import React, { useEffect, useState } from "react";
-import { ColumnConfig } from "@shared/types/column";
 
 interface ColumnCustomizerModalProps {
   isOpen: boolean;

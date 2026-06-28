@@ -4,56 +4,56 @@ import { Industry } from "./industry";
 import { CrmMember } from "./crm-member";
 
 export interface Company {
-  id: string;
   businessId: string;
-  name: string;
-  identification: string | null;
-  taxType: string | null;
-  website: string | null;
-  employeeRange: string | null;
-  description: string | null;
-  industryId: string | null;
-  industry: Industry | null;
-  ownerId: string | null;
-  owner: CrmMember | null;
-  lifecycleStageId: string | null;
-  lifecycle_stage: LifecycleStage | null;
-  tags: Tag[];
-  customFields: Record<string, any> | null;
   createdAt: string;
+  customFields: Record<string, any> | null;
+  description: string | null;
+  employeeRange: string | null;
+  id: string;
+  identification: string | null;
+  industry: Industry | null;
+  industryId: string | null;
+  lifecycle_stage: LifecycleStage | null;
+  lifecycleStageId: string | null;
+  name: string;
+  owner: CrmMember | null;
+  ownerId: string | null;
+  tags: Tag[];
+  taxType: string | null;
   updatedAt: string;
+  website: string | null;
 }
 
 export interface CompanyFormData {
-  name: string;
-  identification: string;
-  taxType: string;
-  website: string;
-  employeeRange: string;
+  customFields: Record<string, any>;
   description: string;
+  employeeRange: string;
+  identification: string;
   industryId: string;
   lifecycleStageId: string;
+  name: string;
   ownerId: string;
   tagIds: string[];
-  customFields: Record<string, any>;
+  taxType: string;
+  website: string;
 }
 
 export interface ListCompaniesQuery {
-  search?: string;
-  industryId?: string;
-  lifecycleStageId?: string;
-  ownerId?: string;
   createdAtFrom?: string;
   createdAtTo?: string;
-  page?: number;
+  industryId?: string;
+  lifecycleStageId?: string;
   limit?: number;
+  ownerId?: string;
+  page?: number;
+  search?: string;
 }
 
 export interface CompaniesListResponse {
   items: Company[];
-  total: number;
-  page: number;
   limit: number;
+  page: number;
+  total: number;
   totalPages: number;
 }
 

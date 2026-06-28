@@ -1,3 +1,4 @@
+import { TabItem, Tabs } from "@core/ui/Tabs";
 import { CustomFieldFormSidebar } from "@crm/components/CustomFieldFormSidebar";
 import { useCustomFields, useRemoveField } from "@crm/hooks/useCustomFields";
 import { CustomFieldType } from "@crm/types/crm";
@@ -22,7 +23,6 @@ import {
   UserRound,
 } from "lucide-react";
 import React, { useState } from "react";
-import { Tabs, TabItem } from "@core/ui/Tabs";
 
 type EntityTab = "contact" | "company";
 

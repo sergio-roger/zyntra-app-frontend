@@ -1,6 +1,16 @@
-import React, { useEffect, useState } from "react";
+import { Input } from "@core/ui/Input";
+import { Select } from "@core/ui/Select";
+import { Tabs } from "@core/ui/Tabs";
+import { Textarea } from "@core/ui/Textarea";
+import { useCreateCompany, useIndustrys, useUpdateCompany } from "@crm/hooks/useCompanies";
+import { useCrmUsers } from "@crm/hooks/useCrmUsers";
+import { useTags } from "@crm/hooks/useTags";
+import { Company, CompanyFormData } from "@crm/types/company";
+import { LifecycleStage } from "@crm/types/lifecycle-stage";
+import { useQuery } from "@tanstack/react-query";
 import {
   Building2,
+  Check,
   ChevronRight,
   FileText,
   Globe,
@@ -10,17 +20,7 @@ import {
   Tag as TagIcon,
   X,
 } from "lucide-react";
-import { Input } from "@core/ui/Input";
-import { Select } from "@core/ui/Select";
-import { Tabs } from "@core/ui/Tabs";
-import { Textarea } from "@core/ui/Textarea";
-import { useCreateCompany, useUpdateCompany, useIndustrys } from "@crm/hooks/useCompanies";
-import { useTags } from "@crm/hooks/useTags";
-import { useCrmUsers } from "@crm/hooks/useCrmUsers";
-import { Company, CompanyFormData } from "@crm/types/company";
-import { LifecycleStage } from "@crm/types/lifecycle-stage";
-import { Check } from "lucide-react";
-import { useQuery } from "@tanstack/react-query";
+import React, { useEffect, useState } from "react";
 
 interface CompanyFormSidebarProps {
   open: boolean;
