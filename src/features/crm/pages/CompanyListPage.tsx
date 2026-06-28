@@ -2,6 +2,7 @@ import { DateRange } from '@core/ui/DateRangePicker';
 import { CompanyCustomFieldsSidebar } from '@crm/components/CompanyCustomFieldsSidebar';
 import { CompanyExportModal } from '@crm/components/CompanyExportModal';
 import { CompanyFilters } from '@crm/components/CompanyFilters';
+import { CompanyListFilters } from '@crm/types/company-filters';
 import { CompanyFormSidebar } from '@crm/components/CompanyFormSidebar';
 import { CompanyImportModal } from '@crm/components/CompanyImportModal';
 import { CompanyTable } from '@crm/components/CompanyTable';
@@ -22,16 +23,7 @@ import React, { useState } from 'react';
 const serializeConditions = (conditions: SegmentCondition[]): string | undefined =>
   conditions.length > 0 ? JSON.stringify(conditions) : undefined;
 
-interface Filters {
-  search: string;
-  industryId: string;
-  lifecycleStageId: string;
-  createdAtFrom: string;
-  createdAtTo: string;
-  page: number;
-}
-
-const defaultFilters = (): Filters => ({
+const defaultFilters = (): CompanyListFilters => ({
   search: '',
   industryId: '',
   lifecycleStageId: '',
@@ -43,7 +35,7 @@ const defaultFilters = (): Filters => ({
 const LIMIT = 20;
 
 export const CompanyListPage: React.FC = () => {
-  const [filters, setFilters] = useState<Filters>(defaultFilters());
+  const [filters, setFilters] = useState<CompanyListFilters>(defaultFilters());
   const [customFieldConditions, setCustomFieldConditions] = useState<SegmentCondition[]>([]);
   const [isCustomFieldSidebarOpen, setIsCustomFieldSidebarOpen] = useState(false);
   const [sidebarOpen, setSidebarOpen] = useState(false);
@@ -64,7 +56,7 @@ export const CompanyListPage: React.FC = () => {
   const isAdminOrManager =
     currentUser?.role === 'admin' || currentUser?.role === 'manager';
 
-  const set = (patch: Partial<Filters>) => {
+  const set = (patch: Partial<CompanyListFilters>) => {
     const resetPage = !('page' in patch);
     setFilters((prev) => ({
       ...prev,
