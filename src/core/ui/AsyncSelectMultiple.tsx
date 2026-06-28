@@ -7,7 +7,7 @@ export interface AsyncLoadResult<TItem> {
   hasMore: boolean;
 }
 
-export interface AsyncSelectMultipleProps<TItem> {
+interface AsyncSelectMultipleProps<TItem> {
   loadOptions: (params: {
     search: string;
     page: number;
@@ -47,11 +47,14 @@ export function AsyncSelectMultiple<TItem>({
   const [hasMore, setHasMore] = useState(false);
   const [loading, setLoading] = useState(false);
   const [loadingMore, setLoadingMore] = useState(false);
+  const [focusedIndex, setFocusedIndex] = useState(-1);
 
   const containerRef = useRef<HTMLDivElement>(null);
   const searchRef = useRef<HTMLInputElement>(null);
+  const listRef = useRef<HTMLDivElement>(null);
   const debounceRef = useRef<ReturnType<typeof setTimeout> | null>(null);
 
+  // Close on outside click or Escape
   useEffect(() => {
     const onMouse = (e: MouseEvent) => {
       if (containerRef.current && !containerRef.current.contains(e.target as Node)) {
@@ -68,6 +71,18 @@ export function AsyncSelectMultiple<TItem>({
       document.removeEventListener('keydown', onKey);
     };
   }, []);
+
+  // Reset focused index when items change
+  useEffect(() => {
+    setFocusedIndex(-1);
+  }, [items]);
+
+  // Scroll focused item into view
+  useEffect(() => {
+    if (focusedIndex < 0 || !listRef.current) return;
+    const domItems = listRef.current.querySelectorAll<HTMLElement>('[role="option"]');
+    domItems[focusedIndex]?.scrollIntoView({ block: 'nearest' });
+  }, [focusedIndex]);
 
   const load = useCallback(
     async (searchTerm: string, pageNum: number, append: boolean) => {
@@ -102,6 +117,7 @@ export function AsyncSelectMultiple<TItem>({
     }
   }, [open]);
 
+  // Debounced search
   useEffect(() => {
     if (!open) return;
     if (debounceRef.current) clearTimeout(debounceRef.current);
@@ -129,6 +145,28 @@ export function AsyncSelectMultiple<TItem>({
     onChange(value.filter((v) => getKey(v) !== getKey(item)));
   };
 
+  const handleSearchKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
+    switch (e.key) {
+      case 'ArrowDown':
+        e.preventDefault();
+        setFocusedIndex((i) => (i < items.length - 1 ? i + 1 : i));
+        break;
+      case 'ArrowUp':
+        e.preventDefault();
+        setFocusedIndex((i) => (i > 0 ? i - 1 : 0));
+        break;
+      case 'Enter':
+        if (focusedIndex >= 0 && items[focusedIndex]) {
+          e.preventDefault();
+          toggle(items[focusedIndex]);
+        }
+        break;
+      case 'Escape':
+        setOpen(false);
+        break;
+    }
+  };
+
   const hasValue = value.length > 0;
 
   const triggerLabel = hasValue
@@ -146,7 +184,7 @@ export function AsyncSelectMultiple<TItem>({
         </label>
       )}
 
-      <div className="relative" ref={containerRef}>
+      <div ref={containerRef}>
         {/* Trigger */}
         <button
           type="button"
@@ -194,12 +232,12 @@ export function AsyncSelectMultiple<TItem>({
           </div>
         )}
 
-        {/* Dropdown */}
+        {/* Dropdown — inline (not absolute) so form's overflow-y:auto doesn't clip it */}
         {open && (
           <div
             role="listbox"
             aria-multiselectable
-            className="absolute z-50 w-full mt-1 bg-slate-800 border border-white/10 rounded-xl shadow-xl overflow-hidden animate-in fade-in slide-in-from-top-2 duration-150"
+            className="w-full mt-1.5 bg-slate-800 border border-white/10 rounded-xl shadow-xl overflow-hidden"
           >
             {/* Search input */}
             <div className="p-2 border-b border-white/5">
@@ -213,14 +251,15 @@ export function AsyncSelectMultiple<TItem>({
                   type="text"
                   value={search}
                   onChange={(e) => setSearch(e.target.value)}
-                  placeholder="Buscar..."
+                  onKeyDown={handleSearchKeyDown}
+                  placeholder="Buscar... (↑↓ para navegar, Enter para seleccionar)"
                   className="w-full bg-slate-900/60 border border-white/10 rounded-lg py-2 pl-8 pr-3 text-sm text-white placeholder-slate-500 focus:outline-none focus:border-primary/30 transition-all"
                 />
               </div>
             </div>
 
             {/* Items list */}
-            <div className="max-h-52 overflow-y-auto">
+            <div ref={listRef} className="max-h-52 overflow-y-auto">
               {loading ? (
                 <div className="flex items-center justify-center py-8 gap-2 text-slate-500">
                   <Loader2 size={15} className="animate-spin" />
@@ -233,8 +272,9 @@ export function AsyncSelectMultiple<TItem>({
                   </span>
                 </div>
               ) : (
-                items.map((item) => {
+                items.map((item, i) => {
                   const selected = isSelected(item);
+                  const focused = focusedIndex === i;
                   const description = getDescription?.(item);
                   return (
                     <button
@@ -245,8 +285,9 @@ export function AsyncSelectMultiple<TItem>({
                       onClick={() => toggle(item)}
                       className={`
                         w-full px-4 py-2.5 text-sm text-left transition-colors
-                        flex items-center gap-3 hover:bg-white/5
+                        flex items-center gap-3
                         ${selected ? 'bg-primary/10' : ''}
+                        ${focused ? 'bg-white/10' : 'hover:bg-white/5'}
                       `}
                     >
                       {/* Checkbox */}

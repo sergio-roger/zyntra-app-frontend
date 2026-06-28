@@ -256,10 +256,11 @@ export const DealDetailSidebar: React.FC<DealDetailSidebarProps> = ({
 
       {/* Drawer */}
       <div
-        className={`fixed inset-y-0 right-0 w-full !mt-0 max-w-md bg-slate-900 border-l border-white/10 z-[70] shadow-2xl transform transition-transform duration-300 ease-out flex flex-col ${open ? 'translate-x-0' : 'translate-x-full'}`}
+        className={`fixed inset-y-0 right-0 w-full !mt-0 max-w-md bg-slate-900 border-l border-white/10 z-[70] shadow-2xl transform transition-transform duration-300 ease-out overflow-y-auto ${open ? 'translate-x-0' : 'translate-x-full'}`}
       >
+        <div className="flex flex-col min-h-full">
         {/* Header */}
-        <div className="flex items-start justify-between p-6 border-b border-white/5 shrink-0">
+        <div className="sticky top-0 z-10 bg-slate-900 flex items-start justify-between p-6 border-b border-white/5">
           <div className="min-w-0 pr-4">
             <h3 className="text-xl font-bold text-white truncate">
               {deal?.title ?? 'Negocio'}
@@ -277,7 +278,7 @@ export const DealDetailSidebar: React.FC<DealDetailSidebarProps> = ({
         </div>
 
         {/* Tabs */}
-        <div className="flex border-b border-white/5 shrink-0">
+        <div className="sticky top-[89px] z-10 bg-slate-900 flex border-b border-white/5">
           {(['detalle', 'tareas', 'historial'] as Tab[]).map((tab) => (
             <button
               key={tab}
@@ -294,7 +295,7 @@ export const DealDetailSidebar: React.FC<DealDetailSidebarProps> = ({
         </div>
 
         {/* Content */}
-        <div className="flex-1 overflow-y-auto">
+        <div className="flex-1">
           {/* ── Detalle Tab ── */}
           {activeTab === 'detalle' && (
             <form
@@ -342,7 +343,7 @@ export const DealDetailSidebar: React.FC<DealDetailSidebarProps> = ({
 
         {/* Footer — only for Detalle tab */}
         {activeTab === 'detalle' && (
-          <div className="p-6 border-t border-white/5 bg-slate-950/30 shrink-0 space-y-3">
+          <div className="sticky bottom-0 bg-slate-900 p-6 border-t border-white/5 bg-slate-950/30 space-y-3">
             <div className="flex gap-3">
               <button
                 type="button"
@@ -382,6 +383,7 @@ export const DealDetailSidebar: React.FC<DealDetailSidebarProps> = ({
             </button>
           </div>
         )}
+        </div>
       </div>
 
       <ConfirmModal

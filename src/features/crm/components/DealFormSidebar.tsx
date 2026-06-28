@@ -1,11 +1,11 @@
 import { DealFormFields } from '@crm/components/DealFormFields';
-import { Contact } from '@crm/types/contact';
-import { Company } from '@crm/types/company';
 import {
   useCreateDeal,
   usePipelines,
   useUpdateDeal,
 } from '@crm/hooks/useDeals';
+import { Company } from '@crm/types/company';
+import { Contact } from '@crm/types/contact';
 import { CreateDealInput } from '@crm/types/create-deal-input';
 import { Deal } from '@crm/types/deal';
 import { DealPipeline } from '@crm/types/deal-pipeline';
@@ -57,7 +57,6 @@ export const DealFormSidebar: React.FC<DealFormSidebarProps> = ({
   const updateMutation = useUpdateDeal();
   const isSaving = createMutation.isPending || updateMutation.isPending;
 
-  // Resolve stages from selected pipeline
   const stages: DealPipelineStage[] = selectedPipeline?.stages ?? [];
 
   // When pipelines load or open changes, set default pipeline
@@ -168,11 +167,11 @@ export const DealFormSidebar: React.FC<DealFormSidebarProps> = ({
       />
 
       <div
-        className={`fixed inset-y-0 right-0 w-full !mt-0 max-w-md bg-slate-900 border-l border-white/10 z-[70] shadow-2xl transform transition-transform duration-300 ease-out ${open ? 'translate-x-0' : 'translate-x-full'}`}
+        className={`fixed inset-y-0 right-0 w-full !mt-0 max-w-md bg-slate-900 border-l border-white/10 z-[70] shadow-2xl transform transition-transform duration-300 ease-out overflow-y-auto ${open ? 'translate-x-0' : 'translate-x-full'}`}
       >
-        <div className="flex flex-col h-full">
+        <div className="flex flex-col min-h-full">
           {/* Header */}
-          <div className="flex items-center justify-between p-6 border-b border-white/5">
+          <div className="sticky top-0 z-10 bg-slate-900 flex items-center justify-between p-6 border-b border-white/5">
             <div>
               <h3 className="text-xl font-bold text-white">
                 {deal ? 'Editar Negocio' : 'Nuevo Negocio'}
@@ -195,7 +194,7 @@ export const DealFormSidebar: React.FC<DealFormSidebarProps> = ({
           <form
             id="deal-form"
             onSubmit={handleSubmit}
-            className="flex-1 overflow-y-auto p-6 space-y-5"
+            className="flex-1 p-6 space-y-5 pb-10"
           >
             <DealFormFields
               formData={formData}
@@ -217,7 +216,7 @@ export const DealFormSidebar: React.FC<DealFormSidebarProps> = ({
           </form>
 
           {/* Footer */}
-          <div className="p-6 border-t border-white/5 bg-slate-950/30 flex gap-3">
+          <div className="sticky bottom-0 bg-slate-900 p-6 border-t border-white/5 bg-slate-950/30 flex gap-3">
             <button
               type="button"
               onClick={onClose}

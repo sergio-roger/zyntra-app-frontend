@@ -219,19 +219,21 @@ export const DealCompanySearch: React.FC<DealCompanySearchProps> = ({
 
       {/* ── Select mode ── */}
       {mode === 'select' && (
-        <div className="relative">
-          <Search size={13} className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-500 pointer-events-none" />
-          <input
-            type="text"
-            placeholder="Buscar por nombre de empresa..."
-            value={search}
-            onChange={(e) => setSearch(e.target.value)}
-            onFocus={() => setDropdownOpen(true)}
-            className="w-full bg-slate-950/50 border border-white/10 rounded-xl py-2.5 pl-9 pr-4 text-sm text-white placeholder-slate-500 focus:outline-none focus:border-indigo-500/40 transition-all"
-          />
+        <div className="space-y-1.5">
+          <div className="relative">
+            <Search size={13} className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-500 pointer-events-none" />
+            <input
+              type="text"
+              placeholder="Buscar por nombre de empresa..."
+              value={search}
+              onChange={(e) => setSearch(e.target.value)}
+              onFocus={() => setDropdownOpen(true)}
+              className="w-full bg-slate-950/50 border border-white/10 rounded-xl py-2.5 pl-9 pr-4 text-sm text-white placeholder-slate-500 focus:outline-none focus:border-indigo-500/40 transition-all"
+            />
+          </div>
 
           {dropdownOpen && (
-            <div className="absolute z-50 mt-1.5 w-full bg-slate-900 border border-white/10 rounded-xl shadow-2xl overflow-hidden">
+            <div className="w-full bg-slate-900 border border-white/10 rounded-xl overflow-hidden">
               {results.length === 0 ? (
                 <div className="flex flex-col items-center py-6 text-slate-500 gap-2">
                   <Building2 size={20} className="opacity-25" />
@@ -240,7 +242,7 @@ export const DealCompanySearch: React.FC<DealCompanySearchProps> = ({
                   </p>
                 </div>
               ) : (
-                <ul className="max-h-52 overflow-y-auto py-1">
+                <ul className="py-1">
                   {results.map((c) => (
                     <li key={c.id}>
                       <button
@@ -312,6 +314,7 @@ export const DealCompanySearch: React.FC<DealCompanySearchProps> = ({
                     value={newTaxType}
                     onChange={(v) => setNewTaxType(v ?? 'RUC')}
                     placeholder="Tipo..."
+                    inline
                   />
                 </div>
                 <input
@@ -334,6 +337,7 @@ export const DealCompanySearch: React.FC<DealCompanySearchProps> = ({
               onChange={(id) => setNewIndustryId(id)}
               clearable
               clearLabel="— Sin industria"
+              inline
             />
 
             {/* Número de empleados */}
@@ -346,6 +350,7 @@ export const DealCompanySearch: React.FC<DealCompanySearchProps> = ({
               onChange={(v) => setNewEmployeeRange(v)}
               clearable
               clearLabel="— Sin definir"
+              inline
             />
 
             {/* Sitio web */}

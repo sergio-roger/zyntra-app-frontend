@@ -82,28 +82,30 @@ export const DealContactSearch: React.FC<DealContactSearchProps> = ({
           </button>
         </div>
       ) : (
-        <div className="relative">
-          <Search
-            size={14}
-            className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-500 pointer-events-none"
-          />
-          <input
-            type="text"
-            placeholder="Buscar por nombre o email..."
-            value={search}
-            onChange={(e) => setSearch(e.target.value)}
-            onFocus={() => setOpen(true)}
-            className="w-full bg-slate-950/50 border border-white/10 rounded-xl py-2.5 pl-9 pr-4 text-sm text-white placeholder-slate-500 focus:outline-none focus:border-indigo-500/50 transition-all"
-          />
+        <div className="space-y-1.5">
+          <div className="relative">
+            <Search
+              size={14}
+              className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-500 pointer-events-none"
+            />
+            <input
+              type="text"
+              placeholder="Buscar por nombre o email..."
+              value={search}
+              onChange={(e) => setSearch(e.target.value)}
+              onFocus={() => setOpen(true)}
+              className="w-full bg-slate-950/50 border border-white/10 rounded-xl py-2.5 pl-9 pr-4 text-sm text-white placeholder-slate-500 focus:outline-none focus:border-indigo-500/50 transition-all"
+            />
+          </div>
 
           {open && (
-            <div className="absolute z-50 mt-1 w-full bg-slate-900 border border-white/10 rounded-xl shadow-2xl overflow-hidden">
+            <div className="w-full bg-slate-900 border border-white/10 rounded-xl overflow-hidden">
               {results.length === 0 ? (
                 <p className="px-4 py-3 text-xs text-slate-500 text-center">
                   {search ? 'Sin resultados' : 'Escribe para buscar...'}
                 </p>
               ) : (
-                <ul className="max-h-56 overflow-y-auto py-1">
+                <ul className="py-1">
                   {results.map((c) => (
                     <li key={c.id}>
                       <button

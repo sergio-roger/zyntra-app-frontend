@@ -24,6 +24,7 @@ interface SelectProps<TValue = string> {
 
   clearable?: boolean;
   clearLabel?: string;
+  inline?: boolean;
 
   displayValue?: (
     value: TValue | null,
@@ -50,13 +51,18 @@ function SelectInner<TValue = string>(
     disabled = false,
     clearable = false,
     clearLabel = '— Sin selección',
+    inline = false,
     displayValue,
     renderOption,
   }: SelectProps<TValue>,
   ref: React.ForwardedRef<HTMLButtonElement>,
 ) {
   const [open, setOpen] = useState(false);
+  const [focusedIndex, setFocusedIndex] = useState(-1);
   const containerRef = useRef<HTMLDivElement>(null);
+  const listRef = useRef<HTMLDivElement>(null);
+
+  const totalItems = (clearable ? 1 : 0) + options.length;
 
   // Close on outside click or Escape
   useEffect(() => {
@@ -78,6 +84,60 @@ function SelectInner<TValue = string>(
       document.removeEventListener('keydown', onKey);
     };
   }, []);
+
+  // Reset focused index when dropdown closes
+  useEffect(() => {
+    if (!open) setFocusedIndex(-1);
+  }, [open]);
+
+  // Scroll focused item into view
+  useEffect(() => {
+    if (focusedIndex < 0 || !listRef.current) return;
+    const domItems = listRef.current.querySelectorAll<HTMLElement>('[role="option"]');
+    domItems[focusedIndex]?.scrollIntoView({ block: 'nearest' });
+  }, [focusedIndex]);
+
+  const selectAtIndex = (idx: number) => {
+    if (clearable && idx === 0) {
+      onChange(null);
+    } else {
+      const opt = options[clearable ? idx - 1 : idx];
+      if (opt && !opt.disabled) onChange(opt.value);
+    }
+    setOpen(false);
+  };
+
+  const handleKeyDown = (e: React.KeyboardEvent<HTMLButtonElement>) => {
+    if (!open) {
+      if (e.key === 'ArrowDown' || e.key === 'ArrowUp') {
+        e.preventDefault();
+        setOpen(true);
+        setFocusedIndex(e.key === 'ArrowDown' ? 0 : totalItems - 1);
+      }
+      return;
+    }
+    switch (e.key) {
+      case 'ArrowDown':
+        e.preventDefault();
+        setFocusedIndex((i) => (i < totalItems - 1 ? i + 1 : i));
+        break;
+      case 'ArrowUp':
+        e.preventDefault();
+        setFocusedIndex((i) => (i > 0 ? i - 1 : 0));
+        break;
+      case 'Enter':
+      case ' ':
+        if (focusedIndex >= 0) {
+          e.preventDefault();
+          selectAtIndex(focusedIndex);
+        }
+        break;
+      case 'Escape':
+        e.preventDefault();
+        setOpen(false);
+        break;
+    }
+  };
 
   const selectedOption = options.find((o) => o.value === value);
   const hasValue = !!value;
@@ -101,6 +161,7 @@ function SelectInner<TValue = string>(
           type="button"
           disabled={disabled}
           onClick={() => setOpen((v) => !v)}
+          onKeyDown={handleKeyDown}
           aria-haspopup="listbox"
           aria-expanded={open}
           className={`
@@ -126,8 +187,9 @@ function SelectInner<TValue = string>(
 
         {open && (
           <div
+            ref={listRef}
             role="listbox"
-            className="absolute z-20 w-full mt-1 bg-slate-800 border border-white/10 rounded-xl shadow-xl overflow-hidden animate-in fade-in slide-in-from-top-2 duration-150"
+            className={`w-full mt-1 bg-slate-800 border border-white/10 rounded-xl shadow-xl overflow-hidden animate-in fade-in slide-in-from-top-2 duration-150 ${inline ? '' : 'absolute z-20'}`}
           >
             {clearable && (
               <button
@@ -138,7 +200,10 @@ function SelectInner<TValue = string>(
                   onChange(null);
                   setOpen(false);
                 }}
-                className={`w-full px-4 py-2.5 text-sm text-left transition-colors hover:bg-white/5 flex items-center justify-between ${!hasValue ? 'text-white bg-primary/10' : 'text-slate-400'}`}
+                className={`w-full px-4 py-2.5 text-sm text-left transition-colors flex items-center justify-between
+                  ${!hasValue ? 'text-white bg-primary/10' : 'text-slate-400'}
+                  ${focusedIndex === 0 ? 'bg-white/10' : 'hover:bg-white/5'}
+                `}
               >
                 <span>{clearLabel}</span>
                 {!hasValue && (
@@ -147,8 +212,10 @@ function SelectInner<TValue = string>(
               </button>
             )}
 
-            {options.map((option) => {
+            {options.map((option, i) => {
+              const itemIdx = clearable ? i + 1 : i;
               const isSelected = option.value === value;
+              const isFocused = focusedIndex === itemIdx;
               return (
                 <button
                   key={String(option.value)}
@@ -161,10 +228,11 @@ function SelectInner<TValue = string>(
                     setOpen(false);
                   }}
                   className={`
-                    w-full px-4 py-2.5 text-sm text-left transition-colors hover:bg-white/5
+                    w-full px-4 py-2.5 text-sm text-left transition-colors
                     flex items-center justify-between
                     disabled:opacity-40 disabled:cursor-not-allowed
                     ${isSelected ? 'text-white bg-primary/10' : 'text-slate-300'}
+                    ${isFocused ? 'bg-white/10' : 'hover:bg-white/5'}
                   `}
                 >
                   {renderOption ? (
