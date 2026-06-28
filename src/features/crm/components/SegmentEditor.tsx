@@ -1,9 +1,9 @@
-import { ConditionBuilder } from "@crm/components/ConditionBuilder";
-import { SegmentPreviewPanel } from "@crm/components/SegmentPreviewPanel";
-import { Segment } from "@crm/types/segment";
-import { SegmentCondition } from "@crm/types/segment-condition";
-import { Loader2, Save, X } from "lucide-react";
-import React, { useEffect, useState } from "react";
+import { ConditionBuilder } from '@crm/components/ConditionBuilder';
+import { SegmentPreviewPanel } from '@crm/components/SegmentPreviewPanel';
+import { Segment } from '@crm/types/segment';
+import { SegmentCondition } from '@crm/types/segment-condition';
+import { Loader2, Save, X } from 'lucide-react';
+import React, { useEffect, useState } from 'react';
 
 interface SegmentEditorProps {
   segment: Segment | null;
@@ -22,15 +22,15 @@ export const SegmentEditor: React.FC<SegmentEditorProps> = ({
   onSave,
   onCancel,
 }) => {
-  const [name, setName] = useState(segment?.name ?? "");
-  const [description, setDescription] = useState(segment?.description ?? "");
+  const [name, setName] = useState(segment?.name ?? '');
+  const [description, setDescription] = useState(segment?.description ?? '');
   const [conditions, setConditions] = useState<SegmentCondition[]>(
     segment?.conditions ?? [],
   );
 
   useEffect(() => {
-    setName(segment?.name ?? "");
-    setDescription(segment?.description ?? "");
+    setName(segment?.name ?? '');
+    setDescription(segment?.description ?? '');
     setConditions(segment?.conditions ?? []);
   }, [segment?.id]);
 
@@ -49,7 +49,7 @@ export const SegmentEditor: React.FC<SegmentEditorProps> = ({
         <div>
           <h3 className="text-base font-black text-white leading-tight">
             {isCreating
-              ? "Nuevo Segmento Inteligente"
+              ? 'Nuevo Segmento Inteligente'
               : `Editando: ${segment.name}`}
           </h3>
           <p className="text-xs text-slate-500 mt-1">
@@ -101,7 +101,7 @@ export const SegmentEditor: React.FC<SegmentEditorProps> = ({
               </div>
               <div>
                 <label className="block text-[11px] font-bold uppercase tracking-wider text-slate-400 mb-1.5">
-                  Descripción{" "}
+                  Descripción{' '}
                   <span className="text-slate-600 normal-case font-normal tracking-normal">
                     (opcional)
                   </span>

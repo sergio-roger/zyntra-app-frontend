@@ -1,14 +1,14 @@
-import axios from "axios";
+import axios from 'axios';
 
 const getBaseURL = () => {
-  return import.meta.env.VITE_API_URL || "/api";
+  return import.meta.env.VITE_API_URL || '/api';
 };
 
 const api = axios.create({
   baseURL: getBaseURL(),
   withCredentials: true,
   headers: {
-    "Content-Type": "application/json",
+    'Content-Type': 'application/json',
   },
 });
 

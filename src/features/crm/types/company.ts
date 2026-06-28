@@ -1,7 +1,7 @@
-import { Tag } from "./tag";
-import { LifecycleStage } from "./lifecycle-stage";
-import { Industry } from "./industry";
-import { CrmMember } from "./crm-member";
+import { Tag } from './tag';
+import { LifecycleStage } from './lifecycle-stage';
+import { Industry } from './industry';
+import { CrmMember } from './crm-member';
 
 export interface Company {
   businessId: string;

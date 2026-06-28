@@ -1,5 +1,5 @@
-import React from "react";
-import { AlertTriangle, X } from "lucide-react";
+import React from 'react';
+import { AlertTriangle, X } from 'lucide-react';
 
 interface ConfirmModalProps {
   isOpen: boolean;
@@ -9,7 +9,7 @@ interface ConfirmModalProps {
   description: string;
   confirmText?: string;
   cancelText?: string;
-  variant?: "danger" | "primary" | "warning";
+  variant?: 'danger' | 'primary' | 'warning';
 }
 
 export const ConfirmModal: React.FC<ConfirmModalProps> = ({
@@ -18,22 +18,22 @@ export const ConfirmModal: React.FC<ConfirmModalProps> = ({
   onConfirm,
   title,
   description,
-  confirmText = "Confirmar",
-  cancelText = "Cancelar",
-  variant = "danger",
+  confirmText = 'Confirmar',
+  cancelText = 'Cancelar',
+  variant = 'danger',
 }) => {
   if (!isOpen) return null;
 
   const variantStyles = {
-    danger: "bg-rose-600 hover:bg-rose-500 shadow-rose-500/20",
-    primary: "bg-indigo-600 hover:bg-indigo-500 shadow-indigo-500/20",
-    warning: "bg-amber-600 hover:bg-amber-500 shadow-amber-500/20",
+    danger: 'bg-rose-600 hover:bg-rose-500 shadow-rose-500/20',
+    primary: 'bg-indigo-600 hover:bg-indigo-500 shadow-indigo-500/20',
+    warning: 'bg-amber-600 hover:bg-amber-500 shadow-amber-500/20',
   };
 
   const iconStyles = {
-    danger: "text-rose-400 bg-rose-400/10",
-    primary: "text-indigo-400 bg-indigo-400/10",
-    warning: "text-amber-400 bg-amber-400/10",
+    danger: 'text-rose-400 bg-rose-400/10',
+    primary: 'text-indigo-400 bg-indigo-400/10',
+    warning: 'text-amber-400 bg-amber-400/10',
   };
 
   return (

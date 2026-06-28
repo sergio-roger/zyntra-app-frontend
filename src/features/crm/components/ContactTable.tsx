@@ -1,10 +1,10 @@
-import { DEFAULT_COLUMNS } from "@crm/constants/contact-columns";
-import { Contact } from "@crm/types/contact";
-import { EmptyState } from "@shared/components/EmptyState";
-import { ColumnConfig } from "@shared/types/column";
-import { Pencil, Settings2, Trash2, User } from "lucide-react";
-import React from "react";
-import { SourceBadge } from "./badges";
+import { DEFAULT_COLUMNS } from '@crm/constants/contact-columns';
+import { Contact } from '@crm/types/contact';
+import { EmptyState } from '@shared/components/EmptyState';
+import { ColumnConfig } from '@shared/types/column';
+import { Pencil, Settings2, Trash2, User } from 'lucide-react';
+import React from 'react';
+import { SourceBadge } from './badges';
 
 interface ContactTableProps {
   contacts: Contact[];
@@ -18,26 +18,26 @@ interface ContactTableProps {
 }
 
 const formatDate = (iso: string | null) => {
-  if (!iso) return "—";
+  if (!iso) return '—';
   return new Date(iso).toLocaleDateString();
 };
 
 const getCustomFieldValue = (c: Contact, colKey: string) => {
   const val = c.customFields?.[colKey];
-  if (val === undefined || val === null || val === "") return <span className="text-slate-600">—</span>;
-  if (typeof val === "boolean") {
+  if (val === undefined || val === null || val === '') return <span className="text-slate-600">—</span>;
+  if (typeof val === 'boolean') {
     return (
       <span
         className={`inline-flex px-1.5 py-0.5 rounded text-[10px] font-bold ${
-          val ? "bg-emerald-500/10 text-emerald-400" : "bg-slate-800 text-slate-400"
+          val ? 'bg-emerald-500/10 text-emerald-400' : 'bg-slate-800 text-slate-400'
         }`}
       >
-        {val ? "Sí" : "No"}
+        {val ? 'Sí' : 'No'}
       </span>
     );
   }
   if (Array.isArray(val)) {
-    return <span className="text-slate-300">{val.join(", ")}</span>;
+    return <span className="text-slate-300">{val.join(', ')}</span>;
   }
   return <span className="text-slate-300">{String(val)}</span>;
 };
@@ -54,8 +54,8 @@ const RENDERERS: Record<
       {c.name}
     </button>
   ),
-  email: (c) => <span className="text-slate-300">{c.email ?? "—"}</span>,
-  phone: (c) => <span className="text-slate-300">{c.phone ?? "—"}</span>,
+  email: (c) => <span className="text-slate-300">{c.email ?? '—'}</span>,
+  phone: (c) => <span className="text-slate-300">{c.phone ?? '—'}</span>,
   lifecycleStage: (c) => {
     if (!c.lifecycleStage) return <span className="text-slate-600">—</span>;
     return (
@@ -85,7 +85,7 @@ const RENDERERS: Record<
   notes: (c) => (
     <span
       className="text-slate-400 text-xs block max-w-[220px] truncate"
-      title={c.notes ?? ""}
+      title={c.notes ?? ''}
     >
       {c.notes ?? <span className="text-slate-600">—</span>}
     </span>
@@ -111,7 +111,7 @@ export const ContactTable: React.FC<ContactTableProps> = ({
         icon={User}
         title="No se encontraron contactos"
         description="No hay registros que coincidan con los filtros seleccionados o tu base de datos está vacía."
-        actionLabel={onAction ? "Crear contacto" : undefined}
+        actionLabel={onAction ? 'Crear contacto' : undefined}
         onAction={onAction}
       />
     );
@@ -127,7 +127,7 @@ export const ContactTable: React.FC<ContactTableProps> = ({
           <tr>
             {visibleCols.map((col) => (
               <th key={col.key} className="px-4 py-3 font-semibold">
-                {col.label.replace(" (Campo Personalizado)", "")}
+                {col.label.replace(' (Campo Personalizado)', '')}
               </th>
             ))}
             <th className="px-4 py-3 text-right font-semibold">Acciones</th>
@@ -163,8 +163,8 @@ export const ContactTable: React.FC<ContactTableProps> = ({
                     aria-label="Editar"
                     className={`rounded-md p-1.5 transition-colors ${
                       canEdit
-                        ? "text-slate-400 hover:bg-white/10 hover:text-indigo-400"
-                        : "cursor-not-allowed text-slate-700 opacity-40"
+                        ? 'text-slate-400 hover:bg-white/10 hover:text-indigo-400'
+                        : 'cursor-not-allowed text-slate-700 opacity-40'
                     }`}
                   >
                     <Pencil size={15} />
@@ -175,8 +175,8 @@ export const ContactTable: React.FC<ContactTableProps> = ({
                     aria-label="Eliminar"
                     className={`rounded-md p-1.5 transition-colors ${
                       canEdit
-                        ? "text-slate-400 hover:bg-rose-500/15 hover:text-rose-400"
-                        : "cursor-not-allowed text-slate-700 opacity-40"
+                        ? 'text-slate-400 hover:bg-rose-500/15 hover:text-rose-400'
+                        : 'cursor-not-allowed text-slate-700 opacity-40'
                     }`}
                   >
                     <Trash2 size={15} />

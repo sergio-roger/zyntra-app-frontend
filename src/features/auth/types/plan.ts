@@ -1,7 +1,7 @@
 export enum BillingCycle {
-  MONTHLY = "monthly",
-  ONE_TIME = "one-time",
-  YEARLY = "yearly",
+  MONTHLY = 'monthly',
+  ONE_TIME = 'one-time',
+  YEARLY = 'yearly',
 }
 
 export interface PlanDescription {

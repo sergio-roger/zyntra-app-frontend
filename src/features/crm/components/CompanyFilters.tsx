@@ -1,8 +1,8 @@
-import { DateRange, DateRangePicker } from "@core/ui/DateRangePicker";
-import { Select } from "@core/ui/Select";
-import { useIndustrys } from "@crm/hooks/useCompanies";
-import { LifecycleStage } from "@crm/types/lifecycle-stage";
-import { useQuery } from "@tanstack/react-query";
+import { DateRange, DateRangePicker } from '@core/ui/DateRangePicker';
+import { Select } from '@core/ui/Select';
+import { useIndustrys } from '@crm/hooks/useCompanies';
+import { LifecycleStage } from '@crm/types/lifecycle-stage';
+import { useQuery } from '@tanstack/react-query';
 import {
   Download,
   FilterX,
@@ -10,8 +10,8 @@ import {
   LayoutTemplate,
   Search,
   SlidersHorizontal,
-} from "lucide-react";
-import React, { useState } from "react";
+} from 'lucide-react';
+import React, { useState } from 'react';
 
 interface CompanyFiltersProps {
   search: string;
@@ -46,10 +46,10 @@ export const CompanyFilters: React.FC<CompanyFiltersProps> = ({
 
   const { data: industryTypes = [] } = useIndustrys();
   const { data: stages = [] } = useQuery<LifecycleStage[]>({
-    queryKey: ["lifecycle-stages"],
+    queryKey: ['lifecycle-stages'],
     queryFn: () =>
-      import("@shared/api/axios").then((m) =>
-        m.default.get("/lifecycle/stages").then((r) => r.data),
+      import('@shared/api/axios').then((m) =>
+        m.default.get('/lifecycle/stages').then((r) => r.data),
       ),
     staleTime: 10 * 60 * 1000,
   });
@@ -57,7 +57,7 @@ export const CompanyFilters: React.FC<CompanyFiltersProps> = ({
   const industryOptions = industryTypes.map((s) => ({ value: s.id, label: s.name }));
   const stageOptions = stages.map((s) => ({
     value: s.id,
-    label: `${s.icon ?? ""} ${s.name}`.trim(),
+    label: `${s.icon ?? ''} ${s.name}`.trim(),
   }));
 
   const dateRangeValue: DateRange | null =
@@ -107,8 +107,8 @@ export const CompanyFilters: React.FC<CompanyFiltersProps> = ({
             onClick={() => setShowAdvanced((p) => !p)}
             className={`inline-flex items-center gap-1.5 whitespace-nowrap rounded-lg border px-3 py-2 text-xs font-medium transition-colors ${
               showAdvanced
-                ? "border-indigo-500/40 bg-indigo-500/10 text-indigo-300 hover:bg-indigo-500/20"
-                : "border-white/10 bg-slate-950/40 text-slate-300 hover:border-white/20 hover:bg-white/5"
+                ? 'border-indigo-500/40 bg-indigo-500/10 text-indigo-300 hover:bg-indigo-500/20'
+                : 'border-white/10 bg-slate-950/40 text-slate-300 hover:border-white/20 hover:bg-white/5'
             }`}
           >
             <SlidersHorizontal size={14} /> Filtros avanzados
@@ -135,7 +135,7 @@ export const CompanyFilters: React.FC<CompanyFiltersProps> = ({
             <Select
               options={industryOptions}
               value={industryId || null}
-              onChange={(v) => onIndustryChange(v ?? "")}
+              onChange={(v) => onIndustryChange(v ?? '')}
               placeholder="Todas las industrias"
               clearable
               clearLabel="Todas las industrias"
@@ -147,7 +147,7 @@ export const CompanyFilters: React.FC<CompanyFiltersProps> = ({
             <Select
               options={stageOptions}
               value={lifecycleStageId || null}
-              onChange={(v) => onLifecycleStageChange(v ?? "")}
+              onChange={(v) => onLifecycleStageChange(v ?? '')}
               placeholder="Todas las etapas"
               clearable
               clearLabel="Todas las etapas"

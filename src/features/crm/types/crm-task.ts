@@ -1,7 +1,7 @@
-import { Contact } from "./contact";
+import { Contact } from './contact';
 
-export type TaskStatus = "pending" | "completed" | "cancelled";
-export type TaskPriority = "low" | "medium" | "high";
+export type TaskStatus = 'pending' | 'completed' | 'cancelled';
+export type TaskPriority = 'low' | 'medium' | 'high';
 
 export interface CrmTask {
   assigned_to: string | null;

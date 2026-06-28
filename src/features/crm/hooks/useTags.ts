@@ -1,9 +1,9 @@
-import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
-import { crmApi } from "@crm/api/crm.api";
+import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
+import { crmApi } from '@crm/api/crm.api';
 
 export const tagsKeys = {
-  all: ["crm", "tags"] as const,
-  filtered: (entityType?: string) => ["crm", "tags", entityType || "all"] as const,
+  all: ['crm', 'tags'] as const,
+  filtered: (entityType?: string) => ['crm', 'tags', entityType || 'all'] as const,
 };
 
 export const useTags = (entityType?: string) =>

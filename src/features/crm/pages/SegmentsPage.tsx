@@ -1,18 +1,18 @@
-import { SegmentDetail } from "@crm/components/SegmentDetail";
-import { SegmentEditor } from "@crm/components/SegmentEditor";
-import { SegmentListPanel } from "@crm/components/SegmentListPanel";
+import { SegmentDetail } from '@crm/components/SegmentDetail';
+import { SegmentEditor } from '@crm/components/SegmentEditor';
+import { SegmentListPanel } from '@crm/components/SegmentListPanel';
 import {
   useCreateSegment,
   useDeleteSegment,
   useSegmentsList,
   useUpdateSegment,
-} from "@crm/hooks/useSegments";
-import { Segment } from "@crm/types/segment";
-import { SegmentCondition } from "@crm/types/segment-condition";
-import { ConfirmModal } from "@shared/components/ConfirmModal";
-import { EmptyState } from "@shared/components/EmptyState";
-import { Users } from "lucide-react";
-import React, { useState } from "react";
+} from '@crm/hooks/useSegments';
+import { Segment } from '@crm/types/segment';
+import { SegmentCondition } from '@crm/types/segment-condition';
+import { ConfirmModal } from '@shared/components/ConfirmModal';
+import { EmptyState } from '@shared/components/EmptyState';
+import { Users } from 'lucide-react';
+import React, { useState } from 'react';
 
 export const SegmentsPage: React.FC = () => {
   const { data: segments = [], isLoading, refetch } = useSegmentsList();

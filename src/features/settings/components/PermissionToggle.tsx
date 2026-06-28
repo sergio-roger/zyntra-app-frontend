@@ -1,5 +1,5 @@
-import React from "react";
-import { Loader2 } from "lucide-react";
+import React from 'react';
+import { Loader2 } from 'lucide-react';
 
 interface PermissionToggleProps {
   menuId: string;
@@ -37,12 +37,12 @@ export const PermissionToggle: React.FC<PermissionToggleProps> = ({
         disabled={disabled || isPending}
         onClick={() => onChange(!checked)}
         className={`relative inline-flex h-6 w-11 items-center rounded-full transition-colors focus:outline-none disabled:opacity-50 shrink-0 ${
-          checked ? "bg-indigo-600" : "bg-slate-700"
+          checked ? 'bg-indigo-600' : 'bg-slate-700'
         }`}
       >
         <span
           className={`inline-block h-4 w-4 transform rounded-full bg-white transition-transform ${
-            checked ? "translate-x-6" : "translate-x-1"
+            checked ? 'translate-x-6' : 'translate-x-1'
           }`}
         />
       </button>

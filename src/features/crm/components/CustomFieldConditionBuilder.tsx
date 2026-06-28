@@ -1,8 +1,8 @@
-import { Select } from "@core/ui/Select";
-import { useCustomFields } from "@crm/hooks/useCustomFields";
-import { SegmentCondition } from "@crm/types/segment-condition";
-import { Plus, Trash2 } from "lucide-react";
-import React from "react";
+import { Select } from '@core/ui/Select';
+import { useCustomFields } from '@crm/hooks/useCustomFields';
+import { SegmentCondition } from '@crm/types/segment-condition';
+import { Plus, Trash2 } from 'lucide-react';
+import React from 'react';
 
 interface CustomFieldConditionBuilderProps {
   conditions: SegmentCondition[];
@@ -21,7 +21,7 @@ export const CustomFieldConditionBuilder: React.FC<
     const first = activeFields[0];
     onChange([
       ...conditions,
-      { field: `customFields.${first.name}`, operator: "equals", value: "" },
+      { field: `customFields.${first.name}`, operator: 'equals', value: '' },
     ]);
   };
 
@@ -63,26 +63,26 @@ export const CustomFieldConditionBuilder: React.FC<
       </div>
 
       {conditions.map((cond, i) => {
-        const fieldName = cond.field.replace("customFields.", "");
+        const fieldName = cond.field.replace('customFields.', '');
         const cf = activeFields.find((f) => f.name === fieldName);
         const hideValue =
-          cond.operator === "is_empty" || cond.operator === "is_not_empty";
-        const isNumeric = cf?.type === "number";
+          cond.operator === 'is_empty' || cond.operator === 'is_not_empty';
+        const isNumeric = cf?.type === 'number';
 
         const operatorOptions = isNumeric
           ? [
-              { value: "equals", label: "= igual" },
-              { value: "greater_than", label: "> mayor" },
-              { value: "less_than", label: "< menor" },
+              { value: 'equals', label: '= igual' },
+              { value: 'greater_than', label: '> mayor' },
+              { value: 'less_than', label: '< menor' },
             ]
-          : cf?.type === "checkbox"
-            ? [{ value: "equals", label: "es" }]
+          : cf?.type === 'checkbox'
+            ? [{ value: 'equals', label: 'es' }]
             : [
-                { value: "equals", label: "igual a" },
-                { value: "not_equals", label: "distinto de" },
-                { value: "contains", label: "contiene" },
-                { value: "is_empty", label: "vacío" },
-                { value: "is_not_empty", label: "no vacío" },
+                { value: 'equals', label: 'igual a' },
+                { value: 'not_equals', label: 'distinto de' },
+                { value: 'contains', label: 'contiene' },
+                { value: 'is_empty', label: 'vacío' },
+                { value: 'is_not_empty', label: 'no vacío' },
               ];
 
         return (
@@ -97,8 +97,8 @@ export const CustomFieldConditionBuilder: React.FC<
                 onChange={(v) =>
                   update(i, {
                     field: v ?? fieldOptions[0]?.value,
-                    operator: "equals",
-                    value: "",
+                    operator: 'equals',
+                    value: '',
                   })
                 }
                 className="py-1.5 text-xs"
@@ -111,8 +111,8 @@ export const CustomFieldConditionBuilder: React.FC<
                 value={cond.operator}
                 onChange={(v) =>
                   update(i, {
-                    operator: (v as SegmentCondition["operator"]) ?? "equals",
-                    value: "",
+                    operator: (v as SegmentCondition['operator']) ?? 'equals',
+                    value: '',
                   })
                 }
                 className="py-1.5 text-xs"
@@ -120,7 +120,7 @@ export const CustomFieldConditionBuilder: React.FC<
             </div>
 
             {!hideValue &&
-              (cf?.type === "select" && cf.options ? (
+              (cf?.type === 'select' && cf.options ? (
                 <div className="min-w-0 flex-1">
                   <Select
                     options={cf.options.map((opt) => ({
@@ -128,29 +128,29 @@ export const CustomFieldConditionBuilder: React.FC<
                       label: opt,
                     }))}
                     value={cond.value || null}
-                    onChange={(v) => update(i, { value: v ?? "" })}
+                    onChange={(v) => update(i, { value: v ?? '' })}
                     placeholder="Elige..."
                     className="py-1.5 text-xs"
                   />
                 </div>
-              ) : cf?.type === "checkbox" ? (
+              ) : cf?.type === 'checkbox' ? (
                 <div className="min-w-0 flex-1">
                   <Select
                     options={[
-                      { value: "true", label: "Sí" },
-                      { value: "false", label: "No" },
+                      { value: 'true', label: 'Sí' },
+                      { value: 'false', label: 'No' },
                     ]}
                     value={String(cond.value)}
-                    onChange={(v) => update(i, { value: v === "true" })}
+                    onChange={(v) => update(i, { value: v === 'true' })}
                     className="py-1.5 text-xs"
                   />
                 </div>
               ) : (
                 <input
                   type={
-                    isNumeric ? "number" : cf?.type === "date" ? "date" : "text"
+                    isNumeric ? 'number' : cf?.type === 'date' ? 'date' : 'text'
                   }
-                  value={cond.value ?? ""}
+                  value={cond.value ?? ''}
                   onChange={(e) => update(i, { value: e.target.value })}
                   placeholder="Valor..."
                   className="min-w-0 flex-1 rounded-lg border border-slate-700/60 bg-slate-950/70 px-2 py-1.5 text-xs text-slate-200 placeholder-slate-600 outline-none transition-all focus:border-indigo-400"

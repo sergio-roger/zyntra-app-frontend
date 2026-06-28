@@ -1,6 +1,6 @@
-import { crmApi } from "@crm/api/crm.api";
-import { useAuthStore } from "@features/auth/store/authStore";
-import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+import { crmApi } from '@crm/api/crm.api';
+import { useAuthStore } from '@features/auth/store/authStore';
+import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 
 const useEffectiveUserId = () => {
   const user = useAuthStore((s) => s.user);
@@ -8,9 +8,9 @@ const useEffectiveUserId = () => {
 };
 
 export const preferenceKeys = {
-  all: (userId: string | null) => ["user", "preferences", userId] as const,
+  all: (userId: string | null) => ['user', 'preferences', userId] as const,
   detail: (userId: string | null, key: string) =>
-    ["user", "preferences", userId, key] as const,
+    ['user', 'preferences', userId, key] as const,
 };
 
 export const useUserPreference = (key: string) => {

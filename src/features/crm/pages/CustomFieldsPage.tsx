@@ -1,12 +1,12 @@
-import { TabItem, Tabs } from "@core/ui/Tabs";
-import { CustomFieldFormSidebar } from "@crm/components/CustomFieldFormSidebar";
-import { useCustomFields, useRemoveField } from "@crm/hooks/useCustomFields";
-import { CustomFieldType } from "@crm/types/crm";
-import { CustomField } from "@crm/types/custom-field";
-import { ConfirmModal } from "@shared/components/ConfirmModal";
-import { EmptyState } from "@shared/components/EmptyState";
-import { toastManager } from "@shared/components/toast/toastManager";
-import { AxiosError } from "axios";
+import { TabItem, Tabs } from '@core/ui/Tabs';
+import { CustomFieldFormSidebar } from '@crm/components/CustomFieldFormSidebar';
+import { useCustomFields, useRemoveField } from '@crm/hooks/useCustomFields';
+import { CustomFieldType } from '@crm/types/crm';
+import { CustomField } from '@crm/types/custom-field';
+import { ConfirmModal } from '@shared/components/ConfirmModal';
+import { EmptyState } from '@shared/components/EmptyState';
+import { toastManager } from '@shared/components/toast/toastManager';
+import { AxiosError } from 'axios';
 import {
   AlertCircle,
   Building2,
@@ -21,10 +21,10 @@ import {
   Trash2,
   Type,
   UserRound,
-} from "lucide-react";
-import React, { useState } from "react";
+} from 'lucide-react';
+import React, { useState } from 'react';
 
-type EntityTab = "contact" | "company";
+type EntityTab = 'contact' | 'company';
 
 const FIELD_TYPE_ICONS: Record<CustomFieldType, any> = {
   text: Type,
@@ -36,16 +36,16 @@ const FIELD_TYPE_ICONS: Record<CustomFieldType, any> = {
 };
 
 const FIELD_TYPE_LABELS: Record<CustomFieldType, string> = {
-  text: "Texto corto",
-  number: "Número",
-  date: "Fecha",
-  select: "Selección única",
-  checkbox: "Casilla de verificación",
-  url: "Enlace web",
+  text: 'Texto corto',
+  number: 'Número',
+  date: 'Fecha',
+  select: 'Selección única',
+  checkbox: 'Casilla de verificación',
+  url: 'Enlace web',
 };
 
 export const CustomFieldsPage: React.FC = () => {
-  const [activeTab, setActiveTab] = useState<EntityTab>("contact");
+  const [activeTab, setActiveTab] = useState<EntityTab>('contact');
   const { data: fields, isLoading, isError, error } = useCustomFields(activeTab);
   const removeMutation = useRemoveField();
 
@@ -69,28 +69,28 @@ export const CustomFieldsPage: React.FC = () => {
       try {
         await removeMutation.mutateAsync(fieldToDelete);
         toastManager.add({
-          title: "Campo eliminado",
-          description: "El campo personalizado ha sido eliminado.",
-          type: "success",
+          title: 'Campo eliminado',
+          description: 'El campo personalizado ha sido eliminado.',
+          type: 'success',
         });
       } catch (err) {
-        let errorMsg = "No se pudo eliminar el campo personalizado.";
+        let errorMsg = 'No se pudo eliminar el campo personalizado.';
         if (err instanceof AxiosError) {
           const data = err.response?.data as any;
-          const entityLabel = activeTab === "company" ? "empresas" : "contactos";
+          const entityLabel = activeTab === 'company' ? 'empresas' : 'contactos';
           if (
-            data?.message === "field_has_data" ||
-            data?.errors?.[0]?.description === "field_has_data"
+            data?.message === 'field_has_data' ||
+            data?.errors?.[0]?.description === 'field_has_data'
           ) {
             errorMsg = `No se puede eliminar el campo porque tiene datos registrados en algunos ${entityLabel}.`;
-          } else if (typeof data?.message === "string") {
+          } else if (typeof data?.message === 'string') {
             errorMsg = data.message;
           }
         }
         toastManager.add({
-          title: "Error al eliminar",
+          title: 'Error al eliminar',
           description: errorMsg,
-          type: "error",
+          type: 'error',
         });
       } finally {
         setFieldToDelete(null);
@@ -100,8 +100,8 @@ export const CustomFieldsPage: React.FC = () => {
   };
 
   const tabs: { key: EntityTab; label: string; icon: any }[] = [
-    { key: "contact", label: "Contactos", icon: UserRound },
-    { key: "company", label: "Empresas", icon: Building2 },
+    { key: 'contact', label: 'Contactos', icon: UserRound },
+    { key: 'company', label: 'Empresas', icon: Building2 },
   ];
 
   return (
@@ -196,7 +196,7 @@ export const CustomFieldsPage: React.FC = () => {
                         </td>
                         <td className="px-6 py-4 text-center">
                           <span
-                            className={`inline-flex h-2 w-2 rounded-full ${field.required ? "bg-amber-400 shadow-[0_0_8px_rgba(251,191,36,0.5)]" : "bg-slate-700"}`}
+                            className={`inline-flex h-2 w-2 rounded-full ${field.required ? 'bg-amber-400 shadow-[0_0_8px_rgba(251,191,36,0.5)]' : 'bg-slate-700'}`}
                           />
                         </td>
                         <td className="px-6 py-4 text-right">
@@ -225,7 +225,7 @@ export const CustomFieldsPage: React.FC = () => {
             <EmptyState
               icon={Settings2}
               title="No hay campos personalizados"
-              description={`Aún no has creado campos personalizados para ${activeTab === "company" ? "empresas" : "contactos"}.`}
+              description={`Aún no has creado campos personalizados para ${activeTab === 'company' ? 'empresas' : 'contactos'}.`}
               actionLabel="Crear mi primer campo"
               onAction={() => handleOpenSidebar()}
             />

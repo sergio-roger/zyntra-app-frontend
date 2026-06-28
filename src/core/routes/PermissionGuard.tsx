@@ -1,6 +1,6 @@
-import React from "react";
-import { Navigate } from "react-router-dom";
-import { useAuthStore } from "@features/auth/store/authStore";
+import React from 'react';
+import { Navigate } from 'react-router-dom';
+import { useAuthStore } from '@features/auth/store/authStore';
 
 export const PermissionGuard: React.FC<{
   menuKey: string;
@@ -8,7 +8,7 @@ export const PermissionGuard: React.FC<{
 }> = ({ menuKey, children }) => {
   const { allowedMenus } = useAuthStore();
   const isAdmin = useAuthStore(
-    (s) => s.user?.role === "admin" || s.user?.role === "superAdmin",
+    (s) => s.user?.role === 'admin' || s.user?.role === 'superAdmin',
   );
 
   if (isAdmin) return <>{children}</>;

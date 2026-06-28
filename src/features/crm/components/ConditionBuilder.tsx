@@ -1,9 +1,9 @@
-import React from "react";
-import { Plus, Trash2, Filter } from "lucide-react";
-import { useTags } from "@crm/hooks/useTags";
-import { useCustomFields } from "@crm/hooks/useCustomFields";
-import { SOURCES, SOURCE_LABELS } from "@crm/types/crm";
-import { SegmentCondition } from "@crm/types/segment-condition";
+import React from 'react';
+import { Plus, Trash2, Filter } from 'lucide-react';
+import { useTags } from '@crm/hooks/useTags';
+import { useCustomFields } from '@crm/hooks/useCustomFields';
+import { SOURCES, SOURCE_LABELS } from '@crm/types/crm';
+import { SegmentCondition } from '@crm/types/segment-condition';
 
 interface ConditionBuilderProps {
   conditions: SegmentCondition[];
@@ -11,20 +11,20 @@ interface ConditionBuilderProps {
 }
 
 const selectCls =
-  "w-full rounded-lg border border-slate-700/60 bg-slate-950/70 px-3 py-2 text-sm text-slate-200 outline-none focus:border-indigo-400 focus:ring-1 focus:ring-indigo-400/20 transition-all cursor-pointer";
+  'w-full rounded-lg border border-slate-700/60 bg-slate-950/70 px-3 py-2 text-sm text-slate-200 outline-none focus:border-indigo-400 focus:ring-1 focus:ring-indigo-400/20 transition-all cursor-pointer';
 
 export const ConditionBuilder: React.FC<ConditionBuilderProps> = ({
   conditions,
   onChange,
 }) => {
-  const { data: tags = [] } = useTags("contact");
+  const { data: tags = [] } = useTags('contact');
   const { data: customFields = [] } = useCustomFields();
   const [stages, setStages] = React.useState<any[]>([]);
 
   React.useEffect(() => {
-    import("@shared/api/axios").then(({ default: api }) => {
+    import('@shared/api/axios').then(({ default: api }) => {
       api
-        .get("/lifecycle/stages")
+        .get('/lifecycle/stages')
         .then((r) => setStages(r.data))
         .catch((e) => console.error(e));
     });
@@ -33,7 +33,7 @@ export const ConditionBuilder: React.FC<ConditionBuilderProps> = ({
   const handleAddCondition = () => {
     onChange([
       ...conditions,
-      { field: "source", operator: "equals", value: "" },
+      { field: 'source', operator: 'equals', value: '' },
     ]);
   };
 
@@ -47,23 +47,23 @@ export const ConditionBuilder: React.FC<ConditionBuilderProps> = ({
     const next = [...conditions];
     next[index] = {
       field,
-      operator: field === "deal_value" ? "greater_than" : "equals",
-      value: "",
+      operator: field === 'deal_value' ? 'greater_than' : 'equals',
+      value: '',
     };
     onChange(next);
   };
 
   const handleOperatorChange = (
     index: number,
-    operator: SegmentCondition["operator"],
+    operator: SegmentCondition['operator'],
   ) => {
     const next = [...conditions];
     next[index] = {
       ...next[index],
       operator,
       value:
-        operator === "is_empty" || operator === "is_not_empty"
-          ? ""
+        operator === 'is_empty' || operator === 'is_not_empty'
+          ? ''
           : next[index].value,
     };
     onChange(next);
@@ -125,17 +125,17 @@ export const ConditionBuilder: React.FC<ConditionBuilderProps> = ({
       ) : (
         <div className="space-y-1">
           {conditions.map((cond, index) => {
-            const isCustomField = cond.field.startsWith("customFields.");
+            const isCustomField = cond.field.startsWith('customFields.');
             const selectedCustomField = isCustomField
               ? customFields.find(
                   (cf) => `customFields.${cf.name}` === cond.field,
                 )
               : null;
             const hideValue =
-              cond.operator === "is_empty" || cond.operator === "is_not_empty";
+              cond.operator === 'is_empty' || cond.operator === 'is_not_empty';
             const isNumeric =
-              cond.field === "deal_value" ||
-              selectedCustomField?.type === "number";
+              cond.field === 'deal_value' ||
+              selectedCustomField?.type === 'number';
 
             return (
               <div key={index}>
@@ -195,7 +195,7 @@ export const ConditionBuilder: React.FC<ConditionBuilderProps> = ({
                       onChange={(e) =>
                         handleOperatorChange(
                           index,
-                          e.target.value as SegmentCondition["operator"],
+                          e.target.value as SegmentCondition['operator'],
                         )
                       }
                       className={selectCls}
@@ -226,7 +226,7 @@ export const ConditionBuilder: React.FC<ConditionBuilderProps> = ({
                       </div>
                     ) : (
                       <div>
-                        {cond.field === "source" ? (
+                        {cond.field === 'source' ? (
                           <select
                             value={cond.value}
                             onChange={(e) =>
@@ -241,7 +241,7 @@ export const ConditionBuilder: React.FC<ConditionBuilderProps> = ({
                               </option>
                             ))}
                           </select>
-                        ) : cond.field === "lifecycleStageId" ? (
+                        ) : cond.field === 'lifecycleStageId' ? (
                           <select
                             value={cond.value}
                             onChange={(e) =>
@@ -256,7 +256,7 @@ export const ConditionBuilder: React.FC<ConditionBuilderProps> = ({
                               </option>
                             ))}
                           </select>
-                        ) : cond.field === "tags" ? (
+                        ) : cond.field === 'tags' ? (
                           <select
                             value={cond.value}
                             onChange={(e) =>
@@ -271,7 +271,7 @@ export const ConditionBuilder: React.FC<ConditionBuilderProps> = ({
                               </option>
                             ))}
                           </select>
-                        ) : selectedCustomField?.type === "select" &&
+                        ) : selectedCustomField?.type === 'select' &&
                           selectedCustomField.options ? (
                           <select
                             value={cond.value}
@@ -289,7 +289,7 @@ export const ConditionBuilder: React.FC<ConditionBuilderProps> = ({
                           </select>
                         ) : (
                           <input
-                            type={isNumeric ? "number" : "text"}
+                            type={isNumeric ? 'number' : 'text'}
                             value={cond.value}
                             onChange={(e) =>
                               handleValueChange(index, e.target.value)

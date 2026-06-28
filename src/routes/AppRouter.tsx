@@ -1,14 +1,14 @@
-import { ModuleGuard } from "@core/components/ModuleGuard";
-import { ProtectedRoute } from "@core/routes/ProtectedRoute";
-import { crmRoutes } from "@crm/routes/CrmRoutes";
-import { agentRoutes } from "@features/agents/routes/AgentRoutes";
-import { authRoutes } from "@features/auth/routes/AuthRoutes";
-import { chatbotRoutes } from "@features/chatbot/routes/ChatbotRoutes";
-import { dashboardRoutes } from "@features/dashboard/routes/DashboardRoutes";
-import { settingsRoutes } from "@features/settings/routes/SettingsRoutes";
-import { ConstructionPage } from "@shared/components/ConstructionPage";
-import { AppShell } from "@shared/layouts/AppShell";
-import { BrowserRouter, Navigate, useRoutes } from "react-router-dom";
+import { ModuleGuard } from '@core/components/ModuleGuard';
+import { ProtectedRoute } from '@core/routes/ProtectedRoute';
+import { crmRoutes } from '@crm/routes/CrmRoutes';
+import { agentRoutes } from '@features/agents/routes/AgentRoutes';
+import { authRoutes } from '@features/auth/routes/AuthRoutes';
+import { chatbotRoutes } from '@features/chatbot/routes/ChatbotRoutes';
+import { dashboardRoutes } from '@features/dashboard/routes/DashboardRoutes';
+import { settingsRoutes } from '@features/settings/routes/SettingsRoutes';
+import { ConstructionPage } from '@shared/components/ConstructionPage';
+import { AppShell } from '@shared/layouts/AppShell';
+import { BrowserRouter, Navigate, useRoutes } from 'react-router-dom';
 
 const AppRoutes = () => {
   return useRoutes([
@@ -26,7 +26,7 @@ const AppRoutes = () => {
         ...agentRoutes,
         ...settingsRoutes,
         {
-          path: "/funnels/*",
+          path: '/funnels/*',
           element: (
             <ModuleGuard menuKey="funnels">
               <ConstructionPage />
@@ -34,7 +34,7 @@ const AppRoutes = () => {
           ),
         },
         {
-          path: "/avatar/*",
+          path: '/avatar/*',
           element: (
             <ModuleGuard menuKey="avatar">
               <ConstructionPage />
@@ -42,7 +42,7 @@ const AppRoutes = () => {
           ),
         },
         {
-          path: "/analytics/*",
+          path: '/analytics/*',
           element: (
             <ModuleGuard menuKey="analytics">
               <ConstructionPage />
@@ -50,7 +50,7 @@ const AppRoutes = () => {
           ),
         },
         {
-          path: "/billing",
+          path: '/billing',
           element: (
             <ConstructionPage
               title="Facturación"
@@ -58,11 +58,11 @@ const AppRoutes = () => {
             />
           ),
         },
-        { path: "/construction", element: <ConstructionPage /> },
+        { path: '/construction', element: <ConstructionPage /> },
       ],
     },
-    { path: "/", element: <Navigate to="/login" /> },
-    { path: "*", element: <Navigate to="/login" /> },
+    { path: '/', element: <Navigate to="/login" /> },
+    { path: '*', element: <Navigate to="/login" /> },
   ]);
 };
 

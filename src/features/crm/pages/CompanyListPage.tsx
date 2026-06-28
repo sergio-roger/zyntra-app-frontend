@@ -1,21 +1,21 @@
-import { DateRange } from "@core/ui/DateRangePicker";
-import { CompanyCustomFieldsSidebar } from "@crm/components/CompanyCustomFieldsSidebar";
-import { CompanyExportModal } from "@crm/components/CompanyExportModal";
-import { CompanyFilters } from "@crm/components/CompanyFilters";
-import { CompanyFormSidebar } from "@crm/components/CompanyFormSidebar";
-import { CompanyImportModal } from "@crm/components/CompanyImportModal";
-import { CompanyTable } from "@crm/components/CompanyTable";
-import { Pagination } from "@crm/components/Pagination";
-import { DEFAULT_COMPANY_COLUMNS } from "@crm/constants/company-columns";
-import { useCompaniesList, useDeleteCompany } from "@crm/hooks/useCompanies";
-import { useCustomFields } from "@crm/hooks/useCustomFields";
-import { useUpdateUserPreference, useUserPreference } from "@crm/hooks/useUserPreferences";
-import { Company } from "@crm/types/company";
-import { useAuthStore } from "@features/auth/store/authStore";
-import { ColumnCustomizerModal } from "@shared/components/ColumnCustomizerModal";
-import { ConfirmModal } from "@shared/components/ConfirmModal";
-import { AlertCircle, FileSpreadsheet, Loader2, Plus } from "lucide-react";
-import React, { useState } from "react";
+import { DateRange } from '@core/ui/DateRangePicker';
+import { CompanyCustomFieldsSidebar } from '@crm/components/CompanyCustomFieldsSidebar';
+import { CompanyExportModal } from '@crm/components/CompanyExportModal';
+import { CompanyFilters } from '@crm/components/CompanyFilters';
+import { CompanyFormSidebar } from '@crm/components/CompanyFormSidebar';
+import { CompanyImportModal } from '@crm/components/CompanyImportModal';
+import { CompanyTable } from '@crm/components/CompanyTable';
+import { Pagination } from '@crm/components/Pagination';
+import { DEFAULT_COMPANY_COLUMNS } from '@crm/constants/company-columns';
+import { useCompaniesList, useDeleteCompany } from '@crm/hooks/useCompanies';
+import { useCustomFields } from '@crm/hooks/useCustomFields';
+import { useUpdateUserPreference, useUserPreference } from '@crm/hooks/useUserPreferences';
+import { Company } from '@crm/types/company';
+import { useAuthStore } from '@features/auth/store/authStore';
+import { ColumnCustomizerModal } from '@shared/components/ColumnCustomizerModal';
+import { ConfirmModal } from '@shared/components/ConfirmModal';
+import { AlertCircle, FileSpreadsheet, Loader2, Plus } from 'lucide-react';
+import React, { useState } from 'react';
 
 interface Filters {
   search: string;
@@ -27,11 +27,11 @@ interface Filters {
 }
 
 const defaultFilters = (): Filters => ({
-  search: "",
-  industryId: "",
-  lifecycleStageId: "",
-  createdAtFrom: "",
-  createdAtTo: "",
+  search: '',
+  industryId: '',
+  lifecycleStageId: '',
+  createdAtFrom: '',
+  createdAtTo: '',
   page: 1,
 });
 
@@ -48,17 +48,17 @@ export const CompanyListPage: React.FC = () => {
   const [companyToDelete, setCompanyToDelete] = useState<Company | null>(null);
   const [isCustomizerOpen, setIsCustomizerOpen] = useState(false);
 
-  const { data: customFields = [] } = useCustomFields("company");
-  const { data: columnPreference } = useUserPreference("companies_table_columns");
+  const { data: customFields = [] } = useCustomFields('company');
+  const { data: columnPreference } = useUserPreference('companies_table_columns');
   const updatePreferenceMutation = useUpdateUserPreference();
   const currentColumnConfig = columnPreference || DEFAULT_COMPANY_COLUMNS;
 
   const currentUser = useAuthStore((s) => s.user);
   const isAdminOrManager =
-    currentUser?.role === "admin" || currentUser?.role === "manager";
+    currentUser?.role === 'admin' || currentUser?.role === 'manager';
 
   const set = (patch: Partial<Filters>) => {
-    const resetPage = !("page" in patch);
+    const resetPage = !('page' in patch);
     setFilters((prev) => ({
       ...prev,
       ...patch,
@@ -79,7 +79,7 @@ export const CompanyListPage: React.FC = () => {
   const deleteMutation = useDeleteCompany();
 
   const handleDateRangeChange = (range: DateRange | null) => {
-    set({ createdAtFrom: range?.from ?? "", createdAtTo: range?.to ?? "" });
+    set({ createdAtFrom: range?.from ?? '', createdAtTo: range?.to ?? '' });
   };
 
   const openCreate = () => {
@@ -118,7 +118,7 @@ export const CompanyListPage: React.FC = () => {
             Organiza y gestiona las empresas y organizaciones de tu cartera.
           </p>
           <div className="text-xs font-semibold text-slate-500">
-            <span className="text-slate-300">{query.data?.total ?? 0}</span> empresa{(query.data?.total ?? 0) !== 1 ? "s" : ""} registrada{(query.data?.total ?? 0) !== 1 ? "s" : ""}
+            <span className="text-slate-300">{query.data?.total ?? 0}</span> empresa{(query.data?.total ?? 0) !== 1 ? 's' : ''} registrada{(query.data?.total ?? 0) !== 1 ? 's' : ''}
           </div>
         </div>
 
@@ -260,7 +260,7 @@ export const CompanyListPage: React.FC = () => {
         defaultColumns={DEFAULT_COMPANY_COLUMNS}
         onSave={(newConfig) => {
           updatePreferenceMutation.mutate({
-            key: "companies_table_columns",
+            key: 'companies_table_columns',
             value: newConfig,
           });
         }}

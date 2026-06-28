@@ -1,19 +1,19 @@
-import api from "@shared/api/axios";
+import api from '@shared/api/axios';
 import {
   Company,
   CompaniesListResponse,
   CompanyFormData,
   ExportCompanyColumn,
   ListCompaniesQuery,
-} from "@crm/types/company";
+} from '@crm/types/company';
 
 const buildQS = (q: Record<string, unknown>): string => {
   const sp = new URLSearchParams();
   for (const [k, v] of Object.entries(q)) {
-    if (v !== undefined && v !== null && v !== "") sp.set(k, String(v));
+    if (v !== undefined && v !== null && v !== '') sp.set(k, String(v));
   }
   const s = sp.toString();
-  return s ? `?${s}` : "";
+  return s ? `?${s}` : '';
 };
 
 const mapCompany = (raw: any): Company => ({
@@ -64,7 +64,7 @@ export const companiesApi = {
 
   create: (input: CreateCompanyInput) =>
     api
-      .post<unknown, { data: any }>("/crm/companies", input)
+      .post<unknown, { data: any }>('/crm/companies', input)
       .then((r) => ({ data: mapCompany(r.data) })),
 
   update: (id: string, input: UpdateCompanyInput) =>
@@ -79,14 +79,14 @@ export const companiesApi = {
     columns: ExportCompanyColumn[];
   }) =>
     api.post<unknown, Blob>(
-      "/crm/companies/export",
+      '/crm/companies/export',
       { ...params.filters, columns: params.columns },
-      { responseType: "blob" },
+      { responseType: 'blob' },
     ),
 
   import: (rows: Array<{ name: string; identification?: string; website?: string; employeeRange?: string; description?: string }>) =>
-    api.post<unknown, { data: { count: number } }>("/crm/companies/import", rows),
+    api.post<unknown, { data: { count: number } }>('/crm/companies/import', rows),
 
   listIndustries: () =>
-    api.get<unknown, { data: any[] }>("/crm/industries"),
+    api.get<unknown, { data: any[] }>('/crm/industries'),
 };

@@ -1,18 +1,18 @@
-import { Select } from "@core/ui/Select";
-import { DealDetailSidebar } from "@crm/components/DealDetailSidebar";
-import { DealFormSidebar } from "@crm/components/DealFormSidebar";
-import { DealsKanban } from "@crm/components/DealsKanban";
-import { PipelineFormModal } from "@crm/components/PipelineFormModal";
-import { PipelineSettingsDrawer } from "@crm/components/PipelineSettingsDrawer";
-import { StageEditSidebar } from "@crm/components/StageEditSidebar";
+import { Select } from '@core/ui/Select';
+import { DealDetailSidebar } from '@crm/components/DealDetailSidebar';
+import { DealFormSidebar } from '@crm/components/DealFormSidebar';
+import { DealsKanban } from '@crm/components/DealsKanban';
+import { PipelineFormModal } from '@crm/components/PipelineFormModal';
+import { PipelineSettingsDrawer } from '@crm/components/PipelineSettingsDrawer';
+import { StageEditSidebar } from '@crm/components/StageEditSidebar';
 import {
   useDealsKanban,
   usePipelineForecast,
   usePipelines,
-} from "@crm/hooks/useDeals";
-import { Deal } from "@crm/types/deal";
-import { DealPipeline } from "@crm/types/deal-pipeline";
-import { DealPipelineStage } from "@crm/types/deal-pipeline-stage";
+} from '@crm/hooks/useDeals';
+import { Deal } from '@crm/types/deal';
+import { DealPipeline } from '@crm/types/deal-pipeline';
+import { DealPipelineStage } from '@crm/types/deal-pipeline-stage';
 import {
   AlertCircle,
   BarChart3,
@@ -24,12 +24,12 @@ import {
   Settings2,
   Target,
   TrendingUp,
-} from "lucide-react";
-import React, { useEffect, useState } from "react";
+} from 'lucide-react';
+import React, { useEffect, useState } from 'react';
 
-const fmt = (value: number, currency = "COP") =>
-  new Intl.NumberFormat("es-CO", {
-    style: "currency",
+const fmt = (value: number, currency = 'COP') =>
+  new Intl.NumberFormat('es-CO', {
+    style: 'currency',
     currency,
     maximumFractionDigits: 0,
   }).format(value);
@@ -74,7 +74,7 @@ export const DealsPage: React.FC = () => {
   };
 
   const handleDealClick = (deal: Deal) => {
-    if (deal.id === "new") {
+    if (deal.id === 'new') {
       setSelectedDeal(null);
       setStageOverrideId(deal.stage_id);
       setIsSidebarOpen(true);
@@ -156,8 +156,8 @@ export const DealsPage: React.FC = () => {
                   onClick={() => setActivePipelineId(p.id)}
                   className={`flex items-center gap-2 px-3 py-1.5 rounded-l-lg text-xs font-bold transition-all border border-r-0 ${
                     activePipelineId === p.id
-                      ? "bg-indigo-600/20 border-indigo-500/40 text-indigo-300"
-                      : "bg-slate-950 border-white/5 text-slate-400 hover:text-slate-200 hover:border-white/10"
+                      ? 'bg-indigo-600/20 border-indigo-500/40 text-indigo-300'
+                      : 'bg-slate-950 border-white/5 text-slate-400 hover:text-slate-200 hover:border-white/10'
                   }`}
                 >
                   {p.name}
@@ -172,8 +172,8 @@ export const DealsPage: React.FC = () => {
                   title="Configurar etapas"
                   className={`flex items-center justify-center px-2 py-1.5 rounded-r-lg text-xs transition-all border ${
                     activePipelineId === p.id
-                      ? "bg-indigo-600/20 border-indigo-500/40 text-indigo-400 hover:bg-indigo-600/30"
-                      : "bg-slate-950 border-white/5 text-slate-600 hover:text-slate-300 hover:border-white/10"
+                      ? 'bg-indigo-600/20 border-indigo-500/40 text-indigo-400 hover:bg-indigo-600/30'
+                      : 'bg-slate-950 border-white/5 text-slate-600 hover:text-slate-300 hover:border-white/10'
                   }`}
                 >
                   <Settings2 size={11} />
@@ -185,8 +185,8 @@ export const DealsPage: React.FC = () => {
               onClick={() => setShowForecast((v) => !v)}
               className={`shrink-0 ml-auto flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-bold transition-all border ${
                 showForecast
-                  ? "bg-emerald-600/20 border-emerald-500/40 text-emerald-300"
-                  : "bg-slate-950 border-white/5 text-slate-400 hover:text-slate-200"
+                  ? 'bg-emerald-600/20 border-emerald-500/40 text-emerald-300'
+                  : 'bg-slate-950 border-white/5 text-slate-400 hover:text-slate-200'
               }`}
             >
               <BarChart3 size={14} />
@@ -230,7 +230,7 @@ export const DealsPage: React.FC = () => {
               <p className="text-[10px] text-slate-500">
                 {forecast.totals.total_value > 0
                   ? `${Math.round((forecast.totals.weighted_value / forecast.totals.total_value) * 100)}% probabilidad media`
-                  : "—"}
+                  : '—'}
               </p>
             </div>
           </div>

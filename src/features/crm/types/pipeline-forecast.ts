@@ -1,4 +1,4 @@
-import { ForecastMonth } from "./forecast-month";
+import { ForecastMonth } from './forecast-month';
 
 export interface PipelineForecast {
   by_month: ForecastMonth[];

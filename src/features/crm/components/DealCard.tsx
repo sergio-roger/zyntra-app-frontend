@@ -1,13 +1,13 @@
-import { Deal } from "@crm/types/deal";
-import { useDraggable } from "@dnd-kit/core";
+import { Deal } from '@crm/types/deal';
+import { useDraggable } from '@dnd-kit/core';
 import {
   Building2,
   Calendar,
   GripVertical,
   TrendingUp,
   User,
-} from "lucide-react";
-import React from "react";
+} from 'lucide-react';
+import React from 'react';
 
 interface DealCardProps {
   deal: Deal;
@@ -35,9 +35,9 @@ export const DealCard: React.FC<DealCardProps> = ({
     ? { transform: `translate3d(${transform.x}px, ${transform.y}px, 0)` }
     : undefined;
 
-  const currency = deal.currency || "COP";
-  const formattedValue = new Intl.NumberFormat("es-CO", {
-    style: "currency",
+  const currency = deal.currency || 'COP';
+  const formattedValue = new Intl.NumberFormat('es-CO', {
+    style: 'currency',
     currency,
     maximumFractionDigits: 0,
   }).format(deal.value);
@@ -50,8 +50,8 @@ export const DealCard: React.FC<DealCardProps> = ({
       style={style}
       className={`group flex flex-col gap-3 rounded-xl border bg-slate-800/40 p-4 transition-all cursor-pointer shadow-lg select-none ${
         isBeingDragged || isDragging
-          ? "opacity-40 border-indigo-500/40 scale-[0.98]"
-          : "border-white/[0.05] active:scale-[0.98]"
+          ? 'opacity-40 border-indigo-500/40 scale-[0.98]'
+          : 'border-white/[0.05] active:scale-[0.98]'
       }`}
       onClick={() => !isBeingDragged && onClick?.(deal)}
     >
@@ -87,7 +87,7 @@ export const DealCard: React.FC<DealCardProps> = ({
         <div className="flex items-center gap-2 text-xs text-slate-400">
           <User size={14} className="text-slate-500" />
           <span className="truncate">
-            {deal.contact?.name || "Contacto desconocido"}
+            {deal.contact?.name || 'Contacto desconocido'}
           </span>
         </div>
 
@@ -108,7 +108,7 @@ export const DealCard: React.FC<DealCardProps> = ({
           <div className="flex items-center gap-1 text-[10px] text-slate-500">
             <Calendar size={12} />
             <span>
-              {new Date(deal.expected_close_date).toLocaleDateString("es-CO")}
+              {new Date(deal.expected_close_date).toLocaleDateString('es-CO')}
             </span>
           </div>
         )}

@@ -24,6 +24,7 @@ export default defineConfig([
       'react-hooks/exhaustive-deps': 'off',
       '@typescript-eslint/no-explicit-any': 'off',
       '@typescript-eslint/consistent-type-imports': ['error', { prefer: 'no-type-imports' }],
+      'quotes': ['error', 'single'],
     },
   },
 ])

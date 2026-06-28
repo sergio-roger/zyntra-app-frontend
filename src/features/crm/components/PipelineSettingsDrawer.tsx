@@ -1,19 +1,19 @@
-import { Select } from "@core/ui/Select";
+import { Select } from '@core/ui/Select';
 import {
   PIPELINE_STAGE_COLORS,
   STAGE_TYPE_LABELS,
-} from "@crm/constants/pipeline-settings";
+} from '@crm/constants/pipeline-settings';
 import {
   useCreateStage,
   useDeleteStage,
   useUpdatePipeline,
   useUpdateStage,
-} from "@crm/hooks/useDeals";
-import { DealPipeline } from "@crm/types/deal-pipeline";
-import { EditableStage, StageType } from "@crm/types/pipeline-settings";
-import { useTeamsList } from "@features/settings/hooks/useUsersTeams";
-import { ConfirmModal } from "@shared/components/ConfirmModal";
-import { toastManager } from "@shared/components/toast/toastManager";
+} from '@crm/hooks/useDeals';
+import { DealPipeline } from '@crm/types/deal-pipeline';
+import { EditableStage, StageType } from '@crm/types/pipeline-settings';
+import { useTeamsList } from '@features/settings/hooks/useUsersTeams';
+import { ConfirmModal } from '@shared/components/ConfirmModal';
+import { toastManager } from '@shared/components/toast/toastManager';
 import {
   Check,
   GripVertical,
@@ -25,10 +25,10 @@ import {
   Trash2,
   Users,
   X,
-} from "lucide-react";
-import React, { useEffect, useState } from "react";
+} from 'lucide-react';
+import React, { useEffect, useState } from 'react';
 
-type Tab = "configuracion" | "etapas";
+type Tab = 'configuracion' | 'etapas';
 
 interface PipelineSettingsDrawerProps {
   open: boolean;
@@ -41,10 +41,10 @@ export const PipelineSettingsDrawer: React.FC<PipelineSettingsDrawerProps> = ({
   pipeline,
   onClose,
 }) => {
-  const [activeTab, setActiveTab] = useState<Tab>("configuracion");
+  const [activeTab, setActiveTab] = useState<Tab>('configuracion');
 
   // ── Config form state ──────────────────────────────────────────────────────
-  const [pipelineName, setPipelineName] = useState("");
+  const [pipelineName, setPipelineName] = useState('');
   const [isDefault, setIsDefault] = useState(false);
   const [teamId, setTeamId] = useState<string | null>(null);
 
@@ -64,7 +64,7 @@ export const PipelineSettingsDrawer: React.FC<PipelineSettingsDrawerProps> = ({
 
   useEffect(() => {
     if (!pipeline) return;
-    setActiveTab("configuracion");
+    setActiveTab('configuracion');
     setPipelineName(pipeline.name);
     setIsDefault(pipeline.is_default);
     setTeamId(pipeline.team_id);
@@ -86,17 +86,17 @@ export const PipelineSettingsDrawer: React.FC<PipelineSettingsDrawerProps> = ({
         },
       });
       toastManager.add({
-        title: "Pipeline actualizado",
-        description: "Los cambios fueron guardados correctamente.",
-        type: "success",
+        title: 'Pipeline actualizado',
+        description: 'Los cambios fueron guardados correctamente.',
+        type: 'success',
       });
       onClose();
     } catch (err: any) {
       toastManager.add({
-        title: "Error al guardar",
+        title: 'Error al guardar',
         description:
-          err?.response?.data?.message ?? "No se pudo actualizar el pipeline.",
-        type: "error",
+          err?.response?.data?.message ?? 'No se pudo actualizar el pipeline.',
+        type: 'error',
       });
     }
   };
@@ -146,16 +146,16 @@ export const PipelineSettingsDrawer: React.FC<PipelineSettingsDrawerProps> = ({
       await deleteStage.mutateAsync(stageId);
       setStages((prev) => prev.filter((s) => s.id !== stageId));
       toastManager.add({
-        title: "Etapa eliminada",
+        title: 'Etapa eliminada',
         description: `La etapa "${stageName}" fue eliminada correctamente.`,
-        type: "success",
+        type: 'success',
       });
     } catch (err: any) {
       toastManager.add({
-        title: "Error al eliminar",
+        title: 'Error al eliminar',
         description:
-          err?.response?.data?.message ?? "No se pudo eliminar la etapa.",
-        type: "error",
+          err?.response?.data?.message ?? 'No se pudo eliminar la etapa.',
+        type: 'error',
       });
     } finally {
       setDeletingId(null);
@@ -169,10 +169,10 @@ export const PipelineSettingsDrawer: React.FC<PipelineSettingsDrawerProps> = ({
       const res = await createStage.mutateAsync({
         pipelineId: pipeline.id,
         input: {
-          name: "Nueva etapa",
+          name: 'Nueva etapa',
           color: nextColor,
           position: stages.length,
-          type: "active",
+          type: 'active',
           probability_percent: 30,
         },
       });
@@ -185,12 +185,12 @@ export const PipelineSettingsDrawer: React.FC<PipelineSettingsDrawerProps> = ({
   return (
     <>
       <div
-        className={`fixed inset-0 bg-black/60 !mt-0 backdrop-blur-sm z-[60] transition-opacity duration-300 ${open ? "opacity-100" : "opacity-0 pointer-events-none"}`}
+        className={`fixed inset-0 bg-black/60 !mt-0 backdrop-blur-sm z-[60] transition-opacity duration-300 ${open ? 'opacity-100' : 'opacity-0 pointer-events-none'}`}
         onClick={onClose}
       />
 
       <div
-        className={`fixed inset-y-0 right-0 w-full !mt-0 max-w-lg bg-slate-900 border-l border-white/10 z-[70] shadow-2xl transform transition-transform duration-300 ease-out flex flex-col ${open ? "translate-x-0" : "translate-x-full"}`}
+        className={`fixed inset-y-0 right-0 w-full !mt-0 max-w-lg bg-slate-900 border-l border-white/10 z-[70] shadow-2xl transform transition-transform duration-300 ease-out flex flex-col ${open ? 'translate-x-0' : 'translate-x-full'}`}
       >
         {/* Header */}
         <div className="flex items-center justify-between p-6 border-b border-white/5 shrink-0">
@@ -217,17 +217,17 @@ export const PipelineSettingsDrawer: React.FC<PipelineSettingsDrawerProps> = ({
 
         {/* Tabs */}
         <div className="flex border-b border-white/5 shrink-0">
-          {(["configuracion", "etapas"] as Tab[]).map((tab) => (
+          {(['configuracion', 'etapas'] as Tab[]).map((tab) => (
             <button
               key={tab}
               onClick={() => setActiveTab(tab)}
               className={`flex-1 py-3 text-sm font-semibold transition-colors ${
                 activeTab === tab
-                  ? "text-indigo-400 border-b-2 border-indigo-500"
-                  : "text-slate-500 hover:text-slate-300"
+                  ? 'text-indigo-400 border-b-2 border-indigo-500'
+                  : 'text-slate-500 hover:text-slate-300'
               }`}
             >
-              {tab === "configuracion" ? "Configuración" : "Etapas"}
+              {tab === 'configuracion' ? 'Configuración' : 'Etapas'}
             </button>
           ))}
         </div>
@@ -235,7 +235,7 @@ export const PipelineSettingsDrawer: React.FC<PipelineSettingsDrawerProps> = ({
         {/* Content */}
         <div className="flex-1 overflow-y-auto">
           {/* ── Configuración Tab ── */}
-          {activeTab === "configuracion" && (
+          {activeTab === 'configuracion' && (
             <form
               id="pipeline-config-form"
               onSubmit={handleSaveConfig}
@@ -275,12 +275,12 @@ export const PipelineSettingsDrawer: React.FC<PipelineSettingsDrawerProps> = ({
                   type="button"
                   onClick={() => setIsDefault((v) => !v)}
                   className={`relative shrink-0 mt-0.5 h-6 w-11 rounded-full transition-colors duration-200 focus:outline-none ${
-                    isDefault ? "bg-indigo-600" : "bg-slate-700"
+                    isDefault ? 'bg-indigo-600' : 'bg-slate-700'
                   }`}
                 >
                   <span
                     className={`absolute top-0.5 left-0.5 h-5 w-5 rounded-full bg-white shadow transition-transform duration-200 ${
-                      isDefault ? "translate-x-5" : "translate-x-0"
+                      isDefault ? 'translate-x-5' : 'translate-x-0'
                     }`}
                   />
                 </button>
@@ -308,7 +308,7 @@ export const PipelineSettingsDrawer: React.FC<PipelineSettingsDrawerProps> = ({
           )}
 
           {/* ── Etapas Tab ── */}
-          {activeTab === "etapas" && (
+          {activeTab === 'etapas' && (
             <div className="p-6 space-y-3">
               <div className="flex items-center justify-between mb-1">
                 <p className="text-xs font-bold text-slate-400 uppercase tracking-wider">
@@ -347,7 +347,7 @@ export const PipelineSettingsDrawer: React.FC<PipelineSettingsDrawerProps> = ({
                       type="text"
                       value={stage.name}
                       onChange={(e) =>
-                        handleFieldChange(stage.id, "name", e.target.value)
+                        handleFieldChange(stage.id, 'name', e.target.value)
                       }
                       className="flex-1 bg-slate-900/60 border border-white/8 rounded-lg px-3 py-1.5 text-sm text-white focus:outline-none focus:border-indigo-500/50 transition-all"
                     />
@@ -359,13 +359,13 @@ export const PipelineSettingsDrawer: React.FC<PipelineSettingsDrawerProps> = ({
                         <button
                           key={c}
                           onClick={() =>
-                            handleFieldChange(stage.id, "color", c)
+                            handleFieldChange(stage.id, 'color', c)
                           }
                           className="h-5 w-5 rounded-full border-2 transition-all"
                           style={{
                             backgroundColor: c,
                             borderColor:
-                              stage.color === c ? "white" : "transparent",
+                              stage.color === c ? 'white' : 'transparent',
                           }}
                         />
                       ))}
@@ -374,7 +374,7 @@ export const PipelineSettingsDrawer: React.FC<PipelineSettingsDrawerProps> = ({
                     <select
                       value={stage.type}
                       onChange={(e) =>
-                        handleFieldChange(stage.id, "type", e.target.value)
+                        handleFieldChange(stage.id, 'type', e.target.value)
                       }
                       className="bg-slate-900/60 border border-white/8 rounded-lg px-2 py-1 text-xs text-white focus:outline-none"
                     >
@@ -396,7 +396,7 @@ export const PipelineSettingsDrawer: React.FC<PipelineSettingsDrawerProps> = ({
                         onChange={(e) =>
                           handleFieldChange(
                             stage.id,
-                            "probability_percent",
+                            'probability_percent',
                             Number(e.target.value),
                           )
                         }
@@ -458,7 +458,7 @@ export const PipelineSettingsDrawer: React.FC<PipelineSettingsDrawerProps> = ({
         </div>
 
         {/* Footer — only for Configuración tab */}
-        {activeTab === "configuracion" && (
+        {activeTab === 'configuracion' && (
           <div className="p-6 border-t border-white/5 bg-slate-950/30 flex gap-3 shrink-0">
             <button
               type="button"

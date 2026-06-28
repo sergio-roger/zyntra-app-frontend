@@ -1,5 +1,5 @@
-import { Deal } from "./deal";
-import { DealPipelineStage } from "./deal-pipeline-stage";
+import { Deal } from './deal';
+import { DealPipelineStage } from './deal-pipeline-stage';
 
 export interface KanbanColumn {
   deals: Deal[];

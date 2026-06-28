@@ -1,7 +1,7 @@
-import { usePreviewContacts } from "@crm/hooks/useSegments";
-import { SegmentCondition } from "@crm/types/segment-condition";
-import { Loader2, Users } from "lucide-react";
-import React from "react";
+import { usePreviewContacts } from '@crm/hooks/useSegments';
+import { SegmentCondition } from '@crm/types/segment-condition';
+import { Loader2, Users } from 'lucide-react';
+import React from 'react';
 
 interface SegmentPreviewPanelProps {
   conditions: SegmentCondition[];
@@ -58,7 +58,7 @@ export const SegmentPreviewPanel: React.FC<SegmentPreviewPanelProps> = ({
                 <div className="min-w-0 mr-2">
                   <p className="font-bold text-white truncate">{c.name}</p>
                   <p className="text-[10px] text-slate-500 mt-0.5 truncate">
-                    {c.email || c.phone || "Sin contacto"}
+                    {c.email || c.phone || 'Sin contacto'}
                   </p>
                 </div>
                 {c.lifecycleStage ? (

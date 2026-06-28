@@ -2,9 +2,9 @@ import {
   useMenusList,
   useRolePermissions,
   useUpdatePermissions,
-} from "@features/settings/hooks/usePermissions";
-import { Menu } from "@features/settings/types/settings";
-import { toastManager } from "@shared/components/toast/toastManager";
+} from '@features/settings/hooks/usePermissions';
+import { Menu } from '@features/settings/types/settings';
+import { toastManager } from '@shared/components/toast/toastManager';
 
 interface UsePermissionMatrixParams {
   roleKey: string;
@@ -17,7 +17,7 @@ type ToggleStrategy = (
   currentIds: string[],
 ) => string[];
 
-const toggleStrategies: Record<"check" | "uncheck", ToggleStrategy> = {
+const toggleStrategies: Record<'check' | 'uncheck', ToggleStrategy> = {
   check: (menu, allMenus, currentIds) => {
     const nextIds = new Set(currentIds);
     nextIds.add(menu.id);
@@ -62,7 +62,7 @@ export function usePermissionMatrix({
     const menu = allMenus.find((m) => m.id === menuId);
     if (!menu) return;
 
-    const strategyKey = checked ? "check" : "uncheck";
+    const strategyKey = checked ? 'check' : 'uncheck';
     const nextIds = toggleStrategies[strategyKey](
       menu,
       allMenus,
@@ -72,9 +72,9 @@ export function usePermissionMatrix({
     updateMutation.mutate(nextIds, {
       onError: () => {
         toastManager.add({
-          title: "Error al actualizar permisos",
-          description: "No se pudo guardar la configuración. Intenta de nuevo.",
-          type: "error",
+          title: 'Error al actualizar permisos',
+          description: 'No se pudo guardar la configuración. Intenta de nuevo.',
+          type: 'error',
         });
       },
     });

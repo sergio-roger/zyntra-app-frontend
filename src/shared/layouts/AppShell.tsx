@@ -1,21 +1,21 @@
-import { useAuthStore } from "@features/auth/store/authStore";
-import { Breadcrumbs } from "@shared/components/Breadcrumbs";
-import { SideRail } from "@shared/layouts/SideRail";
-import { SubSidebar } from "@shared/layouts/SubSidebar";
-import { findActiveModule } from "@shared/layouts/nav.config";
-import { NavModule } from "@shared/types/nav";
-import { Bell, LayoutDashboard, Menu, Search, Zap } from "lucide-react";
-import React, { useEffect, useState } from "react";
-import { Outlet, useLocation } from "react-router-dom";
+import { useAuthStore } from '@features/auth/store/authStore';
+import { Breadcrumbs } from '@shared/components/Breadcrumbs';
+import { SideRail } from '@shared/layouts/SideRail';
+import { SubSidebar } from '@shared/layouts/SubSidebar';
+import { findActiveModule } from '@shared/layouts/nav.config';
+import { NavModule } from '@shared/types/nav';
+import { Bell, LayoutDashboard, Menu, Search, Zap } from 'lucide-react';
+import React, { useEffect, useState } from 'react';
+import { Outlet, useLocation } from 'react-router-dom';
 
 const DEFAULT_MODULE: NavModule = {
-  key: "dashboard",
-  label: "Zyntra",
+  key: 'dashboard',
+  label: 'Zyntra',
   icon: LayoutDashboard,
-  match: "/dashboard",
-  to: "/dashboard",
-  description: "",
-  color: "",
+  match: '/dashboard',
+  to: '/dashboard',
+  description: '',
+  color: '',
 };
 
 export const AppShell: React.FC = () => {

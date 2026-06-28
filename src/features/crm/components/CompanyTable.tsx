@@ -1,9 +1,9 @@
-import { DEFAULT_COMPANY_COLUMNS } from "@crm/constants/company-columns";
-import { Company } from "@crm/types/company";
-import { EmptyState } from "@shared/components/EmptyState";
-import { ColumnConfig } from "@shared/types/column";
-import { Building2, ExternalLink, Pencil, Settings2, Trash2 } from "lucide-react";
-import React from "react";
+import { DEFAULT_COMPANY_COLUMNS } from '@crm/constants/company-columns';
+import { Company } from '@crm/types/company';
+import { EmptyState } from '@shared/components/EmptyState';
+import { ColumnConfig } from '@shared/types/column';
+import { Building2, ExternalLink, Pencil, Settings2, Trash2 } from 'lucide-react';
+import React from 'react';
 
 interface CompanyTableProps {
   companies: Company[];
@@ -17,26 +17,26 @@ interface CompanyTableProps {
 }
 
 const formatDate = (iso: string | null | undefined) => {
-  if (!iso) return "—";
-  return new Date(iso).toLocaleDateString("es-EC");
+  if (!iso) return '—';
+  return new Date(iso).toLocaleDateString('es-EC');
 };
 
 const getCustomFieldValue = (c: Company, colKey: string) => {
   const val = c.customFields?.[colKey];
-  if (val === undefined || val === null || val === "") return <span className="text-slate-600">—</span>;
-  if (typeof val === "boolean") {
+  if (val === undefined || val === null || val === '') return <span className="text-slate-600">—</span>;
+  if (typeof val === 'boolean') {
     return (
       <span
         className={`inline-flex px-1.5 py-0.5 rounded text-[10px] font-bold ${
-          val ? "bg-emerald-500/10 text-emerald-400" : "bg-slate-800 text-slate-400"
+          val ? 'bg-emerald-500/10 text-emerald-400' : 'bg-slate-800 text-slate-400'
         }`}
       >
-        {val ? "Sí" : "No"}
+        {val ? 'Sí' : 'No'}
       </span>
     );
   }
   if (Array.isArray(val)) {
-    return <span className="text-slate-300">{val.join(", ")}</span>;
+    return <span className="text-slate-300">{val.join(', ')}</span>;
   }
   return <span className="text-slate-300">{String(val)}</span>;
 };
@@ -56,12 +56,12 @@ const RENDERERS: Record<
       {c.name}
     </button>
   ),
-  taxType: (c) => <span className="text-slate-300">{c.taxType ?? "—"}</span>,
-  identification: (c) => <span className="text-slate-300">{c.identification ?? "—"}</span>,
+  taxType: (c) => <span className="text-slate-300">{c.taxType ?? '—'}</span>,
+  identification: (c) => <span className="text-slate-300">{c.identification ?? '—'}</span>,
   website: (c) => (
     c.website ? (
       <a
-        href={c.website.startsWith("http") ? c.website : `https://${c.website}`}
+        href={c.website.startsWith('http') ? c.website : `https://${c.website}`}
         target="_blank"
         rel="noopener noreferrer"
         className="inline-flex items-center gap-1 text-indigo-400 hover:underline"
@@ -69,7 +69,7 @@ const RENDERERS: Record<
       >
         <ExternalLink size={11} />
         <span className="max-w-[140px] truncate text-xs">
-          {c.website.replace(/^https?:\/\//, "")}
+          {c.website.replace(/^https?:\/\//, '')}
         </span>
       </a>
     ) : (
@@ -172,7 +172,7 @@ export const CompanyTable: React.FC<CompanyTableProps> = ({
         icon={Building2}
         title="No se encontraron empresas"
         description="No hay registros que coincidan con los filtros seleccionados o tu base de datos está vacía."
-        actionLabel={onAction ? "Crear empresa" : undefined}
+        actionLabel={onAction ? 'Crear empresa' : undefined}
         onAction={onAction}
       />
     );
@@ -187,7 +187,7 @@ export const CompanyTable: React.FC<CompanyTableProps> = ({
           <tr>
             {visibleCols.map((col) => (
               <th key={col.key} className="px-4 py-3 font-semibold">
-                {col.label.replace(" (Campo Personalizado)", "")}
+                {col.label.replace(' (Campo Personalizado)', '')}
               </th>
             ))}
             <th className="px-4 py-3 text-right font-semibold">Acciones</th>
@@ -223,8 +223,8 @@ export const CompanyTable: React.FC<CompanyTableProps> = ({
                     aria-label="Editar"
                     className={`rounded-md p-1.5 transition-colors ${
                       canEdit
-                        ? "text-slate-400 hover:bg-white/10 hover:text-indigo-400"
-                        : "cursor-not-allowed text-slate-700 opacity-40"
+                        ? 'text-slate-400 hover:bg-white/10 hover:text-indigo-400'
+                        : 'cursor-not-allowed text-slate-700 opacity-40'
                     }`}
                   >
                     <Pencil size={15} />
@@ -235,8 +235,8 @@ export const CompanyTable: React.FC<CompanyTableProps> = ({
                     aria-label="Eliminar"
                     className={`rounded-md p-1.5 transition-colors ${
                       canEdit
-                        ? "text-slate-400 hover:bg-rose-500/15 hover:text-rose-400"
-                        : "cursor-not-allowed text-slate-700 opacity-40"
+                        ? 'text-slate-400 hover:bg-rose-500/15 hover:text-rose-400'
+                        : 'cursor-not-allowed text-slate-700 opacity-40'
                     }`}
                   >
                     <Trash2 size={15} />

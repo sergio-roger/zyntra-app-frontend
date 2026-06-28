@@ -1,8 +1,8 @@
-import React from "react";
-import { Link } from "react-router-dom";
-import { KeyRound } from "lucide-react";
-import { AuthLayout } from "@features/auth/components/AuthLayout";
-import { ForgotPasswordForm } from "@features/auth/components/ForgotPasswordForm";
+import React from 'react';
+import { Link } from 'react-router-dom';
+import { KeyRound } from 'lucide-react';
+import { AuthLayout } from '@features/auth/components/AuthLayout';
+import { ForgotPasswordForm } from '@features/auth/components/ForgotPasswordForm';
 
 export const ForgotPasswordPage: React.FC = () => {
   return (
@@ -12,7 +12,7 @@ export const ForgotPasswordPage: React.FC = () => {
       subtitle="Te enviaremos un enlace para restablecerla"
       footer={
         <>
-          ¿Recordaste tu contraseña?{" "}
+          ¿Recordaste tu contraseña?{' '}
           <Link
             to="/login"
             className="font-medium text-indigo-400 hover:underline"

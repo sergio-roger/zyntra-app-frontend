@@ -1,4 +1,4 @@
-import { CustomField } from "@crm/types/custom-field";
+import { CustomField } from '@crm/types/custom-field';
 import {
   closestCenter,
   DndContext,
@@ -7,18 +7,18 @@ import {
   PointerSensor,
   useSensor,
   useSensors,
-} from "@dnd-kit/core";
+} from '@dnd-kit/core';
 import {
   arrayMove,
   SortableContext,
   sortableKeyboardCoordinates,
   useSortable,
   verticalListSortingStrategy,
-} from "@dnd-kit/sortable";
-import { CSS } from "@dnd-kit/utilities";
-import { ColumnConfig } from "@shared/types/column";
-import { GripVertical, Settings2, X } from "lucide-react";
-import React, { useEffect, useState } from "react";
+} from '@dnd-kit/sortable';
+import { CSS } from '@dnd-kit/utilities';
+import { ColumnConfig } from '@shared/types/column';
+import { GripVertical, Settings2, X } from 'lucide-react';
+import React, { useEffect, useState } from 'react';
 
 interface ColumnCustomizerModalProps {
   isOpen: boolean;
@@ -50,7 +50,7 @@ const SortableItem: React.FC<SortableItemProps> = ({ col, onToggleVisible }) => 
     zIndex: isDragging ? 50 : undefined,
   };
 
-  const isNameColumn = col.key === "name";
+  const isNameColumn = col.key === 'name';
 
   return (
     <div
@@ -58,8 +58,8 @@ const SortableItem: React.FC<SortableItemProps> = ({ col, onToggleVisible }) => 
       style={style}
       className={`flex items-center gap-3 p-3 bg-slate-800/40 border border-white/[0.05] rounded-xl transition-all ${
         isDragging
-          ? "border-indigo-500 bg-slate-800/80 shadow-lg shadow-indigo-500/10 scale-[1.02]"
-          : "hover:bg-slate-800/60"
+          ? 'border-indigo-500 bg-slate-800/80 shadow-lg shadow-indigo-500/10 scale-[1.02]'
+          : 'hover:bg-slate-800/60'
       }`}
     >
       <button
@@ -79,13 +79,13 @@ const SortableItem: React.FC<SortableItemProps> = ({ col, onToggleVisible }) => 
           onChange={() => onToggleVisible(col.key)}
           className={`checkbox checkbox-sm rounded-lg transition-all ${
             isNameColumn
-              ? "checkbox-disabled"
-              : "checkbox-primary border-slate-600 bg-slate-950"
+              ? 'checkbox-disabled'
+              : 'checkbox-primary border-slate-600 bg-slate-950'
           }`}
         />
         <span
           className={`text-sm font-medium ${
-            col.visible ? "text-slate-200" : "text-slate-500"
+            col.visible ? 'text-slate-200' : 'text-slate-500'
           }`}
         >
           {col.label}
@@ -171,7 +171,7 @@ export const ColumnCustomizerModal: React.FC<ColumnCustomizerModalProps> = ({
   };
 
   const handleToggleVisible = (key: string) => {
-    if (key === "name") return; // name cannot be toggled
+    if (key === 'name') return; // name cannot be toggled
     setConfig((items) =>
       items.map((item) =>
         item.key === key ? { ...item, visible: !item.visible } : item,

@@ -1,12 +1,12 @@
-import { RouteObject } from "react-router-dom";
-import { PublicOnlyRoute } from "@core/routes/ProtectedRoute";
-import { LoginPage } from "@features/auth/pages/LoginPage";
-import { ForgotPasswordPage } from "@features/auth/pages/ForgotPasswordPage";
-import { ResetPasswordPage } from "@features/auth/pages/ResetPasswordPage";
+import { RouteObject } from 'react-router-dom';
+import { PublicOnlyRoute } from '@core/routes/ProtectedRoute';
+import { LoginPage } from '@features/auth/pages/LoginPage';
+import { ForgotPasswordPage } from '@features/auth/pages/ForgotPasswordPage';
+import { ResetPasswordPage } from '@features/auth/pages/ResetPasswordPage';
 
 export const authRoutes: RouteObject[] = [
   {
-    path: "/login",
+    path: '/login',
     element: (
       <PublicOnlyRoute>
         <LoginPage />
@@ -14,7 +14,7 @@ export const authRoutes: RouteObject[] = [
     ),
   },
   {
-    path: "/forgot-password",
+    path: '/forgot-password',
     element: (
       <PublicOnlyRoute>
         <ForgotPasswordPage />
@@ -22,7 +22,7 @@ export const authRoutes: RouteObject[] = [
     ),
   },
   {
-    path: "/reset-password",
+    path: '/reset-password',
     element: (
       <PublicOnlyRoute>
         <ResetPasswordPage />

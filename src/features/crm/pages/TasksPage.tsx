@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState } from 'react';
 import {
   Plus,
   Loader2,
@@ -9,19 +9,19 @@ import {
   Trash2,
   Clock,
   User,
-} from "lucide-react";
+} from 'lucide-react';
 import {
   useCrmTasks,
   useUpdateTask,
   useDeleteTask,
-} from "@crm/hooks/useCrmTasks";
-import { TaskFormSidebar } from "@crm/components/TaskFormSidebar";
-import { ConfirmModal } from "@shared/components/ConfirmModal";
-import { TaskStatus } from "@crm/types/crm";
-import { CrmTask } from "@crm/types/crm-task";
+} from '@crm/hooks/useCrmTasks';
+import { TaskFormSidebar } from '@crm/components/TaskFormSidebar';
+import { ConfirmModal } from '@shared/components/ConfirmModal';
+import { TaskStatus } from '@crm/types/crm';
+import { CrmTask } from '@crm/types/crm-task';
 
 export const TasksPage: React.FC = () => {
-  const [statusFilter, setStatusFilter] = useState<TaskStatus | "">("pending");
+  const [statusFilter, setStatusFilter] = useState<TaskStatus | ''>('pending');
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const [editingTask, setEditingTask] = useState<CrmTask | null>(null);
 
@@ -42,7 +42,7 @@ export const TasksPage: React.FC = () => {
 
   const handleToggleStatus = async (task: CrmTask) => {
     const newStatus: TaskStatus =
-      task.status === "completed" ? "pending" : "completed";
+      task.status === 'completed' ? 'pending' : 'completed';
     await updateMutation.mutateAsync({ id: task.id, status: newStatus });
   };
 
@@ -70,19 +70,19 @@ export const TasksPage: React.FC = () => {
 
   const getPriorityColor = (priority: string) => {
     switch (priority) {
-      case "high":
-        return "text-rose-400 bg-rose-400/10 border-rose-400/20";
-      case "medium":
-        return "text-amber-400 bg-amber-400/10 border-amber-400/20";
-      case "low":
-        return "text-emerald-400 bg-emerald-400/10 border-emerald-400/20";
+      case 'high':
+        return 'text-rose-400 bg-rose-400/10 border-rose-400/20';
+      case 'medium':
+        return 'text-amber-400 bg-amber-400/10 border-amber-400/20';
+      case 'low':
+        return 'text-emerald-400 bg-emerald-400/10 border-emerald-400/20';
       default:
-        return "text-slate-400 bg-slate-400/10 border-slate-400/20";
+        return 'text-slate-400 bg-slate-400/10 border-slate-400/20';
     }
   };
 
   const isOverdue = (date: string) => {
-    return new Date(date) < new Date() && statusFilter !== "completed";
+    return new Date(date) < new Date() && statusFilter !== 'completed';
   };
 
   return (
@@ -106,29 +106,29 @@ export const TasksPage: React.FC = () => {
 
       {/* Filters */}
       <div className="flex gap-2 p-1 bg-slate-950/50 rounded-2xl border border-white/5 w-fit">
-        {(["pending", "completed", "cancelled"] as const).map((status) => (
+        {(['pending', 'completed', 'cancelled'] as const).map((status) => (
           <button
             key={status}
             onClick={() => setStatusFilter(status)}
             className={`px-4 py-2 rounded-xl text-xs font-bold uppercase tracking-wider transition-all ${
               statusFilter === status
-                ? "bg-slate-800 text-white shadow-lg"
-                : "text-slate-500 hover:text-slate-300"
+                ? 'bg-slate-800 text-white shadow-lg'
+                : 'text-slate-500 hover:text-slate-300'
             }`}
           >
-            {status === "pending"
-              ? "Pendientes"
-              : status === "completed"
-                ? "Completadas"
-                : "Canceladas"}
+            {status === 'pending'
+              ? 'Pendientes'
+              : status === 'completed'
+                ? 'Completadas'
+                : 'Canceladas'}
           </button>
         ))}
         <button
-          onClick={() => setStatusFilter("")}
+          onClick={() => setStatusFilter('')}
           className={`px-4 py-2 rounded-xl text-xs font-bold uppercase tracking-wider transition-all ${
-            statusFilter === ""
-              ? "bg-slate-800 text-white shadow-lg"
-              : "text-slate-500 hover:text-slate-300"
+            statusFilter === ''
+              ? 'bg-slate-800 text-white shadow-lg'
+              : 'text-slate-500 hover:text-slate-300'
           }`}
         >
           Todas
@@ -155,9 +155,9 @@ export const TasksPage: React.FC = () => {
         <div className="flex flex-col items-center justify-center py-20 bg-slate-950/20 rounded-3xl border-2 border-dashed border-white/5 opacity-50">
           <CheckCircle2 size={48} className="text-slate-600 mb-4" />
           <p className="text-slate-400 font-medium text-center">
-            {statusFilter === "completed"
-              ? "Aún no has completado tareas."
-              : "No tienes tareas pendientes. ¡Buen trabajo!"}
+            {statusFilter === 'completed'
+              ? 'Aún no has completado tareas.'
+              : 'No tienes tareas pendientes. ¡Buen trabajo!'}
           </p>
         </div>
       )}
@@ -167,19 +167,19 @@ export const TasksPage: React.FC = () => {
           <div
             key={task.id}
             className={`group bg-slate-900/50 border border-white/5 rounded-2xl p-4 hover:border-white/20 transition-all ${
-              task.status === "completed" ? "opacity-60" : ""
+              task.status === 'completed' ? 'opacity-60' : ''
             }`}
           >
             <div className="flex items-start gap-4">
               <button
                 onClick={() => handleToggleStatus(task)}
                 className={`mt-1 transition-colors ${
-                  task.status === "completed"
-                    ? "text-emerald-500"
-                    : "text-slate-600 hover:text-indigo-400"
+                  task.status === 'completed'
+                    ? 'text-emerald-500'
+                    : 'text-slate-600 hover:text-indigo-400'
                 }`}
               >
-                {task.status === "completed" ? (
+                {task.status === 'completed' ? (
                   <CheckCircle2 size={24} />
                 ) : (
                   <Circle size={24} />
@@ -191,9 +191,9 @@ export const TasksPage: React.FC = () => {
                   <h4
                     onClick={() => openEdit(task)}
                     className={`font-bold text-white cursor-pointer hover:text-indigo-400 transition-colors ${
-                      task.status === "completed"
-                        ? "line-through text-slate-500"
-                        : ""
+                      task.status === 'completed'
+                        ? 'line-through text-slate-500'
+                        : ''
                     }`}
                   >
                     {task.title}
@@ -254,7 +254,7 @@ export const TasksPage: React.FC = () => {
         onClose={() => setIsConfirmOpen(false)}
         onConfirm={handleConfirmDelete}
         title="Eliminar Tarea"
-        description={`¿Estás seguro de que deseas eliminar esta tarea? Esta acción no se puede deshacer.`}
+        description={'¿Estás seguro de que deseas eliminar esta tarea? Esta acción no se puede deshacer.'}
         confirmText="Eliminar Tarea"
         variant="danger"
       />

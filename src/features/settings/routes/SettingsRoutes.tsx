@@ -1,48 +1,48 @@
-import { lazy } from "react";
-import { Navigate, RouteObject } from "react-router-dom";
-import { ConstructionPage } from "@shared/components/ConstructionPage";
-import { SuspenseLoader } from "@shared/components/SuspenseLoader";
-import { AdminGuard } from "@core/routes/AdminGuard";
-import { PermissionGuard } from "@core/routes/PermissionGuard";
-import { ModuleGuard } from "@core/components/ModuleGuard";
+import { lazy } from 'react';
+import { Navigate, RouteObject } from 'react-router-dom';
+import { ConstructionPage } from '@shared/components/ConstructionPage';
+import { SuspenseLoader } from '@shared/components/SuspenseLoader';
+import { AdminGuard } from '@core/routes/AdminGuard';
+import { PermissionGuard } from '@core/routes/PermissionGuard';
+import { ModuleGuard } from '@core/components/ModuleGuard';
 
 const LifecycleConfig = lazy(() =>
-  import("../components/LifecycleConfig").then((m) => ({
+  import('../components/LifecycleConfig').then((m) => ({
     default: m.LifecycleConfig,
   })),
 );
 const UsersPage = lazy(() =>
-  import("../pages/UsersPage").then((m) => ({ default: m.UsersPage })),
+  import('../pages/UsersPage').then((m) => ({ default: m.UsersPage })),
 );
 const TeamsPage = lazy(() =>
-  import("../pages/TeamsPage").then((m) => ({ default: m.TeamsPage })),
+  import('../pages/TeamsPage').then((m) => ({ default: m.TeamsPage })),
 );
 const PermissionsPage = lazy(() =>
-  import("../pages/PermissionsPage").then((m) => ({
+  import('../pages/PermissionsPage').then((m) => ({
     default: m.PermissionsPage,
   })),
 );
 const RolePermissionsPage = lazy(() =>
-  import("../pages/RolePermissionsPage").then((m) => ({
+  import('../pages/RolePermissionsPage').then((m) => ({
     default: m.RolePermissionsPage,
   })),
 );
 const PlansPage = lazy(() =>
-  import("../../../shared/pages/PlansPage").then((m) => ({
+  import('../../../shared/pages/PlansPage').then((m) => ({
     default: m.PlansPage,
   })),
 );
 
 export const settingsRoutes: RouteObject[] = [
   {
-    path: "/settings",
+    path: '/settings',
     children: [
       {
         index: true,
         element: <Navigate to="/settings/configuracion" replace />,
       },
       {
-        path: "configuracion",
+        path: 'configuracion',
         element: (
           <PermissionGuard menuKey="settings_config">
             <SuspenseLoader>
@@ -55,7 +55,7 @@ export const settingsRoutes: RouteObject[] = [
         ),
       },
       {
-        path: "my-account",
+        path: 'my-account',
         element: (
           <PermissionGuard menuKey="settings_my_account">
             <SuspenseLoader>
@@ -68,7 +68,7 @@ export const settingsRoutes: RouteObject[] = [
         ),
       },
       {
-        path: "users",
+        path: 'users',
         element: (
           <PermissionGuard menuKey="settings_users">
             <ModuleGuard menuKey="settings_users">
@@ -80,7 +80,7 @@ export const settingsRoutes: RouteObject[] = [
         ),
       },
       {
-        path: "plans",
+        path: 'plans',
         element: (
           <PermissionGuard menuKey="billing">
             <ModuleGuard menuKey="billing">
@@ -92,7 +92,7 @@ export const settingsRoutes: RouteObject[] = [
         ),
       },
       {
-        path: "teams",
+        path: 'teams',
         element: (
           <PermissionGuard menuKey="settings_teams">
             <ModuleGuard menuKey="settings_teams">
@@ -104,7 +104,7 @@ export const settingsRoutes: RouteObject[] = [
         ),
       },
       {
-        path: "lifecycle",
+        path: 'lifecycle',
         element: (
           <PermissionGuard menuKey="settings_lifecycle">
             <ModuleGuard menuKey="settings_lifecycle">
@@ -116,7 +116,7 @@ export const settingsRoutes: RouteObject[] = [
         ),
       },
       {
-        path: "channels",
+        path: 'channels',
         element: (
           <PermissionGuard menuKey="settings_channels">
             <ModuleGuard menuKey="settings_channels">
@@ -129,7 +129,7 @@ export const settingsRoutes: RouteObject[] = [
         ),
       },
       {
-        path: "permissions",
+        path: 'permissions',
         element: (
           <AdminGuard>
             <SuspenseLoader>
@@ -139,7 +139,7 @@ export const settingsRoutes: RouteObject[] = [
         ),
       },
       {
-        path: "permissions/:role",
+        path: 'permissions/:role',
         element: (
           <AdminGuard>
             <SuspenseLoader>

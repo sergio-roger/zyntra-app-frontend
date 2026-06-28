@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState } from 'react';
 import {
   Plus,
   Loader2,
@@ -9,16 +9,16 @@ import {
   UserCheck,
   UserMinus,
   Users,
-} from "lucide-react";
+} from 'lucide-react';
 import {
   useUsersList,
   useUpdateUser,
-} from "@features/settings/hooks/useUsersTeams";
-import { UserFormSidebar } from "@features/settings/components/UserFormSidebar";
-import { EmptyState } from "@shared/components/EmptyState";
-import { CrmUser } from "@features/settings/types/settings";
-import { useAuthStore } from "@features/auth/store/authStore";
-import { toastManager } from "@shared/components/toast/toastManager";
+} from '@features/settings/hooks/useUsersTeams';
+import { UserFormSidebar } from '@features/settings/components/UserFormSidebar';
+import { EmptyState } from '@shared/components/EmptyState';
+import { CrmUser } from '@features/settings/types/settings';
+import { useAuthStore } from '@features/auth/store/authStore';
+import { toastManager } from '@shared/components/toast/toastManager';
 
 export const UsersPage: React.FC = () => {
   const [sidebarOpen, setSidebarOpen] = useState(false);
@@ -48,9 +48,9 @@ export const UsersPage: React.FC = () => {
   const toggleStatus = async (user: CrmUser) => {
     if (!user.is_active && isLimitReached) {
       toastManager.add({
-        title: "Límite alcanzado",
+        title: 'Límite alcanzado',
         description: `Has alcanzado el límite de ${limit} usuarios activos permitidos en tu plan.`,
-        type: "error",
+        type: 'error',
       });
       return;
     }
@@ -62,14 +62,14 @@ export const UsersPage: React.FC = () => {
 
   const getRoleLabel = (role: string) => {
     switch (role) {
-      case "admin":
-        return "Administrador";
-      case "manager":
-        return "Gerente";
-      case "agent":
-        return "Agente";
-      case "superAdmin":
-        return "Super Admin";
+      case 'admin':
+        return 'Administrador';
+      case 'manager':
+        return 'Gerente';
+      case 'agent':
+        return 'Agente';
+      case 'superAdmin':
+        return 'Super Admin';
       default:
         return role;
     }
@@ -88,12 +88,12 @@ export const UsersPage: React.FC = () => {
           <div className="text-xs font-semibold text-slate-500">
             <span
               className={
-                isLimitReached ? "text-rose-400 font-bold" : "text-slate-300"
+                isLimitReached ? 'text-rose-400 font-bold' : 'text-slate-300'
               }
             >
               {activeUsersCount}
-            </span>{" "}
-            / {limit === 999999 ? "∞" : limit} activos
+            </span>{' '}
+            / {limit === 999999 ? '∞' : limit} activos
           </div>
         </div>
         <button
@@ -101,8 +101,8 @@ export const UsersPage: React.FC = () => {
           disabled={isLimitReached}
           className={`inline-flex items-center gap-2 rounded-xl px-5 py-2.5 text-sm font-bold shadow-lg transition-all ${
             isLimitReached
-              ? "bg-slate-800 text-slate-500 cursor-not-allowed shadow-none"
-              : "bg-primary text-white shadow-primary/20 hover:-translate-y-px hover:shadow-xl active:scale-95"
+              ? 'bg-slate-800 text-slate-500 cursor-not-allowed shadow-none'
+              : 'bg-primary text-white shadow-primary/20 hover:-translate-y-px hover:shadow-xl active:scale-95'
           }`}
         >
           <Plus size={18} /> Añadir usuario
@@ -226,25 +226,25 @@ export const UsersPage: React.FC = () => {
                       <span
                         className={`inline-flex items-center gap-1.5 px-2.5 py-1 rounded-lg text-[10px] font-black uppercase tracking-wider ${
                           user.is_active
-                            ? "bg-emerald-500/10 text-emerald-400"
-                            : "bg-slate-800 text-slate-500"
+                            ? 'bg-emerald-500/10 text-emerald-400'
+                            : 'bg-slate-800 text-slate-500'
                         }`}
                       >
                         <span
-                          className={`w-1.5 h-1.5 rounded-full ${user.is_active ? "bg-emerald-500 animate-pulse" : "bg-slate-500"}`}
+                          className={`w-1.5 h-1.5 rounded-full ${user.is_active ? 'bg-emerald-500 animate-pulse' : 'bg-slate-500'}`}
                         />
-                        {user.is_active ? "Activo" : "Inactivo"}
+                        {user.is_active ? 'Activo' : 'Inactivo'}
                       </span>
                     </td>
                     <td className="px-6 py-4 text-right">
                       <div className="flex items-center justify-end gap-2">
                         <button
                           onClick={() => toggleStatus(user)}
-                          title={user.is_active ? "Desactivar" : "Activar"}
+                          title={user.is_active ? 'Desactivar' : 'Activar'}
                           className={`p-2 rounded-xl transition-all ${
                             user.is_active
-                              ? "text-slate-500 hover:text-rose-400 hover:bg-rose-400/10"
-                              : "text-emerald-500 hover:bg-emerald-500/10"
+                              ? 'text-slate-500 hover:text-rose-400 hover:bg-rose-400/10'
+                              : 'text-emerald-500 hover:bg-emerald-500/10'
                           }`}
                         >
                           {user.is_active ? (

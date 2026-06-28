@@ -1,17 +1,17 @@
-import React from "react";
-import { Link } from "react-router-dom";
-import { useForm } from "react-hook-form";
-import { zodResolver } from "@hookform/resolvers/zod";
-import { Mail, Lock } from "lucide-react";
-import { useAuth } from "@features/auth/hooks/useAuth";
-import { FormField } from "@features/auth/components/FormField";
-import { SubmitButton } from "@features/auth/components/SubmitButton";
+import React from 'react';
+import { Link } from 'react-router-dom';
+import { useForm } from 'react-hook-form';
+import { zodResolver } from '@hookform/resolvers/zod';
+import { Mail, Lock } from 'lucide-react';
+import { useAuth } from '@features/auth/hooks/useAuth';
+import { FormField } from '@features/auth/components/FormField';
+import { SubmitButton } from '@features/auth/components/SubmitButton';
 import {
   loginSchema,
   LoginFormValues,
-} from "@features/auth/schemas/login.schema";
-import { extractApiErrors } from "@features/auth/lib/mapAuthError";
-import { toastManager } from "@shared/components/toast/toastManager";
+} from '@features/auth/schemas/login.schema';
+import { extractApiErrors } from '@features/auth/lib/mapAuthError';
+import { toastManager } from '@shared/components/toast/toastManager';
 
 interface LoginFormProps {
   onSuccess?: () => void;
@@ -26,16 +26,16 @@ export const LoginForm: React.FC<LoginFormProps> = ({ onSuccess }) => {
     formState: { errors, isSubmitting },
   } = useForm<LoginFormValues>({
     resolver: zodResolver(loginSchema),
-    defaultValues: { email: "", password: "" },
+    defaultValues: { email: '', password: '' },
   });
 
   const onSubmit = async (data: LoginFormValues) => {
     try {
       await login(data);
       toastManager.add({
-        title: "¡Bienvenido!",
-        description: "Sesión iniciada correctamente.",
-        type: "success",
+        title: '¡Bienvenido!',
+        description: 'Sesión iniciada correctamente.',
+        type: 'success',
       });
       onSuccess?.();
     } catch (err) {
@@ -43,9 +43,9 @@ export const LoginForm: React.FC<LoginFormProps> = ({ onSuccess }) => {
 
       for (const error of apiErrors) {
         toastManager.add({
-          title: "Error de autenticación",
+          title: 'Error de autenticación',
           description: error.description,
-          type: "error",
+          type: 'error',
         });
       }
     }
@@ -65,7 +65,7 @@ export const LoginForm: React.FC<LoginFormProps> = ({ onSuccess }) => {
         autoComplete="email"
         error={errors.email?.message}
         disabled={isSubmitting}
-        {...register("email")}
+        {...register('email')}
       />
 
       <div>
@@ -77,7 +77,7 @@ export const LoginForm: React.FC<LoginFormProps> = ({ onSuccess }) => {
           autoComplete="current-password"
           error={errors.password?.message}
           disabled={isSubmitting}
-          {...register("password")}
+          {...register('password')}
         />
         <div className="mt-2 text-right">
           <Link

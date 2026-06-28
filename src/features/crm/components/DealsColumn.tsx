@@ -1,9 +1,9 @@
-import { Deal } from "@crm/types/deal";
-import { DealPipelineStage } from "@crm/types/deal-pipeline-stage";
-import { useDroppable } from "@dnd-kit/core";
-import { Pencil } from "lucide-react";
-import React from "react";
-import { DealCard } from "./DealCard";
+import { Deal } from '@crm/types/deal';
+import { DealPipelineStage } from '@crm/types/deal-pipeline-stage';
+import { useDroppable } from '@dnd-kit/core';
+import { Pencil } from 'lucide-react';
+import React from 'react';
+import { DealCard } from './DealCard';
 
 interface DealsColumnProps {
   stage: DealPipelineStage;
@@ -22,9 +22,9 @@ export const DealsColumn: React.FC<DealsColumnProps> = ({
 }) => {
   const { setNodeRef, isOver } = useDroppable({ id: stage.id });
 
-  const formattedTotal = new Intl.NumberFormat("es-CO", {
-    style: "currency",
-    currency: "COP",
+  const formattedTotal = new Intl.NumberFormat('es-CO', {
+    style: 'currency',
+    currency: 'COP',
     maximumFractionDigits: 0,
   }).format(totalValue);
 
@@ -33,8 +33,8 @@ export const DealsColumn: React.FC<DealsColumnProps> = ({
       ref={setNodeRef}
       className={`flex flex-col gap-4 min-w-[280px] w-full max-w-[320px] rounded-2xl p-4 border backdrop-blur-sm transition-colors duration-200 ${
         isOver
-          ? "bg-indigo-500/10 border-indigo-500/40"
-          : "bg-slate-900/40 border-white/[0.03]"
+          ? 'bg-indigo-500/10 border-indigo-500/40'
+          : 'bg-slate-900/40 border-white/[0.03]'
       }`}
     >
       {/* Header */}
@@ -62,7 +62,7 @@ export const DealsColumn: React.FC<DealsColumnProps> = ({
             </button>
             <button
               onClick={() =>
-                onDealClick?.({ id: "new", stage_id: stage.id } as any)
+                onDealClick?.({ id: 'new', stage_id: stage.id } as any)
               }
               className="p-1 rounded-lg bg-white/5 hover:bg-indigo-600/20 text-slate-400 hover:text-indigo-400 border border-white/5 transition-all active:scale-95"
               title="Añadir negocio a esta etapa"
@@ -111,12 +111,12 @@ export const DealsColumn: React.FC<DealsColumnProps> = ({
           <div
             className={`flex flex-col items-center justify-center py-12 border-2 border-dashed rounded-2xl transition-colors ${
               isOver
-                ? "border-indigo-500/50 bg-indigo-500/5 opacity-100"
-                : "border-white/5 bg-white/[0.02] opacity-30"
+                ? 'border-indigo-500/50 bg-indigo-500/5 opacity-100'
+                : 'border-white/5 bg-white/[0.02] opacity-30'
             }`}
           >
             <p className="text-[10px] font-bold text-slate-500 uppercase tracking-widest">
-              {isOver ? "Soltar aquí" : "Vacío"}
+              {isOver ? 'Soltar aquí' : 'Vacío'}
             </p>
           </div>
         )}

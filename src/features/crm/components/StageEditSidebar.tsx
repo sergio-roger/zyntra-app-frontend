@@ -1,13 +1,13 @@
-import React, { useEffect, useState } from "react";
-import { X, Save, Loader2, Layers } from "lucide-react";
-import { useUpdateStage } from "@crm/hooks/useDeals";
-import { DealPipelineStage } from "@crm/types/deal-pipeline-stage";
-import { StageType } from "@crm/types/pipeline-settings";
+import React, { useEffect, useState } from 'react';
+import { X, Save, Loader2, Layers } from 'lucide-react';
+import { useUpdateStage } from '@crm/hooks/useDeals';
+import { DealPipelineStage } from '@crm/types/deal-pipeline-stage';
+import { StageType } from '@crm/types/pipeline-settings';
 import {
   PIPELINE_STAGE_COLORS,
   STAGE_TYPE_LABELS,
-} from "@crm/constants/pipeline-settings";
-import { toastManager } from "@shared/components/toast/toastManager";
+} from '@crm/constants/pipeline-settings';
+import { toastManager } from '@shared/components/toast/toastManager';
 
 interface StageEditSidebarProps {
   open: boolean;
@@ -20,9 +20,9 @@ export const StageEditSidebar: React.FC<StageEditSidebarProps> = ({
   stage,
   onClose,
 }) => {
-  const [name, setName] = useState("");
+  const [name, setName] = useState('');
   const [color, setColor] = useState<string>(PIPELINE_STAGE_COLORS[0]);
-  const [type, setType] = useState<StageType>("active");
+  const [type, setType] = useState<StageType>('active');
   const [probability, setProbability] = useState(30);
 
   const updateStage = useUpdateStage();
@@ -50,17 +50,17 @@ export const StageEditSidebar: React.FC<StageEditSidebarProps> = ({
         },
       });
       toastManager.add({
-        title: "Etapa actualizada",
+        title: 'Etapa actualizada',
         description: `"${name.trim()}" fue guardada correctamente.`,
-        type: "success",
+        type: 'success',
       });
       onClose();
     } catch (err: any) {
       toastManager.add({
-        title: "Error al guardar",
+        title: 'Error al guardar',
         description:
-          err?.response?.data?.message ?? "No se pudo actualizar la etapa.",
-        type: "error",
+          err?.response?.data?.message ?? 'No se pudo actualizar la etapa.',
+        type: 'error',
       });
     }
   };
@@ -68,12 +68,12 @@ export const StageEditSidebar: React.FC<StageEditSidebarProps> = ({
   return (
     <>
       <div
-        className={`fixed inset-0 bg-black/60 !mt-0 backdrop-blur-sm z-[60] transition-opacity duration-300 ${open ? "opacity-100" : "opacity-0 pointer-events-none"}`}
+        className={`fixed inset-0 bg-black/60 !mt-0 backdrop-blur-sm z-[60] transition-opacity duration-300 ${open ? 'opacity-100' : 'opacity-0 pointer-events-none'}`}
         onClick={onClose}
       />
 
       <div
-        className={`fixed inset-y-0 right-0 w-full !mt-0 max-w-sm bg-slate-900 border-l border-white/10 z-[70] shadow-2xl transform transition-transform duration-300 ease-out flex flex-col ${open ? "translate-x-0" : "translate-x-full"}`}
+        className={`fixed inset-y-0 right-0 w-full !mt-0 max-w-sm bg-slate-900 border-l border-white/10 z-[70] shadow-2xl transform transition-transform duration-300 ease-out flex flex-col ${open ? 'translate-x-0' : 'translate-x-full'}`}
       >
         {/* Header */}
         <div className="flex items-center justify-between p-6 border-b border-white/5 shrink-0">
@@ -140,8 +140,8 @@ export const StageEditSidebar: React.FC<StageEditSidebarProps> = ({
                   className="h-7 w-7 rounded-full border-2 transition-all hover:scale-110"
                   style={{
                     backgroundColor: c,
-                    borderColor: color === c ? "white" : "transparent",
-                    boxShadow: color === c ? `0 0 8px ${c}80` : "none",
+                    borderColor: color === c ? 'white' : 'transparent',
+                    boxShadow: color === c ? `0 0 8px ${c}80` : 'none',
                   }}
                 />
               ))}
@@ -161,12 +161,12 @@ export const StageEditSidebar: React.FC<StageEditSidebarProps> = ({
                   onClick={() => setType(t)}
                   className={`py-2 px-3 rounded-xl text-xs font-semibold border transition-all ${
                     type === t
-                      ? t === "won"
-                        ? "bg-emerald-500/15 border-emerald-500/40 text-emerald-400"
-                        : t === "lost"
-                          ? "bg-rose-500/15 border-rose-500/40 text-rose-400"
-                          : "bg-indigo-500/15 border-indigo-500/40 text-indigo-400"
-                      : "bg-slate-800/50 border-white/5 text-slate-400 hover:text-slate-200"
+                      ? t === 'won'
+                        ? 'bg-emerald-500/15 border-emerald-500/40 text-emerald-400'
+                        : t === 'lost'
+                          ? 'bg-rose-500/15 border-rose-500/40 text-rose-400'
+                          : 'bg-indigo-500/15 border-indigo-500/40 text-indigo-400'
+                      : 'bg-slate-800/50 border-white/5 text-slate-400 hover:text-slate-200'
                   }`}
                 >
                   {STAGE_TYPE_LABELS[t]}
@@ -212,7 +212,7 @@ export const StageEditSidebar: React.FC<StageEditSidebarProps> = ({
                 style={{ backgroundColor: color }}
               />
               <span className="text-sm font-bold text-white">
-                {name || "Nombre de la etapa"}
+                {name || 'Nombre de la etapa'}
               </span>
               <span
                 className="ml-auto text-[9px] font-bold uppercase tracking-wider px-1.5 py-0.5 rounded-full border"

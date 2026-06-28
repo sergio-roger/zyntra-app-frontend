@@ -1,4 +1,4 @@
-import React from "react";
+import React from 'react';
 import {
   MessageSquare,
   Phone,
@@ -8,8 +8,8 @@ import {
   Upload,
   Hand,
   LucideIcon,
-} from "lucide-react";
-import { SOURCE_LABELS, ContactSource } from "@crm/types/crm";
+} from 'lucide-react';
+import { SOURCE_LABELS, ContactSource } from '@crm/types/crm';
 
 const SOURCE_ICONS: Record<ContactSource, LucideIcon> = {
   manual: Hand,

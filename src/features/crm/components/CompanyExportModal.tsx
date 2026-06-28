@@ -1,4 +1,4 @@
-import React, { useEffect, useMemo, useState } from "react";
+import React, { useEffect, useMemo, useState } from 'react';
 import {
   ArrowDown,
   ArrowUp,
@@ -8,23 +8,23 @@ import {
   Loader2,
   Plus,
   X,
-} from "lucide-react";
-import { companiesApi } from "@crm/api/companies.api";
-import { useCustomFields } from "@crm/hooks/useCustomFields";
-import { ExportCompanyColumn } from "@crm/types/company";
-import { ListCompaniesQuery } from "@crm/types/company";
+} from 'lucide-react';
+import { companiesApi } from '@crm/api/companies.api';
+import { useCustomFields } from '@crm/hooks/useCustomFields';
+import { ExportCompanyColumn } from '@crm/types/company';
+import { ListCompaniesQuery } from '@crm/types/company';
 
 const STANDARD_COLUMNS: ExportCompanyColumn[] = [
-  { key: "name", label: "Nombre" },
-  { key: "identification", label: "RUC / Identificación" },
-  { key: "website", label: "Sitio web" },
-  { key: "industry", label: "Industria" },
-  { key: "lifecycleStage", label: "Etapa del ciclo" },
-  { key: "employeeRange", label: "Empleados" },
-  { key: "tags", label: "Etiquetas" },
-  { key: "description", label: "Descripción" },
-  { key: "createdAt", label: "Fecha de registro" },
-  { key: "updatedAt", label: "Última actualización" },
+  { key: 'name', label: 'Nombre' },
+  { key: 'identification', label: 'RUC / Identificación' },
+  { key: 'website', label: 'Sitio web' },
+  { key: 'industry', label: 'Industria' },
+  { key: 'lifecycleStage', label: 'Etapa del ciclo' },
+  { key: 'employeeRange', label: 'Empleados' },
+  { key: 'tags', label: 'Etiquetas' },
+  { key: 'description', label: 'Descripción' },
+  { key: 'createdAt', label: 'Fecha de registro' },
+  { key: 'updatedAt', label: 'Última actualización' },
 ];
 
 const defaultFilename = () =>
@@ -34,7 +34,7 @@ interface CompanyExportModalProps {
   open: boolean;
   onClose: () => void;
   total: number;
-  queryParams: Omit<ListCompaniesQuery, "page" | "limit">;
+  queryParams: Omit<ListCompaniesQuery, 'page' | 'limit'>;
 }
 
 export const CompanyExportModal: React.FC<CompanyExportModalProps> = ({
@@ -43,7 +43,7 @@ export const CompanyExportModal: React.FC<CompanyExportModalProps> = ({
   total,
   queryParams,
 }) => {
-  const { data: customFieldDefs = [] } = useCustomFields("company");
+  const { data: customFieldDefs = [] } = useCustomFields('company');
 
   const customColumns = useMemo<ExportCompanyColumn[]>(
     () =>
@@ -103,13 +103,13 @@ export const CompanyExportModal: React.FC<CompanyExportModalProps> = ({
       const blob =
         res instanceof Blob
           ? res
-          : new Blob([res], { type: "text/csv;charset=utf-8;" });
+          : new Blob([res], { type: 'text/csv;charset=utf-8;' });
       const url = URL.createObjectURL(blob);
-      const a = document.createElement("a");
+      const a = document.createElement('a');
       a.href = url;
       const safeName = (filename.trim() || defaultFilename()).replace(
         /[^a-zA-Z0-9_-]/g,
-        "_",
+        '_',
       );
       a.download = `${safeName}.csv`;
       document.body.appendChild(a);
@@ -167,11 +167,11 @@ export const CompanyExportModal: React.FC<CompanyExportModalProps> = ({
               <div className="flex items-start gap-3 rounded-xl border border-indigo-500/20 bg-indigo-500/10 px-4 py-3">
                 <Building2 size={15} className="mt-0.5 shrink-0 text-indigo-400" />
                 <p className="text-sm leading-snug text-indigo-300">
-                  Se exportarán{" "}
+                  Se exportarán{' '}
                   <span className="font-bold">
-                    {total.toLocaleString("es-EC")} empresa
-                    {total !== 1 ? "s" : ""}
-                  </span>{" "}
+                    {total.toLocaleString('es-EC')} empresa
+                    {total !== 1 ? 's' : ''}
+                  </span>{' '}
                   con los filtros actuales
                 </p>
               </div>

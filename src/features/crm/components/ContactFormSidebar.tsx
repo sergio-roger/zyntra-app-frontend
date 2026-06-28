@@ -1,16 +1,16 @@
-import { Input } from "@core/ui/Input";
-import { Select } from "@core/ui/Select";
-import { Tabs } from "@core/ui/Tabs";
-import { Textarea } from "@core/ui/Textarea";
-import { crmApi } from "@crm/api/crm.api";
-import { useCreateContact, useUpdateContact } from "@crm/hooks/useContacts";
-import { useTags } from "@crm/hooks/useTags";
-import { ContactFormData } from "@crm/types/contact-form";
-import { Contact } from "@crm/types/contact";
-import { CrmMember } from "@crm/types/crm-member";
-import { LifecycleStage } from "@crm/types/lifecycle-stage";
-import { useAuthStore } from "@features/auth/store/authStore";
-import { useQuery } from "@tanstack/react-query";
+import { Input } from '@core/ui/Input';
+import { Select } from '@core/ui/Select';
+import { Tabs } from '@core/ui/Tabs';
+import { Textarea } from '@core/ui/Textarea';
+import { crmApi } from '@crm/api/crm.api';
+import { useCreateContact, useUpdateContact } from '@crm/hooks/useContacts';
+import { useTags } from '@crm/hooks/useTags';
+import { ContactFormData } from '@crm/types/contact-form';
+import { Contact } from '@crm/types/contact';
+import { CrmMember } from '@crm/types/crm-member';
+import { LifecycleStage } from '@crm/types/lifecycle-stage';
+import { useAuthStore } from '@features/auth/store/authStore';
+import { useQuery } from '@tanstack/react-query';
 import {
   Check,
   ChevronRight,
@@ -24,8 +24,8 @@ import {
   User,
   UserCheck,
   X,
-} from "lucide-react";
-import React, { useEffect, useState } from "react";
+} from 'lucide-react';
+import React, { useEffect, useState } from 'react';
 
 interface ContactFormSidebarProps {
   open: boolean;
@@ -36,14 +36,14 @@ interface ContactFormSidebarProps {
 function formDataFromContact(contact: Contact): ContactFormData {
   return {
     name: contact.name,
-    email: contact.email ?? "",
-    phone: contact.phone ?? "",
-    lifecycleStageId: contact.lifecycleStageId ?? "",
-    source: contact.source ?? "manual",
+    email: contact.email ?? '',
+    phone: contact.phone ?? '',
+    lifecycleStageId: contact.lifecycleStageId ?? '',
+    source: contact.source ?? 'manual',
     ownerId: contact.ownerId ?? null,
     tags:
-      contact.tags?.map((t: any) => (typeof t === "string" ? t : t.id)) ?? [],
-    notes: contact.notes ?? "",
+      contact.tags?.map((t: any) => (typeof t === 'string' ? t : t.id)) ?? [],
+    notes: contact.notes ?? '',
     customFields: contact.customFields ?? {},
   };
 }
@@ -52,16 +52,16 @@ function defaultFormData(
   stages: LifecycleStage[],
   ownerId?: string | null,
 ): ContactFormData {
-  const firstActiveStage = stages.find((s) => s.type === "active");
+  const firstActiveStage = stages.find((s) => s.type === 'active');
   return {
-    name: "",
-    email: "",
-    phone: "",
-    lifecycleStageId: firstActiveStage?.id ?? "",
-    source: "manual",
+    name: '',
+    email: '',
+    phone: '',
+    lifecycleStageId: firstActiveStage?.id ?? '',
+    source: 'manual',
     ownerId: ownerId ?? null,
     tags: [],
-    notes: "",
+    notes: '',
     customFields: {},
   };
 }
@@ -74,10 +74,10 @@ export const ContactFormSidebar: React.FC<ContactFormSidebarProps> = ({
   const { user } = useAuthStore();
 
   const { data: stages = [] } = useQuery<LifecycleStage[]>({
-    queryKey: ["lifecycle-stages"],
+    queryKey: ['lifecycle-stages'],
     queryFn: () =>
-      import("@shared/api/axios").then((m) =>
-        m.default.get("/lifecycle/stages").then((r) => r.data),
+      import('@shared/api/axios').then((m) =>
+        m.default.get('/lifecycle/stages').then((r) => r.data),
       ),
     staleTime: 10 * 60 * 1000,
   });
@@ -86,11 +86,11 @@ export const ContactFormSidebar: React.FC<ContactFormSidebarProps> = ({
     defaultFormData(stages, user?.crm_user_id),
   );
 
-  const [activeTab, setActiveTab] = useState<"info" | "advanced">("info");
+  const [activeTab, setActiveTab] = useState<'info' | 'advanced'>('info');
 
-  const { data: availableTags = [] } = useTags("contact");
+  const { data: availableTags = [] } = useTags('contact');
   const { data: members = [] } = useQuery<CrmMember[]>({
-    queryKey: ["crm-members"],
+    queryKey: ['crm-members'],
     queryFn: () => crmApi.listMembers().then((r) => r.data),
     staleTime: 5 * 60 * 1000,
   });
@@ -105,7 +105,7 @@ export const ContactFormSidebar: React.FC<ContactFormSidebarProps> = ({
         ? formDataFromContact(contact)
         : defaultFormData(stages, user?.crm_user_id),
     );
-    setActiveTab("info");
+    setActiveTab('info');
   }, [contact, stages, open, user]);
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -123,25 +123,25 @@ export const ContactFormSidebar: React.FC<ContactFormSidebarProps> = ({
     <>
       {/* Overlay */}
       <div
-        className={`fixed inset-0 bg-black/60 !mt-0 backdrop-blur-sm z-[60] transition-opacity duration-300 ${open ? "opacity-100" : "opacity-0 pointer-events-none"}`}
+        className={`fixed inset-0 bg-black/60 !mt-0 backdrop-blur-sm z-[60] transition-opacity duration-300 ${open ? 'opacity-100' : 'opacity-0 pointer-events-none'}`}
         onClick={onClose}
       />
 
       {/* Sidebar */}
       <div
-        className={`fixed inset-y-0 right-0 w-full !mt-0 max-w-md bg-slate-900 border-l border-white/10 z-[70] shadow-2xl transform transition-transform duration-300 ease-out ${open ? "translate-x-0" : "translate-x-full"}`}
+        className={`fixed inset-y-0 right-0 w-full !mt-0 max-w-md bg-slate-900 border-l border-white/10 z-[70] shadow-2xl transform transition-transform duration-300 ease-out ${open ? 'translate-x-0' : 'translate-x-full'}`}
       >
         <div className="flex flex-col h-full">
           {/* Header */}
           <div className="flex items-center justify-between p-6 border-b border-white/5">
             <div>
               <h3 className="text-xl font-bold text-white">
-                {contact ? "Editar contacto" : "Nuevo contacto"}
+                {contact ? 'Editar contacto' : 'Nuevo contacto'}
               </h3>
               <p className="text-sm text-slate-400 mt-1">
                 {contact
-                  ? "Actualiza la información del prospecto"
-                  : "Crea un nuevo prospecto manualmente"}
+                  ? 'Actualiza la información del prospecto'
+                  : 'Crea un nuevo prospecto manualmente'}
               </p>
             </div>
             <button
@@ -155,11 +155,11 @@ export const ContactFormSidebar: React.FC<ContactFormSidebarProps> = ({
           {/* Tabs Switcher */}
           <Tabs
             active={activeTab}
-            onChange={(k) => setActiveTab(k as "info" | "advanced")}
+            onChange={(k) => setActiveTab(k as 'info' | 'advanced')}
             className="mt-4"
             tabs={[
-              { key: "info", label: "Información", icon: User },
-              { key: "advanced", label: "Avanzado", icon: Settings2 },
+              { key: 'info', label: 'Información', icon: User },
+              { key: 'advanced', label: 'Avanzado', icon: Settings2 },
             ]}
           />
 
@@ -169,7 +169,7 @@ export const ContactFormSidebar: React.FC<ContactFormSidebarProps> = ({
             onSubmit={handleSubmit}
             className="flex-1 overflow-y-auto p-6 space-y-8"
           >
-            {activeTab === "info" ? (
+            {activeTab === 'info' ? (
               <div className="space-y-8 animate-in fade-in slide-in-from-right-4 duration-300">
                 {/* Info Section */}
                 <div className="space-y-4">
@@ -215,8 +215,8 @@ export const ContactFormSidebar: React.FC<ContactFormSidebarProps> = ({
                     </div>
 
                     {members.length > 0 &&
-                      (user?.role === "admin" ||
-                        user?.role === "superAdmin") && (
+                      (user?.role === 'admin' ||
+                        user?.role === 'superAdmin') && (
                         <Select
                           label="Propietario"
                           icon={UserCheck}
@@ -236,8 +236,8 @@ export const ContactFormSidebar: React.FC<ContactFormSidebarProps> = ({
                           placeholder="Sin asignar"
                           displayValue={(id) =>
                             id === user?.crm_user_id
-                              ? "Propietario (Yo)"
-                              : (members.find((m) => m.id === id)?.name ?? "")
+                              ? 'Propietario (Yo)'
+                              : (members.find((m) => m.id === id)?.name ?? '')
                           }
                         />
                       )}
@@ -261,8 +261,8 @@ export const ContactFormSidebar: React.FC<ContactFormSidebarProps> = ({
                         }
                         className={`flex items-center gap-2 p-3 rounded-xl border text-left transition-all ${
                           formData.lifecycleStageId === s.id
-                            ? "bg-primary/10 border-primary text-white shadow-lg shadow-primary/10"
-                            : "bg-slate-950/30 border-white/5 text-slate-400 hover:border-white/20"
+                            ? 'bg-primary/10 border-primary text-white shadow-lg shadow-primary/10'
+                            : 'bg-slate-950/30 border-white/5 text-slate-400 hover:border-white/20'
                         }`}
                       >
                         <span className="text-lg">{s.icon}</span>
@@ -295,8 +295,8 @@ export const ContactFormSidebar: React.FC<ContactFormSidebarProps> = ({
                           }}
                           className={`flex items-center gap-1.5 px-3 py-1.5 rounded-full border transition-all ${
                             isSelected
-                              ? "text-white border-transparent"
-                              : "bg-slate-950/30 border-white/5 text-slate-400 hover:border-white/10"
+                              ? 'text-white border-transparent'
+                              : 'bg-slate-950/30 border-white/5 text-slate-400 hover:border-white/10'
                           }`}
                           style={
                             isSelected ? { backgroundColor: tag.color } : {}
@@ -356,7 +356,7 @@ export const ContactFormSidebar: React.FC<ContactFormSidebarProps> = ({
               ) : (
                 <Save size={18} />
               )}
-              {contact ? "Actualizar contacto" : "Guardar contacto"}
+              {contact ? 'Actualizar contacto' : 'Guardar contacto'}
             </button>
           </div>
         </div>

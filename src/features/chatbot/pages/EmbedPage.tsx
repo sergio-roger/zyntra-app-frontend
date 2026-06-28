@@ -1,6 +1,6 @@
-import { useState } from "react";
-import { Copy, Check, ExternalLink, Code } from "lucide-react";
-import { useAuthStore } from "@features/auth/store/authStore";
+import { useState } from 'react';
+import { Copy, Check, ExternalLink, Code } from 'lucide-react';
+import { useAuthStore } from '@features/auth/store/authStore';
 
 export const EmbedPage: React.FC = () => {
   const [copied, setCopied] = useState(false);
@@ -8,7 +8,7 @@ export const EmbedPage: React.FC = () => {
 
   const snippet = businessId
     ? `<script src="https://cdn.zyntra.app/widget/v1.js" data-business-id="${businessId}" defer></script>`
-    : "";
+    : '';
 
   const handleCopy = async () => {
     if (!snippet) return;
@@ -71,7 +71,7 @@ export const EmbedPage: React.FC = () => {
           className="mt-4 btn btn-outline btn-sm gap-2"
           onClick={(e) => {
             e.preventDefault();
-            window.open("https://docs.zyntra.app/widget", "_blank");
+            window.open('https://docs.zyntra.app/widget', '_blank');
           }}
         >
           <ExternalLink size={14} />

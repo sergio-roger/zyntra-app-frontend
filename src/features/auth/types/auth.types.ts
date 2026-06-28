@@ -1,6 +1,6 @@
-import { Plan } from "./plan";
+import { Plan } from './plan';
 
-export type ModuleAccessLevel = "full" | "read_only" | "locked";
+export type ModuleAccessLevel = 'full' | 'read_only' | 'locked';
 
 export interface MenuNode {
   id: string;
@@ -17,7 +17,7 @@ export type User = {
   id: string;
   name: string;
   email: string;
-  role: "admin" | "manager" | "agent" | "superAdmin" | null;
+  role: 'admin' | 'manager' | 'agent' | 'superAdmin' | null;
   plan: Plan;
   plan_status: string;
   crm_user_id?: string | null;

@@ -1,10 +1,10 @@
-import { Input } from "@core/ui/Input";
-import { useCustomFields } from "@crm/hooks/useCustomFields";
-import { useUpdateCompany } from "@crm/hooks/useCompanies";
-import { Company } from "@crm/types/company";
-import { Loader2, Save, Settings2, X } from "lucide-react";
-import React, { useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { Input } from '@core/ui/Input';
+import { useCustomFields } from '@crm/hooks/useCustomFields';
+import { useUpdateCompany } from '@crm/hooks/useCompanies';
+import { Company } from '@crm/types/company';
+import { Loader2, Save, Settings2, X } from 'lucide-react';
+import React, { useEffect, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 
 interface CompanyCustomFieldsSidebarProps {
   open: boolean;
@@ -17,7 +17,7 @@ export const CompanyCustomFieldsSidebar: React.FC<CompanyCustomFieldsSidebarProp
   company,
   onClose,
 }) => {
-  const { data: fields = [] } = useCustomFields("company");
+  const { data: fields = [] } = useCustomFields('company');
   const updateMutation = useUpdateCompany();
   const [values, setValues] = useState<Record<string, any>>({});
   const navigate = useNavigate();
@@ -43,11 +43,11 @@ export const CompanyCustomFieldsSidebar: React.FC<CompanyCustomFieldsSidebarProp
   return (
     <>
       <div
-        className={`fixed inset-0 bg-black/60 !mt-0 backdrop-blur-sm z-[60] transition-opacity duration-300 ${open ? "opacity-100" : "opacity-0 pointer-events-none"}`}
+        className={`fixed inset-0 bg-black/60 !mt-0 backdrop-blur-sm z-[60] transition-opacity duration-300 ${open ? 'opacity-100' : 'opacity-0 pointer-events-none'}`}
         onClick={onClose}
       />
       <div
-        className={`fixed inset-y-0 right-0 w-full !mt-0 max-w-md bg-slate-900 border-l border-white/10 z-[70] shadow-2xl transform transition-transform duration-300 ease-out ${open ? "translate-x-0" : "translate-x-full"}`}
+        className={`fixed inset-y-0 right-0 w-full !mt-0 max-w-md bg-slate-900 border-l border-white/10 z-[70] shadow-2xl transform transition-transform duration-300 ease-out ${open ? 'translate-x-0' : 'translate-x-full'}`}
       >
         <div className="flex flex-col h-full">
           <div className="flex items-center justify-between p-6 border-b border-white/5">
@@ -79,7 +79,7 @@ export const CompanyCustomFieldsSidebar: React.FC<CompanyCustomFieldsSidebarProp
                 </p>
                 <button
                   onClick={() => {
-                    navigate("/crm/fields");
+                    navigate('/crm/fields');
                     onClose();
                   }}
                   className="px-5 py-2.5 text-xs font-bold text-white bg-indigo-600 hover:bg-indigo-500 rounded-xl transition-all shadow-lg shadow-indigo-500/20 active:scale-95 animate-bounce"
@@ -95,7 +95,7 @@ export const CompanyCustomFieldsSidebar: React.FC<CompanyCustomFieldsSidebarProp
                 </div>
                 {activeFields.map((field) => (
                   <div key={field.id}>
-                    {field.type === "select" ? (
+                    {field.type === 'select' ? (
                       <div className="space-y-1.5">
                         <label className="text-xs font-medium text-slate-400 ml-1">
                           {field.label}
@@ -104,7 +104,7 @@ export const CompanyCustomFieldsSidebar: React.FC<CompanyCustomFieldsSidebarProp
                           )}
                         </label>
                         <select
-                          value={values[field.name] || ""}
+                          value={values[field.name] || ''}
                           onChange={(e) => set(field.name, e.target.value)}
                           className="w-full bg-slate-950/50 border border-white/10 rounded-xl py-2.5 px-4 text-sm text-white focus:outline-none focus:border-primary/50 transition-all appearance-none"
                         >
@@ -116,7 +116,7 @@ export const CompanyCustomFieldsSidebar: React.FC<CompanyCustomFieldsSidebarProp
                           ))}
                         </select>
                       </div>
-                    ) : field.type === "checkbox" ? (
+                    ) : field.type === 'checkbox' ? (
                       <div className="flex items-center justify-between bg-slate-950/50 border border-white/10 rounded-xl p-4">
                         <label className="text-sm font-medium text-slate-300">
                           {field.label}
@@ -133,17 +133,17 @@ export const CompanyCustomFieldsSidebar: React.FC<CompanyCustomFieldsSidebarProp
                       </div>
                     ) : (
                       <Input
-                        label={`${field.label}${field.required ? " *" : ""}`}
+                        label={`${field.label}${field.required ? ' *' : ''}`}
                         type={
-                          field.type === "number"
-                            ? "number"
-                            : field.type === "date"
-                              ? "date"
-                              : field.type === "url"
-                                ? "url"
-                                : "text"
+                          field.type === 'number'
+                            ? 'number'
+                            : field.type === 'date'
+                              ? 'date'
+                              : field.type === 'url'
+                                ? 'url'
+                                : 'text'
                         }
-                        value={values[field.name] || ""}
+                        value={values[field.name] || ''}
                         onChange={(e) => set(field.name, e.target.value)}
                       />
                     )}

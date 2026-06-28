@@ -1,15 +1,15 @@
-import api from "@shared/api/axios";
-import { ConvertToDealInput } from "@crm/types/convert-to-deal-input";
-import { Deal } from "@crm/types/deal";
-import { mapContact, mapContactsList } from "@crm/api/crm.api";
+import api from '@shared/api/axios';
+import { ConvertToDealInput } from '@crm/types/convert-to-deal-input';
+import { Deal } from '@crm/types/deal';
+import { mapContact, mapContactsList } from '@crm/api/crm.api';
 
 const buildQS = (q: Record<string, unknown>): string => {
   const sp = new URLSearchParams();
   for (const [k, v] of Object.entries(q)) {
-    if (v !== undefined && v !== null && v !== "") sp.set(k, String(v));
+    if (v !== undefined && v !== null && v !== '') sp.set(k, String(v));
   }
   const s = sp.toString();
-  return s ? `?${s}` : "";
+  return s ? `?${s}` : '';
 };
 
 export interface ListLeadsQuery {

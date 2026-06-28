@@ -1,14 +1,14 @@
-import { Suspense } from "react";
-import { Navigate, RouteObject } from "react-router-dom";
+import { Suspense } from 'react';
+import { Navigate, RouteObject } from 'react-router-dom';
 import {
   DashboardLoader,
   DashboardFallback,
-} from "@features/dashboard/DashboardLoader";
-import { useAuthStore } from "@features/auth/store/authStore";
+} from '@features/dashboard/DashboardLoader';
+import { useAuthStore } from '@features/auth/store/authStore';
 
 const DashboardRedirect = () => {
   const allowedMenus = useAuthStore((s) => s.allowedMenus);
-  const dashboardModule = allowedMenus?.find((m) => m.key === "dashboard");
+  const dashboardModule = allowedMenus?.find((m) => m.key === 'dashboard');
 
   if (
     dashboardModule &&
@@ -23,11 +23,11 @@ const DashboardRedirect = () => {
 
 export const dashboardRoutes: RouteObject[] = [
   {
-    path: "/dashboard",
+    path: '/dashboard',
     children: [
-      { path: "", element: <DashboardRedirect /> },
+      { path: '', element: <DashboardRedirect /> },
       {
-        path: "home",
+        path: 'home',
         element: (
           <Suspense fallback={<DashboardFallback />}>
             <DashboardLoader />

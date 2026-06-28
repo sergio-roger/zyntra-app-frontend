@@ -1,5 +1,5 @@
-import React from "react";
-import { Sparkles, Bot, BarChart3, MessageSquare } from "lucide-react";
+import React from 'react';
+import { Sparkles, Bot, BarChart3, MessageSquare } from 'lucide-react';
 
 interface AuthLayoutProps {
   icon: React.ReactNode;
@@ -10,9 +10,9 @@ interface AuthLayoutProps {
 }
 
 const features = [
-  { icon: Bot, label: "Agentes IA multitarea trabajando 24/7" },
-  { icon: MessageSquare, label: "Chatbots y CRM unificados" },
-  { icon: BarChart3, label: "Analítica de marketing en tiempo real" },
+  { icon: Bot, label: 'Agentes IA multitarea trabajando 24/7' },
+  { icon: MessageSquare, label: 'Chatbots y CRM unificados' },
+  { icon: BarChart3, label: 'Analítica de marketing en tiempo real' },
 ];
 
 export const AuthLayout: React.FC<AuthLayoutProps> = ({

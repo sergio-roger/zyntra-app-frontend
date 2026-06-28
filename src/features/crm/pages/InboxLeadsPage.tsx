@@ -1,12 +1,12 @@
-import { ConvertToDealSidebar } from "@crm/components/ConvertToDealSidebar";
-import { LeadsTable } from "@crm/components/LeadsTable";
-import { useArchiveLead, useLeadsList } from "@crm/hooks/useLeads";
-import { Contact } from "@crm/types/contact";
-import { AlertCircle, Inbox, Loader2, RefreshCw, Search } from "lucide-react";
-import React, { useState } from "react";
+import { ConvertToDealSidebar } from '@crm/components/ConvertToDealSidebar';
+import { LeadsTable } from '@crm/components/LeadsTable';
+import { useArchiveLead, useLeadsList } from '@crm/hooks/useLeads';
+import { Contact } from '@crm/types/contact';
+import { AlertCircle, Inbox, Loader2, RefreshCw, Search } from 'lucide-react';
+import React, { useState } from 'react';
 
 export const InboxLeadsPage: React.FC = () => {
-  const [search, setSearch] = useState("");
+  const [search, setSearch] = useState('');
   const [selectedLead, setSelectedLead] = useState<Contact | null>(null);
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
 

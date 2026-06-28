@@ -1,32 +1,32 @@
-import React, { useState } from "react";
-import { useForm } from "react-hook-form";
-import { zodResolver } from "@hookform/resolvers/zod";
-import { User, Mail, Lock, AlertCircle, Check, X } from "lucide-react";
-import { useAuth } from "@features/auth/hooks/useAuth";
-import { FormField } from "@features/auth/components/FormField";
-import { SubmitButton } from "@features/auth/components/SubmitButton";
+import React, { useState } from 'react';
+import { useForm } from 'react-hook-form';
+import { zodResolver } from '@hookform/resolvers/zod';
+import { User, Mail, Lock, AlertCircle, Check, X } from 'lucide-react';
+import { useAuth } from '@features/auth/hooks/useAuth';
+import { FormField } from '@features/auth/components/FormField';
+import { SubmitButton } from '@features/auth/components/SubmitButton';
 import {
   registerSchema,
   RegisterFormValues,
-} from "@features/auth/schemas/register.schema";
-import { mapAuthError } from "@features/auth/lib/mapAuthError";
+} from '@features/auth/schemas/register.schema';
+import { mapAuthError } from '@features/auth/lib/mapAuthError';
 
 interface RegisterFormProps {
   onSuccess?: () => void;
 }
 
 const checks = [
-  { test: (p: string) => p.length >= 8, label: "Al menos 8 caracteres" },
-  { test: (p: string) => /[A-Z]/.test(p), label: "Una mayúscula" },
-  { test: (p: string) => /[0-9]/.test(p), label: "Un número" },
+  { test: (p: string) => p.length >= 8, label: 'Al menos 8 caracteres' },
+  { test: (p: string) => /[A-Z]/.test(p), label: 'Una mayúscula' },
+  { test: (p: string) => /[0-9]/.test(p), label: 'Un número' },
 ];
 
 export const RegisterForm: React.FC<RegisterFormProps> = ({ onSuccess }) => {
   // react-hook-form's watch() cannot be safely auto-memoized by React Compiler
-  "use no memo";
+  'use no memo';
 
   const { register: registerUser } = useAuth();
-  const [serverError, setServerError] = useState("");
+  const [serverError, setServerError] = useState('');
 
   const {
     register,
@@ -35,15 +35,15 @@ export const RegisterForm: React.FC<RegisterFormProps> = ({ onSuccess }) => {
     formState: { errors, isSubmitting },
   } = useForm<RegisterFormValues>({
     resolver: zodResolver(registerSchema),
-    mode: "onBlur",
-    defaultValues: { name: "", email: "", password: "", confirmPassword: "" },
+    mode: 'onBlur',
+    defaultValues: { name: '', email: '', password: '', confirmPassword: '' },
   });
 
   // eslint-disable-next-line react-hooks/incompatible-library
-  const password = watch("password");
+  const password = watch('password');
 
   const onSubmit = async (data: RegisterFormValues) => {
-    setServerError("");
+    setServerError('');
     try {
       await registerUser({
         name: data.name,
@@ -69,7 +69,7 @@ export const RegisterForm: React.FC<RegisterFormProps> = ({ onSuccess }) => {
         placeholder="Mi Negocio S.L."
         autoComplete="organization"
         error={errors.name?.message}
-        {...register("name")}
+        {...register('name')}
       />
 
       <FormField
@@ -79,7 +79,7 @@ export const RegisterForm: React.FC<RegisterFormProps> = ({ onSuccess }) => {
         placeholder="tu@email.com"
         autoComplete="email"
         error={errors.email?.message}
-        {...register("email")}
+        {...register('email')}
       />
 
       <FormField
@@ -89,7 +89,7 @@ export const RegisterForm: React.FC<RegisterFormProps> = ({ onSuccess }) => {
         placeholder="••••••••"
         autoComplete="new-password"
         error={errors.password?.message}
-        {...register("password")}
+        {...register('password')}
       />
 
       {password && (
@@ -100,7 +100,7 @@ export const RegisterForm: React.FC<RegisterFormProps> = ({ onSuccess }) => {
               <li
                 key={label}
                 className={`flex items-center gap-1.5 transition-colors ${
-                  ok ? "text-emerald-400" : "text-slate-500"
+                  ok ? 'text-emerald-400' : 'text-slate-500'
                 }`}
               >
                 {ok ? <Check size={12} /> : <X size={12} />}
@@ -118,7 +118,7 @@ export const RegisterForm: React.FC<RegisterFormProps> = ({ onSuccess }) => {
         placeholder="••••••••"
         autoComplete="new-password"
         error={errors.confirmPassword?.message}
-        {...register("confirmPassword")}
+        {...register('confirmPassword')}
       />
 
       {serverError && (
@@ -134,11 +134,11 @@ export const RegisterForm: React.FC<RegisterFormProps> = ({ onSuccess }) => {
       <SubmitButton loading={isSubmitting}>Crear cuenta</SubmitButton>
 
       <p className="text-center text-xs text-slate-500">
-        Al registrarte, aceptas nuestros{" "}
+        Al registrarte, aceptas nuestros{' '}
         <a href="#" className="text-slate-400 hover:text-indigo-400">
           Términos
-        </a>{" "}
-        y{" "}
+        </a>{' '}
+        y{' '}
         <a href="#" className="text-slate-400 hover:text-indigo-400">
           Política de Privacidad
         </a>
