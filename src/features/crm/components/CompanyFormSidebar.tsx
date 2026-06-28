@@ -2,6 +2,7 @@ import { Input } from '@core/ui/Input';
 import { Select } from '@core/ui/Select';
 import { Tabs } from '@core/ui/Tabs';
 import { Textarea } from '@core/ui/Textarea';
+import { useAuthStore } from '@features/auth/store/authStore';
 import { useCreateCompany, useIndustrys, useUpdateCompany } from '@crm/hooks/useCompanies';
 import { useCrmUsers } from '@crm/hooks/useCrmUsers';
 import { useTags } from '@crm/hooks/useTags';
@@ -65,6 +66,9 @@ export const CompanyFormSidebar: React.FC<CompanyFormSidebarProps> = ({
   company,
   onClose,
 }) => {
+  const { user: currentUser } = useAuthStore();
+  const isAdmin = currentUser?.role === 'admin' || currentUser?.role === 'manager'; // Adjust based on your role constants
+  
   const [formData, setFormData] = useState<CompanyFormData>(defaultFormData);
   const [activeTab, setActiveTab] = useState<'info' | 'advanced'>('info');
 
@@ -85,9 +89,17 @@ export const CompanyFormSidebar: React.FC<CompanyFormSidebarProps> = ({
   const isSaving = createMutation.isPending || updateMutation.isPending;
 
   useEffect(() => {
-    setFormData(company ? formDataFromCompany(company) : defaultFormData());
+    if (company) {
+      setFormData(formDataFromCompany(company));
+    } else {
+      const initial = defaultFormData();
+      if (!isAdmin && currentUser) {
+        initial.ownerId = currentUser.id;
+      }
+      setFormData(initial);
+    }
     setActiveTab('info');
-  }, [company, open]);
+  }, [company, open, isAdmin, currentUser]);
 
   const set = (patch: Partial<CompanyFormData>) =>
     setFormData((prev) => ({ ...prev, ...patch }));
@@ -251,7 +263,7 @@ export const CompanyFormSidebar: React.FC<CompanyFormSidebarProps> = ({
                       />
                     )}
                     
-                    {ownerOptions.length > 0 && (
+                    {isAdmin && ownerOptions.length > 0 && (
                       <Select
                         label="Propietario de la empresa"
                         options={ownerOptions}
