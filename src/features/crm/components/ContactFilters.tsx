@@ -1,11 +1,9 @@
 import { Select } from '@core/ui/Select';
 import { DateRange, DateRangePicker } from '@core/ui/DateRangePicker';
-import { crmApi } from '@crm/api/crm.api';
-import { SOURCES, SOURCE_LABELS, ContactSource } from '@crm/types/crm';
-import { CrmMember } from '@crm/types/crm-member';
-import { SegmentCondition } from '@crm/types/segment-condition';
-import { useQuery } from '@tanstack/react-query';
+import { useCrmMembers } from '@crm/hooks/useCrmMembers';
 import { useLifecycleStages } from '@crm/hooks/useLifecycleStages';
+import { SOURCES, SOURCE_LABELS, ContactSource } from '@crm/types/crm';
+import { SegmentCondition } from '@crm/types/segment-condition';
 import {
   Download,
   FilterX,
@@ -70,12 +68,7 @@ export const ContactFilters: React.FC<ContactFiltersProps> = ({
 }) => {
   const [showAdvanced, setShowAdvanced] = useState(false);
 
-  const { data: members = [] } = useQuery<CrmMember[]>({
-    queryKey: ['crm-members'],
-    queryFn: () => crmApi.listMembers().then((r) => r.data),
-    staleTime: 5 * 60 * 1000,
-    enabled: showOwnerFilter,
-  });
+  const { data: members = [] } = useCrmMembers({ enabled: showOwnerFilter });
 
   const { data: stages = [] } = useLifecycleStages();
 

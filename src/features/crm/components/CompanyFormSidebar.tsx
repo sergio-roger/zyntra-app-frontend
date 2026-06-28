@@ -3,12 +3,13 @@ import { Select } from '@core/ui/Select';
 import { Tabs } from '@core/ui/Tabs';
 import { Textarea } from '@core/ui/Textarea';
 import { useAuthStore } from '@features/auth/store/authStore';
+import { EMPLOYEE_RANGE_OPTIONS, TAX_TYPE_OPTIONS } from '@crm/constants/company-options';
 import { useCreateCompany, useIndustrys, useUpdateCompany } from '@crm/hooks/useCompanies';
 import { useCrmUsers } from '@crm/hooks/useCrmUsers';
+import { useLifecycleStages } from '@crm/hooks/useLifecycleStages';
 import { useTags } from '@crm/hooks/useTags';
 import { Company, CompanyFormData } from '@crm/types/company';
-import { LifecycleStage } from '@crm/types/lifecycle-stage';
-import { useQuery } from '@tanstack/react-query';
+import { defaultCompanyFormData, formDataFromCompany } from '@crm/utils/company-form.utils';
 import {
   Building2,
   Check,
@@ -29,38 +30,6 @@ interface CompanyFormSidebarProps {
   onClose: () => void;
 }
 
-function defaultFormData(): CompanyFormData {
-  return {
-    name: '',
-    identification: '',
-    taxType: 'RUC',
-    website: '',
-    employeeRange: '',
-    description: '',
-    industryId: '',
-    lifecycleStageId: '',
-    ownerId: '',
-    tagIds: [],
-    customFields: {},
-  };
-}
-
-function formDataFromCompany(c: Company): CompanyFormData {
-  return {
-    name: c.name,
-    identification: c.identification ?? '',
-    taxType: c.taxType ?? 'RUC',
-    website: c.website ?? '',
-    employeeRange: c.employeeRange ?? '',
-    description: c.description ?? '',
-    industryId: c.industryId ?? '',
-    lifecycleStageId: c.lifecycleStageId ?? '',
-    ownerId: c.ownerId ?? '',
-    tagIds: (c.tags ?? []).map((t) => t.id),
-    customFields: c.customFields ?? {},
-  };
-}
-
 export const CompanyFormSidebar: React.FC<CompanyFormSidebarProps> = ({
   open,
   company,
@@ -69,19 +38,12 @@ export const CompanyFormSidebar: React.FC<CompanyFormSidebarProps> = ({
   const { user: currentUser } = useAuthStore();
   const isAdmin = currentUser?.role === 'admin' || currentUser?.role === 'manager';
   
-  const [formData, setFormData] = useState<CompanyFormData>(defaultFormData);
+  const [formData, setFormData] = useState<CompanyFormData>(defaultCompanyFormData);
   const [activeTab, setActiveTab] = useState<'info' | 'advanced'>('info');
 
   const { data: industries = [] } = useIndustrys();
   const { data: users = [] } = useCrmUsers();
-  const { data: stages = [] } = useQuery<LifecycleStage[]>({
-    queryKey: ['lifecycle-stages'],
-    queryFn: () =>
-      import('@shared/api/axios').then((m) =>
-        m.default.get('/lifecycle/stages').then((r) => r.data),
-      ),
-    staleTime: 10 * 60 * 1000,
-  });
+  const { data: stages = [] } = useLifecycleStages();
   const { data: availableTags = [] } = useTags('company');
 
   const createMutation = useCreateCompany();
@@ -92,7 +54,8 @@ export const CompanyFormSidebar: React.FC<CompanyFormSidebarProps> = ({
     if (company) {
       setFormData(formDataFromCompany(company));
     } else {
-      const initial = defaultFormData();
+      const initial = defaultCompanyFormData();
+
       if (!isAdmin && currentUser) {
         initial.ownerId = currentUser.id;
       }
@@ -126,7 +89,7 @@ export const CompanyFormSidebar: React.FC<CompanyFormSidebarProps> = ({
     if (company) {
       await updateMutation.mutateAsync({ id: company.id, input: payload });
     } else {
-      await createMutation.mutateAsync(payload as any);
+      await createMutation.mutateAsync(payload);
     }
     onClose();
   };
@@ -134,21 +97,6 @@ export const CompanyFormSidebar: React.FC<CompanyFormSidebarProps> = ({
   const industryOptions = industries.map((s) => ({ value: s.id, label: s.name }));
   const ownerOptions = users.map((u) => ({ value: u.id, label: u.name }));
   
-  const taxTypeOptions = [
-    { value: 'RUC', label: 'RUC' },
-    { value: 'NIF', label: 'NIF' },
-    { value: 'DNI', label: 'DNI' },
-    { value: 'PASAPORTE', label: 'Pasaporte' },
-  ];
-
-  const employeeRangeOptions = [
-    { value: '1-10', label: '1-10 empleados' },
-    { value: '11-50', label: '11-50 empleados' },
-    { value: '51-200', label: '51-200 empleados' },
-    { value: '201-500', label: '201-500 empleados' },
-    { value: '501+', label: '501+ empleados' },
-  ];
-
   return (
     <>
       <div
@@ -217,7 +165,7 @@ export const CompanyFormSidebar: React.FC<CompanyFormSidebarProps> = ({
                     <div className="flex gap-2">
                       <div className="w-1/3">
                         <Select
-                          options={taxTypeOptions}
+                          options={TAX_TYPE_OPTIONS}
                           value={formData.taxType}
                           onChange={(v) => set({ taxType: v ?? 'RUC' })}
                           label="Tipo"
@@ -243,7 +191,7 @@ export const CompanyFormSidebar: React.FC<CompanyFormSidebarProps> = ({
                     />
                     <Select
                       label="Rango de empleados"
-                      options={employeeRangeOptions}
+                      options={EMPLOYEE_RANGE_OPTIONS}
                       value={formData.employeeRange || null}
                       onChange={(v) => set({ employeeRange: v ?? '' })}
                       clearable

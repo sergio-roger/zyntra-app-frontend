@@ -1,4 +1,9 @@
-import React, { useEffect, useMemo, useState } from 'react';
+import { ExportColumn } from '@core/types/api';
+import { generateExportFilename } from '@core/utils/export';
+import { companiesApi } from '@crm/api/companies.api';
+import { STANDARD_COMPANY_EXPORT_COLUMNS as STANDARD_COLUMNS } from '@crm/constants/company-columns';
+import { useCustomFields } from '@crm/hooks/useCustomFields';
+import { ListCompaniesQuery } from '@crm/types/company';
 import {
   ArrowDown,
   ArrowUp,
@@ -9,26 +14,7 @@ import {
   Plus,
   X,
 } from 'lucide-react';
-import { companiesApi } from '@crm/api/companies.api';
-import { useCustomFields } from '@crm/hooks/useCustomFields';
-import { ExportCompanyColumn } from '@crm/types/company';
-import { ListCompaniesQuery } from '@crm/types/company';
-
-const STANDARD_COLUMNS: ExportCompanyColumn[] = [
-  { key: 'name', label: 'Nombre' },
-  { key: 'identification', label: 'RUC / Identificación' },
-  { key: 'website', label: 'Sitio web' },
-  { key: 'industry', label: 'Industria' },
-  { key: 'lifecycleStage', label: 'Etapa del ciclo' },
-  { key: 'employeeRange', label: 'Empleados' },
-  { key: 'tags', label: 'Etiquetas' },
-  { key: 'description', label: 'Descripción' },
-  { key: 'createdAt', label: 'Fecha de registro' },
-  { key: 'updatedAt', label: 'Última actualización' },
-];
-
-const defaultFilename = () =>
-  `empresas_${new Date().toISOString().slice(0, 10)}`;
+import React, { useEffect, useMemo, useState } from 'react';
 
 interface CompanyExportModalProps {
   open: boolean;
@@ -45,7 +31,7 @@ export const CompanyExportModal: React.FC<CompanyExportModalProps> = ({
 }) => {
   const { data: customFieldDefs = [] } = useCustomFields('company');
 
-  const customColumns = useMemo<ExportCompanyColumn[]>(
+  const customColumns = useMemo<ExportColumn[]>(
     () =>
       customFieldDefs
         .filter((f) => f.is_active)
@@ -59,14 +45,14 @@ export const CompanyExportModal: React.FC<CompanyExportModalProps> = ({
   );
 
   const [activeColumns, setActiveColumns] =
-    useState<ExportCompanyColumn[]>(STANDARD_COLUMNS);
-  const [filename, setFilename] = useState(defaultFilename);
+    useState<ExportColumn[]>(STANDARD_COLUMNS);
+  const [filename, setFilename] = useState(() => generateExportFilename('empresas'));
   const [isDownloading, setIsDownloading] = useState(false);
 
   useEffect(() => {
     if (open) {
       setActiveColumns(STANDARD_COLUMNS);
-      setFilename(defaultFilename());
+      setFilename(generateExportFilename('empresas'));
     }
   }, [open]);
 
@@ -107,7 +93,7 @@ export const CompanyExportModal: React.FC<CompanyExportModalProps> = ({
       const url = URL.createObjectURL(blob);
       const a = document.createElement('a');
       a.href = url;
-      const safeName = (filename.trim() || defaultFilename()).replace(
+      const safeName = (filename.trim()).replace(
         /[^a-zA-Z0-9_-]/g,
         '_',
       );
@@ -190,7 +176,7 @@ export const CompanyExportModal: React.FC<CompanyExportModalProps> = ({
                     value={filename}
                     onChange={(e) => setFilename(e.target.value)}
                     className="min-w-0 flex-1 bg-transparent text-sm text-slate-200 outline-none placeholder:text-slate-600"
-                    placeholder={defaultFilename()}
+                    placeholder={filename}
                   />
                   <span className="shrink-0 text-[10px] text-slate-600">.csv</span>
                 </div>

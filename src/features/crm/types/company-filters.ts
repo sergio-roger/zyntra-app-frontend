@@ -1,8 +1,12 @@
+import { SegmentCondition } from './segment-condition';
+
 export interface CompanyListFilters {
-  search: string;
-  industryId: string;
-  lifecycleStageId: string;
   createdAtFrom: string;
   createdAtTo: string;
+  customFieldConditions: SegmentCondition[];
+  industryId: string;
+  lifecycleStageId: string;
+  ownerId: string;
   page: number;
+  search: string;
 }

@@ -1,7 +1,9 @@
+import { ExportColumn } from '@core/types/api';
+import { generateExportFilename } from '@core/utils/export';
 import { crmApi } from '@crm/api/crm.api';
+import { STANDARD_CONTACT_EXPORT_COLUMNS as STANDARD_COLUMNS } from '@crm/constants/contact-columns';
 import { useCustomFields } from '@crm/hooks/useCustomFields';
 import { ContactExportModalProps } from '@crm/types/contact-export-modal-props';
-import { ExportColumn } from '@crm/types/export-column';
 import {
   ArrowDown,
   ArrowUp,
@@ -13,25 +15,6 @@ import {
   X,
 } from 'lucide-react';
 import React, { useEffect, useMemo, useState } from 'react';
-
-const STANDARD_COLUMNS: ExportColumn[] = [
-  { key: 'name', label: 'Nombre' },
-  { key: 'email', label: 'Email' },
-  { key: 'phone', label: 'Teléfono' },
-  { key: 'company', label: 'Empresa' },
-  { key: 'source', label: 'Origen' },
-  { key: 'lifecycleStage', label: 'Etapa del ciclo' },
-  { key: 'ownerName', label: 'Propietario' },
-  { key: 'tags', label: 'Etiquetas' },
-  { key: 'score', label: 'Puntuación' },
-  { key: 'dealValue', label: 'Valor negocio' },
-  { key: 'notes', label: 'Notas' },
-  { key: 'createdAt', label: 'Fecha de registro' },
-  { key: 'lastActivityAt', label: 'Último contacto' },
-];
-
-const defaultFilename = () =>
-  `contactos_${new Date().toISOString().slice(0, 10)}`;
 
 export const ContactExportModal: React.FC<ContactExportModalProps> = ({
   open,
@@ -50,13 +33,13 @@ export const ContactExportModal: React.FC<ContactExportModalProps> = ({
 
   const [activeColumns, setActiveColumns] =
     useState<ExportColumn[]>(STANDARD_COLUMNS);
-  const [filename, setFilename] = useState(defaultFilename);
+  const [filename, setFilename] = useState(() => generateExportFilename('contactos'));
   const [isDownloading, setIsDownloading] = useState(false);
 
   useEffect(() => {
     if (open) {
       setActiveColumns(STANDARD_COLUMNS);
-      setFilename(defaultFilename());
+      setFilename(generateExportFilename('contactos'));
     }
   }, [open]);
 
@@ -95,7 +78,7 @@ export const ContactExportModal: React.FC<ContactExportModalProps> = ({
       const url = URL.createObjectURL(blob);
       const a = document.createElement('a');
       a.href = url;
-      const safeName = (filename.trim() || defaultFilename()).replace(
+      const safeName = (filename.trim()).replace(
         /[^a-zA-Z0-9_-]/g,
         '_',
       );
@@ -179,7 +162,7 @@ export const ContactExportModal: React.FC<ContactExportModalProps> = ({
                     value={filename}
                     onChange={(e) => setFilename(e.target.value)}
                     className="min-w-0 flex-1 bg-transparent text-sm text-slate-200 outline-none placeholder:text-slate-600"
-                    placeholder={defaultFilename()}
+                    placeholder={generateExportFilename('contactos')}
                   />
                   <span className="shrink-0 text-[10px] text-slate-600">
                     .csv

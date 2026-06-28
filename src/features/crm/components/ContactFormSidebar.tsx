@@ -2,15 +2,14 @@ import { Input } from '@core/ui/Input';
 import { Select } from '@core/ui/Select';
 import { Tabs } from '@core/ui/Tabs';
 import { Textarea } from '@core/ui/Textarea';
-import { crmApi } from '@crm/api/crm.api';
 import { useCreateContact, useUpdateContact } from '@crm/hooks/useContacts';
+import { useCrmMembers } from '@crm/hooks/useCrmMembers';
+import { useLifecycleStages } from '@crm/hooks/useLifecycleStages';
 import { useTags } from '@crm/hooks/useTags';
 import { ContactFormData } from '@crm/types/contact-form';
 import { Contact } from '@crm/types/contact';
-import { CrmMember } from '@crm/types/crm-member';
-import { LifecycleStage } from '@crm/types/lifecycle-stage';
+import { defaultContactFormData, formDataFromContact } from '@crm/utils/contact-form.utils';
 import { useAuthStore } from '@features/auth/store/authStore';
-import { useQuery } from '@tanstack/react-query';
 import {
   Check,
   ChevronRight,
@@ -33,77 +32,30 @@ interface ContactFormSidebarProps {
   onClose: () => void;
 }
 
-function formDataFromContact(contact: Contact): ContactFormData {
-  return {
-    name: contact.name,
-    email: contact.email ?? '',
-    phone: contact.phone ?? '',
-    lifecycleStageId: contact.lifecycleStageId ?? '',
-    source: contact.source ?? 'manual',
-    ownerId: contact.ownerId ?? null,
-    tags:
-      contact.tags?.map((t: any) => (typeof t === 'string' ? t : t.id)) ?? [],
-    notes: contact.notes ?? '',
-    customFields: contact.customFields ?? {},
-  };
-}
-
-function defaultFormData(
-  stages: LifecycleStage[],
-  ownerId?: string | null,
-): ContactFormData {
-  const firstActiveStage = stages.find((s) => s.type === 'active');
-  return {
-    name: '',
-    email: '',
-    phone: '',
-    lifecycleStageId: firstActiveStage?.id ?? '',
-    source: 'manual',
-    ownerId: ownerId ?? null,
-    tags: [],
-    notes: '',
-    customFields: {},
-  };
-}
-
 export const ContactFormSidebar: React.FC<ContactFormSidebarProps> = ({
   open,
   contact,
   onClose,
 }) => {
   const { user } = useAuthStore();
-
-  const { data: stages = [] } = useQuery<LifecycleStage[]>({
-    queryKey: ['lifecycle-stages'],
-    queryFn: () =>
-      import('@shared/api/axios').then((m) =>
-        m.default.get('/lifecycle/stages').then((r) => r.data),
-      ),
-    staleTime: 10 * 60 * 1000,
-  });
+  const { data: stages = [] } = useLifecycleStages();
+  const { data: availableTags = [] } = useTags('contact');
+  const { data: members = [] } = useCrmMembers();
+  const createMutation = useCreateContact();
+  const updateMutation = useUpdateContact();
 
   const [formData, setFormData] = useState<ContactFormData>(() =>
-    defaultFormData(stages, user?.crm_user_id),
+    defaultContactFormData(stages, user?.crm_user_id),
   );
 
   const [activeTab, setActiveTab] = useState<'info' | 'advanced'>('info');
-
-  const { data: availableTags = [] } = useTags('contact');
-  const { data: members = [] } = useQuery<CrmMember[]>({
-    queryKey: ['crm-members'],
-    queryFn: () => crmApi.listMembers().then((r) => r.data),
-    staleTime: 5 * 60 * 1000,
-  });
-
-  const createMutation = useCreateContact();
-  const updateMutation = useUpdateContact();
   const isSaving = createMutation.isPending || updateMutation.isPending;
 
   useEffect(() => {
     setFormData(
       contact
         ? formDataFromContact(contact)
-        : defaultFormData(stages, user?.crm_user_id),
+        : defaultContactFormData(stages, user?.crm_user_id),
     );
     setActiveTab('info');
   }, [contact, stages, open, user]);

@@ -1,4 +1,3 @@
-export interface ExportColumn {
-  key: string;
-  label: string;
-}
+import { ExportColumn as CoreExportColumn } from '@core/types/api';
+
+export type ExportColumn = CoreExportColumn;

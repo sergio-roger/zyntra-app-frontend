@@ -1,92 +1,70 @@
-import api from '@shared/api/axios';
+import { ExportColumn } from '@core/types/api';
 import {
-  Company,
   CompaniesListResponse,
-  CompanyFormData,
-  ExportCompanyColumn,
+  Company,
+  CreateCompanyInput,
   ListCompaniesQuery,
+  RawCompany,
+  RawCompanyListResponse,
+  UpdateCompanyInput
 } from '@crm/types/company';
-
-const buildQS = (q: Record<string, unknown>): string => {
-  const sp = new URLSearchParams();
-  for (const [k, v] of Object.entries(q)) {
-    if (v !== undefined && v !== null && v !== '') sp.set(k, String(v));
-  }
-  const s = sp.toString();
-  return s ? `?${s}` : '';
-};
-
-const mapCompany = (raw: any): Company => ({
-  id: raw.id,
-  businessId: raw.businessId,
-  name: raw.name,
-  identification: raw.identification ?? null,
-  taxType: raw.taxType ?? null,
-  website: raw.website ?? null,
-  employeeRange: raw.employeeRange ?? null,
-  description: raw.description ?? null,
-  industryId: raw.industryId ?? null,
-  industry: raw.industry ?? null,
-  ownerId: raw.ownerId ?? null,
-  owner: raw.owner ?? null,
-  lifecycleStageId: raw.lifecycleStageId ?? null,
-  lifecycle_stage: raw.lifecycle_stage ?? null,
-  tags: raw.tags ?? [],
-  customFields: raw.customFields ?? null,
-  createdAt: raw.createdAt,
-  updatedAt: raw.updatedAt,
-});
-
-const mapList = (raw: any): CompaniesListResponse => ({
-  items: (raw.items ?? []).map(mapCompany),
-  total: raw.total,
-  page: raw.page,
-  limit: raw.limit,
-  totalPages: raw.totalPages,
-});
-
-export type CreateCompanyInput = Omit<CompanyFormData, never>;
-
-export type UpdateCompanyInput = Partial<CreateCompanyInput>;
+import {
+  buildQueryString,
+  mapCompany,
+  mapCompanyList,
+} from '@crm/utils/company-api.utils';
+import api from '@shared/api/axios';
 
 export const companiesApi = {
-  list: (query: ListCompaniesQuery = {}) =>
+  list: (query: ListCompaniesQuery = {}): Promise<{ data: CompaniesListResponse }> =>
     api
-      .get<unknown, { data: any }>(
-        `/crm/companies${buildQS(query as Record<string, unknown>)}`,
+      .get<RawCompanyListResponse, RawCompanyListResponse>(
+        `/crm/companies${buildQueryString(query as Record<string, string | number | boolean | undefined>)}`,
       )
-      .then((r) => ({ data: mapList(r.data) })),
+      .then((res) => ({ data: mapCompanyList(res) })),
 
-  get: (id: string) =>
+  get: (id: string): Promise<{ data: Company }> =>
     api
-      .get<unknown, { data: any }>(`/crm/companies/${id}`)
-      .then((r) => ({ data: mapCompany(r.data) })),
+      .get<RawCompany, RawCompany>(`/crm/companies/${id}`)
+      .then((res) => ({ data: mapCompany(res) })),
 
-  create: (input: CreateCompanyInput) =>
+  create: (input: CreateCompanyInput): Promise<{ data: Company }> =>
     api
-      .post<unknown, { data: any }>('/crm/companies', input)
-      .then((r) => ({ data: mapCompany(r.data) })),
+      .post<RawCompany, RawCompany>('/crm/companies', input)
+      .then((res) => ({ data: mapCompany(res) })),
 
-  update: (id: string, input: UpdateCompanyInput) =>
+  update: (id: string, input: UpdateCompanyInput): Promise<{ data: Company }> =>
     api
-      .patch<unknown, { data: any }>(`/crm/companies/${id}`, input)
-      .then((r) => ({ data: mapCompany(r.data) })),
+      .patch<RawCompany, RawCompany>(`/crm/companies/${id}`, input)
+      .then((res) => ({ data: mapCompany(res) })),
 
-  remove: (id: string) => api.delete(`/crm/companies/${id}`),
+  remove: (id: string): Promise<void> => api.delete(`/crm/companies/${id}`),
 
   exportCsv: (params: {
-    filters: Record<string, unknown>;
-    columns: ExportCompanyColumn[];
-  }) =>
-    api.post<unknown, Blob>(
+    filters: Record<string, string | number | boolean | undefined>;
+    columns: ExportColumn[];
+  }): Promise<Blob> =>
+    api.post<Blob, Blob>(
       '/crm/companies/export',
       { ...params.filters, columns: params.columns },
       { responseType: 'blob' },
     ),
 
-  import: (rows: Array<{ name: string; identification?: string; website?: string; employeeRange?: string; description?: string }>) =>
-    api.post<unknown, { data: { count: number } }>('/crm/companies/import', rows),
+  import: (
+    rows: Array<{
+      name: string;
+      identification?: string;
+      website?: string;
+      employeeRange?: string;
+      description?: string;
+    }>,
+  ): Promise<{ data: { count: number } }> =>
+    api.post<{ count: number }, { count: number }>(
+      '/crm/companies/import',
+      rows,
+    ).then((res) => ({ data: res })),
 
-  listIndustries: () =>
-    api.get<unknown, { data: any[] }>('/crm/industries'),
+  listIndustries: (): Promise<{ data: Array<{ id: string; name: string }> }> =>
+    api.get<Array<{ id: string; name: string }>, Array<{ id: string; name: string }>>('/crm/industries')
+      .then((res) => ({ data: res })),
 };

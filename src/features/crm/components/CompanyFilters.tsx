@@ -1,9 +1,9 @@
 import { DateRange, DateRangePicker } from '@core/ui/DateRangePicker';
 import { Select } from '@core/ui/Select';
 import { useIndustrys } from '@crm/hooks/useCompanies';
-import { LifecycleStage } from '@crm/types/lifecycle-stage';
+import { useCrmMembers } from '@crm/hooks/useCrmMembers';
+import { useLifecycleStages } from '@crm/hooks/useLifecycleStages';
 import { SegmentCondition } from '@crm/types/segment-condition';
-import { useQuery } from '@tanstack/react-query';
 import {
   Download,
   FilterX,
@@ -11,6 +11,7 @@ import {
   LayoutTemplate,
   Search,
   SlidersHorizontal,
+  Users,
   Variable,
 } from 'lucide-react';
 import React, { useState } from 'react';
@@ -18,12 +19,15 @@ import React, { useState } from 'react';
 interface CompanyFiltersProps {
   search: string;
   industryId: string;
+  ownerId: string;
   lifecycleStageId: string;
   createdAtFrom: string;
   createdAtTo: string;
   customFieldConditions: SegmentCondition[];
+  showOwnerFilter?: boolean;
   onSearchChange: (v: string) => void;
   onIndustryChange: (v: string) => void;
+  onOwnerChange?: (v: string) => void;
   onLifecycleStageChange: (v: string) => void;
   onDateRangeChange: (range: DateRange | null) => void;
   onOpenCustomFieldFilters: () => void;
@@ -35,12 +39,15 @@ interface CompanyFiltersProps {
 export const CompanyFilters: React.FC<CompanyFiltersProps> = ({
   search,
   industryId,
+  ownerId,
   lifecycleStageId,
   createdAtFrom,
   createdAtTo,
   customFieldConditions,
+  showOwnerFilter = false,
   onSearchChange,
   onIndustryChange,
+  onOwnerChange,
   onLifecycleStageChange,
   onDateRangeChange,
   onOpenCustomFieldFilters,
@@ -50,16 +57,11 @@ export const CompanyFilters: React.FC<CompanyFiltersProps> = ({
 }) => {
   const [showAdvanced, setShowAdvanced] = useState(false);
 
+  const { data: members = [] } = useCrmMembers({ enabled: showOwnerFilter });
   const { data: industryTypes = [] } = useIndustrys();
-  const { data: stages = [] } = useQuery<LifecycleStage[]>({
-    queryKey: ['lifecycle-stages'],
-    queryFn: () =>
-      import('@shared/api/axios').then((m) =>
-        m.default.get('/lifecycle/stages').then((r) => r.data),
-      ),
-    staleTime: 10 * 60 * 1000,
-  });
+  const { data: stages = [] } = useLifecycleStages();
 
+  const ownerOptions = members.map((m) => ({ value: m.id, label: m.name }));
   const industryOptions = industryTypes.map((s) => ({ value: s.id, label: s.name }));
   const stageOptions = stages.map((s) => ({
     value: s.id,
@@ -70,7 +72,7 @@ export const CompanyFilters: React.FC<CompanyFiltersProps> = ({
     createdAtFrom && createdAtTo ? { from: createdAtFrom, to: createdAtTo } : null;
 
   const hasAdvancedFilters = Boolean(
-    industryId || lifecycleStageId || createdAtFrom || createdAtTo,
+    industryId || ownerId || lifecycleStageId || createdAtFrom || createdAtTo,
   );
   const hasFilters = Boolean(search || hasAdvancedFilters || customFieldConditions.length > 0);
 
@@ -179,6 +181,21 @@ export const CompanyFilters: React.FC<CompanyFiltersProps> = ({
               className="py-2 text-sm"
             />
           </div>
+
+          {showOwnerFilter && (
+            <div className="w-48">
+              <Select
+                options={ownerOptions}
+                value={ownerId || null}
+                onChange={(v) => onOwnerChange?.(v ?? '')}
+                placeholder="Todos los propietarios"
+                clearable
+                clearLabel="Todos los propietarios"
+                icon={Users}
+                className="py-2 text-sm"
+              />
+            </div>
+          )}
 
           <div className="w-52">
             <DateRangePicker
