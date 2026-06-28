@@ -10,12 +10,13 @@ interface CustomFieldFilterSidebarProps {
   conditions: SegmentCondition[];
   onChange: (conditions: SegmentCondition[]) => void;
   onClose: () => void;
+  entityType?: string;
 }
 
 export const CustomFieldFilterSidebar: React.FC<
   CustomFieldFilterSidebarProps
-> = ({ open, conditions, onChange, onClose }) => {
-  const { data: fields = [] } = useCustomFields();
+> = ({ open, conditions, onChange, onClose, entityType }) => {
+  const { data: fields = [] } = useCustomFields(entityType);
   const activeFields = fields.filter((f) => f.is_active);
   const navigate = useNavigate();
 
@@ -79,6 +80,7 @@ export const CustomFieldFilterSidebar: React.FC<
               <CustomFieldConditionBuilder
                 conditions={conditions}
                 onChange={onChange}
+                entityType={entityType}
               />
             </div>
 

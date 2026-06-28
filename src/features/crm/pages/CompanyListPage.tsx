@@ -5,17 +5,22 @@ import { CompanyFilters } from '@crm/components/CompanyFilters';
 import { CompanyFormSidebar } from '@crm/components/CompanyFormSidebar';
 import { CompanyImportModal } from '@crm/components/CompanyImportModal';
 import { CompanyTable } from '@crm/components/CompanyTable';
+import { CustomFieldFilterSidebar } from '@crm/components/CustomFieldFilterSidebar';
 import { Pagination } from '@crm/components/Pagination';
 import { DEFAULT_COMPANY_COLUMNS } from '@crm/constants/company-columns';
 import { useCompaniesList, useDeleteCompany } from '@crm/hooks/useCompanies';
 import { useCustomFields } from '@crm/hooks/useCustomFields';
 import { useUpdateUserPreference, useUserPreference } from '@crm/hooks/useUserPreferences';
 import { Company } from '@crm/types/company';
+import { SegmentCondition } from '@crm/types/segment-condition';
 import { useAuthStore } from '@features/auth/store/authStore';
 import { ColumnCustomizerModal } from '@shared/components/ColumnCustomizerModal';
 import { ConfirmModal } from '@shared/components/ConfirmModal';
 import { AlertCircle, FileSpreadsheet, Loader2, Plus } from 'lucide-react';
 import React, { useState } from 'react';
+
+const serializeConditions = (conditions: SegmentCondition[]): string | undefined =>
+  conditions.length > 0 ? JSON.stringify(conditions) : undefined;
 
 interface Filters {
   search: string;
@@ -39,6 +44,8 @@ const LIMIT = 20;
 
 export const CompanyListPage: React.FC = () => {
   const [filters, setFilters] = useState<Filters>(defaultFilters());
+  const [customFieldConditions, setCustomFieldConditions] = useState<SegmentCondition[]>([]);
+  const [isCustomFieldSidebarOpen, setIsCustomFieldSidebarOpen] = useState(false);
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const [editing, setEditing] = useState<Company | null>(null);
   const [customFieldsCompany, setCustomFieldsCompany] = useState<Company | null>(null);
@@ -66,12 +73,18 @@ export const CompanyListPage: React.FC = () => {
     }));
   };
 
+  const handleReset = () => {
+    setFilters(defaultFilters());
+    setCustomFieldConditions([]);
+  };
+
   const query = useCompaniesList({
     search: filters.search || undefined,
     industryId: filters.industryId || undefined,
     lifecycleStageId: filters.lifecycleStageId || undefined,
     createdAtFrom: filters.createdAtFrom || undefined,
     createdAtTo: filters.createdAtTo || undefined,
+    customFieldFilters: serializeConditions(customFieldConditions),
     page: filters.page,
     limit: LIMIT,
   });
@@ -147,13 +160,15 @@ export const CompanyListPage: React.FC = () => {
         lifecycleStageId={filters.lifecycleStageId}
         createdAtFrom={filters.createdAtFrom}
         createdAtTo={filters.createdAtTo}
+        customFieldConditions={customFieldConditions}
         onSearchChange={(v) => set({ search: v })}
         onIndustryChange={(v) => set({ industryId: v })}
         onLifecycleStageChange={(v) => set({ lifecycleStageId: v })}
         onDateRangeChange={handleDateRangeChange}
+        onOpenCustomFieldFilters={() => setIsCustomFieldSidebarOpen(true)}
         onExportCsv={() => setIsExportOpen(true)}
         onCustomizeColumns={() => setIsCustomizerOpen(true)}
-        onReset={() => setFilters(defaultFilters())}
+        onReset={handleReset}
       />
 
       {/* Loading */}
@@ -207,6 +222,15 @@ export const CompanyListPage: React.FC = () => {
         </div>
       )}
 
+      {/* Custom Field Filter Sidebar */}
+      <CustomFieldFilterSidebar
+        open={isCustomFieldSidebarOpen}
+        conditions={customFieldConditions}
+        onChange={setCustomFieldConditions}
+        onClose={() => setIsCustomFieldSidebarOpen(false)}
+        entityType="company"
+      />
+
       {/* Custom Fields Sidebar */}
       <CompanyCustomFieldsSidebar
         open={customFieldsCompany !== null}
@@ -228,10 +252,11 @@ export const CompanyListPage: React.FC = () => {
         total={query.data?.total ?? 0}
         queryParams={{
           search: filters.search || undefined,
-          industryId: filters.industryTypeId || undefined,
+          industryId: filters.industryId || undefined,
           lifecycleStageId: filters.lifecycleStageId || undefined,
           createdAtFrom: filters.createdAtFrom || undefined,
           createdAtTo: filters.createdAtTo || undefined,
+          customFieldFilters: serializeConditions(customFieldConditions),
         }}
       />
 

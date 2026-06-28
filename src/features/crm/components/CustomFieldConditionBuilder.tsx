@@ -7,12 +7,13 @@ import React from 'react';
 interface CustomFieldConditionBuilderProps {
   conditions: SegmentCondition[];
   onChange: (conditions: SegmentCondition[]) => void;
+  entityType?: string;
 }
 
 export const CustomFieldConditionBuilder: React.FC<
   CustomFieldConditionBuilderProps
-> = ({ conditions, onChange }) => {
-  const { data: fields = [] } = useCustomFields();
+> = ({ conditions, onChange, entityType }) => {
+  const { data: fields = [] } = useCustomFields(entityType);
   const activeFields = fields.filter((f) => f.is_active);
 
   if (!activeFields.length) return null;

@@ -41,6 +41,7 @@ export interface CompanyFormData {
 export interface ListCompaniesQuery {
   createdAtFrom?: string;
   createdAtTo?: string;
+  customFieldFilters?: string;
   industryId?: string;
   lifecycleStageId?: string;
   limit?: number;

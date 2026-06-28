@@ -2,6 +2,7 @@ import { DateRange, DateRangePicker } from '@core/ui/DateRangePicker';
 import { Select } from '@core/ui/Select';
 import { useIndustrys } from '@crm/hooks/useCompanies';
 import { LifecycleStage } from '@crm/types/lifecycle-stage';
+import { SegmentCondition } from '@crm/types/segment-condition';
 import { useQuery } from '@tanstack/react-query';
 import {
   Download,
@@ -10,6 +11,7 @@ import {
   LayoutTemplate,
   Search,
   SlidersHorizontal,
+  Variable,
 } from 'lucide-react';
 import React, { useState } from 'react';
 
@@ -19,10 +21,12 @@ interface CompanyFiltersProps {
   lifecycleStageId: string;
   createdAtFrom: string;
   createdAtTo: string;
+  customFieldConditions: SegmentCondition[];
   onSearchChange: (v: string) => void;
   onIndustryChange: (v: string) => void;
   onLifecycleStageChange: (v: string) => void;
   onDateRangeChange: (range: DateRange | null) => void;
+  onOpenCustomFieldFilters: () => void;
   onExportCsv: () => void;
   onCustomizeColumns?: () => void;
   onReset: () => void;
@@ -34,10 +38,12 @@ export const CompanyFilters: React.FC<CompanyFiltersProps> = ({
   lifecycleStageId,
   createdAtFrom,
   createdAtTo,
+  customFieldConditions,
   onSearchChange,
   onIndustryChange,
   onLifecycleStageChange,
   onDateRangeChange,
+  onOpenCustomFieldFilters,
   onExportCsv,
   onCustomizeColumns,
   onReset,
@@ -66,7 +72,7 @@ export const CompanyFilters: React.FC<CompanyFiltersProps> = ({
   const hasAdvancedFilters = Boolean(
     industryId || lifecycleStageId || createdAtFrom || createdAtTo,
   );
-  const hasFilters = Boolean(search || hasAdvancedFilters);
+  const hasFilters = Boolean(search || hasAdvancedFilters || customFieldConditions.length > 0);
 
   return (
     <div className="rounded-xl border border-white/10 bg-slate-900/50 p-3">
@@ -115,6 +121,24 @@ export const CompanyFilters: React.FC<CompanyFiltersProps> = ({
           </button>
           {hasAdvancedFilters && (
             <span className="absolute -top-1 -right-1 h-2 w-2 rounded-full bg-primary ring-2 ring-slate-900" />
+          )}
+        </div>
+
+        <div className="relative">
+          <button
+            onClick={onOpenCustomFieldFilters}
+            className={`inline-flex items-center gap-1.5 whitespace-nowrap rounded-lg border px-3 py-2 text-xs font-medium transition-colors ${
+              customFieldConditions.length > 0
+                ? 'border-indigo-500/40 bg-indigo-500/10 text-indigo-300 hover:bg-indigo-500/20'
+                : 'border-white/10 bg-slate-950/40 text-slate-300 hover:border-white/20 hover:bg-white/5'
+            }`}
+          >
+            <Variable size={14} /> Otros campos
+          </button>
+          {customFieldConditions.length > 0 && (
+            <span className="absolute -top-1 -right-1 flex h-4 w-4 items-center justify-center rounded-full bg-indigo-500 text-[9px] font-black text-white ring-2 ring-slate-900">
+              {customFieldConditions.length}
+            </span>
           )}
         </div>
 
