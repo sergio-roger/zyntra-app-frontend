@@ -78,7 +78,7 @@ export const CompanyExportModal: React.FC<CompanyExportModalProps> = ({
     if (isDownloading || activeColumns.length === 0) return;
     setIsDownloading(true);
     try {
-      const filters: Record<string, unknown> = {};
+      const filters: Record<string, string | number | boolean | undefined> = {};
       if (queryParams.search) filters.search = queryParams.search;
       if (queryParams.industryId) filters.industryId = queryParams.industryId;
       if (queryParams.lifecycleStageId) filters.lifecycleStageId = queryParams.lifecycleStageId;

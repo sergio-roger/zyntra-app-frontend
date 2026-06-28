@@ -26,7 +26,7 @@ export interface Company {
 }
 
 export interface CompanyFormData {
-  customFields: Record<string, string | number | boolean | null>;
+  customFields?: Record<string, string | number | boolean | null>;
   description: string;
   employeeRange: string;
   identification: string;
@@ -72,7 +72,9 @@ export interface RawCompany {
   website?: string | null;
 }
 
-export type CreateCompanyInput = Omit<CompanyFormData, never>;
+export type CreateCompanyInput = Partial<Omit<CompanyFormData, 'name'>> & {
+  name: string;
+};
 
 export type UpdateCompanyInput = Partial<CreateCompanyInput>;
 

@@ -300,7 +300,7 @@ export const CompanyListPage: React.FC = () => {
       {activeQuery.data && (
         <div className="animate-in slide-in-from-bottom-4 duration-500">
           <CompanyTable
-            companies={activeQuery.data.items}
+            companies={activeQuery.data?.items ?? []}
             columns={currentColumnConfig}
             onEdit={openEdit}
             onDelete={handleDeleteRequest}

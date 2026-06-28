@@ -1,19 +1,13 @@
 import { useQuery } from '@tanstack/react-query';
+import { LifecycleStage } from '@crm/types/lifecycle-stage';
 import api from '@shared/api/axios';
-
-export interface LifecycleStage {
-  color?: string;
-  description?: string;
-  icon?: string;
-  id: string;
-  name: string;
-}
 
 export const useLifecycleStages = () => {
   return useQuery<LifecycleStage[]>({
     queryKey: ['lifecycle-stages'],
     queryFn: async () => {
-      const { data } = await api.get('/lifecycle/stages');
+      const res: any = await api.get('/lifecycle/stages');
+      const data = Array.isArray(res) ? res : Array.isArray(res?.data) ? res.data : [];
       return data;
     },
     staleTime: 5 * 60 * 1000,

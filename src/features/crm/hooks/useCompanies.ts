@@ -1,9 +1,9 @@
+import { companiesApi } from '@crm/api/companies.api';
 import {
   CreateCompanyInput,
+  ListCompaniesQuery,
   UpdateCompanyInput,
-  companiesApi,
-} from '@crm/api/companies.api';
-import { ListCompaniesQuery } from '@crm/types/company';
+} from '@crm/types/company';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 
 export const companiesKeys = {

@@ -81,7 +81,7 @@ export const CompanyFormSidebar: React.FC<CompanyFormSidebarProps> = ({
       lifecycleStageId: formData.lifecycleStageId || undefined,
       ownerId: formData.ownerId || undefined,
       tagIds: formData.tagIds,
-      customFields: Object.keys(formData.customFields).length > 0
+      customFields: formData.customFields && Object.keys(formData.customFields).length > 0
         ? formData.customFields
         : undefined,
     };

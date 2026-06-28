@@ -2,7 +2,6 @@ import {
   CompaniesListResponse,
   Company,
   RawCompany,
-  RawCompanyListResponse,
 } from '@crm/types/company';
 
 export const buildQueryString = (
@@ -38,11 +37,17 @@ export const mapCompany = (raw: RawCompany): Company => ({
 });
 
 export const mapCompanyList = (
-  raw: RawCompanyListResponse,
-): CompaniesListResponse => ({
-  items: (raw.items ?? []).map(mapCompany),
-  total: raw.total,
-  page: raw.page,
-  limit: raw.limit,
-  totalPages: raw.totalPages,
-});
+  raw: any,
+): CompaniesListResponse => {
+  const data =
+    raw && typeof raw === 'object' && 'data' in raw && raw.data && typeof raw.data === 'object' && 'items' in raw.data
+      ? raw.data
+      : raw;
+  return {
+    items: (data?.items ?? []).map(mapCompany),
+    total: data?.total ?? 0,
+    page: data?.page ?? 1,
+    limit: data?.limit ?? 20,
+    totalPages: data?.totalPages ?? 1,
+  };
+};
