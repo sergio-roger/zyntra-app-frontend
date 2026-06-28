@@ -3,7 +3,6 @@ import { DateRange, DateRangePicker } from '@core/ui/DateRangePicker';
 import { crmApi } from '@crm/api/crm.api';
 import { SOURCES, SOURCE_LABELS, ContactSource } from '@crm/types/crm';
 import { CrmMember } from '@crm/types/crm-member';
-import { LifecycleStage } from '@crm/types/lifecycle-stage';
 import { SegmentCondition } from '@crm/types/segment-condition';
 import { useQuery } from '@tanstack/react-query';
 import { useLifecycleStages } from '@crm/hooks/useLifecycleStages';

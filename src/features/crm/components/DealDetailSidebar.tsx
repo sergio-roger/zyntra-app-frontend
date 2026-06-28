@@ -1,6 +1,5 @@
 import { DealFormFields } from '@crm/components/DealFormFields';
 import { Contact } from '@crm/types/contact';
-import { useContactsList } from '@crm/hooks/useContacts';
 import {
   useDealHistory,
   useDeleteDeal,
@@ -15,20 +14,12 @@ import { DealStageHistoryRecord } from '@crm/types/deal-stage-history-record';
 import { ConfirmModal } from '@shared/components/ConfirmModal';
 import { toastManager } from '@shared/components/toast/toastManager';
 import {
-  AlertCircle,
-  Briefcase,
-  Calendar,
   CheckCircle2,
-  ChevronDown,
   Clock,
-  DollarSign,
   Loader2,
   Save,
   Trash2,
-  TrendingUp,
-  User,
   X,
-  ListTodo,
 } from 'lucide-react';
 import { TaskBoard } from '@crm/components/TaskBoard';
 import React, { useEffect, useState } from 'react';

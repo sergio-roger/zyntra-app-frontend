@@ -1,6 +1,5 @@
 import { DealFormFields } from '@crm/components/DealFormFields';
 import { Contact } from '@crm/types/contact';
-import { useContactsList } from '@crm/hooks/useContacts';
 import {
   useCreateDeal,
   usePipelines,
@@ -11,15 +10,8 @@ import { Deal } from '@crm/types/deal';
 import { DealPipeline } from '@crm/types/deal-pipeline';
 import { DealPipelineStage } from '@crm/types/deal-pipeline-stage';
 import {
-  AlertCircle,
-  Briefcase,
-  Calendar,
-  ChevronDown,
-  DollarSign,
   Loader2,
   Save,
-  TrendingUp,
-  User,
   X,
 } from 'lucide-react';
 import React, { useEffect, useState } from 'react';

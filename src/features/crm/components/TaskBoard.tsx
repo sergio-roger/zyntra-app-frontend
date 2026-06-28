@@ -1,10 +1,10 @@
-import React, { useState } from 'react';
-import { useCrmTasks, useUpdateTask, useDeleteTask } from '@crm/hooks/useCrmTasks';
-import { CrmTask } from '@crm/types/crm-task';
-import { TaskStatus } from '@crm/types/crm';
 import { TaskFormSidebar } from '@crm/components/TaskFormSidebar';
+import { useCrmTasks, useDeleteTask, useUpdateTask } from '@crm/hooks/useCrmTasks';
+import { TaskStatus } from '@crm/types/crm';
+import { CrmTask } from '@crm/types/crm-task';
 import { ConfirmModal } from '@shared/components/ConfirmModal';
-import { CheckCircle2, Circle, Clock, Calendar, User, Trash2, Plus, Loader2 } from 'lucide-react';
+import { Calendar, CheckCircle2, Circle, Clock, Loader2, Plus, Trash2 } from 'lucide-react';
+import React, { useState } from 'react';
 
 interface TaskBoardProps {
   dealId?: string;
