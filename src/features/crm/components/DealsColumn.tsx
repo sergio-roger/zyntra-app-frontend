@@ -53,13 +53,15 @@ export const DealsColumn: React.FC<DealsColumnProps> = ({
             </span>
           </div>
           <div className="flex items-center gap-1.5">
-            <button
-              onClick={() => onEditStage?.(stage)}
-              className="p-1 rounded-lg bg-white/5 hover:bg-slate-700/60 text-slate-500 hover:text-slate-300 border border-white/5 transition-all active:scale-95"
-              title="Editar esta etapa"
-            >
-              <Pencil className="w-3.5 h-3.5" />
-            </button>
+            {onEditStage && (
+              <button
+                onClick={() => onEditStage(stage)}
+                className="p-1 rounded-lg bg-white/5 hover:bg-slate-700/60 text-slate-500 hover:text-slate-300 border border-white/5 transition-all active:scale-95"
+                title="Editar esta etapa"
+              >
+                <Pencil className="w-3.5 h-3.5" />
+              </button>
+            )}
             <button
               onClick={() =>
                 onDealClick?.({ id: 'new', stage_id: stage.id } as any)

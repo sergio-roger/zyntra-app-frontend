@@ -13,17 +13,21 @@ import {
 import { Deal } from '@crm/types/deal';
 import { DealPipeline } from '@crm/types/deal-pipeline';
 import { DealPipelineStage } from '@crm/types/deal-pipeline-stage';
+import { useAuthStore } from '@features/auth/store/authStore';
+import { EmptyState } from '@shared/components/EmptyState';
 import {
   AlertCircle,
   BarChart3,
   ChevronDown,
   DollarSign,
+  FolderOpen,
   FolderPlus,
   Loader2,
   Search,
   Settings2,
   Target,
   TrendingUp,
+  Users,
 } from 'lucide-react';
 import React, { useEffect, useState } from 'react';
 
@@ -35,6 +39,9 @@ const fmt = (value: number, currency = 'COP') =>
   }).format(value);
 
 export const DealsPage: React.FC = () => {
+  const user = useAuthStore((s) => s.user);
+  const isAdmin = user?.role === 'admin';
+
   const [selectedDeal, setSelectedDeal] = useState<Deal | null>(null);
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
   const [isPipelineModalOpen, setIsPipelineModalOpen] = useState(false);
@@ -76,7 +83,7 @@ export const DealsPage: React.FC = () => {
   const handleDealClick = (deal: Deal) => {
     if (deal.id === 'new') {
       setSelectedDeal(null);
-      setStageOverrideId(deal.stage_id);
+      setStageOverrideId(deal.stageId);
       setIsSidebarOpen(true);
     } else {
       setSelectedDeal(deal);
@@ -122,13 +129,15 @@ export const DealsPage: React.FC = () => {
               className="pl-10 pr-4 py-2 rounded-xl bg-slate-900/50 border border-white/5 text-sm text-slate-300 focus:outline-none focus:ring-2 focus:ring-indigo-500/40 w-64 transition-all"
             />
           </div>
-          <button
-            onClick={handleCreatePipeline}
-            className="flex items-center gap-2 px-4 py-2.5 rounded-xl bg-indigo-600 hover:bg-indigo-500 text-white text-sm font-bold transition-all shadow-lg shadow-indigo-600/30 active:scale-95"
-          >
-            <FolderPlus size={18} />
-            <span>Nuevo Pipeline</span>
-          </button>
+          {isAdmin && (
+            <button
+              onClick={handleCreatePipeline}
+              className="flex items-center gap-2 px-4 py-2.5 rounded-xl bg-indigo-600 hover:bg-indigo-500 text-white text-sm font-bold transition-all shadow-lg shadow-indigo-600/30 active:scale-95"
+            >
+              <FolderPlus size={18} />
+              <span>Nuevo Pipeline</span>
+            </button>
+          )}
         </div>
       </div>
 
@@ -154,30 +163,46 @@ export const DealsPage: React.FC = () => {
               <div key={p.id} className="shrink-0 flex items-center gap-0.5">
                 <button
                   onClick={() => setActivePipelineId(p.id)}
-                  className={`flex items-center gap-2 px-3 py-1.5 rounded-l-lg text-xs font-bold transition-all border border-r-0 ${
+                  className={`flex items-center gap-2 px-3 py-1.5 text-xs font-bold transition-all border ${
+                    isAdmin ? 'rounded-l-lg border-r-0' : 'rounded-lg'
+                  } ${
                     activePipelineId === p.id
                       ? 'bg-indigo-600/20 border-indigo-500/40 text-indigo-300'
                       : 'bg-slate-950 border-white/5 text-slate-400 hover:text-slate-200 hover:border-white/10'
                   }`}
                 >
                   {p.name}
-                  {p.is_default && (
+                  {p.team && (
+                    <span
+                      className="inline-flex items-center gap-1 text-[8px] font-black uppercase tracking-widest px-1.5 py-0.5 rounded"
+                      style={{
+                        backgroundColor: p.team.color + '28',
+                        color: p.team.color,
+                      }}
+                    >
+                      <Users size={8} />
+                      {p.team.name}
+                    </span>
+                  )}
+                  {p.is_default && isAdmin && (
                     <span className="text-[8px] font-black uppercase tracking-widest opacity-50 bg-indigo-500/20 px-1 rounded">
                       principal
                     </span>
                   )}
                 </button>
-                <button
-                  onClick={() => setSettingsPipeline(p)}
-                  title="Configurar etapas"
-                  className={`flex items-center justify-center px-2 py-1.5 rounded-r-lg text-xs transition-all border ${
-                    activePipelineId === p.id
-                      ? 'bg-indigo-600/20 border-indigo-500/40 text-indigo-400 hover:bg-indigo-600/30'
-                      : 'bg-slate-950 border-white/5 text-slate-600 hover:text-slate-300 hover:border-white/10'
-                  }`}
-                >
-                  <Settings2 size={11} />
-                </button>
+                {isAdmin && (
+                  <button
+                    onClick={() => setSettingsPipeline(p)}
+                    title="Configurar etapas"
+                    className={`flex items-center justify-center px-2 py-1.5 rounded-r-lg text-xs transition-all border ${
+                      activePipelineId === p.id
+                        ? 'bg-indigo-600/20 border-indigo-500/40 text-indigo-400 hover:bg-indigo-600/30'
+                        : 'bg-slate-950 border-white/5 text-slate-600 hover:text-slate-300 hover:border-white/10'
+                    }`}
+                  >
+                    <Settings2 size={11} />
+                  </button>
+                )}
               </div>
             ))}
 
@@ -352,17 +377,23 @@ export const DealsPage: React.FC = () => {
         </div>
       )}
 
-      {/* Empty — no pipelines configured */}
+      {/* Empty — sin pipelines visibles */}
       {!isLoading && !isError && pipelines.length === 0 && (
-        <div className="flex flex-col items-center justify-center py-32 gap-4 opacity-60">
-          <BarChart3 size={48} className="text-slate-600" />
-          <p className="text-slate-400 font-bold">
-            No hay pipelines configurados
-          </p>
-          <p className="text-[11px] text-slate-500">
-            Crea un pipeline desde Configuración para comenzar.
-          </p>
-        </div>
+        isAdmin ? (
+          <EmptyState
+            icon={FolderOpen}
+            title="No hay pipelines configurados"
+            description="Crea tu primer pipeline para comenzar a gestionar oportunidades de venta."
+            actionLabel="Nuevo Pipeline"
+            onAction={handleCreatePipeline}
+          />
+        ) : (
+          <EmptyState
+            icon={Users}
+            title="Sin pipeline asignado"
+            description="Tu equipo aún no tiene un pipeline asignado. Contacta a tu administrador para que configure el acceso."
+          />
+        )
       )}
 
       {/* Kanban Board */}
@@ -371,7 +402,7 @@ export const DealsPage: React.FC = () => {
           <DealsKanban
             kanbanData={kanbanData}
             onDealClick={handleDealClick}
-            onEditStage={(stage) => setEditingStage(stage)}
+            onEditStage={isAdmin ? (stage) => setEditingStage(stage) : undefined}
           />
         </div>
       )}
