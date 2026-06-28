@@ -7,8 +7,8 @@ export type CustomFieldType =
   | "url";
 
 export interface CustomField {
-  business_id: string;
-  created_at: string;
+  businessId: string;
+  createdAt: string;
   entity_type: "contact" | "company";
   id: string;
   is_active: boolean;

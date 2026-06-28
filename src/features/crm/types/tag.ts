@@ -1,10 +1,10 @@
 export interface Tag {
-  business_id: string;
+  businessId: string;
   color: string;
-  created_at: string;
+  createdAt: string;
   description: string | null;
   id: string;
   name: string;
-  updated_at: string;
+  updatedAt: string;
   entity_type: string;
 }

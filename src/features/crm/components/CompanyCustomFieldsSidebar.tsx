@@ -23,7 +23,7 @@ export const CompanyCustomFieldsSidebar: React.FC<CompanyCustomFieldsSidebarProp
   const navigate = useNavigate();
 
   useEffect(() => {
-    setValues(company?.custom_fields ?? {});
+    setValues(company?.customFields ?? {});
   }, [company, open]);
 
   const activeFields = fields.filter((f) => f.is_active);
@@ -32,7 +32,7 @@ export const CompanyCustomFieldsSidebar: React.FC<CompanyCustomFieldsSidebarProp
     if (!company) return;
     await updateMutation.mutateAsync({
       id: company.id,
-      input: { custom_fields: values },
+      input: { customFields: values },
     });
     onClose();
   };

@@ -32,15 +32,15 @@ function defaultFormData(): CompanyFormData {
   return {
     name: "",
     identification: "",
-    tax_type: "RUC",
+    taxType: "RUC",
     website: "",
-    employee_range: "",
+    employeeRange: "",
     description: "",
-    industry_id: "",
-    lifecycle_stage_id: "",
-    owner_id: "",
-    tag_ids: [],
-    custom_fields: {},
+    industryId: "",
+    lifecycleStageId: "",
+    ownerId: "",
+    tagIds: [],
+    customFields: {},
   };
 }
 
@@ -48,15 +48,15 @@ function formDataFromCompany(c: Company): CompanyFormData {
   return {
     name: c.name,
     identification: c.identification ?? "",
-    tax_type: c.tax_type ?? "RUC",
+    taxType: c.taxType ?? "RUC",
     website: c.website ?? "",
-    employee_range: c.employee_range ?? "",
+    employeeRange: c.employeeRange ?? "",
     description: c.description ?? "",
-    industry_id: c.industry_id ?? "",
-    lifecycle_stage_id: c.lifecycle_stage_id ?? "",
-    owner_id: c.owner_id ?? "",
-    tag_ids: (c.tags ?? []).map((t) => t.id),
-    custom_fields: c.custom_fields ?? {},
+    industryId: c.industryId ?? "",
+    lifecycleStageId: c.lifecycleStageId ?? "",
+    ownerId: c.ownerId ?? "",
+    tagIds: (c.tags ?? []).map((t) => t.id),
+    customFields: c.customFields ?? {},
   };
 }
 
@@ -98,16 +98,16 @@ export const CompanyFormSidebar: React.FC<CompanyFormSidebarProps> = ({
     const payload = {
       name: formData.name,
       identification: formData.identification || undefined,
-      tax_type: formData.tax_type || undefined,
+      taxType: formData.taxType || undefined,
       website: formData.website || undefined,
-      employee_range: formData.employee_range || undefined,
+      employeeRange: formData.employeeRange || undefined,
       description: formData.description || undefined,
-      industry_id: formData.industry_id || undefined,
-      lifecycle_stage_id: formData.lifecycle_stage_id || undefined,
-      owner_id: formData.owner_id || undefined,
-      tag_ids: formData.tag_ids,
-      custom_fields: Object.keys(formData.custom_fields).length > 0
-        ? formData.custom_fields
+      industryId: formData.industryId || undefined,
+      lifecycleStageId: formData.lifecycleStageId || undefined,
+      ownerId: formData.ownerId || undefined,
+      tagIds: formData.tagIds,
+      customFields: Object.keys(formData.customFields).length > 0
+        ? formData.customFields
         : undefined,
     };
 
@@ -206,8 +206,8 @@ export const CompanyFormSidebar: React.FC<CompanyFormSidebarProps> = ({
                       <div className="w-1/3">
                         <Select
                           options={taxTypeOptions}
-                          value={formData.tax_type}
-                          onChange={(v) => set({ tax_type: v ?? "RUC" })}
+                          value={formData.taxType}
+                          onChange={(v) => set({ taxType: v ?? "RUC" })}
                           label="Tipo"
                         />
                       </div>
@@ -232,8 +232,8 @@ export const CompanyFormSidebar: React.FC<CompanyFormSidebarProps> = ({
                     <Select
                       label="Rango de empleados"
                       options={employeeRangeOptions}
-                      value={formData.employee_range || null}
-                      onChange={(v) => set({ employee_range: v ?? "" })}
+                      value={formData.employeeRange || null}
+                      onChange={(v) => set({ employeeRange: v ?? "" })}
                       clearable
                       clearLabel="Sin definir"
                       placeholder="Selecciona el tamaño"
@@ -243,8 +243,8 @@ export const CompanyFormSidebar: React.FC<CompanyFormSidebarProps> = ({
                       <Select
                         label="Industria"
                         options={industryOptions}
-                        value={formData.industry_id || null}
-                        onChange={(v) => set({ industry_id: v ?? "" })}
+                        value={formData.industryId || null}
+                        onChange={(v) => set({ industryId: v ?? "" })}
                         clearable
                         clearLabel="Sin industria"
                         placeholder="Selecciona una industria"
@@ -255,8 +255,8 @@ export const CompanyFormSidebar: React.FC<CompanyFormSidebarProps> = ({
                       <Select
                         label="Propietario de la empresa"
                         options={ownerOptions}
-                        value={formData.owner_id || null}
-                        onChange={(v) => set({ owner_id: v ?? "" })}
+                        value={formData.ownerId || null}
+                        onChange={(v) => set({ ownerId: v ?? "" })}
                         clearable
                         clearLabel="Sin propietario"
                         placeholder="Asignar a un usuario..."
@@ -277,9 +277,9 @@ export const CompanyFormSidebar: React.FC<CompanyFormSidebarProps> = ({
                         <button
                           key={s.id}
                           type="button"
-                          onClick={() => set({ lifecycle_stage_id: s.id })}
+                          onClick={() => set({ lifecycleStageId: s.id })}
                           className={`flex items-center gap-2 p-3 rounded-xl border text-left transition-all ${
-                            formData.lifecycle_stage_id === s.id
+                            formData.lifecycleStageId === s.id
                               ? "bg-primary/10 border-primary text-white shadow-lg shadow-primary/10"
                               : "bg-slate-950/30 border-white/5 text-slate-400 hover:border-white/20"
                           }`}
@@ -300,16 +300,16 @@ export const CompanyFormSidebar: React.FC<CompanyFormSidebarProps> = ({
                   </div>
                   <div className="flex flex-wrap gap-2">
                     {availableTags.map((tag) => {
-                      const isSelected = formData.tag_ids.includes(tag.id);
+                      const isSelected = formData.tagIds.includes(tag.id);
                       return (
                         <button
                           key={tag.id}
                           type="button"
                           onClick={() => {
                             const next = isSelected
-                              ? formData.tag_ids.filter((id) => id !== tag.id)
-                              : [...formData.tag_ids, tag.id];
-                            set({ tag_ids: next });
+                              ? formData.tagIds.filter((id) => id !== tag.id)
+                              : [...formData.tagIds, tag.id];
+                            set({ tagIds: next });
                           }}
                           className={`flex items-center gap-1.5 px-3 py-1.5 rounded-full border transition-all ${
                             isSelected

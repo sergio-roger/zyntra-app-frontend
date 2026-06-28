@@ -32,8 +32,8 @@ const OP_LABELS: Record<string, string> = {
 };
 
 function conditionSummary(c: SegmentCondition, stages: any[]) {
-  const field = c.field.startsWith("custom_fields.")
-    ? c.field.replace("custom_fields.", "")
+  const field = c.field.startsWith("customFields.")
+    ? c.field.replace("customFields.", "")
     : (FIELD_LABELS[c.field] ?? c.field);
   const op = OP_LABELS[c.operator] ?? c.operator;
   let value = "";

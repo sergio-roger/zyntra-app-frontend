@@ -5,15 +5,15 @@ export type TaskPriority = "low" | "medium" | "high";
 
 export interface CrmTask {
   assigned_to: string | null;
-  business_id: string;
+  businessId: string;
   contact_id: string | null;
   contact?: Contact;
-  created_at: string;
+  createdAt: string;
   description: string | null;
   due_date: string;
   id: string;
   priority: TaskPriority;
   status: TaskStatus;
   title: string;
-  updated_at: string;
+  updatedAt: string;
 }

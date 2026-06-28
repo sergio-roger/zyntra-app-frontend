@@ -125,10 +125,10 @@ export const ConditionBuilder: React.FC<ConditionBuilderProps> = ({
       ) : (
         <div className="space-y-1">
           {conditions.map((cond, index) => {
-            const isCustomField = cond.field.startsWith("custom_fields.");
+            const isCustomField = cond.field.startsWith("customFields.");
             const selectedCustomField = isCustomField
               ? customFields.find(
-                  (cf) => `custom_fields.${cf.name}` === cond.field,
+                  (cf) => `customFields.${cf.name}` === cond.field,
                 )
               : null;
             const hideValue =
@@ -180,7 +180,7 @@ export const ConditionBuilder: React.FC<ConditionBuilderProps> = ({
                           {customFields.map((cf) => (
                             <option
                               key={cf.id}
-                              value={`custom_fields.${cf.name}`}
+                              value={`customFields.${cf.name}`}
                             >
                               {cf.label}
                             </option>

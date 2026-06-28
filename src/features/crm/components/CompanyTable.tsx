@@ -22,7 +22,7 @@ const formatDate = (iso: string | null | undefined) => {
 };
 
 const getCustomFieldValue = (c: Company, colKey: string) => {
-  const val = c.custom_fields?.[colKey];
+  const val = c.customFields?.[colKey];
   if (val === undefined || val === null || val === "") return <span className="text-slate-600">—</span>;
   if (typeof val === "boolean") {
     return (
@@ -56,7 +56,7 @@ const RENDERERS: Record<
       {c.name}
     </button>
   ),
-  tax_type: (c) => <span className="text-slate-300">{c.tax_type ?? "—"}</span>,
+  taxType: (c) => <span className="text-slate-300">{c.taxType ?? "—"}</span>,
   identification: (c) => <span className="text-slate-300">{c.identification ?? "—"}</span>,
   website: (c) => (
     c.website ? (
@@ -78,9 +78,9 @@ const RENDERERS: Record<
   ),
   employeeRange: (c) => (
     <span className="text-slate-300">
-      {c.employee_range ? (
+      {c.employeeRange ? (
         <span className="inline-flex items-center gap-1.5 rounded-full border border-slate-700/50 bg-slate-800/50 px-2.5 py-0.5 text-xs">
-          {c.employee_range}
+          {c.employeeRange}
         </span>
       ) : (
         <span className="text-slate-600">—</span>
@@ -152,7 +152,7 @@ const RENDERERS: Record<
     </div>
   ),
   createdAt: (c) => (
-    <span className="text-slate-400">{formatDate(c.created_at)}</span>
+    <span className="text-slate-400">{formatDate(c.createdAt)}</span>
   ),
 };
 

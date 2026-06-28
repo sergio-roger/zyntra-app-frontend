@@ -21,7 +21,7 @@ export const CustomFieldConditionBuilder: React.FC<
     const first = activeFields[0];
     onChange([
       ...conditions,
-      { field: `custom_fields.${first.name}`, operator: "equals", value: "" },
+      { field: `customFields.${first.name}`, operator: "equals", value: "" },
     ]);
   };
 
@@ -38,7 +38,7 @@ export const CustomFieldConditionBuilder: React.FC<
   };
 
   const fieldOptions = activeFields.map((f) => ({
-    value: `custom_fields.${f.name}`,
+    value: `customFields.${f.name}`,
     label: f.label,
   }));
 
@@ -63,7 +63,7 @@ export const CustomFieldConditionBuilder: React.FC<
       </div>
 
       {conditions.map((cond, i) => {
-        const fieldName = cond.field.replace("custom_fields.", "");
+        const fieldName = cond.field.replace("customFields.", "");
         const cf = activeFields.find((f) => f.name === fieldName);
         const hideValue =
           cond.operator === "is_empty" || cond.operator === "is_not_empty";

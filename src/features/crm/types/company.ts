@@ -5,44 +5,44 @@ import { CrmMember } from "./crm-member";
 
 export interface Company {
   id: string;
-  business_id: string;
+  businessId: string;
   name: string;
   identification: string | null;
-  tax_type: string | null;
+  taxType: string | null;
   website: string | null;
-  employee_range: string | null;
+  employeeRange: string | null;
   description: string | null;
-  industry_id: string | null;
+  industryId: string | null;
   industry: Industry | null;
-  owner_id: string | null;
+  ownerId: string | null;
   owner: CrmMember | null;
-  lifecycle_stage_id: string | null;
+  lifecycleStageId: string | null;
   lifecycle_stage: LifecycleStage | null;
   tags: Tag[];
-  custom_fields: Record<string, any> | null;
-  created_at: string;
-  updated_at: string;
+  customFields: Record<string, any> | null;
+  createdAt: string;
+  updatedAt: string;
 }
 
 export interface CompanyFormData {
   name: string;
   identification: string;
-  tax_type: string;
+  taxType: string;
   website: string;
-  employee_range: string;
+  employeeRange: string;
   description: string;
-  industry_id: string;
-  lifecycle_stage_id: string;
-  owner_id: string;
-  tag_ids: string[];
-  custom_fields: Record<string, any>;
+  industryId: string;
+  lifecycleStageId: string;
+  ownerId: string;
+  tagIds: string[];
+  customFields: Record<string, any>;
 }
 
 export interface ListCompaniesQuery {
   search?: string;
-  industry_id?: string;
-  lifecycle_stage_id?: string;
-  owner_id?: string;
+  industryId?: string;
+  lifecycleStageId?: string;
+  ownerId?: string;
   createdAtFrom?: string;
   createdAtTo?: string;
   page?: number;

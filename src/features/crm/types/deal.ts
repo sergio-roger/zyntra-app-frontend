@@ -7,11 +7,11 @@ export type DealStatus = "open" | "won" | "lost" | "abandoned";
 export interface Deal {
   assigned_to_id: string | null;
   assigned_to?: any;
-  business_id: string;
+  businessId: string;
   closed_at: string | null;
   contact_id: string;
   contact?: Contact;
-  created_at: string;
+  createdAt: string;
   currency: string;
   description: string | null;
   expected_close_date: string | null;
@@ -25,6 +25,6 @@ export interface Deal {
   team_id: string | null;
   team?: any;
   title: string;
-  updated_at: string;
+  updatedAt: string;
   value: number;
 }

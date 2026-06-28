@@ -68,8 +68,8 @@ export const CompanyListPage: React.FC = () => {
 
   const query = useCompaniesList({
     search: filters.search || undefined,
-    industry_id: filters.industryId || undefined,
-    lifecycle_stage_id: filters.lifecycleStageId || undefined,
+    industryId: filters.industryId || undefined,
+    lifecycleStageId: filters.lifecycleStageId || undefined,
     createdAtFrom: filters.createdAtFrom || undefined,
     createdAtTo: filters.createdAtTo || undefined,
     page: filters.page,
@@ -228,8 +228,8 @@ export const CompanyListPage: React.FC = () => {
         total={query.data?.total ?? 0}
         queryParams={{
           search: filters.search || undefined,
-          industry_id: filters.industryTypeId || undefined,
-          lifecycle_stage_id: filters.lifecycleStageId || undefined,
+          industryId: filters.industryTypeId || undefined,
+          lifecycleStageId: filters.lifecycleStageId || undefined,
           createdAtFrom: filters.createdAtFrom || undefined,
           createdAtTo: filters.createdAtTo || undefined,
         }}

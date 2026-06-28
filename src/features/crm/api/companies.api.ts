@@ -18,23 +18,23 @@ const buildQS = (q: Record<string, unknown>): string => {
 
 const mapCompany = (raw: any): Company => ({
   id: raw.id,
-  business_id: raw.business_id,
+  businessId: raw.businessId,
   name: raw.name,
   identification: raw.identification ?? null,
-  tax_type: raw.tax_type ?? null,
+  taxType: raw.taxType ?? null,
   website: raw.website ?? null,
-  employee_range: raw.employee_range ?? null,
+  employeeRange: raw.employeeRange ?? null,
   description: raw.description ?? null,
-  industry_id: raw.industry_id ?? null,
+  industryId: raw.industryId ?? null,
   industry: raw.industry ?? null,
-  owner_id: raw.owner_id ?? null,
+  ownerId: raw.ownerId ?? null,
   owner: raw.owner ?? null,
-  lifecycle_stage_id: raw.lifecycle_stage_id ?? null,
+  lifecycleStageId: raw.lifecycleStageId ?? null,
   lifecycle_stage: raw.lifecycle_stage ?? null,
   tags: raw.tags ?? [],
-  custom_fields: raw.custom_fields ?? null,
-  created_at: raw.created_at,
-  updated_at: raw.updated_at,
+  customFields: raw.customFields ?? null,
+  createdAt: raw.createdAt,
+  updatedAt: raw.updatedAt,
 });
 
 const mapList = (raw: any): CompaniesListResponse => ({
@@ -84,7 +84,7 @@ export const companiesApi = {
       { responseType: "blob" },
     ),
 
-  import: (rows: Array<{ name: string; identification?: string; website?: string; employee_range?: string; description?: string }>) =>
+  import: (rows: Array<{ name: string; identification?: string; website?: string; employeeRange?: string; description?: string }>) =>
     api.post<unknown, { data: { count: number } }>("/crm/companies/import", rows),
 
   listIndustries: () =>

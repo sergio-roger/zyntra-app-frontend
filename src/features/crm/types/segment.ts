@@ -1,11 +1,11 @@
 import { SegmentCondition } from "./segment-condition";
 
 export interface Segment {
-  business_id: string;
+  businessId: string;
   conditions: SegmentCondition[];
-  created_at: string;
+  createdAt: string;
   description: string | null;
   id: string;
   name: string;
-  updated_at: string;
+  updatedAt: string;
 }

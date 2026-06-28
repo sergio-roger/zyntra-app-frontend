@@ -66,7 +66,7 @@ const makeStage = (
 
 const makeDeal = (overrides: Partial<Deal> = {}): Deal => ({
   id: "deal-1",
-  business_id: "biz-1",
+  businessId: "biz-1",
   title: "Test Deal",
   description: null,
   value: 1000,
@@ -81,8 +81,8 @@ const makeDeal = (overrides: Partial<Deal> = {}): Deal => ({
   expected_close_date: null,
   probability: 10,
   closed_at: null,
-  created_at: new Date().toISOString(),
-  updated_at: new Date().toISOString(),
+  createdAt: new Date().toISOString(),
+  updatedAt: new Date().toISOString(),
   ...overrides,
 });
 
@@ -103,11 +103,11 @@ const makePipeline = (): DealPipeline => ({
   is_default: true,
   position: 0,
   stages: [stageA, stageB],
-  business_id: "biz-1",
+  businessId: "biz-1",
   team_id: null,
   deleted_at: null,
-  created_at: new Date().toISOString(),
-  updated_at: new Date().toISOString(),
+  createdAt: new Date().toISOString(),
+  updatedAt: new Date().toISOString(),
 });
 
 const makeKanbanData = (dealStageId = "stage-prospección"): KanbanResponse => ({

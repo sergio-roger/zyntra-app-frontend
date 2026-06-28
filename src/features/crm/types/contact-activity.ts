@@ -11,7 +11,7 @@ export type ActivityCreatedBy = "system" | "user" | "ai";
 export interface ContactActivity {
   contact_id: string;
   content: string;
-  created_at: string;
+  createdAt: string;
   created_by: ActivityCreatedBy;
   id: string;
   metadata: Record<string, unknown>;
