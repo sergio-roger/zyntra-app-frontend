@@ -18,9 +18,9 @@ const STANDARD_COLUMNS: ExportCompanyColumn[] = [
   { key: "name", label: "Nombre" },
   { key: "identification", label: "RUC / Identificación" },
   { key: "website", label: "Sitio web" },
-  { key: "sector_type", label: "Sector" },
-  { key: "lifecycle_stage", label: "Etapa del ciclo" },
-  { key: "num_employees", label: "Empleados" },
+  { key: "industry", label: "Industria" },
+  { key: "lifecycleStage", label: "Etapa del ciclo" },
+  { key: "employeeRange", label: "Empleados" },
   { key: "tags", label: "Etiquetas" },
   { key: "description", label: "Descripción" },
   { key: "createdAt", label: "Fecha de registro" },
@@ -94,7 +94,7 @@ export const CompanyExportModal: React.FC<CompanyExportModalProps> = ({
     try {
       const filters: Record<string, unknown> = {};
       if (queryParams.search) filters.search = queryParams.search;
-      if (queryParams.sector_type_id) filters.sector_type_id = queryParams.sector_type_id;
+      if (queryParams.industryId) filters.industryId = queryParams.industryId;
       if (queryParams.lifecycleStageId) filters.lifecycleStageId = queryParams.lifecycleStageId;
       if (queryParams.createdAtFrom) filters.createdAtFrom = queryParams.createdAtFrom;
       if (queryParams.createdAtTo) filters.createdAtTo = queryParams.createdAtTo;
