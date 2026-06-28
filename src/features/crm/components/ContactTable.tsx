@@ -1,6 +1,7 @@
 import { DEFAULT_COLUMNS } from '@crm/constants/contact-columns';
 import { Contact } from '@crm/types/contact';
 import { EmptyState } from '@shared/components/EmptyState';
+import { OwnerDisplay } from '@shared/components/OwnerDisplay';
 import { ColumnConfig } from '@shared/types/column';
 import { Pencil, Settings2, Trash2, User } from 'lucide-react';
 import React from 'react';
@@ -77,11 +78,7 @@ const RENDERERS: Record<
     );
   },
   source: (c) => <SourceBadge source={c.source} />,
-  owner: (c) => (
-    <span className="text-slate-300">
-      {c.owner ? c.owner.name : <span className="text-slate-600">—</span>}
-    </span>
-  ),
+  owner: (c) => <OwnerDisplay owner={c.owner} />,
   notes: (c) => (
     <span
       className="text-slate-400 text-xs block max-w-[220px] truncate"

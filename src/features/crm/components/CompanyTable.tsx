@@ -1,6 +1,7 @@
 import { DEFAULT_COMPANY_COLUMNS } from '@crm/constants/company-columns';
 import { Company } from '@crm/types/company';
 import { EmptyState } from '@shared/components/EmptyState';
+import { OwnerDisplay } from '@shared/components/OwnerDisplay';
 import { ColumnConfig } from '@shared/types/column';
 import { Building2, ExternalLink, Pencil, Settings2, Trash2 } from 'lucide-react';
 import React from 'react';
@@ -87,20 +88,7 @@ const RENDERERS: Record<
       )}
     </span>
   ),
-  owner: (c) => (
-    <span className="text-slate-300">
-      {c.owner ? (
-        <div className="flex items-center gap-2">
-          <div className="flex h-5 w-5 shrink-0 items-center justify-center rounded-full bg-slate-800 text-[10px] font-medium text-slate-300 ring-1 ring-slate-700">
-            {c.owner.name.charAt(0).toUpperCase()}
-          </div>
-          <span className="truncate text-xs">{c.owner.name}</span>
-        </div>
-      ) : (
-        <span className="text-slate-600">—</span>
-      )}
-    </span>
-  ),
+  owner: (c) => <OwnerDisplay owner={c.owner} />,
   industry: (c) => (
     c.industry ? (
       <span className="inline-flex items-center rounded-md border border-slate-700 bg-slate-800 px-2 py-0.5 text-[10px] font-medium text-slate-300">
