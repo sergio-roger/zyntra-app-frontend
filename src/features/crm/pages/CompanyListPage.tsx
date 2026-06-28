@@ -392,8 +392,8 @@ export const CompanyListPage: React.FC = () => {
         customFields={customFields}
         currentConfig={currentColumnConfig}
         defaultColumns={DEFAULT_COMPANY_COLUMNS}
-        onSave={(newConfig) => {
-          updatePreferenceMutation.mutate({
+        onSave={async (newConfig) => {
+          await updatePreferenceMutation.mutateAsync({
             key: 'companies_table_columns',
             value: newConfig,
           });

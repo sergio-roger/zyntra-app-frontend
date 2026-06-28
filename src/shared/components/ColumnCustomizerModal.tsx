@@ -62,14 +62,13 @@ const SortableItem: React.FC<SortableItemProps> = ({ col, onToggleVisible }) => 
           : 'hover:bg-slate-800/60'
       }`}
     >
-      <button
-        type="button"
-        className="cursor-grab p-1 hover:bg-white/5 rounded text-slate-500 hover:text-slate-300 active:cursor-grabbing touch-none"
+      <div
+        className="cursor-grab p-1 hover:bg-white/5 rounded text-slate-500 hover:text-slate-300 active:cursor-grabbing touch-none select-none"
         {...attributes}
         {...listeners}
       >
         <GripVertical size={16} />
-      </button>
+      </div>
 
       <label className="flex items-center gap-3 flex-1 cursor-pointer select-none">
         <input
@@ -110,7 +109,6 @@ export const ColumnCustomizerModal: React.FC<ColumnCustomizerModalProps> = ({
 }) => {
   const [config, setConfig] = useState<ColumnConfig[]>([]);
 
-  // Align currentConfig with customFields (add any new custom fields as invisible columns by default)
   useEffect(() => {
     if (!isOpen) return;
 
@@ -126,10 +124,8 @@ export const ColumnCustomizerModal: React.FC<ColumnCustomizerModalProps> = ({
         })),
     ];
 
-    // Map existing configuration, keeping their order and visibility
     const newConfig: ColumnConfig[] = [];
 
-    // First add active config columns if they are still available
     currentConfig.forEach((saved) => {
       const match = allAvailable.find((avail) => avail.key === saved.key);
       if (match) {
@@ -141,7 +137,6 @@ export const ColumnCustomizerModal: React.FC<ColumnCustomizerModalProps> = ({
       }
     });
 
-    // Then append any newly created custom fields or missing default fields that aren't in config yet
     allAvailable.forEach((avail) => {
       const alreadyAdded = newConfig.some((c) => c.key === avail.key);
       if (!alreadyAdded) {
@@ -153,7 +148,11 @@ export const ColumnCustomizerModal: React.FC<ColumnCustomizerModalProps> = ({
   }, [isOpen, currentConfig, customFields]);
 
   const sensors = useSensors(
-    useSensor(PointerSensor),
+    useSensor(PointerSensor, {
+      activationConstraint: {
+        distance: 5,
+      },
+    }),
     useSensor(KeyboardSensor, {
       coordinateGetter: sortableKeyboardCoordinates,
     }),
