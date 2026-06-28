@@ -13,6 +13,8 @@ import {
   Search,
   Users,
   X,
+  ChevronDown,
+  ChevronUp,
 } from 'lucide-react';
 import { TAX_TYPE_OPTIONS, EMPLOYEE_RANGE_OPTIONS } from '@crm/constants/company-options';
 
@@ -68,15 +70,44 @@ export const DealCompanySearch: React.FC<DealCompanySearchProps> = ({
 
   const industryOptions = industries.map((i) => ({ value: i.id, label: i.name }));
 
+  const [selectedIndex, setSelectedIndex] = useState(-1);
+
   useEffect(() => {
-    const handler = (e: MouseEvent) => {
-      if (!containerRef.current?.contains(e.target as Node)) {
-        setDropdownOpen(false);
-      }
+    setSelectedIndex(-1);
+  }, [results.length, dropdownOpen]);
+
+  useEffect(() => {
+    const onKey = (e: KeyboardEvent) => {
+      if (e.key === 'Escape') setDropdownOpen(false);
     };
-    document.addEventListener('mousedown', handler);
-    return () => document.removeEventListener('mousedown', handler);
+    document.addEventListener('keydown', onKey);
+    return () => document.removeEventListener('keydown', onKey);
   }, []);
+
+  const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
+    if (!dropdownOpen) {
+      if (e.key === 'ArrowDown' || e.key === 'Enter') {
+        e.preventDefault();
+        setDropdownOpen(true);
+      }
+      return;
+    }
+
+    if (e.key === 'ArrowDown') {
+      e.preventDefault();
+      setSelectedIndex((prev) => (prev < results.length - 1 ? prev + 1 : prev));
+    } else if (e.key === 'ArrowUp') {
+      e.preventDefault();
+      setSelectedIndex((prev) => (prev > 0 ? prev - 1 : prev));
+    } else if (e.key === 'Enter') {
+      e.preventDefault();
+      if (selectedIndex >= 0 && selectedIndex < results.length) {
+        handleSelect(results[selectedIndex]);
+      }
+    } else if (e.key === 'Escape') {
+      setDropdownOpen(false);
+    }
+  };
 
   const handleSelect = (c: Company) => {
     onChange(c.id, c);
@@ -228,8 +259,16 @@ export const DealCompanySearch: React.FC<DealCompanySearchProps> = ({
               value={search}
               onChange={(e) => setSearch(e.target.value)}
               onFocus={() => setDropdownOpen(true)}
-              className="w-full bg-slate-950/50 border border-white/10 rounded-xl py-2.5 pl-9 pr-4 text-sm text-white placeholder-slate-500 focus:outline-none focus:border-indigo-500/40 transition-all"
+              onKeyDown={handleKeyDown}
+              className="w-full bg-slate-950/50 border border-white/10 rounded-xl py-2.5 pl-9 pr-9 text-sm text-white placeholder-slate-500 focus:outline-none focus:border-indigo-500/40 transition-all"
             />
+            <button
+              type="button"
+              onClick={() => setDropdownOpen(!dropdownOpen)}
+              className="absolute right-2 top-1/2 -translate-y-1/2 p-1.5 text-slate-500 hover:text-white rounded-md transition-colors"
+            >
+              {dropdownOpen ? <ChevronUp size={14} /> : <ChevronDown size={14} />}
+            </button>
           </div>
 
           {dropdownOpen && (
@@ -243,12 +282,14 @@ export const DealCompanySearch: React.FC<DealCompanySearchProps> = ({
                 </div>
               ) : (
                 <ul className="py-1">
-                  {results.map((c) => (
+                  {results.map((c, index) => (
                     <li key={c.id}>
                       <button
                         type="button"
                         onClick={() => handleSelect(c)}
-                        className="w-full text-left px-4 py-2.5 hover:bg-white/5 transition-colors flex items-center gap-3"
+                        className={`w-full text-left px-4 py-2.5 transition-colors flex items-center gap-3 ${
+                          index === selectedIndex ? 'bg-indigo-500/20' : 'hover:bg-white/5'
+                        }`}
                       >
                         <div className="w-7 h-7 rounded-md bg-slate-800 border border-white/5 flex items-center justify-center shrink-0">
                           <Building2 size={13} className="text-slate-400" />

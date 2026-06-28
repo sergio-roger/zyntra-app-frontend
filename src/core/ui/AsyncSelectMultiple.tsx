@@ -1,5 +1,5 @@
-import React, { useCallback, useEffect, useRef, useState } from 'react';
 import { Check, ChevronDown, Loader2, LucideIcon, Search, X } from 'lucide-react';
+import React, { useCallback, useEffect, useRef, useState } from 'react';
 
 export interface AsyncLoadResult<TItem> {
   items: TItem[];
@@ -54,25 +54,16 @@ export function AsyncSelectMultiple<TItem>({
   const listRef = useRef<HTMLDivElement>(null);
   const debounceRef = useRef<ReturnType<typeof setTimeout> | null>(null);
 
-  // Close on outside click or Escape
   useEffect(() => {
-    const onMouse = (e: MouseEvent) => {
-      if (containerRef.current && !containerRef.current.contains(e.target as Node)) {
-        setOpen(false);
-      }
-    };
     const onKey = (e: KeyboardEvent) => {
       if (e.key === 'Escape') setOpen(false);
     };
-    document.addEventListener('mousedown', onMouse);
     document.addEventListener('keydown', onKey);
     return () => {
-      document.removeEventListener('mousedown', onMouse);
       document.removeEventListener('keydown', onKey);
     };
   }, []);
 
-  // Reset focused index when items change
   useEffect(() => {
     setFocusedIndex(-1);
   }, [items]);

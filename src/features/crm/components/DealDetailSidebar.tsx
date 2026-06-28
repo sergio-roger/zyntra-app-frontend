@@ -343,7 +343,7 @@ export const DealDetailSidebar: React.FC<DealDetailSidebarProps> = ({
 
         {/* Footer — only for Detalle tab */}
         {activeTab === 'detalle' && (
-          <div className="sticky bottom-0 bg-slate-900 p-6 border-t border-white/5 bg-slate-950/30 space-y-3">
+          <div className="sticky bottom-0 bg-slate-900 p-6 border-t border-white/5 space-y-3">
             <div className="flex gap-3">
               <button
                 type="button"

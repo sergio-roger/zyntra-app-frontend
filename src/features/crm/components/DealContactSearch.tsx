@@ -1,7 +1,7 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { useContactsList } from '@crm/hooks/useContacts';
 import { Contact } from '@crm/types/contact';
-import { Building2, Search, User, X } from 'lucide-react';
+import { Building2, Search, User, X, ChevronDown, ChevronUp } from 'lucide-react';
 
 interface DealContactSearchProps {
   value: string;
@@ -28,13 +28,36 @@ export const DealContactSearch: React.FC<DealContactSearchProps> = ({
   );
   const results = data?.items ?? [];
 
+  const [selectedIndex, setSelectedIndex] = useState(-1);
+
   useEffect(() => {
-    const handler = (e: MouseEvent) => {
-      if (!containerRef.current?.contains(e.target as Node)) setOpen(false);
-    };
-    document.addEventListener('mousedown', handler);
-    return () => document.removeEventListener('mousedown', handler);
-  }, []);
+    setSelectedIndex(-1);
+  }, [results.length, open]);
+
+  const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
+    if (!open) {
+      if (e.key === 'ArrowDown' || e.key === 'Enter') {
+        e.preventDefault();
+        setOpen(true);
+      }
+      return;
+    }
+
+    if (e.key === 'ArrowDown') {
+      e.preventDefault();
+      setSelectedIndex((prev) => (prev < results.length - 1 ? prev + 1 : prev));
+    } else if (e.key === 'ArrowUp') {
+      e.preventDefault();
+      setSelectedIndex((prev) => (prev > 0 ? prev - 1 : prev));
+    } else if (e.key === 'Enter') {
+      e.preventDefault();
+      if (selectedIndex >= 0 && selectedIndex < results.length) {
+        handleSelect(results[selectedIndex]);
+      }
+    } else if (e.key === 'Escape') {
+      setOpen(false);
+    }
+  };
 
   const handleSelect = (c: Contact) => {
     onChange(c.id, c);
@@ -94,8 +117,16 @@ export const DealContactSearch: React.FC<DealContactSearchProps> = ({
               value={search}
               onChange={(e) => setSearch(e.target.value)}
               onFocus={() => setOpen(true)}
-              className="w-full bg-slate-950/50 border border-white/10 rounded-xl py-2.5 pl-9 pr-4 text-sm text-white placeholder-slate-500 focus:outline-none focus:border-indigo-500/50 transition-all"
+              onKeyDown={handleKeyDown}
+              className="w-full bg-slate-950/50 border border-white/10 rounded-xl py-2.5 pl-9 pr-9 text-sm text-white placeholder-slate-500 focus:outline-none focus:border-indigo-500/50 transition-all"
             />
+            <button
+              type="button"
+              onClick={() => setOpen(!open)}
+              className="absolute right-2 top-1/2 -translate-y-1/2 p-1.5 text-slate-500 hover:text-white rounded-md transition-colors"
+            >
+              {open ? <ChevronUp size={14} /> : <ChevronDown size={14} />}
+            </button>
           </div>
 
           {open && (
@@ -106,12 +137,14 @@ export const DealContactSearch: React.FC<DealContactSearchProps> = ({
                 </p>
               ) : (
                 <ul className="py-1">
-                  {results.map((c) => (
+                  {results.map((c, index) => (
                     <li key={c.id}>
                       <button
                         type="button"
                         onClick={() => handleSelect(c)}
-                        className="w-full text-left px-4 py-2.5 hover:bg-white/5 transition-colors"
+                        className={`w-full text-left px-4 py-2.5 transition-colors ${
+                          index === selectedIndex ? 'bg-indigo-500/20' : 'hover:bg-white/5'
+                        }`}
                       >
                         <p className="text-sm font-medium text-white">{c.name}</p>
                         <div className="flex items-center gap-2 mt-0.5">

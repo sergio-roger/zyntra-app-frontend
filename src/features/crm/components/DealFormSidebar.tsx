@@ -216,7 +216,7 @@ export const DealFormSidebar: React.FC<DealFormSidebarProps> = ({
           </form>
 
           {/* Footer */}
-          <div className="sticky bottom-0 bg-slate-900 p-6 border-t border-white/5 bg-slate-950/30 flex gap-3">
+          <div className="sticky bottom-0 bg-slate-900 p-6 border-t border-white/5 flex gap-3">
             <button
               type="button"
               onClick={onClose}
