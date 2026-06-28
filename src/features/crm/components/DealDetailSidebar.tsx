@@ -142,7 +142,7 @@ export const DealDetailSidebar: React.FC<DealDetailSidebarProps> = ({
     currency: 'USD',
     pipelineId: '',
     stageId: '',
-    contactId: '',
+    contactIds: [],
     probability: 10,
     expectedCloseDate: '',
     description: '',
@@ -151,7 +151,7 @@ export const DealDetailSidebar: React.FC<DealDetailSidebarProps> = ({
     null,
   );
 
-  const [selectedContact, setSelectedContact] = useState<Contact | null>(null);
+  const [selectedContacts, setSelectedContacts] = useState<Contact[]>([]);
   const [selectedCompany, setSelectedCompany] = useState<Company | null>(null);
 
   const { data: pipelines = [] } = usePipelines();
@@ -173,7 +173,7 @@ export const DealDetailSidebar: React.FC<DealDetailSidebarProps> = ({
     const pipeline =
       deal.pipeline ?? pipelines.find((p) => p.id === deal.pipelineId) ?? null;
     setSelectedPipeline(pipeline);
-    setSelectedContact(deal.contact ?? null);
+    setSelectedContacts(deal.contact ? [deal.contact] : []);
     setSelectedCompany(null);
     setFormData({
       title: deal.title,
@@ -182,7 +182,7 @@ export const DealDetailSidebar: React.FC<DealDetailSidebarProps> = ({
       currency: deal.currency ?? 'USD',
       pipelineId: deal.pipelineId,
       stageId: deal.stageId,
-      contactId: deal.contactId,
+      contactIds: deal.contactId ? [deal.contactId] : [],
       companyId: deal.companyId ?? undefined,
       assignedToId: deal.assignedToId ?? undefined,
       teamId: deal.teamId ?? undefined,
@@ -305,10 +305,9 @@ export const DealDetailSidebar: React.FC<DealDetailSidebarProps> = ({
               <DealFormFields
                 formData={formData}
                 onChange={(patch) => setFormData({ ...formData, ...patch })}
-                selectedContact={selectedContact}
-                onContactChange={(id, contact) => {
-                  setFormData((f) => ({ ...f, contactId: id }));
-                  setSelectedContact(contact);
+                selectedContacts={selectedContacts}
+                onContactsChange={(contacts) => {
+                  setSelectedContacts(contacts);
                 }}
                 selectedCompany={selectedCompany}
                 onCompanyChange={(id, company) => {
@@ -358,7 +357,7 @@ export const DealDetailSidebar: React.FC<DealDetailSidebarProps> = ({
                 disabled={
                   isSaving ||
                   !formData.title ||
-                  !formData.contactId ||
+                  !formData.contactIds?.length ||
                   !formData.pipelineId ||
                   !formData.stageId
                 }

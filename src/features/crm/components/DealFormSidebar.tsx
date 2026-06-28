@@ -31,7 +31,7 @@ const emptyForm = (): CreateDealInput => ({
   currency: 'USD',
   pipelineId: '',
   stageId: '',
-  contactId: '',
+  contactIds: [],
   probability: 10,
   expectedCloseDate: '',
   description: '',
@@ -48,7 +48,7 @@ export const DealFormSidebar: React.FC<DealFormSidebarProps> = ({
   const [selectedPipeline, setSelectedPipeline] = useState<DealPipeline | null>(
     null,
   );
-  const [selectedContact, setSelectedContact] = useState<Contact | null>(null);
+  const [selectedContacts, setSelectedContacts] = useState<Contact[]>([]);
   const [selectedCompany, setSelectedCompany] = useState<Company | null>(null);
 
   const { data: pipelines = [] } = usePipelines();
@@ -70,7 +70,7 @@ export const DealFormSidebar: React.FC<DealFormSidebarProps> = ({
         pipelines.find((p) => p.id === deal.pipelineId) ??
         null;
       setSelectedPipeline(pipeline);
-      setSelectedContact(deal.contact ?? null);
+      setSelectedContacts(deal.contact ? [deal.contact] : []);
       setSelectedCompany(null);
       setFormData({
         title: deal.title,
@@ -79,7 +79,7 @@ export const DealFormSidebar: React.FC<DealFormSidebarProps> = ({
         currency: deal.currency || 'USD',
         pipelineId: deal.pipelineId,
         stageId: deal.stageId,
-        contactId: deal.contactId,
+        contactIds: deal.contactId ? [deal.contactId] : [],
         companyId: deal.companyId ?? undefined,
         assignedToId: deal.assignedToId ?? undefined,
         teamId: deal.teamId ?? undefined,
@@ -118,7 +118,7 @@ export const DealFormSidebar: React.FC<DealFormSidebarProps> = ({
         stageId: activeStage?.id ?? '',
         probability: activeStage?.probability_percent ?? 10,
       });
-      setSelectedContact(null);
+      setSelectedContacts([]);
       setSelectedCompany(null);
     }
   }, [deal, open, pipelines, defaultPipelineId, stageOverrideId]);
@@ -200,10 +200,9 @@ export const DealFormSidebar: React.FC<DealFormSidebarProps> = ({
             <DealFormFields
               formData={formData}
               onChange={(patch) => setFormData({ ...formData, ...patch })}
-              selectedContact={selectedContact}
-              onContactChange={(id, contact) => {
-                setFormData((f) => ({ ...f, contactId: id }));
-                setSelectedContact(contact);
+              selectedContacts={selectedContacts}
+              onContactsChange={(contacts) => {
+                setSelectedContacts(contacts);
               }}
               selectedCompany={selectedCompany}
               onCompanyChange={(id, company) => {
@@ -232,7 +231,7 @@ export const DealFormSidebar: React.FC<DealFormSidebarProps> = ({
               disabled={
                 isSaving ||
                 !formData.title ||
-                !formData.contactId ||
+                !formData.contactIds?.length ||
                 !formData.pipelineId ||
                 !formData.stageId
               }

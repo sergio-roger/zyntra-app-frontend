@@ -1,11 +1,13 @@
-import React from 'react';
+import React, { useCallback } from 'react';
 import { Input } from '@core/ui/Input';
 import { Select } from '@core/ui/Select';
 import { Textarea } from '@core/ui/Textarea';
-import { DealContactSearch } from '@crm/components/DealContactSearch';
+import { AsyncSelectMultiple } from '@core/ui/AsyncSelectMultiple';
 import { DealCompanySearch } from '@crm/components/DealCompanySearch';
+import { crmApi } from '@crm/api/crm.api';
 import { CreateDealInput } from '@crm/types/create-deal-input';
 import { Contact } from '@crm/types/contact';
+import { ContactsListResponse } from '@crm/types/contacts-list-response';
 import { Company } from '@crm/types/company';
 import { DealPipeline } from '@crm/types/deal-pipeline';
 import { DealPipelineStage } from '@crm/types/deal-pipeline-stage';
@@ -17,14 +19,14 @@ import {
   GitBranch,
   Layers,
   TrendingUp,
-  User,
+  Users,
 } from 'lucide-react';
 
 interface DealFormFieldsProps {
   formData: CreateDealInput;
   onChange: (patch: Partial<CreateDealInput>) => void;
-  selectedContact: Contact | null;
-  onContactChange: (id: string, contact: Contact | null) => void;
+  selectedContacts: Contact[];
+  onContactsChange: (contacts: Contact[]) => void;
   selectedCompany: Company | null;
   onCompanyChange: (id: string, company: Company | null) => void;
   pipelines: DealPipeline[];
@@ -78,8 +80,8 @@ const SectionHeader: React.FC<SectionHeaderProps> = ({
 export const DealFormFields: React.FC<DealFormFieldsProps> = ({
   formData,
   onChange,
-  selectedContact,
-  onContactChange,
+  selectedContacts,
+  onContactsChange,
   selectedCompany,
   onCompanyChange,
   pipelines,
@@ -87,6 +89,15 @@ export const DealFormFields: React.FC<DealFormFieldsProps> = ({
   onPipelineChange,
   onStageChange,
 }) => {
+  const loadContactOptions = useCallback(
+    async ({ search, page, limit }: { search: string; page: number; limit: number }) => {
+      const res = await crmApi.list({ search: search || undefined, page, limit });
+      const data = res.data as ContactsListResponse;
+      return { items: data.items, total: data.total, hasMore: data.page < data.totalPages };
+    },
+    [],
+  );
+
   const pipelineOptions = pipelines.map((p) => ({
     value: p.id,
     label: p.is_default ? `${p.name} ★` : p.name,
@@ -169,6 +180,29 @@ export const DealFormFields: React.FC<DealFormFieldsProps> = ({
         onChange={(e) => onChange({ description: e.target.value })}
       />
 
+      {/* ── Contacto ── */}
+      <SectionHeader
+        icon={<Users size={10} />}
+        label="Contactos"
+        badge="Requerido"
+        accent="emerald"
+      />
+
+      <AsyncSelectMultiple<Contact>
+        label="Contactos vinculados"
+        icon={Users}
+        placeholder="Buscar y seleccionar contactos..."
+        loadOptions={loadContactOptions}
+        getKey={(c) => c.id}
+        getLabel={(c) => c.name}
+        getDescription={(c) => c.email ?? undefined}
+        value={selectedContacts}
+        onChange={(contacts) => {
+          onContactsChange(contacts);
+          onChange({ contactIds: contacts.map((c) => c.id) });
+        }}
+      />
+
       {/* ── Empresa ── */}
       <SectionHeader
         icon={<Building2 size={10} />}
@@ -181,21 +215,6 @@ export const DealFormFields: React.FC<DealFormFieldsProps> = ({
         value={formData.companyId ?? ''}
         selectedCompany={selectedCompany}
         onChange={onCompanyChange}
-      />
-
-      {/* ── Contacto ── */}
-      <SectionHeader
-        icon={<User size={10} />}
-        label="Contacto"
-        badge="Requerido"
-        accent="emerald"
-      />
-
-      <DealContactSearch
-        value={formData.contactId}
-        selectedContact={selectedContact}
-        onChange={onContactChange}
-        required
       />
     </div>
   );

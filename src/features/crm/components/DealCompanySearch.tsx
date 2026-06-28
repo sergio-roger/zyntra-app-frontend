@@ -14,22 +14,7 @@ import {
   Users,
   X,
 } from 'lucide-react';
-
-
-const TAX_TYPE_OPTIONS = [
-  { value: 'RUC', label: 'RUC' },
-  { value: 'NIF', label: 'NIF' },
-  { value: 'DNI', label: 'DNI' },
-  { value: 'PASAPORTE', label: 'Pasaporte' },
-];
-
-const EMPLOYEE_RANGE_OPTIONS = [
-  { value: '1-10', label: '1–10 empleados' },
-  { value: '11-50', label: '11–50 empleados' },
-  { value: '51-200', label: '51–200 empleados' },
-  { value: '201-500', label: '201–500 empleados' },
-  { value: '501+', label: '501+ empleados' },
-];
+import { TAX_TYPE_OPTIONS, EMPLOYEE_RANGE_OPTIONS } from '@crm/constants/company-options';
 
 type Mode = 'select' | 'create';
 
@@ -289,9 +274,9 @@ export const DealCompanySearch: React.FC<DealCompanySearchProps> = ({
 
       {/* ── Create mode ── */}
       {mode === 'create' && (
-        <div className="rounded-xl border border-indigo-500/20 bg-indigo-500/5 overflow-hidden">
+        <div className="rounded-xl border border-indigo-500/20 bg-indigo-500/5">
           {/* Card header */}
-          <div className="flex items-center gap-2 px-4 py-3 border-b border-indigo-500/10 bg-indigo-500/5">
+          <div className="flex items-center gap-2 px-4 py-3 border-b border-indigo-500/10 bg-indigo-500/5 rounded-t-xl">
             <div className="w-7 h-7 rounded-lg bg-indigo-500/20 border border-indigo-500/20 flex items-center justify-center">
               <Building2 size={13} className="text-indigo-400" />
             </div>
