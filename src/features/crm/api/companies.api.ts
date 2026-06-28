@@ -65,6 +65,14 @@ export const companiesApi = {
     ).then((res) => ({ data: res })),
 
   listIndustries: (): Promise<{ data: Array<{ id: string; name: string }> }> =>
-    api.get<Array<{ id: string; name: string }>, Array<{ id: string; name: string }>>('/crm/industries')
-      .then((res) => ({ data: res })),
+    api.get<unknown>('/crm/industries').then((res: any) => {
+      const list = Array.isArray(res)
+        ? res
+        : Array.isArray(res?.data)
+          ? res.data
+          : Array.isArray(res?.items)
+            ? res.items
+            : [];
+      return { data: list };
+    }),
 };

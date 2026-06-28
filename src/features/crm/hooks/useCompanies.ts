@@ -45,7 +45,7 @@ export const useIndustrys = () =>
     queryKey: companiesKeys.industries,
     queryFn: async () => {
       const res = await companiesApi.listIndustries();
-      return res.data as Array<{ id: string; name: string }>;
+      return Array.isArray(res?.data) ? res.data : [];
     },
     staleTime: 10 * 60 * 1000,
   });

@@ -61,12 +61,12 @@ export const CompanyFilters: React.FC<CompanyFiltersProps> = ({
   const { data: industryTypes = [] } = useIndustrys();
   const { data: stages = [] } = useLifecycleStages();
 
-  const ownerOptions = members.map((m) => ({ value: m.id, label: m.name }));
-  const industryOptions = industryTypes.map((s) => ({ value: s.id, label: s.name }));
-  const stageOptions = stages.map((s) => ({
+  const ownerOptions = Array.isArray(members) ? members.map((m) => ({ value: m.id, label: m.name })) : [];
+  const industryOptions = Array.isArray(industryTypes) ? industryTypes.map((s) => ({ value: s.id, label: s.name })) : [];
+  const stageOptions = Array.isArray(stages) ? stages.map((s) => ({
     value: s.id,
     label: `${s.icon ?? ''} ${s.name}`.trim(),
-  }));
+  })) : [];
 
   const dateRangeValue: DateRange | null =
     createdAtFrom && createdAtTo ? { from: createdAtFrom, to: createdAtTo } : null;

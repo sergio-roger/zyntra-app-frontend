@@ -94,8 +94,8 @@ export const CompanyFormSidebar: React.FC<CompanyFormSidebarProps> = ({
     onClose();
   };
 
-  const industryOptions = industries.map((s) => ({ value: s.id, label: s.name }));
-  const ownerOptions = users.map((u) => ({ value: u.id, label: u.name }));
+  const industryOptions = Array.isArray(industries) ? industries.map((s) => ({ value: s.id, label: s.name })) : [];
+  const ownerOptions = Array.isArray(users) ? users.map((u) => ({ value: u.id, label: u.name })) : [];
   
   return (
     <>
