@@ -171,7 +171,7 @@ export const DealDetailSidebar: React.FC<DealDetailSidebarProps> = ({
     if (!open || !deal) return;
     setActiveTab('detalle');
     const pipeline =
-      deal.pipeline ?? pipelines.find((p) => p.id === deal.pipelineId) ?? null;
+      deal.pipeline ?? pipelines.find((p) => p.id === (deal.pipelineId || (deal as any).pipeline_id)) ?? null;
     setSelectedPipeline(pipeline);
     setSelectedContacts(deal.contacts || []);
     setSelectedCompany(deal.company || null);
@@ -180,15 +180,15 @@ export const DealDetailSidebar: React.FC<DealDetailSidebarProps> = ({
       description: deal.description ?? '',
       value: Number(deal.value),
       currency: deal.currency ?? 'USD',
-      pipelineId: deal.pipelineId,
-      stageId: deal.stageId,
+      pipelineId: deal.pipelineId || (deal as any).pipeline_id,
+      stageId: deal.stageId || (deal as any).stage_id,
       contactIds: deal.contacts?.map((c) => c.id) || [],
-      companyId: deal.companyId ?? undefined,
-      assignedToId: deal.assignedToId ?? undefined,
-      teamId: deal.teamId ?? undefined,
+      companyId: deal.companyId ?? (deal as any).company_id ?? undefined,
+      assignedToId: deal.assignedToId ?? (deal as any).assigned_to_id ?? undefined,
+      teamId: deal.teamId ?? (deal as any).team_id ?? undefined,
       probability: deal.probability,
-      expectedCloseDate: deal.expectedCloseDate
-        ? deal.expectedCloseDate.split('T')[0]
+      expectedCloseDate: (deal.expectedCloseDate || (deal as any).expected_close_date)
+        ? (deal.expectedCloseDate || (deal as any).expected_close_date).split('T')[0]
         : '',
     });
   }, [open, deal?.id, pipelines]);
@@ -305,7 +305,7 @@ export const DealDetailSidebar: React.FC<DealDetailSidebarProps> = ({
             >
               <DealFormFields
                 formData={formData}
-                onChange={(patch) => setFormData({ ...formData, ...patch })}
+                onChange={(patch) => setFormData((prev) => ({ ...prev, ...patch }))}
                 selectedContacts={selectedContacts}
                 onContactsChange={(contacts) => {
                   setSelectedContacts(contacts);

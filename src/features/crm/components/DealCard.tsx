@@ -111,11 +111,11 @@ export const DealCard: React.FC<DealCardProps> = ({
           {formattedValue}
         </span>
 
-        {(deal.expectedCloseDate) && (
+        {(deal.expectedCloseDate || (deal as any).expected_close_date) && (
           <div className="flex items-center gap-1 text-[10px] text-slate-500">
             <Calendar size={12} />
             <span>
-              {new Date(deal.expectedCloseDate).toLocaleDateString('es-CO')}
+              {new Date(deal.expectedCloseDate || (deal as any).expected_close_date).toLocaleDateString('es-CO')}
             </span>
           </div>
         )}
