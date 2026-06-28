@@ -336,7 +336,7 @@ export const DealDetailSidebar: React.FC<DealDetailSidebarProps> = ({
           {/* ── Tareas Tab ── */}
           {activeTab === 'tareas' && (
             <div className="p-6">
-              <TaskBoard dealId={deal?.id} contactId={deal?.contact?.id} />
+              <TaskBoard dealId={deal?.id} contactId={deal?.contacts?.[0]?.id} />
             </div>
           )}
         </div>

@@ -4,6 +4,7 @@ import api from '@shared/api/axios';
 export interface LifecycleStage {
   color?: string;
   description?: string;
+  icon?: string;
   id: string;
   name: string;
 }

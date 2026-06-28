@@ -105,8 +105,8 @@ export const DealsKanban: React.FC<DealsKanbanProps> = ({
         // 2. Persist en el servidor y actualizar el cache con datos exactos
         //    (incluye relación stage completa, evita diff en background refetch).
         const { data: updatedDeal } = await dealsApi.update(dealId, {
-          stage_id: newStageId,
-          pipeline_id: kanbanData.pipeline.id,
+          stageId: newStageId,
+          pipelineId: kanbanData.pipeline.id,
         });
 
         qc.setQueryData<KanbanResponse>(queryKey, (old) => {

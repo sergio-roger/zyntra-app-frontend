@@ -72,15 +72,13 @@ const makeDeal = (overrides: Partial<Deal> = {}): Deal => ({
   value: 1000,
   currency: 'COP',
   status: 'open',
-  pipeline_id: 'pipe-1',
-  stage_id: 'stage-prospección',
-  contact_id: 'contact-1',
-  contact: { id: 'contact-1', name: 'Cliente Test' } as any,
-  assigned_to_id: null,
-  team_id: null,
-  expected_close_date: null,
+  pipelineId: 'pipe-1',
+  stageId: 'stage-prospección',
+  assignedToId: null,
+  teamId: null,
+  expectedCloseDate: null,
   probability: 10,
-  closed_at: null,
+  closedAt: null,
   createdAt: new Date().toISOString(),
   updatedAt: new Date().toISOString(),
   ...overrides,
@@ -117,7 +115,7 @@ const makeKanbanData = (dealStageId = 'stage-prospección'): KanbanResponse => (
       stage: stageA,
       deals:
         dealStageId === 'stage-prospección'
-          ? [makeDeal({ stage_id: 'stage-prospección' })]
+          ? [makeDeal({ stageId: 'stage-prospección' })]
           : [],
       total_value: dealStageId === 'stage-prospección' ? 1000 : 0,
     },
@@ -125,7 +123,7 @@ const makeKanbanData = (dealStageId = 'stage-prospección'): KanbanResponse => (
       stage: stageB,
       deals:
         dealStageId === 'stage-contactado'
-          ? [makeDeal({ stage_id: 'stage-contactado' })]
+          ? [makeDeal({ stageId: 'stage-contactado' })]
           : [],
       total_value: dealStageId === 'stage-contactado' ? 1000 : 0,
     },
@@ -158,7 +156,7 @@ describe('DealsKanban — drag-and-drop', () => {
 
   it('calls the PATCH API with the correct stage_id when a deal is dropped', async () => {
     updateMock.mockResolvedValue({
-      data: { id: 'deal-1', stage_id: 'stage-contactado' },
+      data: { id: 'deal-1', stageId: 'stage-contactado' },
     });
 
     const { Wrapper } = createWrapper();
@@ -181,8 +179,8 @@ describe('DealsKanban — drag-and-drop', () => {
 
     expect(updateMock).toHaveBeenCalledTimes(1);
     expect(updateMock).toHaveBeenCalledWith('deal-1', {
-      stage_id: 'stage-contactado',
-      pipeline_id: 'pipe-1',
+      stageId: 'stage-contactado',
+      pipelineId: 'pipe-1',
     });
   });
 
@@ -225,12 +223,12 @@ describe('DealsKanban — drag-and-drop', () => {
 
     // Cleanup — resolve the promise so there are no dangling async ops
     await act(async () => {
-      resolveApi({ data: makeDeal({ stage_id: 'stage-contactado' }) });
+      resolveApi({ data: makeDeal({ stageId: 'stage-contactado' }) });
     });
   });
 
   it('deal stays in new column after the server responds', async () => {
-    const updatedDeal = makeDeal({ stage_id: 'stage-contactado' });
+    const updatedDeal = makeDeal({ stageId: 'stage-contactado' });
     updateMock.mockResolvedValue({ data: updatedDeal });
 
     const { qc, Wrapper } = createWrapper();
