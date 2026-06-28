@@ -28,7 +28,7 @@ export const DealCard: React.FC<DealCardProps> = ({
     isDragging: isBeingDragged,
   } = useDraggable({
     id: deal.id,
-    data: { stageId: deal.stage_id },
+    data: { stageId: deal.stageId },
   });
 
   const style = transform
@@ -84,19 +84,26 @@ export const DealCard: React.FC<DealCardProps> = ({
       )}
 
       <div className="flex flex-col gap-1.5">
-        <div className="flex items-center gap-2 text-xs text-slate-400">
-          <User size={14} className="text-slate-500" />
-          <span className="truncate">
-            {deal.contact?.name || 'Contacto desconocido'}
-          </span>
-        </div>
-
-        {deal.contact?.company?.name && (
+        {deal.company?.name && (
           <div className="flex items-center gap-2 text-[11px] text-slate-500">
-            <Building2 size={13} className="text-slate-600" />
-            <span className="truncate">{deal.contact.company.name}</span>
+            <Building2 size={13} className="text-slate-600 shrink-0" />
+            <span className="truncate">{deal.company?.name}</span>
           </div>
         )}
+
+        <div className="flex items-center gap-2 text-xs text-slate-400">
+          <User size={14} className="text-slate-500 shrink-0" />
+          <div className="flex items-center gap-1 min-w-0">
+            <span className="truncate">
+              {deal.contacts?.[0]?.name || 'Sin contacto asignado'}
+            </span>
+            {((deal.contacts?.length || 0) > 1) && (
+              <span className="shrink-0 rounded-full bg-slate-700/50 px-1.5 py-0.5 text-[9px] font-medium text-slate-300">
+                +{deal.contacts!.length - 1}
+              </span>
+            )}
+          </div>
+        </div>
       </div>
 
       <div className="mt-1 flex items-center justify-between border-t border-white/[0.05] pt-3">
@@ -104,11 +111,11 @@ export const DealCard: React.FC<DealCardProps> = ({
           {formattedValue}
         </span>
 
-        {deal.expected_close_date && (
+        {(deal.expectedCloseDate) && (
           <div className="flex items-center gap-1 text-[10px] text-slate-500">
             <Calendar size={12} />
             <span>
-              {new Date(deal.expected_close_date).toLocaleDateString('es-CO')}
+              {new Date(deal.expectedCloseDate).toLocaleDateString('es-CO')}
             </span>
           </div>
         )}

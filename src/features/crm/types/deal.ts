@@ -1,3 +1,4 @@
+import { Company } from './company';
 import { Contact } from './contact';
 import { DealPipeline } from './deal-pipeline';
 import { DealPipelineStage } from './deal-pipeline-stage';
@@ -10,8 +11,8 @@ export interface Deal {
   businessId: string;
   closedAt: string | null;
   companyId?: string | null;
-  contact?: Contact;
-  contactId: string;
+  company?: Company;
+  contacts?: Contact[];
   createdAt: string;
   currency: string;
   description: string | null;

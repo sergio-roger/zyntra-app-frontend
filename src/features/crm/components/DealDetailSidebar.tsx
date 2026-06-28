@@ -173,8 +173,8 @@ export const DealDetailSidebar: React.FC<DealDetailSidebarProps> = ({
     const pipeline =
       deal.pipeline ?? pipelines.find((p) => p.id === deal.pipelineId) ?? null;
     setSelectedPipeline(pipeline);
-    setSelectedContacts(deal.contact ? [deal.contact] : []);
-    setSelectedCompany(null);
+    setSelectedContacts(deal.contacts || []);
+    setSelectedCompany(deal.company || null);
     setFormData({
       title: deal.title,
       description: deal.description ?? '',
@@ -182,7 +182,7 @@ export const DealDetailSidebar: React.FC<DealDetailSidebarProps> = ({
       currency: deal.currency ?? 'USD',
       pipelineId: deal.pipelineId,
       stageId: deal.stageId,
-      contactIds: deal.contactId ? [deal.contactId] : [],
+      contactIds: deal.contacts?.map((c) => c.id) || [],
       companyId: deal.companyId ?? undefined,
       assignedToId: deal.assignedToId ?? undefined,
       teamId: deal.teamId ?? undefined,
