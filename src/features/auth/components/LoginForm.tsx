@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
@@ -19,6 +19,7 @@ interface LoginFormProps {
 
 export const LoginForm: React.FC<LoginFormProps> = ({ onSuccess }) => {
   const { login } = useAuth();
+  const [showPassword, setShowPassword] = useState(false);
 
   const {
     register,
@@ -72,14 +73,46 @@ export const LoginForm: React.FC<LoginFormProps> = ({ onSuccess }) => {
         <FormField
           label="Contraseña"
           icon={Lock}
-          type="password"
+          type={showPassword ? 'text' : 'password'}
           placeholder="••••••••"
           autoComplete="current-password"
           error={errors.password?.message}
           disabled={isSubmitting}
           {...register('password')}
         />
-        <div className="mt-2 text-right">
+        <div className="mt-2 flex items-center justify-between">
+          <label className="group flex cursor-pointer select-none items-center gap-2">
+            <input
+              type="checkbox"
+              checked={showPassword}
+              onChange={(e) => setShowPassword(e.target.checked)}
+              className="sr-only"
+            />
+            <span
+              className={`flex h-4 w-4 shrink-0 items-center justify-center rounded border shadow-inner transition-all duration-200 ${
+                showPassword
+                  ? 'border-transparent bg-gradient-to-br from-indigo-500 to-violet-600 shadow-indigo-500/30'
+                  : 'border-white/10 bg-slate-950/60 group-hover:border-white/20'
+              }`}
+            >
+              {showPassword && (
+                <svg
+                  viewBox="0 0 10 8"
+                  fill="none"
+                  stroke="currentColor"
+                  strokeWidth="1.8"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  className="h-2.5 w-2.5 text-white"
+                >
+                  <path d="M1 4l3 3 5-6" />
+                </svg>
+              )}
+            </span>
+            <span className="text-xs text-slate-400 transition-colors group-hover:text-slate-300">
+              Ver contraseña
+            </span>
+          </label>
           <Link
             to="/forgot-password"
             className="text-xs text-slate-400 transition-colors hover:text-indigo-400"
