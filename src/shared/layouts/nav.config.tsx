@@ -48,13 +48,17 @@ const PATH_TO_KEY_MAP: Record<string, string> = {
   '/billing': 'billing',
   '/settings/plans': 'billing',
   '/settings': 'settings',
+  '/settings/ajustes-generales': 'settings_general',
+  '/settings/equipo-accesos': 'settings_team_access',
+  '/settings/configuracion-negocio': 'settings_business',
   '/settings/configuracion': 'settings_config',
   '/settings/my-account': 'settings_my_account',
   '/settings/users': 'settings_users',
   '/settings/teams': 'settings_teams',
+  '/settings/roles': 'settings_roles',
   '/settings/lifecycle': 'settings_lifecycle',
   '/settings/channels': 'settings_channels',
-  '/settings/permissions': 'settings_permissions',
+  '/settings/permissions': 'settings_roles',
 };
 
 export const getMenuKeyFromPath = (path: string): string => {

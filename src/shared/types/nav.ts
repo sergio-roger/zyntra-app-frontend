@@ -7,6 +7,17 @@ export interface SubNavItem {
   description?: string;
 }
 
+export interface SubNavGroup {
+  type: 'group';
+  key: string;
+  label: string;
+  icon: LucideIcon;
+  description?: string;
+  children: SubNavItem[];
+}
+
+export type SubNavEntry = SubNavItem | SubNavGroup;
+
 export interface NavModule {
   key: string;
   label: string;
@@ -15,8 +26,9 @@ export interface NavModule {
   to: string;
   description: string;
   color: string;
-  children?: SubNavItem[];
+  children?: SubNavEntry[];
 }
 
 export const SubNavItem = class {};
+export const SubNavGroup = class {};
 export const NavModule = class {};

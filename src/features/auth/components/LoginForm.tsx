@@ -81,7 +81,7 @@ export const LoginForm: React.FC<LoginFormProps> = ({ onSuccess }) => {
           {...register('password')}
         />
         <div className="mt-2 flex items-center justify-between">
-          <label className="group flex cursor-pointer select-none items-center gap-2">
+          <label className="mt-2 group flex cursor-pointer select-none items-center gap-2">
             <input
               type="checkbox"
               checked={showPassword}
@@ -115,7 +115,7 @@ export const LoginForm: React.FC<LoginFormProps> = ({ onSuccess }) => {
           </label>
           <Link
             to="/forgot-password"
-            className="text-xs text-slate-400 transition-colors hover:text-indigo-400"
+            className="mt-2 text-xs text-slate-400 transition-colors hover:text-indigo-400"
           >
             ¿Olvidaste tu contraseña?
           </Link>

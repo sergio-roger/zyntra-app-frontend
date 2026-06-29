@@ -148,6 +148,26 @@ export const settingsRoutes: RouteObject[] = [
           </AdminGuard>
         ),
       },
+      {
+        path: 'roles',
+        element: (
+          <PermissionGuard menuKey="settings_roles">
+            <SuspenseLoader>
+              <PermissionsPage />
+            </SuspenseLoader>
+          </PermissionGuard>
+        ),
+      },
+      {
+        path: 'roles/:role',
+        element: (
+          <PermissionGuard menuKey="settings_roles">
+            <SuspenseLoader>
+              <RolePermissionsPage />
+            </SuspenseLoader>
+          </PermissionGuard>
+        ),
+      },
     ],
   },
 ];
