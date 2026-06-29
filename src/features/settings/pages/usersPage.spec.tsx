@@ -136,7 +136,7 @@ describe('UsersPage - User Limits', () => {
     fireEvent.click(inactiveUserToggle!);
 
     // Should call mutateAsync to activate user
-    expect(mockMutateAsync).toHaveBeenCalledWith({ id: '3', is_active: true });
+    expect(mockMutateAsync).toHaveBeenCalledWith({ id: '3', status: 'active', isActive: true, is_active: true });
     expect(toastManager.add).not.toHaveBeenCalled();
   });
 

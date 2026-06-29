@@ -1,3 +1,4 @@
+import { PALETTE_COLORS, DEFAULT_TEAM_COLOR } from '@core/constants/colors';
 import { Input } from '@core/ui/Input';
 import { Textarea } from '@core/ui/Textarea';
 import {
@@ -24,17 +25,6 @@ interface TeamFormSidebarProps {
   onClose: () => void;
 }
 
-const COLORS = [
-  '#4F46E5',
-  '#10B981',
-  '#F59E0B',
-  '#EF4444',
-  '#EC4899',
-  '#8B5CF6',
-  '#06B6D4',
-  '#F97316',
-];
-
 export const TeamFormSidebar: React.FC<TeamFormSidebarProps> = ({
   open,
   team,
@@ -43,7 +33,7 @@ export const TeamFormSidebar: React.FC<TeamFormSidebarProps> = ({
   const [formData, setFormData] = useState({
     name: '',
     description: '',
-    color: '#4F46E5',
+    color: DEFAULT_TEAM_COLOR,
     member_ids: [] as string[],
   });
 
@@ -64,7 +54,7 @@ export const TeamFormSidebar: React.FC<TeamFormSidebarProps> = ({
       setFormData({
         name: '',
         description: '',
-        color: '#4F46E5',
+        color: DEFAULT_TEAM_COLOR,
         member_ids: [],
       });
     }
@@ -81,11 +71,16 @@ export const TeamFormSidebar: React.FC<TeamFormSidebarProps> = ({
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    const payload = {
+      ...formData,
+      memberIds: formData.member_ids,
+    };
     if (team) {
-      await updateMutation.mutateAsync({ id: team.id, ...formData });
+      await updateMutation.mutateAsync({ id: team.id, ...payload });
     } else {
-      await createMutation.mutateAsync(formData);
+      await createMutation.mutateAsync(payload);
     }
+
     onClose();
   };
 
@@ -140,7 +135,7 @@ export const TeamFormSidebar: React.FC<TeamFormSidebarProps> = ({
                 Color Distintivo
               </label>
               <div className="flex flex-wrap gap-3">
-                {COLORS.map((c) => (
+                {PALETTE_COLORS.map((c) => (
                   <button
                     key={c}
                     type="button"

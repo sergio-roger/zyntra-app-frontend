@@ -1,60 +1,74 @@
 export type UserRole = string;
+export type UserStatus = 'active' | 'inactive' | 'suspended';
 
-export interface CrmUser {
-  id: string;
-  business_id: string;
-  name: string;
+export interface User {
+  avatarUrl?: string | null;
+  businessId: string;
+  createdAt: string;
   email: string;
+  firstName?: string;
+  id: string;
+  isAccountActivated?: boolean;
+  isActive: boolean;
+  jobTitle?: string | null;
+  lastName?: string;
+  name: string;
   role: UserRole;
-  is_active: boolean;
+  status?: UserStatus;
   teams: Team[];
-  created_at: string;
 }
 
 export interface Team {
-  id: string;
-  business_id: string;
-  name: string;
-  description: string | null;
+  businessId: string;
   color: string;
-  members: CrmUser[];
-  created_at: string;
+  createdAt: string;
+  description: string | null;
+  id: string;
+  members: User[];
+  name: string;
 }
 
 export interface CreateUserInput {
-  name: string;
+  avatarUrl?: string;
   email: string;
+  firstName?: string;
+  isAccountActivated?: boolean;
+  isActive?: boolean;
+  jobTitle?: string;
+  lastName?: string;
+  name?: string;
   role: UserRole;
+  status?: UserStatus;
 }
 
 export interface CreateTeamInput {
-  name: string;
-  description?: string;
   color?: string;
-  member_ids?: string[];
+  description?: string;
+  memberIds?: string[];
+  name: string;
 }
 
 export interface Menu {
+  description: string | null;
   id: string;
   key: string;
   label: string;
+  parentKey: string | null;
   path: string;
-  parent_key: string | null;
-  description: string | null;
 }
 
 export interface Role {
-  id: string;
-  name: string;
-  label: string;
-  description: string;
-  isEditable: boolean;
   badge: string | null;
   badgeColor: string | null;
+  description: string;
   iconColor: string | null;
+  id: string;
+  isEditable: boolean;
+  label: string;
+  name: string;
 }
 
 export interface RolePermissions {
+  menuIds: string[];
   role: string;
-  menu_ids: string[];
 }

@@ -75,7 +75,7 @@ export function useUpdateTeam() {
     mutationFn: async ({
       id,
       ...input
-    }: Partial<Team> & { id: string; member_ids?: string[] }) => {
+    }: Partial<Team> & { id: string; memberIds?: string[]; member_ids?: string[] }) => {
       const { data } = await api.patch(`/settings/teams/${id}`, input);
       return data;
     },
