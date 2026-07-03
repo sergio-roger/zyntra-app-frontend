@@ -6,6 +6,27 @@ import { AdminGuard } from '@core/routes/AdminGuard';
 import { PermissionGuard } from '@core/routes/PermissionGuard';
 import { ModuleGuard } from '@core/components/ModuleGuard';
 
+const ChannelStorePage = lazy(() =>
+  import('@features/channels/pages/ChannelStorePage').then((m) => ({
+    default: m.ChannelStorePage,
+  })),
+);
+const ChannelWizardPage = lazy(() =>
+  import('@features/channels/pages/ChannelWizardPage').then((m) => ({
+    default: m.ChannelWizardPage,
+  })),
+);
+const ChannelDetailPage = lazy(() =>
+  import('@features/channels/pages/ChannelDetailPage').then((m) => ({
+    default: m.ChannelDetailPage,
+  })),
+);
+const AiAgentsPage = lazy(() =>
+  import('@features/ai-agents/pages/AiAgentsPage').then((m) => ({
+    default: m.AiAgentsPage,
+  })),
+);
+
 const LifecycleConfig = lazy(() =>
   import('../components/LifecycleConfig').then((m) => ({
     default: m.LifecycleConfig,
@@ -120,10 +141,45 @@ export const settingsRoutes: RouteObject[] = [
         element: (
           <PermissionGuard menuKey="settings_channels">
             <ModuleGuard menuKey="settings_channels">
-              <ConstructionPage
-                title="Canales de Comunicación"
-                description="Próximamente podrás integrar WhatsApp, Instagram y otros canales directamente aquí."
-              />
+              <SuspenseLoader>
+                <ChannelStorePage />
+              </SuspenseLoader>
+            </ModuleGuard>
+          </PermissionGuard>
+        ),
+      },
+      {
+        path: 'channels/new',
+        element: (
+          <PermissionGuard menuKey="settings_channels">
+            <ModuleGuard menuKey="settings_channels">
+              <SuspenseLoader>
+                <ChannelWizardPage />
+              </SuspenseLoader>
+            </ModuleGuard>
+          </PermissionGuard>
+        ),
+      },
+      {
+        path: 'channels/:channelId',
+        element: (
+          <PermissionGuard menuKey="settings_channels">
+            <ModuleGuard menuKey="settings_channels">
+              <SuspenseLoader>
+                <ChannelDetailPage />
+              </SuspenseLoader>
+            </ModuleGuard>
+          </PermissionGuard>
+        ),
+      },
+      {
+        path: 'agents',
+        element: (
+          <PermissionGuard menuKey="settings_agents">
+            <ModuleGuard menuKey="settings_agents">
+              <SuspenseLoader>
+                <AiAgentsPage />
+              </SuspenseLoader>
             </ModuleGuard>
           </PermissionGuard>
         ),

@@ -325,6 +325,7 @@ export const NAV_MODULES: NavModule[] = [
         children: [
           { to: '/settings/lifecycle', label: 'Ciclo de vida', icon: Sparkles },
           { to: '/settings/channels', label: 'Canales', icon: Share2 },
+          { to: '/settings/agents', label: 'Agentes', icon: Bot },
         ],
       },
     ],

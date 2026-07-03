@@ -58,6 +58,7 @@ const PATH_TO_KEY_MAP: Record<string, string> = {
   '/settings/roles': 'settings_roles',
   '/settings/lifecycle': 'settings_lifecycle',
   '/settings/channels': 'settings_channels',
+  '/settings/agents': 'settings_agents',
   '/settings/permissions': 'settings_roles',
 };
 
