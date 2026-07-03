@@ -68,7 +68,7 @@ export const UserFormSidebar: React.FC<UserFormSidebarProps> = ({
         email: user.email,
         jobTitle: user.jobTitle ?? '',
         avatarUrl: user.avatarUrl ?? '',
-        role: user.role,
+        role: user.role ?? 'agent',
         status: user.status ?? ((user.isActive) ? 'active' : 'inactive'),
         isAccountActivated: Boolean(user.isAccountActivated),
       });

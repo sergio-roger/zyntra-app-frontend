@@ -260,14 +260,14 @@ export const UsersPage: React.FC = () => {
                         <div className="flex items-center gap-2 px-3 py-1 rounded-full bg-slate-800 border border-white/5 w-fit">
                           <Shield size={12} className="text-indigo-400" />
                           <span className="text-[11px] font-bold text-slate-300">
-                            {getRoleLabel(user.role)}
+                            {getRoleLabel(user.role ?? '')}
                           </span>
                         </div>
                       </td>
                       <td className="px-6 py-4">
                         <div className="flex flex-wrap gap-2">
-                          {user.teams.length > 0 ? (
-                            user.teams.map((team) => (
+                          {(user.teams?.length ?? 0) > 0 ? (
+                            user.teams!.map((team) => (
                               <div
                                 key={team.id}
                                 className="flex items-center gap-1.5 px-2 py-1 rounded-lg bg-white/5 border border-white/5 shadow-sm"
@@ -303,7 +303,9 @@ export const UsersPage: React.FC = () => {
                         {renderStatusBadge(user)}
                       </td>
                       <td className="px-6 py-4 text-xs text-slate-400 whitespace-nowrap">
-                        {new Date(user.createdAt).toLocaleDateString('es-ES', { day: '2-digit', month: 'short', year: 'numeric' })}
+                        {user.createdAt
+                          ? new Date(user.createdAt).toLocaleDateString('es-ES', { day: '2-digit', month: 'short', year: 'numeric' })
+                          : '—'}
                       </td>
                       <td className="px-6 py-4 text-right">
                         <div className="flex items-center justify-end gap-2">

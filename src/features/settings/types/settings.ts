@@ -1,32 +1,9 @@
-export type UserRole = string;
-export type UserStatus = 'active' | 'inactive' | 'suspended';
-
-export interface User {
-  avatarUrl?: string | null;
-  businessId: string;
-  createdAt: string;
-  email: string;
-  firstName?: string;
-  id: string;
-  isAccountActivated?: boolean;
-  isActive: boolean;
-  jobTitle?: string | null;
-  lastName?: string;
-  name: string;
-  role: UserRole;
-  status?: UserStatus;
-  teams: Team[];
-}
-
-export interface Team {
-  businessId: string;
-  color: string;
-  createdAt: string;
-  description: string | null;
-  id: string;
-  members: User[];
-  name: string;
-}
+export type {
+  User as CrmUser,
+  UserRole,
+  UserStatus,
+  Team,
+} from '@features/auth/types/auth.types';
 
 export interface CreateUserInput {
   avatarUrl?: string;
@@ -37,8 +14,8 @@ export interface CreateUserInput {
   jobTitle?: string;
   lastName?: string;
   name?: string;
-  role: UserRole;
-  status?: UserStatus;
+  role: string;
+  status?: 'active' | 'inactive' | 'suspended';
 }
 
 export interface CreateTeamInput {

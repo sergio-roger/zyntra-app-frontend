@@ -28,28 +28,37 @@ const AiAgentsPage = lazy(() =>
 );
 
 const LifecycleConfig = lazy(() =>
-  import('../components/LifecycleConfig').then((m) => ({
+  import('@features/settings/components/LifecycleConfig').then((m) => ({
     default: m.LifecycleConfig,
   })),
 );
 const UsersPage = lazy(() =>
-  import('../pages/UsersPage').then((m) => ({ default: m.UsersPage })),
+  import('@features/settings/pages/UsersPage').then((m) => ({
+    default: m.UsersPage,
+  })),
+);
+const MyAccountPage = lazy(() =>
+  import('@features/settings/pages/MyAccountPage').then((m) => ({
+    default: m.MyAccountPage,
+  })),
 );
 const TeamsPage = lazy(() =>
-  import('../pages/TeamsPage').then((m) => ({ default: m.TeamsPage })),
+  import('@features/settings/pages/TeamsPage').then((m) => ({
+    default: m.TeamsPage,
+  })),
 );
 const PermissionsPage = lazy(() =>
-  import('../pages/PermissionsPage').then((m) => ({
+  import('@features/settings/pages/PermissionsPage').then((m) => ({
     default: m.PermissionsPage,
   })),
 );
 const RolePermissionsPage = lazy(() =>
-  import('../pages/RolePermissionsPage').then((m) => ({
+  import('@features/settings/pages/RolePermissionsPage').then((m) => ({
     default: m.RolePermissionsPage,
   })),
 );
 const PlansPage = lazy(() =>
-  import('../../../shared/pages/PlansPage').then((m) => ({
+  import('@shared/pages/PlansPage').then((m) => ({
     default: m.PlansPage,
   })),
 );
@@ -80,10 +89,7 @@ export const settingsRoutes: RouteObject[] = [
         element: (
           <PermissionGuard menuKey="settings_my_account">
             <SuspenseLoader>
-              <ConstructionPage
-                title="Mi Cuenta"
-                description="Gestiona los datos de tu cuenta de usuario, contraseña y perfil."
-              />
+              <MyAccountPage />
             </SuspenseLoader>
           </PermissionGuard>
         ),
