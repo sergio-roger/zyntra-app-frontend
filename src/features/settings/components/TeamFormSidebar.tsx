@@ -1,12 +1,12 @@
-import { PALETTE_COLORS, DEFAULT_TEAM_COLOR } from '@core/constants/colors';
-import { Input } from '@core/ui/Input';
-import { Textarea } from '@core/ui/Textarea';
+import { PALETTE_COLORS, DEFAULT_TEAM_COLOR } from "@core/constants/colors";
+import { Input } from "@core/ui/Input";
+import { Textarea } from "@core/ui/Textarea";
 import {
   useCreateTeam,
   useUpdateTeam,
   useUsersList,
-} from '@features/settings/hooks/useUsersTeams';
-import { Team } from '@features/settings/types/settings';
+} from "@features/settings/hooks/useUsersTeams";
+import { Team } from "@features/settings/types/settings";
 import {
   AlignLeft,
   Check,
@@ -16,8 +16,8 @@ import {
   UserPlus,
   Users,
   X,
-} from 'lucide-react';
-import React, { useEffect, useState } from 'react';
+} from "lucide-react";
+import React, { useEffect, useState } from "react";
 
 interface TeamFormSidebarProps {
   open: boolean;
@@ -31,8 +31,8 @@ export const TeamFormSidebar: React.FC<TeamFormSidebarProps> = ({
   onClose,
 }) => {
   const [formData, setFormData] = useState({
-    name: '',
-    description: '',
+    name: "",
+    description: "",
     color: DEFAULT_TEAM_COLOR,
     member_ids: [] as string[],
   });
@@ -46,14 +46,14 @@ export const TeamFormSidebar: React.FC<TeamFormSidebarProps> = ({
     if (team) {
       setFormData({
         name: team.name,
-        description: team.description || '',
+        description: team.description || "",
         color: team.color,
         member_ids: team.members.map((m) => m.id),
       });
     } else {
       setFormData({
-        name: '',
-        description: '',
+        name: "",
+        description: "",
         color: DEFAULT_TEAM_COLOR,
         member_ids: [],
       });
@@ -87,19 +87,19 @@ export const TeamFormSidebar: React.FC<TeamFormSidebarProps> = ({
   return (
     <>
       <div
-        className={`fixed inset-0 bg-black/60 !mt-0 backdrop-blur-sm z-[60] transition-opacity duration-300 ${open ? 'opacity-100' : 'opacity-0 pointer-events-none'}`}
+        className={`fixed inset-0 bg-black/60 !mt-0 backdrop-blur-sm z-[60] transition-opacity duration-300 ${open ? "opacity-100" : "opacity-0 pointer-events-none"}`}
         onClick={onClose}
       />
 
       <div
-        className={`fixed inset-y-0 right-0 w-full !mt-0 max-w-md bg-slate-900 border-l border-white/10 z-[70] shadow-2xl transform transition-transform duration-300 ease-out ${open ? 'translate-x-0' : 'translate-x-full'}`}
+        className={`fixed inset-y-0 right-0 w-full !mt-0 max-w-md bg-slate-900 border-l border-white/10 z-[70] shadow-2xl transform transition-transform duration-300 ease-out ${open ? "translate-x-0" : "translate-x-full"}`}
       >
         <div className="flex flex-col h-full">
           <div className="flex items-center justify-between p-6 border-b border-white/5 bg-slate-900/50 backdrop-blur-md">
             <div>
               <h3 className="text-xl font-bold text-white flex items-center gap-2">
                 <Users size={20} className="text-indigo-400" />
-                {team ? 'Editar Equipo' : 'Nuevo Equipo'}
+                {team ? "Editar Equipo" : "Nuevo Equipo"}
               </h3>
               <p className="text-sm text-slate-400 mt-1">
                 Organiza a tus colaboradores por áreas o funciones
@@ -140,7 +140,7 @@ export const TeamFormSidebar: React.FC<TeamFormSidebarProps> = ({
                     key={c}
                     type="button"
                     onClick={() => setFormData({ ...formData, color: c })}
-                    className={`w-8 h-8 rounded-full border-2 transition-all ${formData.color === c ? 'border-white scale-110 shadow-lg' : 'border-transparent opacity-50 hover:opacity-100'}`}
+                    className={`w-8 h-8 rounded-full border-2 transition-all ${formData.color === c ? "border-white scale-110 shadow-lg" : "border-transparent opacity-50 hover:opacity-100"}`}
                     style={{ backgroundColor: c }}
                   />
                 ))}
@@ -164,8 +164,8 @@ export const TeamFormSidebar: React.FC<TeamFormSidebarProps> = ({
                     onClick={() => toggleMember(u.id)}
                     className={`flex items-center justify-between p-3 rounded-xl border transition-all cursor-pointer ${
                       formData.member_ids.includes(u.id)
-                        ? 'bg-indigo-500/10 border-indigo-500/30'
-                        : 'bg-slate-950/30 border-white/5 hover:border-white/10'
+                        ? "bg-indigo-500/10 border-indigo-500/30"
+                        : "bg-slate-950/30 border-white/5 hover:border-white/10"
                     }`}
                   >
                     <div className="flex items-center gap-3">
@@ -217,7 +217,7 @@ export const TeamFormSidebar: React.FC<TeamFormSidebarProps> = ({
                 ) : (
                   <Check size={18} />
                 )}
-                {team ? 'Guardar Cambios' : 'Crear Equipo'}
+                {team ? "Guardar Cambios" : "Crear Equipo"}
               </button>
             </div>
           </div>

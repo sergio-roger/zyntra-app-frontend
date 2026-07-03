@@ -1,78 +1,78 @@
-import { lazy } from 'react';
-import { Navigate, RouteObject } from 'react-router-dom';
-import { ConstructionPage } from '@shared/components/ConstructionPage';
-import { SuspenseLoader } from '@shared/components/SuspenseLoader';
-import { AdminGuard } from '@core/routes/AdminGuard';
-import { PermissionGuard } from '@core/routes/PermissionGuard';
-import { ModuleGuard } from '@core/components/ModuleGuard';
+import { lazy } from "react";
+import { Navigate, RouteObject } from "react-router-dom";
+import { ConstructionPage } from "@shared/components/ConstructionPage";
+import { SuspenseLoader } from "@shared/components/SuspenseLoader";
+import { AdminGuard } from "@core/routes/AdminGuard";
+import { PermissionGuard } from "@core/routes/PermissionGuard";
+import { ModuleGuard } from "@core/components/ModuleGuard";
 
 const ChannelStorePage = lazy(() =>
-  import('@features/channels/pages/ChannelStorePage').then((m) => ({
+  import("@features/channels/pages/ChannelStorePage").then((m) => ({
     default: m.ChannelStorePage,
   })),
 );
 const ChannelWizardPage = lazy(() =>
-  import('@features/channels/pages/ChannelWizardPage').then((m) => ({
+  import("@features/channels/pages/ChannelWizardPage").then((m) => ({
     default: m.ChannelWizardPage,
   })),
 );
 const ChannelDetailPage = lazy(() =>
-  import('@features/channels/pages/ChannelDetailPage').then((m) => ({
+  import("@features/channels/pages/ChannelDetailPage").then((m) => ({
     default: m.ChannelDetailPage,
   })),
 );
 const AiAgentsPage = lazy(() =>
-  import('@features/ai-agents/pages/AiAgentsPage').then((m) => ({
+  import("@features/ai-agents/pages/AiAgentsPage").then((m) => ({
     default: m.AiAgentsPage,
   })),
 );
 
 const LifecycleConfig = lazy(() =>
-  import('@features/settings/components/LifecycleConfig').then((m) => ({
+  import("@features/settings/components/LifecycleConfig").then((m) => ({
     default: m.LifecycleConfig,
   })),
 );
 const UsersPage = lazy(() =>
-  import('@features/settings/pages/UsersPage').then((m) => ({
+  import("@features/settings/pages/UsersPage").then((m) => ({
     default: m.UsersPage,
   })),
 );
 const MyAccountPage = lazy(() =>
-  import('@features/settings/pages/MyAccountPage').then((m) => ({
+  import("@features/settings/pages/MyAccountPage").then((m) => ({
     default: m.MyAccountPage,
   })),
 );
 const TeamsPage = lazy(() =>
-  import('@features/settings/pages/TeamsPage').then((m) => ({
+  import("@features/settings/pages/TeamsPage").then((m) => ({
     default: m.TeamsPage,
   })),
 );
 const PermissionsPage = lazy(() =>
-  import('@features/settings/pages/PermissionsPage').then((m) => ({
+  import("@features/settings/pages/PermissionsPage").then((m) => ({
     default: m.PermissionsPage,
   })),
 );
 const RolePermissionsPage = lazy(() =>
-  import('@features/settings/pages/RolePermissionsPage').then((m) => ({
+  import("@features/settings/pages/RolePermissionsPage").then((m) => ({
     default: m.RolePermissionsPage,
   })),
 );
 const PlansPage = lazy(() =>
-  import('@shared/pages/PlansPage').then((m) => ({
+  import("@shared/pages/PlansPage").then((m) => ({
     default: m.PlansPage,
   })),
 );
 
 export const settingsRoutes: RouteObject[] = [
   {
-    path: '/settings',
+    path: "/settings",
     children: [
       {
         index: true,
         element: <Navigate to="/settings/configuracion" replace />,
       },
       {
-        path: 'configuracion',
+        path: "configuracion",
         element: (
           <PermissionGuard menuKey="settings_config">
             <SuspenseLoader>
@@ -85,7 +85,7 @@ export const settingsRoutes: RouteObject[] = [
         ),
       },
       {
-        path: 'my-account',
+        path: "my-account",
         element: (
           <PermissionGuard menuKey="settings_my_account">
             <SuspenseLoader>
@@ -95,7 +95,7 @@ export const settingsRoutes: RouteObject[] = [
         ),
       },
       {
-        path: 'users',
+        path: "users",
         element: (
           <PermissionGuard menuKey="settings_users">
             <ModuleGuard menuKey="settings_users">
@@ -107,7 +107,7 @@ export const settingsRoutes: RouteObject[] = [
         ),
       },
       {
-        path: 'plans',
+        path: "plans",
         element: (
           <PermissionGuard menuKey="billing">
             <ModuleGuard menuKey="billing">
@@ -119,7 +119,7 @@ export const settingsRoutes: RouteObject[] = [
         ),
       },
       {
-        path: 'teams',
+        path: "teams",
         element: (
           <PermissionGuard menuKey="settings_teams">
             <ModuleGuard menuKey="settings_teams">
@@ -131,7 +131,7 @@ export const settingsRoutes: RouteObject[] = [
         ),
       },
       {
-        path: 'lifecycle',
+        path: "lifecycle",
         element: (
           <PermissionGuard menuKey="settings_lifecycle">
             <ModuleGuard menuKey="settings_lifecycle">
@@ -143,7 +143,7 @@ export const settingsRoutes: RouteObject[] = [
         ),
       },
       {
-        path: 'channels',
+        path: "channels",
         element: (
           <PermissionGuard menuKey="settings_channels">
             <ModuleGuard menuKey="settings_channels">
@@ -155,7 +155,7 @@ export const settingsRoutes: RouteObject[] = [
         ),
       },
       {
-        path: 'channels/new',
+        path: "channels/new",
         element: (
           <PermissionGuard menuKey="settings_channels">
             <ModuleGuard menuKey="settings_channels">
@@ -167,7 +167,7 @@ export const settingsRoutes: RouteObject[] = [
         ),
       },
       {
-        path: 'channels/:channelId',
+        path: "channels/:channelId",
         element: (
           <PermissionGuard menuKey="settings_channels">
             <ModuleGuard menuKey="settings_channels">
@@ -179,7 +179,7 @@ export const settingsRoutes: RouteObject[] = [
         ),
       },
       {
-        path: 'agents',
+        path: "agents",
         element: (
           <PermissionGuard menuKey="settings_agents">
             <ModuleGuard menuKey="settings_agents">
@@ -191,7 +191,7 @@ export const settingsRoutes: RouteObject[] = [
         ),
       },
       {
-        path: 'permissions',
+        path: "permissions",
         element: (
           <AdminGuard>
             <SuspenseLoader>
@@ -201,7 +201,7 @@ export const settingsRoutes: RouteObject[] = [
         ),
       },
       {
-        path: 'permissions/:role',
+        path: "permissions/:role",
         element: (
           <AdminGuard>
             <SuspenseLoader>
@@ -211,7 +211,7 @@ export const settingsRoutes: RouteObject[] = [
         ),
       },
       {
-        path: 'roles',
+        path: "roles",
         element: (
           <PermissionGuard menuKey="settings_roles">
             <SuspenseLoader>
@@ -221,7 +221,7 @@ export const settingsRoutes: RouteObject[] = [
         ),
       },
       {
-        path: 'roles/:role',
+        path: "roles/:role",
         element: (
           <PermissionGuard menuKey="settings_roles">
             <SuspenseLoader>

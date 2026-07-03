@@ -1,10 +1,23 @@
-import React, { useState } from 'react';
-import { useNavigate, useParams } from 'react-router-dom';
+import React, { useState } from "react";
+import { useNavigate, useParams } from "react-router-dom";
 import {
-  ArrowLeft, Copy, Check, Loader2, AlertCircle, Trash2, Bot, X,
-} from 'lucide-react';
-import { useChannel, useUpdateChannel, useDeleteChannel, useAssignAgent, useUnassignAgent } from '../hooks/useChannels';
-import { useAiAgents } from '@features/ai-agents/hooks/useAiAgents';
+  ArrowLeft,
+  Copy,
+  Check,
+  Loader2,
+  AlertCircle,
+  Trash2,
+  Bot,
+  X,
+} from "lucide-react";
+import {
+  useChannel,
+  useUpdateChannel,
+  useDeleteChannel,
+  useAssignAgent,
+  useUnassignAgent,
+} from "../hooks/useChannels";
+import { useAiAgents } from "@features/ai-agents/hooks/useAiAgents";
 
 function CopyButton({ text }: { text: string }) {
   const [copied, setCopied] = useState(false);
@@ -15,26 +28,34 @@ function CopyButton({ text }: { text: string }) {
   };
   return (
     <button className="btn btn-ghost btn-sm gap-1" onClick={handle}>
-      {copied ? <Check size={14} className="text-success" /> : <Copy size={14} />}
-      {copied ? 'Copiado' : 'Copiar'}
+      {copied ? (
+        <Check size={14} className="text-success" />
+      ) : (
+        <Copy size={14} />
+      )}
+      {copied ? "Copiado" : "Copiar"}
     </button>
   );
 }
 
 export const ChannelDetailPage: React.FC = () => {
   const navigate = useNavigate();
-  const { channelId = '' } = useParams<{ channelId: string }>();
+  const { channelId = "" } = useParams<{ channelId: string }>();
   const { data: channel, isLoading, isError } = useChannel(channelId);
   const { data: agents = [] } = useAiAgents();
 
-  const { mutateAsync: updateChannel, isPending: saving } = useUpdateChannel(channelId);
-  const { mutateAsync: deleteChannel, isPending: deleting } = useDeleteChannel();
-  const { mutateAsync: assignAgent, isPending: assigning } = useAssignAgent(channelId);
-  const { mutateAsync: unassignAgent, isPending: unassigning } = useUnassignAgent(channelId);
+  const { mutateAsync: updateChannel, isPending: saving } =
+    useUpdateChannel(channelId);
+  const { mutateAsync: deleteChannel, isPending: deleting } =
+    useDeleteChannel();
+  const { mutateAsync: assignAgent, isPending: assigning } =
+    useAssignAgent(channelId);
+  const { mutateAsync: unassignAgent, isPending: unassigning } =
+    useUnassignAgent(channelId);
 
-  const [selectedAgent, setSelectedAgent] = useState<string>('');
+  const [selectedAgent, setSelectedAgent] = useState<string>("");
   const [confirmDelete, setConfirmDelete] = useState(false);
-  const [error, setError] = useState('');
+  const [error, setError] = useState("");
 
   if (isLoading) {
     return (
@@ -55,9 +76,11 @@ export const ChannelDetailPage: React.FC = () => {
 
   const handleToggleStatus = async () => {
     try {
-      await updateChannel({ status: channel.status === 'active' ? 'inactive' : 'active' });
+      await updateChannel({
+        status: channel.status === "active" ? "inactive" : "active",
+      });
     } catch {
-      setError('Error al actualizar el estado.');
+      setError("Error al actualizar el estado.");
     }
   };
 
@@ -65,9 +88,9 @@ export const ChannelDetailPage: React.FC = () => {
     if (!selectedAgent) return;
     try {
       await assignAgent(selectedAgent);
-      setSelectedAgent('');
+      setSelectedAgent("");
     } catch {
-      setError('Error al asignar el agente.');
+      setError("Error al asignar el agente.");
     }
   };
 
@@ -75,16 +98,16 @@ export const ChannelDetailPage: React.FC = () => {
     try {
       await unassignAgent();
     } catch {
-      setError('Error al desasignar el agente.');
+      setError("Error al desasignar el agente.");
     }
   };
 
   const handleDelete = async () => {
     try {
       await deleteChannel(channelId);
-      navigate('/settings/channels');
+      navigate("/settings/channels");
     } catch {
-      setError('No se puede eliminar el canal.');
+      setError("No se puede eliminar el canal.");
       setConfirmDelete(false);
     }
   };
@@ -93,21 +116,32 @@ export const ChannelDetailPage: React.FC = () => {
 
   return (
     <div className="p-6 max-w-2xl">
-      <button className="btn btn-ghost btn-sm gap-1 mb-6" onClick={() => navigate('/settings/channels')}>
+      <button
+        className="btn btn-ghost btn-sm gap-1 mb-6"
+        onClick={() => navigate("/settings/channels")}
+      >
         <ArrowLeft size={14} /> Canal Store
       </button>
 
       <div className="flex items-center justify-between mb-6">
         <div>
           <h1 className="text-xl font-bold">{channel.name}</h1>
-          <p className="text-sm text-base-content/60">{channel.channelType?.label ?? 'Canal'}</p>
+          <p className="text-sm text-base-content/60">
+            {channel.channelType?.label ?? "Canal"}
+          </p>
         </div>
         <div className="flex items-center gap-2">
-          <span className={`badge ${channel.status === 'active' ? 'badge-success' : 'badge-ghost'}`}>
-            {channel.status === 'active' ? 'Activo' : 'Inactivo'}
+          <span
+            className={`badge ${channel.status === "active" ? "badge-success" : "badge-ghost"}`}
+          >
+            {channel.status === "active" ? "Activo" : "Inactivo"}
           </span>
-          <button className="btn btn-ghost btn-sm" onClick={handleToggleStatus} disabled={saving}>
-            {channel.status === 'active' ? 'Desactivar' : 'Activar'}
+          <button
+            className="btn btn-ghost btn-sm"
+            onClick={handleToggleStatus}
+            disabled={saving}
+          >
+            {channel.status === "active" ? "Desactivar" : "Activar"}
           </button>
         </div>
       </div>
@@ -115,7 +149,9 @@ export const ChannelDetailPage: React.FC = () => {
       {error && (
         <div className="alert alert-error mb-4 text-sm">
           <AlertCircle size={16} /> <span>{error}</span>
-          <button className="btn btn-ghost btn-xs" onClick={() => setError('')}><X size={12} /></button>
+          <button className="btn btn-ghost btn-xs" onClick={() => setError("")}>
+            <X size={12} />
+          </button>
         </div>
       )}
 
@@ -131,7 +167,8 @@ export const ChannelDetailPage: React.FC = () => {
               {channel.embedCode}
             </pre>
             <p className="text-xs text-base-content/50">
-              Inserta este código antes del cierre de <code>&lt;/body&gt;</code> en tu sitio web.
+              Inserta este código antes del cierre de <code>&lt;/body&gt;</code>{" "}
+              en tu sitio web.
             </p>
           </div>
         </div>
@@ -148,14 +185,20 @@ export const ChannelDetailPage: React.FC = () => {
             <div className="flex items-center justify-between bg-base-200 rounded-lg p-3">
               <div>
                 <p className="font-medium text-sm">{assignedAgent.name}</p>
-                <p className="text-xs text-base-content/50">{assignedAgent.model}</p>
+                <p className="text-xs text-base-content/50">
+                  {assignedAgent.model}
+                </p>
               </div>
               <button
                 className="btn btn-ghost btn-sm text-error"
                 onClick={handleUnassign}
                 disabled={unassigning}
               >
-                {unassigning ? <Loader2 size={14} className="animate-spin" /> : <X size={14} />}
+                {unassigning ? (
+                  <Loader2 size={14} className="animate-spin" />
+                ) : (
+                  <X size={14} />
+                )}
                 Desasignar
               </button>
             </div>
@@ -167,26 +210,34 @@ export const ChannelDetailPage: React.FC = () => {
                 onChange={(e) => setSelectedAgent(e.target.value)}
               >
                 <option value="">Seleccionar agente...</option>
-                {agents.filter((a) => a.is_active).map((a) => (
-                  <option key={a.id} value={a.id}>{a.name}</option>
-                ))}
+                {agents
+                  .filter((a) => a.is_active)
+                  .map((a) => (
+                    <option key={a.id} value={a.id}>
+                      {a.name}
+                    </option>
+                  ))}
               </select>
               <button
                 className="btn btn-primary btn-sm"
                 onClick={handleAssign}
                 disabled={!selectedAgent || assigning}
               >
-                {assigning ? <Loader2 size={14} className="animate-spin" /> : 'Asignar'}
+                {assigning ? (
+                  <Loader2 size={14} className="animate-spin" />
+                ) : (
+                  "Asignar"
+                )}
               </button>
             </div>
           )}
 
           {agents.length === 0 && (
             <p className="text-sm text-base-content/50">
-              No tienes agentes configurados.{' '}
+              No tienes agentes configurados.{" "}
               <button
                 className="link link-primary"
-                onClick={() => navigate('/settings/agents')}
+                onClick={() => navigate("/settings/agents")}
               >
                 Crear un agente
               </button>
@@ -201,10 +252,26 @@ export const ChannelDetailPage: React.FC = () => {
           <h2 className="font-semibold text-error">Zona de peligro</h2>
           {confirmDelete ? (
             <div className="flex items-center gap-2">
-              <p className="text-sm flex-1">¿Confirmas eliminar este canal? Esta acción no se puede deshacer.</p>
-              <button className="btn btn-ghost btn-sm" onClick={() => setConfirmDelete(false)}>Cancelar</button>
-              <button className="btn btn-error btn-sm" onClick={handleDelete} disabled={deleting}>
-                {deleting ? <Loader2 size={14} className="animate-spin" /> : <Trash2 size={14} />}
+              <p className="text-sm flex-1">
+                ¿Confirmas eliminar este canal? Esta acción no se puede
+                deshacer.
+              </p>
+              <button
+                className="btn btn-ghost btn-sm"
+                onClick={() => setConfirmDelete(false)}
+              >
+                Cancelar
+              </button>
+              <button
+                className="btn btn-error btn-sm"
+                onClick={handleDelete}
+                disabled={deleting}
+              >
+                {deleting ? (
+                  <Loader2 size={14} className="animate-spin" />
+                ) : (
+                  <Trash2 size={14} />
+                )}
                 Eliminar
               </button>
             </div>

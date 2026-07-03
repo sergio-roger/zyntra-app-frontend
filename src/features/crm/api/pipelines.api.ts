@@ -1,7 +1,7 @@
-import api from '@shared/api/axios';
-import { DealPipeline } from '@crm/types/deal-pipeline';
-import { DealPipelineStage } from '@crm/types/deal-pipeline-stage';
-import { PipelineForecast } from '@crm/types/pipeline-forecast';
+import api from "@shared/api/axios";
+import { DealPipeline } from "@crm/types/deal-pipeline";
+import { DealPipelineStage } from "@crm/types/deal-pipeline-stage";
+import { PipelineForecast } from "@crm/types/pipeline-forecast";
 
 export interface CreatePipelineInput {
   name: string;
@@ -14,7 +14,7 @@ export interface CreateStageInput {
   name: string;
   color?: string;
   position?: number;
-  type?: 'active' | 'won' | 'lost';
+  type?: "active" | "won" | "lost";
   probability_percent?: number;
 }
 
@@ -23,10 +23,10 @@ export interface ReorderStagesInput {
 }
 
 export const pipelinesApi = {
-  list: () => api.get<unknown, { data: DealPipeline[] }>('/crm/pipelines'),
+  list: () => api.get<unknown, { data: DealPipeline[] }>("/crm/pipelines"),
 
   create: (input: CreatePipelineInput) =>
-    api.post<unknown, { data: DealPipeline }>('/crm/pipelines', input),
+    api.post<unknown, { data: DealPipeline }>("/crm/pipelines", input),
 
   update: (id: string, input: Partial<CreatePipelineInput>) =>
     api.patch<unknown, { data: DealPipeline }>(`/crm/pipelines/${id}`, input),

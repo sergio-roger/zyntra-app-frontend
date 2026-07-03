@@ -1,15 +1,20 @@
-import { useAuthStore } from '@/features/auth/store/authStore';
-import { getMenuKeyFromPath } from '@shared/layouts/nav.config';
-import { SubNavGroupItem } from '@shared/layouts/SubNavGroupItem';
-import { SubNavLink } from '@shared/layouts/SubNavLink';
-import { useUiStore } from '@shared/store/uiStore';
-import { NavModule, SubNavEntry, SubNavGroup, SubNavItem } from '@shared/types/nav';
-import { X } from 'lucide-react';
-import React, { useEffect, useMemo } from 'react';
-import { useLocation } from 'react-router-dom';
+import { useAuthStore } from "@/features/auth/store/authStore";
+import { getMenuKeyFromPath } from "@shared/layouts/nav.config";
+import { SubNavGroupItem } from "@shared/layouts/SubNavGroupItem";
+import { SubNavLink } from "@shared/layouts/SubNavLink";
+import { useUiStore } from "@shared/store/uiStore";
+import {
+  NavModule,
+  SubNavEntry,
+  SubNavGroup,
+  SubNavItem,
+} from "@shared/types/nav";
+import { X } from "lucide-react";
+import React, { useEffect, useMemo } from "react";
+import { useLocation } from "react-router-dom";
 
 const isGroup = (entry: SubNavEntry): entry is SubNavGroup =>
-  (entry as SubNavGroup).type === 'group';
+  (entry as SubNavGroup).type === "group";
 
 interface SubSidebarProps {
   module: NavModule;
@@ -25,7 +30,7 @@ export const SubSidebar: React.FC<SubSidebarProps> = ({
   const { pathname } = useLocation();
   const { allowedMenus } = useAuthStore();
 
-  const dbModuleKey = module.key === 'agents' ? 'agents_ia' : module.key;
+  const dbModuleKey = module.key === "agents" ? "agents_ia" : module.key;
 
   // Build a map: parentKey → Set<childKey> from the backend menu tree (supports 3 levels)
   const allowedChildrenMap = useMemo(() => {
@@ -51,7 +56,7 @@ export const SubSidebar: React.FC<SubSidebarProps> = ({
     for (const entry of module.children ?? []) {
       if (!isGroup(entry)) continue;
       for (const child of entry.children) {
-        if (pathname === child.to || pathname.startsWith(child.to + '/')) {
+        if (pathname === child.to || pathname.startsWith(child.to + "/")) {
           return entry.key;
         }
       }
@@ -91,8 +96,8 @@ export const SubSidebar: React.FC<SubSidebarProps> = ({
           md:transition-all md:duration-300 md:ease-in-out
           ${
             isOpen
-              ? 'translate-x-[72px] md:translate-x-0 md:w-64 md:opacity-100'
-              : '-translate-x-full md:translate-x-0 md:w-0 md:opacity-0 md:border-none'
+              ? "translate-x-[72px] md:translate-x-0 md:w-64 md:opacity-100"
+              : "-translate-x-full md:translate-x-0 md:w-0 md:opacity-0 md:border-none"
           }
         `}
       >

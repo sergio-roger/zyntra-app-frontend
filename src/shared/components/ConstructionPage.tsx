@@ -1,12 +1,12 @@
-import React from 'react';
+import React from "react";
 import {
   Hammer,
   ArrowLeft,
   LayoutDashboard,
   Sparkles,
   Clock,
-} from 'lucide-react';
-import { useNavigate } from 'react-router-dom';
+} from "lucide-react";
+import { useNavigate } from "react-router-dom";
 
 interface ConstructionPageProps {
   title?: string;
@@ -14,8 +14,8 @@ interface ConstructionPageProps {
 }
 
 export const ConstructionPage: React.FC<ConstructionPageProps> = ({
-  title = '¡Estamos construyendo algo increíble!',
-  description = 'Esta sección está siendo desarrollada por nuestro equipo de ingeniería para ofrecerte la mejor experiencia posible. Estará lista muy pronto.',
+  title = "¡Estamos construyendo algo increíble!",
+  description = "Esta sección está siendo desarrollada por nuestro equipo de ingeniería para ofrecerte la mejor experiencia posible. Estará lista muy pronto.",
 }) => {
   const navigate = useNavigate();
 
@@ -32,9 +32,9 @@ export const ConstructionPage: React.FC<ConstructionPageProps> = ({
       </div>
 
       <h1 className="text-4xl font-black text-base-content mb-4 tracking-tight max-w-2xl mx-auto md:text-5xl">
-        {title.includes('increíble') ? (
+        {title.includes("increíble") ? (
           <>
-            ¡Estamos construyendo algo{' '}
+            ¡Estamos construyendo algo{" "}
             <span className="text-primary italic">increíble</span>!
           </>
         ) : (
@@ -67,7 +67,7 @@ export const ConstructionPage: React.FC<ConstructionPageProps> = ({
         </button>
 
         <button
-          onClick={() => navigate('/dashboard')}
+          onClick={() => navigate("/dashboard")}
           className="btn btn-primary gap-2 px-8 shadow-lg shadow-primary/20"
         >
           <LayoutDashboard size={18} />

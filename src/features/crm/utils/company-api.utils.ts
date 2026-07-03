@@ -1,18 +1,14 @@
-import {
-  CompaniesListResponse,
-  Company,
-  RawCompany,
-} from '@crm/types/company';
+import { CompaniesListResponse, Company, RawCompany } from "@crm/types/company";
 
 export const buildQueryString = (
   q: Record<string, string | number | boolean | undefined>,
 ): string => {
   const sp = new URLSearchParams();
   for (const [k, v] of Object.entries(q)) {
-    if (v !== undefined && v !== null && v !== '') sp.set(k, String(v));
+    if (v !== undefined && v !== null && v !== "") sp.set(k, String(v));
   }
   const s = sp.toString();
-  return s ? `?${s}` : '';
+  return s ? `?${s}` : "";
 };
 
 export const mapCompany = (raw: RawCompany): Company => ({
@@ -36,11 +32,14 @@ export const mapCompany = (raw: RawCompany): Company => ({
   updatedAt: raw.updatedAt,
 });
 
-export const mapCompanyList = (
-  raw: any,
-): CompaniesListResponse => {
+export const mapCompanyList = (raw: any): CompaniesListResponse => {
   const data =
-    raw && typeof raw === 'object' && 'data' in raw && raw.data && typeof raw.data === 'object' && 'items' in raw.data
+    raw &&
+    typeof raw === "object" &&
+    "data" in raw &&
+    raw.data &&
+    typeof raw.data === "object" &&
+    "items" in raw.data
       ? raw.data
       : raw;
   return {

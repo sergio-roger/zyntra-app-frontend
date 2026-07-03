@@ -1,17 +1,17 @@
-import React, { useState } from 'react';
-import { Link } from 'react-router-dom';
-import { useForm } from 'react-hook-form';
-import { zodResolver } from '@hookform/resolvers/zod';
-import { Mail, Lock } from 'lucide-react';
-import { useAuth } from '@features/auth/hooks/useAuth';
-import { FormField } from '@features/auth/components/FormField';
-import { SubmitButton } from '@features/auth/components/SubmitButton';
+import React, { useState } from "react";
+import { Link } from "react-router-dom";
+import { useForm } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { Mail, Lock } from "lucide-react";
+import { useAuth } from "@features/auth/hooks/useAuth";
+import { FormField } from "@features/auth/components/FormField";
+import { SubmitButton } from "@features/auth/components/SubmitButton";
 import {
   loginSchema,
   LoginFormValues,
-} from '@features/auth/schemas/login.schema';
-import { extractApiErrors } from '@features/auth/lib/mapAuthError';
-import { toastManager } from '@shared/components/toast/toastManager';
+} from "@features/auth/schemas/login.schema";
+import { extractApiErrors } from "@features/auth/lib/mapAuthError";
+import { toastManager } from "@shared/components/toast/toastManager";
 
 interface LoginFormProps {
   onSuccess?: () => void;
@@ -27,16 +27,16 @@ export const LoginForm: React.FC<LoginFormProps> = ({ onSuccess }) => {
     formState: { errors, isSubmitting },
   } = useForm<LoginFormValues>({
     resolver: zodResolver(loginSchema),
-    defaultValues: { email: '', password: '' },
+    defaultValues: { email: "", password: "" },
   });
 
   const onSubmit = async (data: LoginFormValues) => {
     try {
       await login(data);
       toastManager.add({
-        title: '¡Bienvenido!',
-        description: 'Sesión iniciada correctamente.',
-        type: 'success',
+        title: "¡Bienvenido!",
+        description: "Sesión iniciada correctamente.",
+        type: "success",
       });
       onSuccess?.();
     } catch (err) {
@@ -44,9 +44,9 @@ export const LoginForm: React.FC<LoginFormProps> = ({ onSuccess }) => {
 
       for (const error of apiErrors) {
         toastManager.add({
-          title: 'Error de autenticación',
+          title: "Error de autenticación",
           description: error.description,
-          type: 'error',
+          type: "error",
         });
       }
     }
@@ -66,19 +66,19 @@ export const LoginForm: React.FC<LoginFormProps> = ({ onSuccess }) => {
         autoComplete="email"
         error={errors.email?.message}
         disabled={isSubmitting}
-        {...register('email')}
+        {...register("email")}
       />
 
       <div>
         <FormField
           label="Contraseña"
           icon={Lock}
-          type={showPassword ? 'text' : 'password'}
+          type={showPassword ? "text" : "password"}
           placeholder="••••••••"
           autoComplete="current-password"
           error={errors.password?.message}
           disabled={isSubmitting}
-          {...register('password')}
+          {...register("password")}
         />
         <div className="mt-2 flex items-center justify-between">
           <label className="mt-2 group flex cursor-pointer select-none items-center gap-2">
@@ -91,8 +91,8 @@ export const LoginForm: React.FC<LoginFormProps> = ({ onSuccess }) => {
             <span
               className={`flex h-4 w-4 shrink-0 items-center justify-center rounded border shadow-inner transition-all duration-200 ${
                 showPassword
-                  ? 'border-transparent bg-gradient-to-br from-indigo-500 to-violet-600 shadow-indigo-500/30'
-                  : 'border-white/10 bg-slate-950/60 group-hover:border-white/20'
+                  ? "border-transparent bg-gradient-to-br from-indigo-500 to-violet-600 shadow-indigo-500/30"
+                  : "border-white/10 bg-slate-950/60 group-hover:border-white/20"
               }`}
             >
               {showPassword && (

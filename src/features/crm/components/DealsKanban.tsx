@@ -1,8 +1,8 @@
-import { dealsApi } from '@crm/api/deals.api';
-import { dealsKeys } from '@crm/hooks/useDeals';
-import { Deal } from '@crm/types/deal';
-import { DealPipelineStage } from '@crm/types/deal-pipeline-stage';
-import { KanbanResponse } from '@crm/types/kanban-response';
+import { dealsApi } from "@crm/api/deals.api";
+import { dealsKeys } from "@crm/hooks/useDeals";
+import { Deal } from "@crm/types/deal";
+import { DealPipelineStage } from "@crm/types/deal-pipeline-stage";
+import { KanbanResponse } from "@crm/types/kanban-response";
 import {
   CollisionDetection,
   DndContext,
@@ -14,11 +14,11 @@ import {
   rectIntersection,
   useSensor,
   useSensors,
-} from '@dnd-kit/core';
-import { useQueryClient } from '@tanstack/react-query';
-import React, { useCallback, useState } from 'react';
-import { DealCard } from './DealCard';
-import { DealsColumn } from './DealsColumn';
+} from "@dnd-kit/core";
+import { useQueryClient } from "@tanstack/react-query";
+import React, { useCallback, useState } from "react";
+import { DealCard } from "./DealCard";
+import { DealsColumn } from "./DealsColumn";
 
 interface DealsKanbanProps {
   kanbanData: KanbanResponse;
@@ -129,7 +129,7 @@ export const DealsKanban: React.FC<DealsKanbanProps> = ({
       } catch (err) {
         // En error revertimos al estado real del servidor
         qc.invalidateQueries({ queryKey });
-        console.error('Failed to move deal:', err);
+        console.error("Failed to move deal:", err);
       }
     },
     [kanbanData, qc],
@@ -155,7 +155,7 @@ export const DealsKanban: React.FC<DealsKanbanProps> = ({
         ))}
       </div>
 
-      <DragOverlay dropAnimation={{ duration: 150, easing: 'ease' }}>
+      <DragOverlay dropAnimation={{ duration: 150, easing: "ease" }}>
         {activeDeal ? (
           <div className="rotate-2 opacity-95 shadow-2xl shadow-black/50">
             <DealCard deal={activeDeal} isDragging />

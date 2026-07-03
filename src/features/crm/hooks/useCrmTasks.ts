@@ -1,16 +1,16 @@
-import { CreateTaskInput } from '@crm/types/create-task-input';
-import { TaskStatus } from '@crm/types/crm';
-import { CrmTask } from '@crm/types/crm-task';
-import api from '@shared/api/axios';
-import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
+import { CreateTaskInput } from "@crm/types/create-task-input";
+import { TaskStatus } from "@crm/types/crm";
+import { CrmTask } from "@crm/types/crm-task";
+import api from "@shared/api/axios";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 
 export function useCrmTasks(
   filters: { status?: TaskStatus; contactId?: string; dealId?: string } = {},
 ) {
   return useQuery<CrmTask[]>({
-    queryKey: ['crm-tasks', filters],
+    queryKey: ["crm-tasks", filters],
     queryFn: async () => {
-      const { data } = await api.get('/crm/tasks', { params: filters });
+      const { data } = await api.get("/crm/tasks", { params: filters });
       return data;
     },
   });
@@ -20,12 +20,12 @@ export function useCreateTask() {
   const queryClient = useQueryClient();
   return useMutation({
     mutationFn: async (input: CreateTaskInput) => {
-      const { data } = await api.post('/crm/tasks', input);
+      const { data } = await api.post("/crm/tasks", input);
       return data;
     },
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ['crm-tasks'] });
-      queryClient.invalidateQueries({ queryKey: ['contacts'] });
+      queryClient.invalidateQueries({ queryKey: ["crm-tasks"] });
+      queryClient.invalidateQueries({ queryKey: ["contacts"] });
     },
   });
 }
@@ -38,8 +38,8 @@ export function useUpdateTask() {
       return data;
     },
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ['crm-tasks'] });
-      queryClient.invalidateQueries({ queryKey: ['contacts'] });
+      queryClient.invalidateQueries({ queryKey: ["crm-tasks"] });
+      queryClient.invalidateQueries({ queryKey: ["contacts"] });
     },
   });
 }
@@ -51,7 +51,7 @@ export function useDeleteTask() {
       await api.delete(`/crm/tasks/${id}`);
     },
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ['crm-tasks'] });
+      queryClient.invalidateQueries({ queryKey: ["crm-tasks"] });
     },
   });
 }

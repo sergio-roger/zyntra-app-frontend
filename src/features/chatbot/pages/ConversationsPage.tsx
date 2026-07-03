@@ -2,9 +2,9 @@ import {
   aiApi,
   Conversation,
   ConversationDetail,
-} from '@features/chatbot/api/aiApi';
-import { Clock, Loader2, RefreshCw, User } from 'lucide-react';
-import React, { useEffect, useState } from 'react';
+} from "@features/chatbot/api/aiApi";
+import { Clock, Loader2, RefreshCw, User } from "lucide-react";
+import React, { useEffect, useState } from "react";
 
 export const ConversationsPage: React.FC = () => {
   const [conversations, setConversations] = useState<Conversation[]>([]);
@@ -20,7 +20,7 @@ export const ConversationsPage: React.FC = () => {
       const data = await aiApi.getConversations();
       setConversations(data);
     } catch (err) {
-      console.error('Error loading conversations:', err);
+      console.error("Error loading conversations:", err);
     } finally {
       setLoading(false);
     }
@@ -39,31 +39,31 @@ export const ConversationsPage: React.FC = () => {
       const data = await aiApi.getConversationDetail(id);
       setSelectedConv(data);
     } catch (err) {
-      console.error('Error loading conversation:', err);
+      console.error("Error loading conversation:", err);
     } finally {
       setLoadingDetail(false);
     }
   };
 
   const formatDate = (dateStr?: string) => {
-    if (!dateStr) return '';
+    if (!dateStr) return "";
     const date = new Date(dateStr);
-    return date.toLocaleDateString('es', {
-      day: 'numeric',
-      month: 'short',
-      hour: '2-digit',
-      minute: '2-digit',
+    return date.toLocaleDateString("es", {
+      day: "numeric",
+      month: "short",
+      hour: "2-digit",
+      minute: "2-digit",
     });
   };
 
   const getStatusBadge = (status: string) => {
     const badges: Record<string, string> = {
-      open: 'badge-success',
-      closed: 'badge-ghost',
-      bot: 'badge-warning',
-      human: 'badge-info',
+      open: "badge-success",
+      closed: "badge-ghost",
+      bot: "badge-warning",
+      human: "badge-info",
     };
-    return badges[status] || 'badge-ghost';
+    return badges[status] || "badge-ghost";
   };
 
   if (loading) {
@@ -88,7 +88,7 @@ export const ConversationsPage: React.FC = () => {
 
       <div
         className="grid gap-6 lg:grid-cols-3"
-        style={{ gridTemplateColumns: '1fr 2fr' }}
+        style={{ gridTemplateColumns: "1fr 2fr" }}
       >
         <div className="card bg-base-200 p-4">
           <h2 className="font-semibold mb-4">Recientes</h2>
@@ -104,8 +104,8 @@ export const ConversationsPage: React.FC = () => {
                   key={conv.id}
                   className={`w-full text-left p-3 rounded-lg hover:bg-base-300 transition ${
                     selectedConv?.id === conv.id
-                      ? 'bg-primary/20 border border-primary'
-                      : ''
+                      ? "bg-primary/20 border border-primary"
+                      : ""
                   }`}
                   onClick={() => selectConversation(conv.id)}
                 >
@@ -164,7 +164,7 @@ export const ConversationsPage: React.FC = () => {
                   <div
                     key={msg.id}
                     className={`chat ${
-                      msg.role === 'user' ? 'chat-end' : 'chat-start'
+                      msg.role === "user" ? "chat-end" : "chat-start"
                     }`}
                   >
                     <div className="chat-bubble chat-bubble-primary">

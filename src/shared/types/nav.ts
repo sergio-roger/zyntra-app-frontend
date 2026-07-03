@@ -1,4 +1,4 @@
-import { LucideIcon } from 'lucide-react';
+import { LucideIcon } from "lucide-react";
 
 export interface SubNavItem {
   to: string;
@@ -8,7 +8,7 @@ export interface SubNavItem {
 }
 
 export interface SubNavGroup {
-  type: 'group';
+  type: "group";
   key: string;
   label: string;
   icon: LucideIcon;

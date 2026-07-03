@@ -1,8 +1,8 @@
-import React from 'react';
-import { useNavigate } from 'react-router-dom';
-import { NAV_MODULES } from '../../../shared/layouts/nav.config';
-import { RailLink } from './RailLink';
-import { useAuthStore } from '@features/auth/store/authStore';
+import React from "react";
+import { useNavigate } from "react-router-dom";
+import { NAV_MODULES } from "../../../shared/layouts/nav.config";
+import { RailLink } from "./RailLink";
+import { useAuthStore } from "@features/auth/store/authStore";
 
 interface RailNavigationProps {
   activeKey?: string;
@@ -18,7 +18,7 @@ export const RailNavigation: React.FC<RailNavigationProps> = ({
 
   const RAIL_MODULES = NAV_MODULES.filter((m) => {
     if (!allowedMenus) return false;
-    const dbKey = m.key === 'agents' ? 'agents_ia' : m.key;
+    const dbKey = m.key === "agents" ? "agents_ia" : m.key;
     return allowedMenus.some((allowed) => allowed.key === dbKey);
   });
 

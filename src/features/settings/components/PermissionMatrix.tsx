@@ -1,7 +1,7 @@
-import React, { useState, useEffect } from 'react';
-import { PermissionToggle } from '@features/settings/components/PermissionToggle';
-import { usePermissionMatrix } from '@features/settings/hooks/usePermissionMatrix';
-import { Loader2, ChevronRight } from 'lucide-react';
+import React, { useState, useEffect } from "react";
+import { PermissionToggle } from "@features/settings/components/PermissionToggle";
+import { usePermissionMatrix } from "@features/settings/hooks/usePermissionMatrix";
+import { Loader2, ChevronRight } from "lucide-react";
 
 interface PermissionMatrixProps {
   roleKey: string;
@@ -23,7 +23,7 @@ export const PermissionMatrix: React.FC<PermissionMatrixProps> = ({
     updatingVariables,
   } = usePermissionMatrix({ roleKey, readOnly });
 
-  const [activeTabKey, setActiveTabKey] = useState<string>('');
+  const [activeTabKey, setActiveTabKey] = useState<string>("");
 
   // Set default active tab once roots load
   useEffect(() => {
@@ -81,8 +81,8 @@ export const PermissionMatrix: React.FC<PermissionMatrixProps> = ({
               onClick={() => setActiveTabKey(root.key)}
               className={`w-full text-left px-4 py-3.5 rounded-xl text-sm font-bold transition-all flex items-center justify-between group ${
                 isActive
-                  ? 'bg-primary text-primary-content shadow-lg shadow-primary/20 scale-[1.01]'
-                  : 'text-slate-400 hover:text-white hover:bg-white/5'
+                  ? "bg-primary text-primary-content shadow-lg shadow-primary/20 scale-[1.01]"
+                  : "text-slate-400 hover:text-white hover:bg-white/5"
               }`}
             >
               <div className="flex items-center gap-2.5">
@@ -90,9 +90,9 @@ export const PermissionMatrix: React.FC<PermissionMatrixProps> = ({
                   className={`h-2.5 w-2.5 rounded-full transition-all ${
                     isModuleActive
                       ? isActive
-                        ? 'bg-white'
-                        : 'bg-emerald-400'
-                      : 'bg-slate-700'
+                        ? "bg-white"
+                        : "bg-emerald-400"
+                      : "bg-slate-700"
                   }`}
                 />
                 <span>{root.label}</span>
@@ -101,8 +101,8 @@ export const PermissionMatrix: React.FC<PermissionMatrixProps> = ({
                 <span
                   className={`text-[10px] font-extrabold px-2 py-0.5 rounded-md ${
                     isActive
-                      ? 'bg-white/20 text-white'
-                      : 'bg-white/5 text-slate-500'
+                      ? "bg-white/20 text-white"
+                      : "bg-white/5 text-slate-500"
                   }`}
                 >
                   {childCount}
@@ -111,8 +111,8 @@ export const PermissionMatrix: React.FC<PermissionMatrixProps> = ({
                   size={14}
                   className={`transition-transform duration-300 ${
                     isActive
-                      ? 'translate-x-0.5 opacity-100'
-                      : 'opacity-0 group-hover:opacity-100 group-hover:translate-x-0.5'
+                      ? "translate-x-0.5 opacity-100"
+                      : "opacity-0 group-hover:opacity-100 group-hover:translate-x-0.5"
                   }`}
                 />
               </div>
@@ -153,7 +153,7 @@ export const PermissionMatrix: React.FC<PermissionMatrixProps> = ({
               Subsecciones y Características
             </h4>
             <div
-              className={`grid grid-cols-1 lg:grid-cols-2 gap-4 ${!isRootChecked ? 'opacity-40 pointer-events-none transition-opacity duration-300' : ''}`}
+              className={`grid grid-cols-1 lg:grid-cols-2 gap-4 ${!isRootChecked ? "opacity-40 pointer-events-none transition-opacity duration-300" : ""}`}
             >
               {children.map((child) => {
                 const isChildChecked = activeMenuIds.includes(child.id);

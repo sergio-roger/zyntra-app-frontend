@@ -1,9 +1,9 @@
-import { ExportColumn } from '@core/types/api';
-import { generateExportFilename } from '@core/utils/export';
-import { companiesApi } from '@crm/api/companies.api';
-import { STANDARD_COMPANY_EXPORT_COLUMNS as STANDARD_COLUMNS } from '@crm/constants/company-columns';
-import { useCustomFields } from '@crm/hooks/useCustomFields';
-import { ListCompaniesQuery } from '@crm/types/company';
+import { ExportColumn } from "@core/types/api";
+import { generateExportFilename } from "@core/utils/export";
+import { companiesApi } from "@crm/api/companies.api";
+import { STANDARD_COMPANY_EXPORT_COLUMNS as STANDARD_COLUMNS } from "@crm/constants/company-columns";
+import { useCustomFields } from "@crm/hooks/useCustomFields";
+import { ListCompaniesQuery } from "@crm/types/company";
 import {
   ArrowDown,
   ArrowUp,
@@ -13,14 +13,14 @@ import {
   Loader2,
   Plus,
   X,
-} from 'lucide-react';
-import React, { useEffect, useMemo, useState } from 'react';
+} from "lucide-react";
+import React, { useEffect, useMemo, useState } from "react";
 
 interface CompanyExportModalProps {
   open: boolean;
   onClose: () => void;
   total: number;
-  queryParams: Omit<ListCompaniesQuery, 'page' | 'limit'>;
+  queryParams: Omit<ListCompaniesQuery, "page" | "limit">;
 }
 
 export const CompanyExportModal: React.FC<CompanyExportModalProps> = ({
@@ -29,7 +29,7 @@ export const CompanyExportModal: React.FC<CompanyExportModalProps> = ({
   total,
   queryParams,
 }) => {
-  const { data: customFieldDefs = [] } = useCustomFields('company');
+  const { data: customFieldDefs = [] } = useCustomFields("company");
 
   const customColumns = useMemo<ExportColumn[]>(
     () =>
@@ -46,13 +46,15 @@ export const CompanyExportModal: React.FC<CompanyExportModalProps> = ({
 
   const [activeColumns, setActiveColumns] =
     useState<ExportColumn[]>(STANDARD_COLUMNS);
-  const [filename, setFilename] = useState(() => generateExportFilename('empresas'));
+  const [filename, setFilename] = useState(() =>
+    generateExportFilename("empresas"),
+  );
   const [isDownloading, setIsDownloading] = useState(false);
 
   useEffect(() => {
     if (open) {
       setActiveColumns(STANDARD_COLUMNS);
-      setFilename(generateExportFilename('empresas'));
+      setFilename(generateExportFilename("empresas"));
     }
   }, [open]);
 
@@ -81,22 +83,25 @@ export const CompanyExportModal: React.FC<CompanyExportModalProps> = ({
       const filters: Record<string, string | number | boolean | undefined> = {};
       if (queryParams.search) filters.search = queryParams.search;
       if (queryParams.industryId) filters.industryId = queryParams.industryId;
-      if (queryParams.lifecycleStageId) filters.lifecycleStageId = queryParams.lifecycleStageId;
-      if (queryParams.createdAtFrom) filters.createdAtFrom = queryParams.createdAtFrom;
-      if (queryParams.createdAtTo) filters.createdAtTo = queryParams.createdAtTo;
+      if (queryParams.lifecycleStageId)
+        filters.lifecycleStageId = queryParams.lifecycleStageId;
+      if (queryParams.createdAtFrom)
+        filters.createdAtFrom = queryParams.createdAtFrom;
+      if (queryParams.createdAtTo)
+        filters.createdAtTo = queryParams.createdAtTo;
 
-      const res = await companiesApi.exportCsv({ filters, columns: activeColumns });
+      const res = await companiesApi.exportCsv({
+        filters,
+        columns: activeColumns,
+      });
       const blob =
         res instanceof Blob
           ? res
-          : new Blob([res], { type: 'text/csv;charset=utf-8;' });
+          : new Blob([res], { type: "text/csv;charset=utf-8;" });
       const url = URL.createObjectURL(blob);
-      const a = document.createElement('a');
+      const a = document.createElement("a");
       a.href = url;
-      const safeName = (filename.trim()).replace(
-        /[^a-zA-Z0-9_-]/g,
-        '_',
-      );
+      const safeName = filename.trim().replace(/[^a-zA-Z0-9_-]/g, "_");
       a.download = `${safeName}.csv`;
       document.body.appendChild(a);
       a.click();
@@ -151,13 +156,16 @@ export const CompanyExportModal: React.FC<CompanyExportModalProps> = ({
             {/* Left */}
             <div className="flex w-[52%] flex-col gap-5 overflow-y-auto border-r border-white/10 px-5 py-5">
               <div className="flex items-start gap-3 rounded-xl border border-indigo-500/20 bg-indigo-500/10 px-4 py-3">
-                <Building2 size={15} className="mt-0.5 shrink-0 text-indigo-400" />
+                <Building2
+                  size={15}
+                  className="mt-0.5 shrink-0 text-indigo-400"
+                />
                 <p className="text-sm leading-snug text-indigo-300">
-                  Se exportarán{' '}
+                  Se exportarán{" "}
                   <span className="font-bold">
-                    {total.toLocaleString('es-EC')} empresa
-                    {total !== 1 ? 's' : ''}
-                  </span>{' '}
+                    {total.toLocaleString("es-EC")} empresa
+                    {total !== 1 ? "s" : ""}
+                  </span>{" "}
                   con los filtros actuales
                 </p>
               </div>
@@ -178,7 +186,9 @@ export const CompanyExportModal: React.FC<CompanyExportModalProps> = ({
                     className="min-w-0 flex-1 bg-transparent text-sm text-slate-200 outline-none placeholder:text-slate-600"
                     placeholder={filename}
                   />
-                  <span className="shrink-0 text-[10px] text-slate-600">.csv</span>
+                  <span className="shrink-0 text-[10px] text-slate-600">
+                    .csv
+                  </span>
                 </div>
               </div>
 
@@ -201,7 +211,9 @@ export const CompanyExportModal: React.FC<CompanyExportModalProps> = ({
                     {availableColumns.map((col) => (
                       <button
                         key={col.key}
-                        onClick={() => setActiveColumns((prev) => [...prev, col])}
+                        onClick={() =>
+                          setActiveColumns((prev) => [...prev, col])
+                        }
                         className="inline-flex items-center gap-1 rounded-lg border border-white/10 bg-slate-800 px-2.5 py-1.5 text-xs font-medium text-slate-300 transition-colors hover:border-indigo-500/40 hover:bg-indigo-500/10 hover:text-indigo-300"
                       >
                         <Plus size={10} /> {col.label}
@@ -209,7 +221,9 @@ export const CompanyExportModal: React.FC<CompanyExportModalProps> = ({
                     ))}
                   </div>
                 ) : (
-                  <p className="text-xs text-slate-600">Todas las columnas están activas</p>
+                  <p className="text-xs text-slate-600">
+                    Todas las columnas están activas
+                  </p>
                 )}
               </div>
             </div>

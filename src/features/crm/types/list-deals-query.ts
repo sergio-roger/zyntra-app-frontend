@@ -1,4 +1,4 @@
-import { DealStatus } from '@crm/types/crm';
+import { DealStatus } from "@crm/types/crm";
 
 export interface ListDealsQuery {
   assignedToId?: string;

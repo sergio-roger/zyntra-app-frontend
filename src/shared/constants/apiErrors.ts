@@ -1,10 +1,10 @@
 import {
   ERROR_CODE_MESSAGES,
   ERROR_MESSAGES,
-} from '@shared/constants/errorMessages';
+} from "@shared/constants/errorMessages";
 
 export function getApiErrorMessage(error: unknown): string {
-  const defaultError = 'Ocurrió un error inesperado. Intenta de nuevo';
+  const defaultError = "Ocurrió un error inesperado. Intenta de nuevo";
   const data = (error as any)?.response?.data;
 
   if (!data) {

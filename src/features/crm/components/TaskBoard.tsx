@@ -1,10 +1,22 @@
-import { TaskFormSidebar } from '@crm/components/TaskFormSidebar';
-import { useCrmTasks, useDeleteTask, useUpdateTask } from '@crm/hooks/useCrmTasks';
-import { TaskStatus } from '@crm/types/crm';
-import { CrmTask } from '@crm/types/crm-task';
-import { ConfirmModal } from '@shared/components/ConfirmModal';
-import { Calendar, CheckCircle2, Circle, Clock, Loader2, Plus, Trash2 } from 'lucide-react';
-import React, { useState } from 'react';
+import { TaskFormSidebar } from "@crm/components/TaskFormSidebar";
+import {
+  useCrmTasks,
+  useDeleteTask,
+  useUpdateTask,
+} from "@crm/hooks/useCrmTasks";
+import { TaskStatus } from "@crm/types/crm";
+import { CrmTask } from "@crm/types/crm-task";
+import { ConfirmModal } from "@shared/components/ConfirmModal";
+import {
+  Calendar,
+  CheckCircle2,
+  Circle,
+  Clock,
+  Loader2,
+  Plus,
+  Trash2,
+} from "lucide-react";
+import React, { useState } from "react";
 
 interface TaskBoardProps {
   dealId?: string;
@@ -26,7 +38,8 @@ export const TaskBoard: React.FC<TaskBoardProps> = ({ dealId, contactId }) => {
   const deleteMutation = useDeleteTask();
 
   const handleToggleStatus = async (task: CrmTask) => {
-    const newStatus: TaskStatus = task.status === 'completed' ? 'pending' : 'completed';
+    const newStatus: TaskStatus =
+      task.status === "completed" ? "pending" : "completed";
     await updateMutation.mutateAsync({ id: task.id, status: newStatus });
   };
 
@@ -55,15 +68,19 @@ export const TaskBoard: React.FC<TaskBoardProps> = ({ dealId, contactId }) => {
 
   const getPriorityColor = (priority: string) => {
     switch (priority) {
-      case 'high': return 'text-rose-400 bg-rose-400/10 border-rose-400/20';
-      case 'medium': return 'text-amber-400 bg-amber-400/10 border-amber-400/20';
-      case 'low': return 'text-emerald-400 bg-emerald-400/10 border-emerald-400/20';
-      default: return 'text-slate-400 bg-slate-400/10 border-slate-400/20';
+      case "high":
+        return "text-rose-400 bg-rose-400/10 border-rose-400/20";
+      case "medium":
+        return "text-amber-400 bg-amber-400/10 border-amber-400/20";
+      case "low":
+        return "text-emerald-400 bg-emerald-400/10 border-emerald-400/20";
+      default:
+        return "text-slate-400 bg-slate-400/10 border-slate-400/20";
     }
   };
 
   const isOverdue = (date: string, status: string) => {
-    return new Date(date) < new Date() && status !== 'completed';
+    return new Date(date) < new Date() && status !== "completed";
   };
 
   if (isLoading) {
@@ -96,19 +113,23 @@ export const TaskBoard: React.FC<TaskBoardProps> = ({ dealId, contactId }) => {
             <div
               key={task.id}
               className={`group bg-slate-900/50 border border-white/5 rounded-xl p-3 hover:border-white/20 transition-all ${
-                task.status === 'completed' ? 'opacity-60' : ''
+                task.status === "completed" ? "opacity-60" : ""
               }`}
             >
               <div className="flex items-start gap-3">
                 <button
                   onClick={() => handleToggleStatus(task)}
                   className={`mt-0.5 transition-colors ${
-                    task.status === 'completed'
-                      ? 'text-emerald-500'
-                      : 'text-slate-600 hover:text-indigo-400'
+                    task.status === "completed"
+                      ? "text-emerald-500"
+                      : "text-slate-600 hover:text-indigo-400"
                   }`}
                 >
-                  {task.status === 'completed' ? <CheckCircle2 size={18} /> : <Circle size={18} />}
+                  {task.status === "completed" ? (
+                    <CheckCircle2 size={18} />
+                  ) : (
+                    <Circle size={18} />
+                  )}
                 </button>
 
                 <div className="flex-1 min-w-0">
@@ -116,12 +137,16 @@ export const TaskBoard: React.FC<TaskBoardProps> = ({ dealId, contactId }) => {
                     <h5
                       onClick={() => openEdit(task)}
                       className={`text-sm font-bold text-white truncate cursor-pointer hover:text-indigo-400 transition-colors ${
-                        task.status === 'completed' ? 'line-through text-slate-500' : ''
+                        task.status === "completed"
+                          ? "line-through text-slate-500"
+                          : ""
                       }`}
                     >
                       {task.title}
                     </h5>
-                    <span className={`shrink-0 px-1.5 py-0.5 rounded text-[9px] font-bold uppercase tracking-wider border ${getPriorityColor(task.priority)}`}>
+                    <span
+                      className={`shrink-0 px-1.5 py-0.5 rounded text-[9px] font-bold uppercase tracking-wider border ${getPriorityColor(task.priority)}`}
+                    >
                       {task.priority}
                     </span>
                     {isOverdue(task.dueDate, task.status) && (

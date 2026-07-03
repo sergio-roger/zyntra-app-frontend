@@ -1,22 +1,22 @@
-import { dealsApi } from '@crm/api/deals.api';
-import { pipelinesApi } from '@crm/api/pipelines.api';
-import { CreateDealInput } from '@crm/types/create-deal-input';
-import { UpdateDealInput } from '@crm/types/crm';
-import { ListDealsQuery } from '@crm/types/list-deals-query';
-import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
+import { dealsApi } from "@crm/api/deals.api";
+import { pipelinesApi } from "@crm/api/pipelines.api";
+import { CreateDealInput } from "@crm/types/create-deal-input";
+import { UpdateDealInput } from "@crm/types/crm";
+import { ListDealsQuery } from "@crm/types/list-deals-query";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 
 export const pipelineKeys = {
-  all: ['pipelines'] as const,
-  list: () => ['pipelines', 'list'] as const,
-  forecast: (id: string) => ['pipelines', 'forecast', id] as const,
+  all: ["pipelines"] as const,
+  list: () => ["pipelines", "list"] as const,
+  forecast: (id: string) => ["pipelines", "forecast", id] as const,
 };
 
 export const dealsKeys = {
-  all: ['deals'] as const,
-  list: (query: ListDealsQuery) => ['deals', 'list', query] as const,
-  detail: (id: string) => ['deals', 'detail', id] as const,
-  kanban: (pipelineId: string) => ['deals', 'kanban', pipelineId] as const,
-  history: (id: string) => ['deals', 'history', id] as const,
+  all: ["deals"] as const,
+  list: (query: ListDealsQuery) => ["deals", "list", query] as const,
+  detail: (id: string) => ["deals", "detail", id] as const,
+  kanban: (pipelineId: string) => ["deals", "kanban", pipelineId] as const,
+  history: (id: string) => ["deals", "history", id] as const,
 };
 
 // ─── Pipelines ─────────────────────────────────────────────────────────────
@@ -33,7 +33,7 @@ export const usePipelines = () =>
 export const usePipelineForecast = (pipelineId: string | null) =>
   useQuery({
     enabled: Boolean(pipelineId),
-    queryKey: pipelineKeys.forecast(pipelineId ?? ''),
+    queryKey: pipelineKeys.forecast(pipelineId ?? ""),
     queryFn: async () => {
       const res = await pipelinesApi.forecast(pipelineId as string);
       return res.data;
@@ -145,7 +145,7 @@ export const useReorderStages = () => {
 export const useDealsKanban = (pipelineId: string | null) =>
   useQuery({
     enabled: Boolean(pipelineId),
-    queryKey: dealsKeys.kanban(pipelineId ?? ''),
+    queryKey: dealsKeys.kanban(pipelineId ?? ""),
     queryFn: async () => {
       const res = await dealsApi.kanban(pipelineId as string);
       return res.data;
@@ -166,7 +166,7 @@ export const useDealsList = (query: ListDealsQuery) =>
 export const useDeal = (id: string | null) =>
   useQuery({
     enabled: Boolean(id),
-    queryKey: dealsKeys.detail(id ?? ''),
+    queryKey: dealsKeys.detail(id ?? ""),
     queryFn: async () => {
       const res = await dealsApi.get(id as string);
       return res.data;
@@ -176,7 +176,7 @@ export const useDeal = (id: string | null) =>
 export const useDealHistory = (id: string | null) =>
   useQuery({
     enabled: Boolean(id),
-    queryKey: dealsKeys.history(id ?? ''),
+    queryKey: dealsKeys.history(id ?? ""),
     queryFn: async () => {
       const res = await dealsApi.history(id as string);
       return res.data;

@@ -1,15 +1,15 @@
-import React, { useState } from 'react';
-import { useForm } from 'react-hook-form';
-import { zodResolver } from '@hookform/resolvers/zod';
-import { Lock, AlertCircle, Check, X } from 'lucide-react';
-import { authApi } from '@features/auth/api/authApi';
-import { FormField } from '@features/auth/components/FormField';
-import { SubmitButton } from '@features/auth/components/SubmitButton';
+import React, { useState } from "react";
+import { useForm } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { Lock, AlertCircle, Check, X } from "lucide-react";
+import { authApi } from "@features/auth/api/authApi";
+import { FormField } from "@features/auth/components/FormField";
+import { SubmitButton } from "@features/auth/components/SubmitButton";
 import {
   resetPasswordSchema,
   ResetPasswordFormValues,
-} from '@features/auth/schemas/reset-password.schema';
-import { mapAuthError } from '@features/auth/lib/mapAuthError';
+} from "@features/auth/schemas/reset-password.schema";
+import { mapAuthError } from "@features/auth/lib/mapAuthError";
 
 interface ResetPasswordFormProps {
   token: string;
@@ -17,9 +17,9 @@ interface ResetPasswordFormProps {
 }
 
 const checks = [
-  { test: (p: string) => p.length >= 8, label: 'Al menos 8 caracteres' },
-  { test: (p: string) => /[A-Z]/.test(p), label: 'Una mayúscula' },
-  { test: (p: string) => /[0-9]/.test(p), label: 'Un número' },
+  { test: (p: string) => p.length >= 8, label: "Al menos 8 caracteres" },
+  { test: (p: string) => /[A-Z]/.test(p), label: "Una mayúscula" },
+  { test: (p: string) => /[0-9]/.test(p), label: "Un número" },
 ];
 
 export const ResetPasswordForm: React.FC<ResetPasswordFormProps> = ({
@@ -27,9 +27,9 @@ export const ResetPasswordForm: React.FC<ResetPasswordFormProps> = ({
   onSuccess,
 }) => {
   // react-hook-form's watch() cannot be safely auto-memoized by React Compiler
-  'use no memo';
+  "use no memo";
 
-  const [serverError, setServerError] = useState('');
+  const [serverError, setServerError] = useState("");
 
   const {
     register,
@@ -38,15 +38,15 @@ export const ResetPasswordForm: React.FC<ResetPasswordFormProps> = ({
     formState: { errors, isSubmitting },
   } = useForm<ResetPasswordFormValues>({
     resolver: zodResolver(resetPasswordSchema),
-    mode: 'onBlur',
-    defaultValues: { password: '', confirmPassword: '' },
+    mode: "onBlur",
+    defaultValues: { password: "", confirmPassword: "" },
   });
 
   // eslint-disable-next-line react-hooks/incompatible-library
-  const password = watch('password');
+  const password = watch("password");
 
   const onSubmit = async (data: ResetPasswordFormValues) => {
-    setServerError('');
+    setServerError("");
     try {
       await authApi.resetPassword(token, data.password);
       onSuccess?.();
@@ -68,7 +68,7 @@ export const ResetPasswordForm: React.FC<ResetPasswordFormProps> = ({
         placeholder="••••••••"
         autoComplete="new-password"
         error={errors.password?.message}
-        {...register('password')}
+        {...register("password")}
       />
 
       {password && (
@@ -79,7 +79,7 @@ export const ResetPasswordForm: React.FC<ResetPasswordFormProps> = ({
               <li
                 key={label}
                 className={`flex items-center gap-1.5 transition-colors ${
-                  ok ? 'text-emerald-400' : 'text-slate-500'
+                  ok ? "text-emerald-400" : "text-slate-500"
                 }`}
               >
                 {ok ? <Check size={12} /> : <X size={12} />}
@@ -97,7 +97,7 @@ export const ResetPasswordForm: React.FC<ResetPasswordFormProps> = ({
         placeholder="••••••••"
         autoComplete="new-password"
         error={errors.confirmPassword?.message}
-        {...register('confirmPassword')}
+        {...register("confirmPassword")}
       />
 
       {serverError && (

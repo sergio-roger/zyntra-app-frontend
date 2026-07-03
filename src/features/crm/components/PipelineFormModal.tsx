@@ -1,9 +1,9 @@
-import React, { useState } from 'react';
-import { X, Save, Loader2, FolderPlus, Users } from 'lucide-react';
-import { useCreatePipeline } from '@crm/hooks/useDeals';
-import { useTeamsList } from '@features/settings/hooks/useUsersTeams';
-import { Input } from '@core/ui/Input';
-import { Select } from '@core/ui/Select';
+import React, { useState } from "react";
+import { X, Save, Loader2, FolderPlus, Users } from "lucide-react";
+import { useCreatePipeline } from "@crm/hooks/useDeals";
+import { useTeamsList } from "@features/settings/hooks/useUsersTeams";
+import { Input } from "@core/ui/Input";
+import { Select } from "@core/ui/Select";
 
 interface PipelineFormModalProps {
   open: boolean;
@@ -12,44 +12,44 @@ interface PipelineFormModalProps {
 
 const DEFAULT_STAGES = [
   {
-    name: 'Prospección',
-    color: '#4f46e5',
+    name: "Prospección",
+    color: "#4f46e5",
     probability_percent: 10,
-    type: 'active',
+    type: "active",
   },
   {
-    name: 'Contactado',
-    color: '#06b6d4',
+    name: "Contactado",
+    color: "#06b6d4",
     probability_percent: 20,
-    type: 'active',
+    type: "active",
   },
   {
-    name: 'Propuesta',
-    color: '#f59e0b',
+    name: "Propuesta",
+    color: "#f59e0b",
     probability_percent: 40,
-    type: 'active',
+    type: "active",
   },
   {
-    name: 'Negociación',
-    color: '#8b5cf6',
+    name: "Negociación",
+    color: "#8b5cf6",
     probability_percent: 60,
-    type: 'active',
+    type: "active",
   },
-  { name: 'Ganado', color: '#10b981', probability_percent: 100, type: 'won' },
-  { name: 'Perdido', color: '#ef4444', probability_percent: 0, type: 'lost' },
+  { name: "Ganado", color: "#10b981", probability_percent: 100, type: "won" },
+  { name: "Perdido", color: "#ef4444", probability_percent: 0, type: "lost" },
 ] as const;
 
 const TYPE_LABEL: Record<string, string> = {
-  active: 'Activa',
-  won: 'Ganado',
-  lost: 'Perdido',
+  active: "Activa",
+  won: "Ganado",
+  lost: "Perdido",
 };
 
 export const PipelineFormModal: React.FC<PipelineFormModalProps> = ({
   open,
   onClose,
 }) => {
-  const [name, setName] = useState('');
+  const [name, setName] = useState("");
   const [teamId, setTeamId] = useState<string | null>(null);
   const createMutation = useCreatePipeline();
   const { data: teams = [] } = useTeamsList();
@@ -66,10 +66,10 @@ export const PipelineFormModal: React.FC<PipelineFormModalProps> = ({
         team_id: teamId,
       });
       onClose();
-      setName('');
+      setName("");
       setTeamId(null);
     } catch (err) {
-      console.error('Error creating pipeline:', err);
+      console.error("Error creating pipeline:", err);
     }
   };
 

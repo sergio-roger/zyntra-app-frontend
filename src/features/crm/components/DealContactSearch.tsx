@@ -1,7 +1,14 @@
-import React, { useState, useRef, useEffect } from 'react';
-import { useContactsList } from '@crm/hooks/useContacts';
-import { Contact } from '@crm/types/contact';
-import { Building2, Search, User, X, ChevronDown, ChevronUp } from 'lucide-react';
+import React, { useState, useRef, useEffect } from "react";
+import { useContactsList } from "@crm/hooks/useContacts";
+import { Contact } from "@crm/types/contact";
+import {
+  Building2,
+  Search,
+  User,
+  X,
+  ChevronDown,
+  ChevronUp,
+} from "lucide-react";
 
 interface DealContactSearchProps {
   value: string;
@@ -18,7 +25,7 @@ export const DealContactSearch: React.FC<DealContactSearchProps> = ({
   required,
   error,
 }) => {
-  const [search, setSearch] = useState('');
+  const [search, setSearch] = useState("");
   const [open, setOpen] = useState(false);
   const containerRef = useRef<HTMLDivElement>(null);
 
@@ -36,25 +43,25 @@ export const DealContactSearch: React.FC<DealContactSearchProps> = ({
 
   const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
     if (!open) {
-      if (e.key === 'ArrowDown' || e.key === 'Enter') {
+      if (e.key === "ArrowDown" || e.key === "Enter") {
         e.preventDefault();
         setOpen(true);
       }
       return;
     }
 
-    if (e.key === 'ArrowDown') {
+    if (e.key === "ArrowDown") {
       e.preventDefault();
       setSelectedIndex((prev) => (prev < results.length - 1 ? prev + 1 : prev));
-    } else if (e.key === 'ArrowUp') {
+    } else if (e.key === "ArrowUp") {
       e.preventDefault();
       setSelectedIndex((prev) => (prev > 0 ? prev - 1 : prev));
-    } else if (e.key === 'Enter') {
+    } else if (e.key === "Enter") {
       e.preventDefault();
       if (selectedIndex >= 0 && selectedIndex < results.length) {
         handleSelect(results[selectedIndex]);
       }
-    } else if (e.key === 'Escape') {
+    } else if (e.key === "Escape") {
       setOpen(false);
     }
   };
@@ -62,18 +69,18 @@ export const DealContactSearch: React.FC<DealContactSearchProps> = ({
   const handleSelect = (c: Contact) => {
     onChange(c.id, c);
     setOpen(false);
-    setSearch('');
+    setSearch("");
   };
 
   const handleClear = () => {
-    onChange('', null);
-    setSearch('');
+    onChange("", null);
+    setSearch("");
   };
 
   return (
     <div className="space-y-1.5" ref={containerRef}>
       <label className="text-xs font-medium text-slate-400 ml-1 flex items-center gap-1.5">
-        <User size={14} /> Contacto vinculado {required && '*'}
+        <User size={14} /> Contacto vinculado {required && "*"}
       </label>
 
       {value && selectedContact ? (
@@ -91,7 +98,7 @@ export const DealContactSearch: React.FC<DealContactSearchProps> = ({
               )}
               {selectedContact.email && (
                 <span className="text-[11px] text-slate-500 truncate">
-                  {selectedContact.company ? '·' : ''} {selectedContact.email}
+                  {selectedContact.company ? "·" : ""} {selectedContact.email}
                 </span>
               )}
             </div>
@@ -133,7 +140,7 @@ export const DealContactSearch: React.FC<DealContactSearchProps> = ({
             <div className="w-full bg-slate-900 border border-white/10 rounded-xl overflow-hidden">
               {results.length === 0 ? (
                 <p className="px-4 py-3 text-xs text-slate-500 text-center">
-                  {search ? 'Sin resultados' : 'Escribe para buscar...'}
+                  {search ? "Sin resultados" : "Escribe para buscar..."}
                 </p>
               ) : (
                 <ul className="py-1">
@@ -143,10 +150,14 @@ export const DealContactSearch: React.FC<DealContactSearchProps> = ({
                         type="button"
                         onClick={() => handleSelect(c)}
                         className={`w-full text-left px-4 py-2.5 transition-colors ${
-                          index === selectedIndex ? 'bg-indigo-500/20' : 'hover:bg-white/5'
+                          index === selectedIndex
+                            ? "bg-indigo-500/20"
+                            : "hover:bg-white/5"
                         }`}
                       >
-                        <p className="text-sm font-medium text-white">{c.name}</p>
+                        <p className="text-sm font-medium text-white">
+                          {c.name}
+                        </p>
                         <div className="flex items-center gap-2 mt-0.5">
                           {c.company && (
                             <span className="flex items-center gap-1 text-[11px] text-indigo-400">

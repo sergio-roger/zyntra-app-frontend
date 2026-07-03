@@ -1,8 +1,17 @@
-import React, { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
-import { Globe, MessageCircle, Send, Lock, Plus, ArrowRight, Loader2, AlertCircle } from 'lucide-react';
-import { useChannelStore, useChannels } from '../hooks/useChannels';
-import type { ChannelType, Channel } from '../types/channels.types';
+import React, { useState } from "react";
+import { useNavigate } from "react-router-dom";
+import {
+  Globe,
+  MessageCircle,
+  Send,
+  Lock,
+  Plus,
+  ArrowRight,
+  Loader2,
+  AlertCircle,
+} from "lucide-react";
+import { useChannelStore, useChannels } from "../hooks/useChannels";
+import { ChannelType, Channel } from "../types/channels.types";
 
 const CHANNEL_ICONS: Record<string, React.ReactNode> = {
   web_chat: <Globe size={28} />,
@@ -16,7 +25,11 @@ interface ChannelTypeCardProps {
   onActivate: (ct: ChannelType) => void;
 }
 
-const ChannelTypeCard: React.FC<ChannelTypeCardProps> = ({ channelType, existingChannel, onActivate }) => {
+const ChannelTypeCard: React.FC<ChannelTypeCardProps> = ({
+  channelType,
+  existingChannel,
+  onActivate,
+}) => {
   const disabled = !channelType.is_available;
 
   return (
@@ -24,15 +37,17 @@ const ChannelTypeCard: React.FC<ChannelTypeCardProps> = ({ channelType, existing
       data-testid={`channel-card-${channelType.key}`}
       className={`card bg-base-100 border shadow-sm transition-all ${
         disabled
-          ? 'opacity-60 cursor-not-allowed border-base-300'
-          : 'border-base-300 hover:border-primary hover:shadow-md cursor-pointer'
+          ? "opacity-60 cursor-not-allowed border-base-300"
+          : "border-base-300 hover:border-primary hover:shadow-md cursor-pointer"
       }`}
     >
       <div className="card-body gap-3">
         <div className="flex items-start justify-between">
           <div
             className={`w-12 h-12 rounded-xl flex items-center justify-center ${
-              disabled ? 'bg-base-200 text-base-content/40' : 'bg-primary/10 text-primary'
+              disabled
+                ? "bg-base-200 text-base-content/40"
+                : "bg-primary/10 text-primary"
             }`}
           >
             {CHANNEL_ICONS[channelType.key] ?? <Globe size={28} />}
@@ -45,7 +60,9 @@ const ChannelTypeCard: React.FC<ChannelTypeCardProps> = ({ channelType, existing
             ) : existingChannel ? (
               <span className="badge badge-success badge-sm">Activo</span>
             ) : (
-              <span className="badge badge-primary badge-outline badge-sm">Disponible</span>
+              <span className="badge badge-primary badge-outline badge-sm">
+                Disponible
+              </span>
             )}
           </div>
         </div>
@@ -53,7 +70,9 @@ const ChannelTypeCard: React.FC<ChannelTypeCardProps> = ({ channelType, existing
         <div>
           <h3 className="font-semibold text-base">{channelType.label}</h3>
           {channelType.description && (
-            <p className="text-sm text-base-content/60 mt-0.5">{channelType.description}</p>
+            <p className="text-sm text-base-content/60 mt-0.5">
+              {channelType.description}
+            </p>
           )}
         </div>
 
@@ -86,7 +105,11 @@ const ChannelTypeCard: React.FC<ChannelTypeCardProps> = ({ channelType, existing
 
 export const ChannelStorePage: React.FC = () => {
   const navigate = useNavigate();
-  const { data: store = [], isLoading: loadingStore, isError: errorStore } = useChannelStore();
+  const {
+    data: store = [],
+    isLoading: loadingStore,
+    isError: errorStore,
+  } = useChannelStore();
   const { data: channels = [], isLoading: loadingChannels } = useChannels();
 
   const isLoading = loadingStore || loadingChannels;
@@ -96,7 +119,9 @@ export const ChannelStorePage: React.FC = () => {
     if (existing) {
       navigate(`/settings/channels/${existing.id}`);
     } else {
-      navigate(`/settings/channels/new?type=${ct.id}&key=${ct.key}&label=${encodeURIComponent(ct.label)}`);
+      navigate(
+        `/settings/channels/new?type=${ct.id}&key=${ct.key}&label=${encodeURIComponent(ct.label)}`,
+      );
     }
   };
 

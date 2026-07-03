@@ -1,8 +1,8 @@
-import { getMenuKeyFromPath } from '@shared/layouts/nav.config';
-import { SubNavLink } from '@shared/layouts/SubNavLink';
-import { SubNavGroup } from '@shared/types/nav';
-import { ChevronDown } from 'lucide-react';
-import React from 'react';
+import { getMenuKeyFromPath } from "@shared/layouts/nav.config";
+import { SubNavLink } from "@shared/layouts/SubNavLink";
+import { SubNavGroup } from "@shared/types/nav";
+import { ChevronDown } from "lucide-react";
+import React from "react";
 
 export interface SubNavGroupItemProps {
   group: SubNavGroup;
@@ -47,14 +47,14 @@ export const SubNavGroupItem: React.FC<SubNavGroupItemProps> = ({
         <ChevronDown
           size={13}
           className={`shrink-0 text-base-content/30 transition-transform duration-200 mt-0.5 ${
-            isOpen ? 'rotate-180' : ''
+            isOpen ? "rotate-180" : ""
           }`}
         />
       </button>
 
       <div
         className={`overflow-hidden transition-all duration-200 ${
-          isOpen ? 'max-h-96 opacity-100' : 'max-h-0 opacity-0'
+          isOpen ? "max-h-96 opacity-100" : "max-h-0 opacity-0"
         }`}
       >
         <ul className="flex flex-col gap-0.5 mt-1 ml-5 pl-3 border-l border-base-content/10">

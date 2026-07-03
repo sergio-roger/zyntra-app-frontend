@@ -1,9 +1,9 @@
-import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
-import { crmApi } from '@crm/api/crm.api';
+import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
+import { crmApi } from "@crm/api/crm.api";
 
 export const fieldsKeys = {
-  all: ['crm', 'fields'] as const,
-  byType: (type?: string) => ['crm', 'fields', type ?? 'all'] as const,
+  all: ["crm", "fields"] as const,
+  byType: (type?: string) => ["crm", "fields", type ?? "all"] as const,
 };
 
 export const useCustomFields = (entityType?: string) =>

@@ -1,8 +1,8 @@
-import { LifecycleStageCard } from '@features/settings/components/LifecycleStageCard';
-import { useLifecycleConfig } from '@features/settings/hooks/useLifecycleConfig';
-import { CardWrapper } from '@shared/components/CardWrapper';
-import { Loader2, Plus, Save } from 'lucide-react';
-import React from 'react';
+import { LifecycleStageCard } from "@features/settings/components/LifecycleStageCard";
+import { useLifecycleConfig } from "@features/settings/hooks/useLifecycleConfig";
+import { CardWrapper } from "@shared/components/CardWrapper";
+import { Loader2, Plus, Save } from "lucide-react";
+import React from "react";
 
 export const LifecycleConfig: React.FC = () => {
   const {
@@ -90,17 +90,17 @@ export const LifecycleConfig: React.FC = () => {
                   stage={stage}
                   index={index}
                   onUpdateName={(val) =>
-                    updateStageProperty(stage, 'name', val)
+                    updateStageProperty(stage, "name", val)
                   }
                   onUpdateDescription={(val) =>
-                    updateStageProperty(stage, 'description', val)
+                    updateStageProperty(stage, "description", val)
                   }
                   onSetDefault={() => setDefaultStage(stage)}
                   onDelete={() => handleDeleteStage(stage)}
                 />
               ))}
 
-              {addingTo === 'active' ? (
+              {addingTo === "active" ? (
                 <div className="bg-base-100 rounded-xl p-3 border border-primary/30 shadow-lg">
                   <h3 className="text-[10px] font-bold text-primary uppercase tracking-wider mb-2">
                     Nueva Etapa Activa
@@ -147,7 +147,7 @@ export const LifecycleConfig: React.FC = () => {
                 </div>
               ) : (
                 <button
-                  onClick={() => setAddingTo('active')}
+                  onClick={() => setAddingTo("active")}
                   className="w-full py-4 border-2 border-dashed border-base-content/10 rounded-xl text-xs font-bold text-base-content/40 hover:border-primary/30 hover:text-primary hover:bg-primary/5 transition-all flex items-center justify-center gap-2 group"
                 >
                   <Plus
@@ -186,17 +186,17 @@ export const LifecycleConfig: React.FC = () => {
                   labelPrefix="Etapa perdida"
                   accentColor="amber"
                   onUpdateName={(val) =>
-                    updateStageProperty(stage, 'name', val)
+                    updateStageProperty(stage, "name", val)
                   }
                   onUpdateDescription={(val) =>
-                    updateStageProperty(stage, 'description', val)
+                    updateStageProperty(stage, "description", val)
                   }
                   onSetDefault={() => setDefaultStage(stage)}
                   onDelete={() => handleDeleteStage(stage)}
                 />
               ))}
 
-              {addingTo === 'lost' ? (
+              {addingTo === "lost" ? (
                 <div className="bg-base-100 rounded-xl p-3 border border-amber-500/30 shadow-lg">
                   <h3 className="text-[10px] font-bold text-amber-500 uppercase tracking-wider mb-2">
                     Nueva Etapa Perdida
@@ -243,7 +243,7 @@ export const LifecycleConfig: React.FC = () => {
                 </div>
               ) : (
                 <button
-                  onClick={() => setAddingTo('lost')}
+                  onClick={() => setAddingTo("lost")}
                   className="w-full py-4 border-2 border-dashed border-base-content/10 rounded-xl text-xs font-bold text-base-content/40 hover:border-amber-500/30 hover:text-amber-500 hover:bg-amber-500/5 transition-all flex items-center justify-center gap-2 group"
                 >
                   <Plus

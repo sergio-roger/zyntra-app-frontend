@@ -1,4 +1,4 @@
-export type DealStageType = 'active' | 'won' | 'lost';
+export type DealStageType = "active" | "won" | "lost";
 
 export interface DealPipelineStage {
   color: string;

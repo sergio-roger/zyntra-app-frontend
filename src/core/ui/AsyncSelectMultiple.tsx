@@ -1,5 +1,12 @@
-import { Check, ChevronDown, Loader2, LucideIcon, Search, X } from 'lucide-react';
-import React, { useCallback, useEffect, useRef, useState } from 'react';
+import {
+  Check,
+  ChevronDown,
+  Loader2,
+  LucideIcon,
+  Search,
+  X,
+} from "lucide-react";
+import React, { useCallback, useEffect, useRef, useState } from "react";
 
 export interface AsyncLoadResult<TItem> {
   items: TItem[];
@@ -34,14 +41,14 @@ export function AsyncSelectMultiple<TItem>({
   value,
   onChange,
   label,
-  placeholder = 'Seleccionar...',
+  placeholder = "Seleccionar...",
   icon: Icon,
   limit = 10,
   disabled = false,
   error,
 }: AsyncSelectMultipleProps<TItem>): React.ReactElement {
   const [open, setOpen] = useState(false);
-  const [search, setSearch] = useState('');
+  const [search, setSearch] = useState("");
   const [items, setItems] = useState<TItem[]>([]);
   const [page, setPage] = useState(1);
   const [hasMore, setHasMore] = useState(false);
@@ -56,11 +63,11 @@ export function AsyncSelectMultiple<TItem>({
 
   useEffect(() => {
     const onKey = (e: KeyboardEvent) => {
-      if (e.key === 'Escape') setOpen(false);
+      if (e.key === "Escape") setOpen(false);
     };
-    document.addEventListener('keydown', onKey);
+    document.addEventListener("keydown", onKey);
     return () => {
-      document.removeEventListener('keydown', onKey);
+      document.removeEventListener("keydown", onKey);
     };
   }, []);
 
@@ -71,8 +78,9 @@ export function AsyncSelectMultiple<TItem>({
   // Scroll focused item into view
   useEffect(() => {
     if (focusedIndex < 0 || !listRef.current) return;
-    const domItems = listRef.current.querySelectorAll<HTMLElement>('[role="option"]');
-    domItems[focusedIndex]?.scrollIntoView({ block: 'nearest' });
+    const domItems =
+      listRef.current.querySelectorAll<HTMLElement>('[role="option"]');
+    domItems[focusedIndex]?.scrollIntoView({ block: "nearest" });
   }, [focusedIndex]);
 
   const load = useCallback(
@@ -81,9 +89,15 @@ export function AsyncSelectMultiple<TItem>({
       if (append) setLoadingMore(true);
       else setLoading(true);
       try {
-        const result = await loadOptions({ search: searchTerm, page: pageNum, limit });
+        const result = await loadOptions({
+          search: searchTerm,
+          page: pageNum,
+          limit,
+        });
         if (!cancelled) {
-          setItems((prev) => (append ? [...prev, ...result.items] : result.items));
+          setItems((prev) =>
+            append ? [...prev, ...result.items] : result.items,
+          );
           setHasMore(result.hasMore);
           setPage(pageNum);
         }
@@ -93,16 +107,18 @@ export function AsyncSelectMultiple<TItem>({
           else setLoading(false);
         }
       }
-      return () => { cancelled = true; };
+      return () => {
+        cancelled = true;
+      };
     },
     [loadOptions, limit],
   );
 
   useEffect(() => {
     if (open) {
-      setSearch('');
+      setSearch("");
       setPage(1);
-      load('', 1, false);
+      load("", 1, false);
       const t = setTimeout(() => searchRef.current?.focus(), 50);
       return () => clearTimeout(t);
     }
@@ -121,7 +137,8 @@ export function AsyncSelectMultiple<TItem>({
     };
   }, [search]);
 
-  const isSelected = (item: TItem) => value.some((v) => getKey(v) === getKey(item));
+  const isSelected = (item: TItem) =>
+    value.some((v) => getKey(v) === getKey(item));
 
   const toggle = (item: TItem) => {
     const key = getKey(item);
@@ -138,21 +155,21 @@ export function AsyncSelectMultiple<TItem>({
 
   const handleSearchKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
     switch (e.key) {
-      case 'ArrowDown':
+      case "ArrowDown":
         e.preventDefault();
         setFocusedIndex((i) => (i < items.length - 1 ? i + 1 : i));
         break;
-      case 'ArrowUp':
+      case "ArrowUp":
         e.preventDefault();
         setFocusedIndex((i) => (i > 0 ? i - 1 : 0));
         break;
-      case 'Enter':
+      case "Enter":
         if (focusedIndex >= 0 && items[focusedIndex]) {
           e.preventDefault();
           toggle(items[focusedIndex]);
         }
         break;
-      case 'Escape':
+      case "Escape":
         setOpen(false);
         break;
     }
@@ -189,16 +206,18 @@ export function AsyncSelectMultiple<TItem>({
             flex items-center justify-between gap-2 min-h-[42px]
             focus:outline-none focus:border-primary/50 focus:ring-1 focus:ring-primary/20 transition-all
             disabled:opacity-50 disabled:cursor-not-allowed
-            ${open ? 'border-primary/50 ring-1 ring-primary/20' : 'hover:border-white/20'}
-            ${error ? 'border-rose-500/50' : ''}
+            ${open ? "border-primary/50 ring-1 ring-primary/20" : "hover:border-white/20"}
+            ${error ? "border-rose-500/50" : ""}
           `}
         >
-          <span className={`truncate ${hasValue ? 'text-white' : 'text-slate-500'}`}>
+          <span
+            className={`truncate ${hasValue ? "text-white" : "text-slate-500"}`}
+          >
             {triggerLabel}
           </span>
           <ChevronDown
             size={14}
-            className={`text-slate-400 shrink-0 transition-transform duration-200 ${open ? 'rotate-180' : ''}`}
+            className={`text-slate-400 shrink-0 transition-transform duration-200 ${open ? "rotate-180" : ""}`}
           />
         </button>
 
@@ -213,7 +232,10 @@ export function AsyncSelectMultiple<TItem>({
                 <span className="max-w-[120px] truncate">{getLabel(item)}</span>
                 <button
                   type="button"
-                  onClick={(e) => { e.stopPropagation(); removeTag(item); }}
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    removeTag(item);
+                  }}
                   className="hover:text-white transition-colors ml-0.5 shrink-0"
                 >
                   <X size={9} />
@@ -259,7 +281,9 @@ export function AsyncSelectMultiple<TItem>({
               ) : items.length === 0 ? (
                 <div className="flex items-center justify-center py-8 text-slate-500">
                   <span className="text-xs">
-                    {search ? 'Sin resultados para esa búsqueda' : 'No hay datos disponibles'}
+                    {search
+                      ? "Sin resultados para esa búsqueda"
+                      : "No hay datos disponibles"}
                   </span>
                 </div>
               ) : (
@@ -277,15 +301,15 @@ export function AsyncSelectMultiple<TItem>({
                       className={`
                         w-full px-4 py-2.5 text-sm text-left transition-colors
                         flex items-center gap-3
-                        ${selected ? 'bg-primary/10' : ''}
-                        ${focused ? 'bg-white/10' : 'hover:bg-white/5'}
+                        ${selected ? "bg-primary/10" : ""}
+                        ${focused ? "bg-white/10" : "hover:bg-white/5"}
                       `}
                     >
                       {/* Checkbox */}
                       <span
                         className={`
                           w-4 h-4 rounded border shrink-0 flex items-center justify-center transition-all
-                          ${selected ? 'bg-primary border-primary' : 'border-white/20 bg-slate-900/50'}
+                          ${selected ? "bg-primary border-primary" : "border-white/20 bg-slate-900/50"}
                         `}
                       >
                         {selected && <Check size={9} className="text-white" />}
@@ -293,7 +317,9 @@ export function AsyncSelectMultiple<TItem>({
 
                       {/* Label + description */}
                       <div className="min-w-0 flex-1">
-                        <p className={`truncate ${selected ? 'text-white font-medium' : 'text-slate-300'}`}>
+                        <p
+                          className={`truncate ${selected ? "text-white font-medium" : "text-slate-300"}`}
+                        >
                           {getLabel(item)}
                         </p>
                         {description && (
@@ -317,8 +343,10 @@ export function AsyncSelectMultiple<TItem>({
                   onClick={() => load(search, page + 1, true)}
                   className="w-full py-1.5 text-xs text-slate-400 hover:text-white transition-colors flex items-center justify-center gap-1.5 disabled:opacity-50"
                 >
-                  {loadingMore && <Loader2 size={11} className="animate-spin" />}
-                  {loadingMore ? 'Cargando...' : 'Cargar más'}
+                  {loadingMore && (
+                    <Loader2 size={11} className="animate-spin" />
+                  )}
+                  {loadingMore ? "Cargando..." : "Cargar más"}
                 </button>
               </div>
             )}
@@ -327,7 +355,7 @@ export function AsyncSelectMultiple<TItem>({
             {value.length > 0 && (
               <div className="border-t border-white/5 px-4 py-2 flex items-center justify-between bg-slate-900/50">
                 <span className="text-[11px] text-slate-500">
-                  {value.length} seleccionado{value.length !== 1 ? 's' : ''}
+                  {value.length} seleccionado{value.length !== 1 ? "s" : ""}
                 </span>
                 <button
                   type="button"

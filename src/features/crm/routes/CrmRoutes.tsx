@@ -1,49 +1,49 @@
-import { ModuleGuard } from '@core/components/ModuleGuard';
-import { PermissionGuard } from '@core/routes/PermissionGuard';
-import { SuspenseLoader } from '@shared/components/SuspenseLoader';
-import { lazy } from 'react';
-import { Navigate, RouteObject } from 'react-router-dom';
+import { ModuleGuard } from "@core/components/ModuleGuard";
+import { PermissionGuard } from "@core/routes/PermissionGuard";
+import { SuspenseLoader } from "@shared/components/SuspenseLoader";
+import { lazy } from "react";
+import { Navigate, RouteObject } from "react-router-dom";
 
 const ContactListPage = lazy(() =>
-  import('@crm/pages/ContactListPage').then((m) => ({
+  import("@crm/pages/ContactListPage").then((m) => ({
     default: m.ContactListPage,
   })),
 );
 const InboxLeadsPage = lazy(() =>
-  import('@crm/pages/InboxLeadsPage').then((m) => ({
+  import("@crm/pages/InboxLeadsPage").then((m) => ({
     default: m.InboxLeadsPage,
   })),
 );
 const TagsPage = lazy(() =>
-  import('@crm/pages/TagsPage').then((m) => ({ default: m.TagsPage })),
+  import("@crm/pages/TagsPage").then((m) => ({ default: m.TagsPage })),
 );
 const CustomFieldsPage = lazy(() =>
-  import('@crm/pages/CustomFieldsPage').then((m) => ({
+  import("@crm/pages/CustomFieldsPage").then((m) => ({
     default: m.CustomFieldsPage,
   })),
 );
 const TasksPage = lazy(() =>
-  import('@crm/pages/TasksPage').then((m) => ({ default: m.TasksPage })),
+  import("@crm/pages/TasksPage").then((m) => ({ default: m.TasksPage })),
 );
 const DealsPage = lazy(() =>
-  import('@crm/pages/DealsPage').then((m) => ({ default: m.DealsPage })),
+  import("@crm/pages/DealsPage").then((m) => ({ default: m.DealsPage })),
 );
 const SegmentsPage = lazy(() =>
-  import('@crm/pages/SegmentsPage').then((m) => ({ default: m.SegmentsPage })),
+  import("@crm/pages/SegmentsPage").then((m) => ({ default: m.SegmentsPage })),
 );
 const CompanyListPage = lazy(() =>
-  import('@crm/pages/CompanyListPage').then((m) => ({
+  import("@crm/pages/CompanyListPage").then((m) => ({
     default: m.CompanyListPage,
   })),
 );
 
 export const crmRoutes: RouteObject[] = [
   {
-    path: '/crm',
+    path: "/crm",
     children: [
       { index: true, element: <Navigate to="/crm/contacts" replace /> },
       {
-        path: 'contacts',
+        path: "contacts",
         element: (
           <PermissionGuard menuKey="crm_contacts">
             <ModuleGuard menuKey="crm_contacts">
@@ -55,7 +55,7 @@ export const crmRoutes: RouteObject[] = [
         ),
       },
       {
-        path: 'leads',
+        path: "leads",
         element: (
           <PermissionGuard menuKey="crm_leads">
             <ModuleGuard menuKey="crm_leads">
@@ -67,7 +67,7 @@ export const crmRoutes: RouteObject[] = [
         ),
       },
       {
-        path: 'deals',
+        path: "deals",
         element: (
           <PermissionGuard menuKey="crm_deals">
             <ModuleGuard menuKey="crm_deals">
@@ -79,7 +79,7 @@ export const crmRoutes: RouteObject[] = [
         ),
       },
       {
-        path: 'tags',
+        path: "tags",
         element: (
           <PermissionGuard menuKey="crm_tags">
             <ModuleGuard menuKey="crm_tags">
@@ -91,7 +91,7 @@ export const crmRoutes: RouteObject[] = [
         ),
       },
       {
-        path: 'tasks',
+        path: "tasks",
         element: (
           <PermissionGuard menuKey="crm_tasks">
             <ModuleGuard menuKey="crm_tasks">
@@ -103,7 +103,7 @@ export const crmRoutes: RouteObject[] = [
         ),
       },
       {
-        path: 'fields',
+        path: "fields",
         element: (
           <PermissionGuard menuKey="crm_fields">
             <ModuleGuard menuKey="crm_fields">
@@ -115,7 +115,7 @@ export const crmRoutes: RouteObject[] = [
         ),
       },
       {
-        path: 'segments',
+        path: "segments",
         element: (
           <PermissionGuard menuKey="crm_segments">
             <ModuleGuard menuKey="crm_segments">
@@ -127,7 +127,7 @@ export const crmRoutes: RouteObject[] = [
         ),
       },
       {
-        path: 'companies',
+        path: "companies",
         element: (
           <PermissionGuard menuKey="crm_companies">
             <ModuleGuard menuKey="crm_companies">

@@ -1,21 +1,17 @@
-import { DealFormFields } from '@crm/components/DealFormFields';
+import { DealFormFields } from "@crm/components/DealFormFields";
 import {
   useCreateDeal,
   usePipelines,
   useUpdateDeal,
-} from '@crm/hooks/useDeals';
-import { Company } from '@crm/types/company';
-import { Contact } from '@crm/types/contact';
-import { CreateDealInput } from '@crm/types/create-deal-input';
-import { Deal } from '@crm/types/deal';
-import { DealPipeline } from '@crm/types/deal-pipeline';
-import { DealPipelineStage } from '@crm/types/deal-pipeline-stage';
-import {
-  Loader2,
-  Save,
-  X,
-} from 'lucide-react';
-import React, { useEffect, useState } from 'react';
+} from "@crm/hooks/useDeals";
+import { Company } from "@crm/types/company";
+import { Contact } from "@crm/types/contact";
+import { CreateDealInput } from "@crm/types/create-deal-input";
+import { Deal } from "@crm/types/deal";
+import { DealPipeline } from "@crm/types/deal-pipeline";
+import { DealPipelineStage } from "@crm/types/deal-pipeline-stage";
+import { Loader2, Save, X } from "lucide-react";
+import React, { useEffect, useState } from "react";
 
 interface DealFormSidebarProps {
   open: boolean;
@@ -26,15 +22,15 @@ interface DealFormSidebarProps {
 }
 
 const emptyForm = (): CreateDealInput => ({
-  title: '',
+  title: "",
   value: 0,
-  currency: 'USD',
-  pipelineId: '',
-  stageId: '',
+  currency: "USD",
+  pipelineId: "",
+  stageId: "",
   contactIds: [],
   probability: 10,
-  expectedCloseDate: '',
-  description: '',
+  expectedCloseDate: "",
+  description: "",
 });
 
 export const DealFormSidebar: React.FC<DealFormSidebarProps> = ({
@@ -66,26 +62,32 @@ export const DealFormSidebar: React.FC<DealFormSidebarProps> = ({
     if (deal) {
       const pipeline =
         deal.pipeline ??
-        pipelines.find((p) => p.id === (deal.pipelineId || (deal as any).pipeline_id)) ??
+        pipelines.find(
+          (p) => p.id === (deal.pipelineId || (deal as any).pipeline_id),
+        ) ??
         null;
       setSelectedPipeline(pipeline);
       setSelectedContacts(deal.contacts || []);
       setSelectedCompany(deal.company || null);
       setFormData({
         title: deal.title,
-        description: deal.description || '',
+        description: deal.description || "",
         value: Number(deal.value),
-        currency: deal.currency || 'USD',
+        currency: deal.currency || "USD",
         pipelineId: deal.pipelineId || (deal as any).pipeline_id,
         stageId: deal.stageId || (deal as any).stage_id,
         contactIds: deal.contacts?.map((c) => c.id) || [],
         companyId: deal.companyId ?? (deal as any).company_id ?? undefined,
-        assignedToId: deal.assignedToId ?? (deal as any).assigned_to_id ?? undefined,
+        assignedToId:
+          deal.assignedToId ?? (deal as any).assigned_to_id ?? undefined,
         teamId: deal.teamId ?? (deal as any).team_id ?? undefined,
         probability: deal.probability,
-        expectedCloseDate: (deal.expectedCloseDate || (deal as any).expected_close_date)
-          ? (deal.expectedCloseDate || (deal as any).expected_close_date).split('T')[0]
-          : '',
+        expectedCloseDate:
+          deal.expectedCloseDate || (deal as any).expected_close_date
+            ? (
+                deal.expectedCloseDate || (deal as any).expected_close_date
+              ).split("T")[0]
+            : "",
       });
     } else {
       let targetPipeline = pipelines.find((p) => p.id === defaultPipelineId);
@@ -113,8 +115,8 @@ export const DealFormSidebar: React.FC<DealFormSidebarProps> = ({
 
       setFormData({
         ...emptyForm(),
-        pipelineId: targetPipeline?.id ?? '',
-        stageId: activeStage?.id ?? '',
+        pipelineId: targetPipeline?.id ?? "",
+        stageId: activeStage?.id ?? "",
         probability: activeStage?.probability_percent ?? 10,
       });
       setSelectedContacts([]);
@@ -130,7 +132,7 @@ export const DealFormSidebar: React.FC<DealFormSidebarProps> = ({
     setFormData((f) => ({
       ...f,
       pipelineId: pipelineId,
-      stageId: firstStage?.id ?? '',
+      stageId: firstStage?.id ?? "",
       probability: firstStage?.probability_percent ?? f.probability,
     }));
   };
@@ -155,31 +157,31 @@ export const DealFormSidebar: React.FC<DealFormSidebarProps> = ({
       }
       onClose();
     } catch (err) {
-      console.error('Error saving deal:', err);
+      console.error("Error saving deal:", err);
     }
   };
 
   return (
     <>
       <div
-        className={`fixed inset-0 bg-black/60 !mt-0 backdrop-blur-sm z-[60] transition-opacity duration-300 ${open ? 'opacity-100' : 'opacity-0 pointer-events-none'}`}
+        className={`fixed inset-0 bg-black/60 !mt-0 backdrop-blur-sm z-[60] transition-opacity duration-300 ${open ? "opacity-100" : "opacity-0 pointer-events-none"}`}
         onClick={onClose}
       />
 
       <div
-        className={`fixed inset-y-0 right-0 w-full !mt-0 max-w-md bg-slate-900 border-l border-white/10 z-[70] shadow-2xl transform transition-transform duration-300 ease-out overflow-y-auto ${open ? 'translate-x-0' : 'translate-x-full'}`}
+        className={`fixed inset-y-0 right-0 w-full !mt-0 max-w-md bg-slate-900 border-l border-white/10 z-[70] shadow-2xl transform transition-transform duration-300 ease-out overflow-y-auto ${open ? "translate-x-0" : "translate-x-full"}`}
       >
         <div className="flex flex-col min-h-full">
           {/* Header */}
           <div className="sticky top-0 z-10 bg-slate-900 flex items-center justify-between p-6 border-b border-white/5">
             <div>
               <h3 className="text-xl font-bold text-white">
-                {deal ? 'Editar Negocio' : 'Nuevo Negocio'}
+                {deal ? "Editar Negocio" : "Nuevo Negocio"}
               </h3>
               <p className="text-sm text-slate-400 mt-1">
                 {deal
-                  ? 'Actualiza los detalles de la oportunidad'
-                  : 'Registra una nueva oportunidad de venta'}
+                  ? "Actualiza los detalles de la oportunidad"
+                  : "Registra una nueva oportunidad de venta"}
               </p>
             </div>
             <button
@@ -198,7 +200,9 @@ export const DealFormSidebar: React.FC<DealFormSidebarProps> = ({
           >
             <DealFormFields
               formData={formData}
-              onChange={(patch) => setFormData((prev) => ({ ...prev, ...patch }))}
+              onChange={(patch) =>
+                setFormData((prev) => ({ ...prev, ...patch }))
+              }
               selectedContacts={selectedContacts}
               onContactsChange={(contacts) => {
                 setSelectedContacts(contacts);
@@ -241,7 +245,7 @@ export const DealFormSidebar: React.FC<DealFormSidebarProps> = ({
               ) : (
                 <Save size={18} />
               )}
-              {deal ? 'Actualizar Negocio' : 'Crear Negocio'}
+              {deal ? "Actualizar Negocio" : "Crear Negocio"}
             </button>
           </div>
         </div>

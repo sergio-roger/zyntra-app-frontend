@@ -1,5 +1,5 @@
-import { Check, ChevronDown, LucideIcon } from 'lucide-react';
-import React, { forwardRef, useEffect, useRef, useState } from 'react';
+import { Check, ChevronDown, LucideIcon } from "lucide-react";
+import React, { forwardRef, useEffect, useRef, useState } from "react";
 
 export interface SelectOption<TValue = string> {
   value: TValue;
@@ -44,13 +44,13 @@ function SelectInner<TValue = string>(
     onChange,
     label,
     icon: Icon,
-    placeholder = 'Seleccionar...',
+    placeholder = "Seleccionar...",
     error,
-    containerClassName = '',
-    className = '',
+    containerClassName = "",
+    className = "",
     disabled = false,
     clearable = false,
-    clearLabel = '— Sin selección',
+    clearLabel = "— Sin selección",
     inline = false,
     displayValue,
     renderOption,
@@ -75,13 +75,13 @@ function SelectInner<TValue = string>(
       }
     };
     const onKey = (e: KeyboardEvent) => {
-      if (e.key === 'Escape') setOpen(false);
+      if (e.key === "Escape") setOpen(false);
     };
-    document.addEventListener('mousedown', onMouse);
-    document.addEventListener('keydown', onKey);
+    document.addEventListener("mousedown", onMouse);
+    document.addEventListener("keydown", onKey);
     return () => {
-      document.removeEventListener('mousedown', onMouse);
-      document.removeEventListener('keydown', onKey);
+      document.removeEventListener("mousedown", onMouse);
+      document.removeEventListener("keydown", onKey);
     };
   }, []);
 
@@ -93,8 +93,9 @@ function SelectInner<TValue = string>(
   // Scroll focused item into view
   useEffect(() => {
     if (focusedIndex < 0 || !listRef.current) return;
-    const domItems = listRef.current.querySelectorAll<HTMLElement>('[role="option"]');
-    domItems[focusedIndex]?.scrollIntoView({ block: 'nearest' });
+    const domItems =
+      listRef.current.querySelectorAll<HTMLElement>('[role="option"]');
+    domItems[focusedIndex]?.scrollIntoView({ block: "nearest" });
   }, [focusedIndex]);
 
   const selectAtIndex = (idx: number) => {
@@ -109,30 +110,30 @@ function SelectInner<TValue = string>(
 
   const handleKeyDown = (e: React.KeyboardEvent<HTMLButtonElement>) => {
     if (!open) {
-      if (e.key === 'ArrowDown' || e.key === 'ArrowUp') {
+      if (e.key === "ArrowDown" || e.key === "ArrowUp") {
         e.preventDefault();
         setOpen(true);
-        setFocusedIndex(e.key === 'ArrowDown' ? 0 : totalItems - 1);
+        setFocusedIndex(e.key === "ArrowDown" ? 0 : totalItems - 1);
       }
       return;
     }
     switch (e.key) {
-      case 'ArrowDown':
+      case "ArrowDown":
         e.preventDefault();
         setFocusedIndex((i) => (i < totalItems - 1 ? i + 1 : i));
         break;
-      case 'ArrowUp':
+      case "ArrowUp":
         e.preventDefault();
         setFocusedIndex((i) => (i > 0 ? i - 1 : 0));
         break;
-      case 'Enter':
-      case ' ':
+      case "Enter":
+      case " ":
         if (focusedIndex >= 0) {
           e.preventDefault();
           selectAtIndex(focusedIndex);
         }
         break;
-      case 'Escape':
+      case "Escape":
         e.preventDefault();
         setOpen(false);
         break;
@@ -169,19 +170,19 @@ function SelectInner<TValue = string>(
             flex items-center justify-between gap-2
             focus:outline-none focus:border-primary/50 focus:ring-1 focus:ring-primary/20 transition-all
             disabled:opacity-50 disabled:cursor-not-allowed
-            ${open ? 'border-primary/50 ring-1 ring-primary/20' : 'hover:border-white/20'}
-            ${error ? 'border-rose-500/50 focus:border-rose-500 focus:ring-rose-500/20' : ''}
+            ${open ? "border-primary/50 ring-1 ring-primary/20" : "hover:border-white/20"}
+            ${error ? "border-rose-500/50 focus:border-rose-500 focus:ring-rose-500/20" : ""}
             ${className}
           `}
         >
           <span
-            className={`truncate ${hasValue ? 'text-white' : 'text-slate-500'}`}
+            className={`truncate ${hasValue ? "text-white" : "text-slate-500"}`}
           >
             {triggerLabel}
           </span>
           <ChevronDown
             size={14}
-            className={`text-slate-400 shrink-0 transition-transform duration-200 ${open ? 'rotate-180' : ''}`}
+            className={`text-slate-400 shrink-0 transition-transform duration-200 ${open ? "rotate-180" : ""}`}
           />
         </button>
 
@@ -189,7 +190,7 @@ function SelectInner<TValue = string>(
           <div
             ref={listRef}
             role="listbox"
-            className={`w-full mt-1 bg-slate-800 border border-white/10 rounded-xl shadow-xl overflow-hidden animate-in fade-in slide-in-from-top-2 duration-150 ${inline ? '' : 'absolute z-20'}`}
+            className={`w-full mt-1 bg-slate-800 border border-white/10 rounded-xl shadow-xl overflow-hidden animate-in fade-in slide-in-from-top-2 duration-150 ${inline ? "" : "absolute z-20"}`}
           >
             {clearable && (
               <button
@@ -201,8 +202,8 @@ function SelectInner<TValue = string>(
                   setOpen(false);
                 }}
                 className={`w-full px-4 py-2.5 text-sm text-left transition-colors flex items-center justify-between
-                  ${!hasValue ? 'text-white bg-primary/10' : 'text-slate-400'}
-                  ${focusedIndex === 0 ? 'bg-white/10' : 'hover:bg-white/5'}
+                  ${!hasValue ? "text-white bg-primary/10" : "text-slate-400"}
+                  ${focusedIndex === 0 ? "bg-white/10" : "hover:bg-white/5"}
                 `}
               >
                 <span>{clearLabel}</span>
@@ -231,8 +232,8 @@ function SelectInner<TValue = string>(
                     w-full px-4 py-2.5 text-sm text-left transition-colors
                     flex items-center justify-between
                     disabled:opacity-40 disabled:cursor-not-allowed
-                    ${isSelected ? 'text-white bg-primary/10' : 'text-slate-300'}
-                    ${isFocused ? 'bg-white/10' : 'hover:bg-white/5'}
+                    ${isSelected ? "text-white bg-primary/10" : "text-slate-300"}
+                    ${isFocused ? "bg-white/10" : "hover:bg-white/5"}
                   `}
                 >
                   {renderOption ? (
@@ -265,4 +266,4 @@ export const Select = forwardRef(SelectInner) as <TValue = string>(
   props: SelectProps<TValue> & { ref?: React.Ref<HTMLButtonElement> },
 ) => React.ReactElement | null;
 
-(Select as React.FC).displayName = 'Select';
+(Select as React.FC).displayName = "Select";

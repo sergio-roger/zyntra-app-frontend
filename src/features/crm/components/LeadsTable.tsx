@@ -1,5 +1,5 @@
-import { Contact } from '@crm/types/contact';
-import { ContactSource, SOURCE_LABELS } from '@crm/types/crm';
+import { Contact } from "@crm/types/contact";
+import { ContactSource, SOURCE_LABELS } from "@crm/types/crm";
 import {
   Archive,
   ArrowRightCircle,
@@ -11,8 +11,8 @@ import {
   Share2,
   Upload,
   User,
-} from 'lucide-react';
-import React from 'react';
+} from "lucide-react";
+import React from "react";
 
 interface LeadsTableProps {
   leads: Contact[];
@@ -31,23 +31,23 @@ const SOURCE_ICONS: Record<ContactSource, React.ReactNode> = {
 };
 
 const SOURCE_COLORS: Record<ContactSource, string> = {
-  manual: 'bg-slate-500/20 text-slate-300 border-slate-500/20',
-  chatbot: 'bg-violet-500/20 text-violet-300 border-violet-500/20',
-  whatsapp: 'bg-emerald-500/20 text-emerald-300 border-emerald-500/20',
-  instagram: 'bg-pink-500/20 text-pink-300 border-pink-500/20',
-  email: 'bg-blue-500/20 text-blue-300 border-blue-500/20',
-  form: 'bg-amber-500/20 text-amber-300 border-amber-500/20',
-  import: 'bg-cyan-500/20 text-cyan-300 border-cyan-500/20',
+  manual: "bg-slate-500/20 text-slate-300 border-slate-500/20",
+  chatbot: "bg-violet-500/20 text-violet-300 border-violet-500/20",
+  whatsapp: "bg-emerald-500/20 text-emerald-300 border-emerald-500/20",
+  instagram: "bg-pink-500/20 text-pink-300 border-pink-500/20",
+  email: "bg-blue-500/20 text-blue-300 border-blue-500/20",
+  form: "bg-amber-500/20 text-amber-300 border-amber-500/20",
+  import: "bg-cyan-500/20 text-cyan-300 border-cyan-500/20",
 };
 
 const AVATAR_COLORS = [
-  'bg-violet-500/30 text-violet-300',
-  'bg-blue-500/30 text-blue-300',
-  'bg-emerald-500/30 text-emerald-300',
-  'bg-amber-500/30 text-amber-300',
-  'bg-rose-500/30 text-rose-300',
-  'bg-cyan-500/30 text-cyan-300',
-  'bg-indigo-500/30 text-indigo-300',
+  "bg-violet-500/30 text-violet-300",
+  "bg-blue-500/30 text-blue-300",
+  "bg-emerald-500/30 text-emerald-300",
+  "bg-amber-500/30 text-amber-300",
+  "bg-rose-500/30 text-rose-300",
+  "bg-cyan-500/30 text-cyan-300",
+  "bg-indigo-500/30 text-indigo-300",
 ];
 
 function getAvatarColor(name: string): string {
@@ -59,25 +59,25 @@ function getAvatarColor(name: string): string {
 
 function getInitials(name: string): string {
   return name
-    .split(' ')
+    .split(" ")
     .slice(0, 2)
     .map((w) => w[0])
-    .join('')
+    .join("")
     .toUpperCase();
 }
 
 function relativeTime(dateStr: string): string {
   const diff = Date.now() - new Date(dateStr).getTime();
   const mins = Math.floor(diff / 60000);
-  if (mins < 1) return 'Ahora';
+  if (mins < 1) return "Ahora";
   if (mins < 60) return `hace ${mins}m`;
   const hrs = Math.floor(mins / 60);
   if (hrs < 24) return `hace ${hrs}h`;
   const days = Math.floor(hrs / 24);
   if (days < 30) return `hace ${days}d`;
-  return new Date(dateStr).toLocaleDateString('es', {
-    day: '2-digit',
-    month: 'short',
+  return new Date(dateStr).toLocaleDateString("es", {
+    day: "2-digit",
+    month: "short",
   });
 }
 
@@ -138,7 +138,7 @@ export const LeadsTable: React.FC<LeadsTableProps> = ({
             return (
               <tr
                 key={lead.id}
-                className={`group border-b border-white/[0.03] hover:bg-white/[0.02] transition-colors ${idx === leads.length - 1 ? 'border-b-0' : ''}`}
+                className={`group border-b border-white/[0.03] hover:bg-white/[0.02] transition-colors ${idx === leads.length - 1 ? "border-b-0" : ""}`}
               >
                 {/* Lead / Avatar + Name */}
                 <td className="px-5 py-3.5">
@@ -165,10 +165,10 @@ export const LeadsTable: React.FC<LeadsTableProps> = ({
                 <td className="px-5 py-3.5 hidden md:table-cell">
                   <div className="flex flex-col gap-0.5">
                     <span className="text-slate-300 text-xs truncate max-w-[180px]">
-                      {lead.email || '—'}
+                      {lead.email || "—"}
                     </span>
                     <span className="text-slate-500 text-xs">
-                      {lead.phone || '—'}
+                      {lead.phone || "—"}
                     </span>
                   </div>
                 </td>

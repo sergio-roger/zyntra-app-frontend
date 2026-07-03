@@ -1,1 +1,1 @@
-export { useUsersList as useCrmUsers } from '@features/settings/hooks/useUsersTeams';
+export { useUsersList as useCrmUsers } from "@features/settings/hooks/useUsersTeams";

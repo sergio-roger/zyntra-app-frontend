@@ -1,10 +1,10 @@
 import {
   useDeleteTeam,
   useTeamsList,
-} from '@features/settings/hooks/useUsersTeams';
-import { Team } from '@features/settings/types/settings';
-import { ConfirmModal } from '@shared/components/ConfirmModal';
-import { EmptyState } from '@shared/components/EmptyState';
+} from "@features/settings/hooks/useUsersTeams";
+import { Team } from "@features/settings/types/settings";
+import { ConfirmModal } from "@shared/components/ConfirmModal";
+import { EmptyState } from "@shared/components/EmptyState";
 import {
   AlertCircle,
   Loader2,
@@ -13,9 +13,9 @@ import {
   Settings2,
   Trash2,
   Users,
-} from 'lucide-react';
-import React, { useState } from 'react';
-import { TeamFormSidebar } from '../components/TeamFormSidebar';
+} from "lucide-react";
+import React, { useState } from "react";
+import { TeamFormSidebar } from "../components/TeamFormSidebar";
 
 export const TeamsPage: React.FC = () => {
   const [sidebarOpen, setSidebarOpen] = useState(false);

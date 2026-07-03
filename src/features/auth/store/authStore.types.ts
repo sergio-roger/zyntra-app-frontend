@@ -1,4 +1,4 @@
-import { User, MenuNode } from '@features/auth/types/auth.types';
+import { User, MenuNode } from "@features/auth/types/auth.types";
 
 export interface AuthState {
   user: User | null;

@@ -1,4 +1,4 @@
-import { SegmentCondition } from './segment-condition';
+import { SegmentCondition } from "./segment-condition";
 
 export interface Segment {
   businessId: string;
@@ -7,6 +7,6 @@ export interface Segment {
   description: string | null;
   id: string;
   name: string;
-  type: 'dynamic' | 'static';
+  type: "dynamic" | "static";
   updatedAt: string;
 }

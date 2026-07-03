@@ -12,15 +12,15 @@ import {
   Share2,
   TrendingUp,
   XCircle,
-} from 'lucide-react';
-import React, { useMemo, useState } from 'react';
-import { useLocation } from 'react-router-dom';
-import { useAgentTasks } from '../hooks/use-agent-tasks';
+} from "lucide-react";
+import React, { useMemo, useState } from "react";
+import { useLocation } from "react-router-dom";
+import { useAgentTasks } from "../hooks/use-agent-tasks";
 import {
   AgentTask,
   AgentTaskStatus,
   AgentTaskType,
-} from '@features/agents/types/agents';
+} from "@features/agents/types/agents";
 
 export const AgentCenterPage: React.FC = () => {
   const { pathname } = useLocation();
@@ -30,36 +30,36 @@ export const AgentCenterPage: React.FC = () => {
 
   // Determinar el contexto basado en la ruta
   const context = useMemo(() => {
-    if (pathname.includes('/strategy')) {
+    if (pathname.includes("/strategy")) {
       return {
         type: AgentTaskType.SOCIAL,
-        title: 'Estrategia de Marca',
-        desc: 'Optimiza tu presencia y estrategia digital con IA.',
+        title: "Estrategia de Marca",
+        desc: "Optimiza tu presencia y estrategia digital con IA.",
         icon: TrendingUp,
-        placeholder: 'Ej: Estrategia de crecimiento para mi tienda de ropa',
+        placeholder: "Ej: Estrategia de crecimiento para mi tienda de ropa",
       };
     }
-    if (pathname.includes('/analysis')) {
+    if (pathname.includes("/analysis")) {
       return {
         type: AgentTaskType.CRM_ANALYSIS,
-        title: 'Análisis de Negocio',
-        desc: 'Analiza tus datos y obtén insights accionables.',
+        title: "Análisis de Negocio",
+        desc: "Analiza tus datos y obtén insights accionables.",
         icon: Search,
-        placeholder: 'Ej: Análisis de leads del último mes',
+        placeholder: "Ej: Análisis de leads del último mes",
       };
     }
     return {
       type: AgentTaskType.CONTENT,
-      title: 'Generación de Contenido',
-      desc: 'Crea copys, blogs y guiones optimizados.',
+      title: "Generación de Contenido",
+      desc: "Crea copys, blogs y guiones optimizados.",
       icon: MessageSquareText,
-      placeholder: 'Ej: 5 ideas de posts para Instagram sobre café',
+      placeholder: "Ej: 5 ideas de posts para Instagram sobre café",
     };
   }, [pathname]);
 
   const [formData, setFormData] = useState({
-    topic: '',
-    extra: '',
+    topic: "",
+    extra: "",
   });
 
   // Filtrar tareas por el tipo actual
@@ -78,7 +78,7 @@ export const AgentCenterPage: React.FC = () => {
         },
       });
       setIsModalOpen(false);
-      setFormData({ topic: '', extra: '' });
+      setFormData({ topic: "", extra: "" });
     } catch (err) {
       console.error(err);
     }
@@ -183,10 +183,10 @@ export const AgentCenterPage: React.FC = () => {
                     </div>
                     <div>
                       <h3 className="font-bold text-sm uppercase tracking-wider opacity-60">
-                        {task.type.replace('_', ' ')}
+                        {task.type.replace("_", " ")}
                       </h3>
                       <p className="text-base font-medium truncate max-w-md">
-                        {(task.input.topic as string) || 'Análisis de datos'}
+                        {(task.input.topic as string) || "Análisis de datos"}
                       </p>
                     </div>
                   </div>
@@ -283,7 +283,7 @@ export const AgentCenterPage: React.FC = () => {
               <div>
                 <h3 className="font-bold text-2xl">
                   {(selectedTask.input.topic as string) ||
-                    'Resultado de la Tarea'}
+                    "Resultado de la Tarea"}
                 </h3>
                 <p className="text-sm opacity-60">
                   Resultado del Agente de {selectedTask.type}
@@ -299,11 +299,11 @@ export const AgentCenterPage: React.FC = () => {
 
             <div className="prose max-w-none bg-base-200/50 p-6 rounded-xl border border-base-300 overflow-auto">
               <pre className="whitespace-pre-wrap font-sans text-base leading-relaxed">
-                {typeof selectedTask.output === 'string'
+                {typeof selectedTask.output === "string"
                   ? selectedTask.output
                   : (selectedTask.output?.output as string) ||
                     JSON.stringify(selectedTask.output, null, 2) ||
-                    'No hay resultado disponible.'}
+                    "No hay resultado disponible."}
               </pre>
             </div>
 

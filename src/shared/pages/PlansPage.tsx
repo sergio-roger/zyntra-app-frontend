@@ -1,8 +1,8 @@
-import React from 'react';
-import { useAuthStore } from '@features/auth/store/authStore';
-import { Check, X, Sparkles } from 'lucide-react';
-import { useNavigate } from 'react-router-dom';
-import { CardWrapper } from '@shared/components/CardWrapper';
+import React from "react";
+import { useAuthStore } from "@features/auth/store/authStore";
+import { Check, X, Sparkles } from "lucide-react";
+import { useNavigate } from "react-router-dom";
+import { CardWrapper } from "@shared/components/CardWrapper";
 
 interface PlanDetail {
   name: string;
@@ -19,166 +19,166 @@ interface PlanDetail {
 export const PlansPage: React.FC = () => {
   const user = useAuthStore((s) => s.user);
   const navigate = useNavigate();
-  const currentPlanName = user?.plan?.name || '';
+  const currentPlanName = user?.plan?.name || "";
 
   const plans: PlanDetail[] = [
     {
-      name: 'BrandStart',
-      price: '$99',
-      cycle: 'pago único',
+      name: "BrandStart",
+      price: "$99",
+      cycle: "pago único",
       popular: false,
-      color: 'from-blue-500 to-indigo-600',
-      borderColor: 'border-base-300',
-      badgeBg: 'bg-blue-500/10 text-blue-400',
-      badgeText: 'Emprendedor',
+      color: "from-blue-500 to-indigo-600",
+      borderColor: "border-base-300",
+      badgeBg: "bg-blue-500/10 text-blue-400",
+      badgeText: "Emprendedor",
       features: [
-        'Diagnóstico del modelo de negocio',
-        'Configuración de redes sociales (FB, IG, TikTok)',
-        'Creación de logo (hasta 3 cambios)',
-        'Configuración de WhatsApp Business + Catálogo',
-        'Diseño visual (paleta de colores y tipografía)',
-        'Bibliografías persuasivas optimizadas',
-        'Guía de marca generada con IA',
+        "Diagnóstico del modelo de negocio",
+        "Configuración de redes sociales (FB, IG, TikTok)",
+        "Creación de logo (hasta 3 cambios)",
+        "Configuración de WhatsApp Business + Catálogo",
+        "Diseño visual (paleta de colores y tipografía)",
+        "Bibliografías persuasivas optimizadas",
+        "Guía de marca generada con IA",
       ],
     },
     {
-      name: 'Impulse Pro',
-      price: '$199',
-      cycle: 'al mes',
+      name: "Impulse Pro",
+      price: "$199",
+      cycle: "al mes",
       popular: true,
-      color: 'from-primary to-secondary',
-      borderColor: 'border-primary/50',
-      badgeBg: 'bg-primary/20 text-primary',
-      badgeText: 'Más Popular',
+      color: "from-primary to-secondary",
+      borderColor: "border-primary/50",
+      badgeBg: "bg-primary/20 text-primary",
+      badgeText: "Más Popular",
       features: [
-        'Calendario Editorial de contenidos',
-        'Creación y publicación de contenido',
-        'Optimización continua de perfiles',
-        'Gestión de campañas de Anuncios Meta',
-        '9 Anuncios de Conversión incluidos',
-        'Análisis mensual de métricas y campañas',
-        'Chatbot 24/7 inteligente con IA',
+        "Calendario Editorial de contenidos",
+        "Creación y publicación de contenido",
+        "Optimización continua de perfiles",
+        "Gestión de campañas de Anuncios Meta",
+        "9 Anuncios de Conversión incluidos",
+        "Análisis mensual de métricas y campañas",
+        "Chatbot 24/7 inteligente con IA",
       ],
     },
     {
-      name: 'Core Digital',
-      price: '$449',
-      cycle: 'al mes',
+      name: "Core Digital",
+      price: "$449",
+      cycle: "al mes",
       popular: false,
-      color: 'from-purple-500 to-pink-600',
-      borderColor: 'border-base-300',
-      badgeBg: 'bg-purple-500/10 text-purple-400',
-      badgeText: 'Empresarial',
+      color: "from-purple-500 to-pink-600",
+      borderColor: "border-base-300",
+      badgeBg: "bg-purple-500/10 text-purple-400",
+      badgeText: "Empresarial",
       features: [
-        'Plan BrandStart completamente incluido',
-        'Plan Impulse Pro completamente incluido',
-        'Asesoría estratégica quincenal',
-        'Landing Page / Sitio web profesional',
-        'Optimización SEO de motores de búsqueda',
-        'CRM completo para gestión de clientes',
-        'Agente de IA personalizado a tu negocio',
+        "Plan BrandStart completamente incluido",
+        "Plan Impulse Pro completamente incluido",
+        "Asesoría estratégica quincenal",
+        "Landing Page / Sitio web profesional",
+        "Optimización SEO de motores de búsqueda",
+        "CRM completo para gestión de clientes",
+        "Agente de IA personalizado a tu negocio",
       ],
     },
   ];
 
   // Datos para la tabla comparativa
   const comparisons = [
-    { category: 'Límites de Capacidad', isHeader: true },
-    { name: 'Límite de usuarios', brand: '2', impulse: '5', core: '10' },
+    { category: "Límites de Capacidad", isHeader: true },
+    { name: "Límite de usuarios", brand: "2", impulse: "5", core: "10" },
     {
-      name: 'Límite de contactos',
-      brand: '500',
-      impulse: '5,000',
-      core: 'Ilimitados',
+      name: "Límite de contactos",
+      brand: "500",
+      impulse: "5,000",
+      core: "Ilimitados",
     },
-    { name: 'Tareas de CRM', brand: '10', impulse: '200', core: 'Ilimitadas' },
+    { name: "Tareas de CRM", brand: "10", impulse: "200", core: "Ilimitadas" },
     {
-      name: 'Canales de mensajería',
-      brand: '1 canal',
-      impulse: '3 canales',
-      core: 'Ilimitados',
+      name: "Canales de mensajería",
+      brand: "1 canal",
+      impulse: "3 canales",
+      core: "Ilimitados",
     },
     {
-      name: 'Límite de pipelines',
+      name: "Límite de pipelines",
       brand: false,
-      impulse: '2',
-      core: '5',
+      impulse: "2",
+      core: "5",
     },
 
-    { category: 'Inteligencia Artificial', isHeader: true },
+    { category: "Inteligencia Artificial", isHeader: true },
     {
-      name: 'Agentes de IA',
+      name: "Agentes de IA",
       brand: false,
-      impulse: '1 agente',
-      core: '10 agentes',
+      impulse: "1 agente",
+      core: "10 agentes",
     },
     {
-      name: 'Chatbots con IA',
+      name: "Chatbots con IA",
       brand: false,
-      impulse: '1 chatbot',
-      core: '5 chatbots',
+      impulse: "1 chatbot",
+      core: "5 chatbots",
     },
-    { name: 'Guía de marca con IA', brand: true, impulse: true, core: true },
+    { name: "Guía de marca con IA", brand: true, impulse: true, core: true },
 
-    { category: 'Módulos y Herramientas', isHeader: true },
+    { category: "Módulos y Herramientas", isHeader: true },
     {
-      name: 'Panel de Control (Dashboard)',
+      name: "Panel de Control (Dashboard)",
       brand: true,
       impulse: true,
       core: true,
     },
-    { name: 'Módulo de Facturación', brand: true, impulse: true, core: true },
+    { name: "Módulo de Facturación", brand: true, impulse: true, core: true },
     {
-      name: 'CRM (Gestión de Clientes)',
+      name: "CRM (Gestión de Clientes)",
       brand: false,
       impulse: true,
       core: true,
     },
     {
-      name: 'Inbox Integrado (Bandeja)',
+      name: "Inbox Integrado (Bandeja)",
       brand: false,
       impulse: true,
       core: true,
     },
-    { name: 'Módulo de Analíticas', brand: false, impulse: true, core: true },
+    { name: "Módulo de Analíticas", brand: false, impulse: true, core: true },
     {
-      name: 'Embudos de Venta (Funnels)',
+      name: "Embudos de Venta (Funnels)",
       brand: false,
       impulse: false,
       core: true,
     },
-    { name: 'Clonación de Avatar', brand: false, impulse: false, core: true },
+    { name: "Clonación de Avatar", brand: false, impulse: false, core: true },
 
-    { category: 'Servicios e Implementación', isHeader: true },
+    { category: "Servicios e Implementación", isHeader: true },
     {
-      name: 'Creación de Logo y Marca',
-      brand: true,
-      impulse: false,
-      core: true,
-    },
-    {
-      name: 'Configuración Redes Sociales',
+      name: "Creación de Logo y Marca",
       brand: true,
       impulse: false,
       core: true,
     },
     {
-      name: 'Landing Page (Sitio Web)',
+      name: "Configuración Redes Sociales",
+      brand: true,
+      impulse: false,
+      core: true,
+    },
+    {
+      name: "Landing Page (Sitio Web)",
       brand: false,
       impulse: false,
       core: true,
     },
-    { name: 'Optimización SEO', brand: false, impulse: false, core: true },
+    { name: "Optimización SEO", brand: false, impulse: false, core: true },
     {
-      name: 'Asesoría y Soporte',
-      brand: 'Autónomo',
-      impulse: 'Soporte Básico',
-      core: 'Asesoría Quincenal',
+      name: "Asesoría y Soporte",
+      brand: "Autónomo",
+      impulse: "Soporte Básico",
+      core: "Asesoría Quincenal",
     },
   ];
 
   const renderValue = (val: boolean | string) => {
-    if (typeof val === 'boolean') {
+    if (typeof val === "boolean") {
       return val ? (
         <span className="inline-flex items-center justify-center p-1 rounded-full bg-success/10 text-success">
           <Check size={16} strokeWidth={3} />
@@ -199,7 +199,7 @@ export const PlansPage: React.FC = () => {
       {/* Header */}
       <div className="text-center mb-12">
         <h1 className="text-4xl font-extrabold tracking-tight text-base-content sm:text-5xl">
-          Nuestros{' '}
+          Nuestros{" "}
           <span className="bg-gradient-to-r from-primary to-secondary bg-clip-text text-transparent">
             Planes
           </span>
@@ -219,7 +219,7 @@ export const PlansPage: React.FC = () => {
           return (
             <CardWrapper
               key={plan.name}
-              variant={isCurrent ? 'highlighted' : 'interactive'}
+              variant={isCurrent ? "highlighted" : "interactive"}
               hoverable={!isCurrent}
             >
               {/* Badge superior si es popular o actual */}
@@ -283,16 +283,16 @@ export const PlansPage: React.FC = () => {
               {/* Botón de acción */}
               <div className="p-8 pt-0 mt-auto">
                 <button
-                  onClick={() => navigate('/billing')}
+                  onClick={() => navigate("/billing")}
                   className={`w-full py-3 px-4 rounded-xl font-bold transition-all duration-300 shadow-md ${
                     isCurrent
-                      ? 'bg-base-300 text-base-content cursor-default border border-base-content/10 shadow-none'
-                      : 'bg-gradient-to-r hover:opacity-90 active:scale-95 text-white ' +
+                      ? "bg-base-300 text-base-content cursor-default border border-base-content/10 shadow-none"
+                      : "bg-gradient-to-r hover:opacity-90 active:scale-95 text-white " +
                         plan.color
                   }`}
                   disabled={isCurrent}
                 >
-                  {isCurrent ? 'Plan Actual' : 'Gestionar suscripción'}
+                  {isCurrent ? "Plan Actual" : "Gestionar suscripción"}
                 </button>
               </div>
             </CardWrapper>

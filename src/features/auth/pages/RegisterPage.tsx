@@ -1,8 +1,8 @@
-import React from 'react';
-import { Link, useNavigate } from 'react-router-dom';
-import { UserPlus } from 'lucide-react';
-import { AuthLayout } from '@features/auth/components/AuthLayout';
-import { RegisterForm } from '@features/auth/components/RegisterForm';
+import React from "react";
+import { Link, useNavigate } from "react-router-dom";
+import { UserPlus } from "lucide-react";
+import { AuthLayout } from "@features/auth/components/AuthLayout";
+import { RegisterForm } from "@features/auth/components/RegisterForm";
 
 export const RegisterPage: React.FC = () => {
   const navigate = useNavigate();
@@ -14,7 +14,7 @@ export const RegisterPage: React.FC = () => {
       subtitle="Empieza tu prueba gratuita de 14 días"
       footer={
         <>
-          ¿Ya tienes una cuenta?{' '}
+          ¿Ya tienes una cuenta?{" "}
           <Link
             to="/login"
             className="font-medium text-primary hover:underline"
@@ -24,7 +24,7 @@ export const RegisterPage: React.FC = () => {
         </>
       }
     >
-      <RegisterForm onSuccess={() => navigate('/dashboard')} />
+      <RegisterForm onSuccess={() => navigate("/dashboard")} />
     </AuthLayout>
   );
 };

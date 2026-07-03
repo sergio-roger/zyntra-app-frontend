@@ -1,4 +1,4 @@
-import React from 'react';
+import React from "react";
 
 interface OwnerDisplayProps {
   owner?: { name: string; avatarUrl?: string | null } | null;
@@ -13,7 +13,10 @@ const getInitials = (name: string): string => {
   return name.substring(0, 2).toUpperCase();
 };
 
-export const OwnerDisplay: React.FC<OwnerDisplayProps> = ({ owner, className = '' }) => {
+export const OwnerDisplay: React.FC<OwnerDisplayProps> = ({
+  owner,
+  className = "",
+}) => {
   if (!owner || !owner.name) {
     return <span className="text-slate-600">—</span>;
   }

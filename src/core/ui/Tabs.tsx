@@ -1,4 +1,4 @@
-import { LucideIcon } from 'lucide-react';
+import { LucideIcon } from "lucide-react";
 
 export interface TabItem<TKey extends string = string> {
   key: TKey;
@@ -19,7 +19,7 @@ export function Tabs<TKey extends string = string>({
   tabs,
   active,
   onChange,
-  className = '',
+  className = "",
   compact = false,
 }: TabsProps<TKey>) {
   return (
@@ -30,11 +30,11 @@ export function Tabs<TKey extends string = string>({
           type="button"
           onClick={() => onChange(tab.key)}
           className={`flex items-center justify-center gap-2 py-3 text-sm font-semibold capitalize transition-colors ${
-            compact ? 'px-5 min-w-[120px]' : 'flex-1'
+            compact ? "px-5 min-w-[120px]" : "flex-1"
           } ${
             active === tab.key
-              ? 'text-indigo-400 border-b-2 border-indigo-500'
-              : 'text-slate-500 hover:text-slate-300'
+              ? "text-indigo-400 border-b-2 border-indigo-500"
+              : "text-slate-500 hover:text-slate-300"
           }`}
         >
           {tab.icon && <tab.icon size={14} />}
@@ -43,8 +43,8 @@ export function Tabs<TKey extends string = string>({
             <span
               className={`ml-0.5 rounded-full px-1.5 py-0.5 text-xs font-bold ${
                 active === tab.key
-                  ? 'bg-indigo-500/20 text-indigo-300'
-                  : 'bg-white/5 text-slate-500'
+                  ? "bg-indigo-500/20 text-indigo-300"
+                  : "bg-white/5 text-slate-500"
               }`}
             >
               {tab.badge}

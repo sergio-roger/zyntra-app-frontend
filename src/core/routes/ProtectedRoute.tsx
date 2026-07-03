@@ -1,7 +1,7 @@
-import React from 'react';
-import { Navigate, useLocation } from 'react-router-dom';
-import { FullScreenLoader } from '@shared/components/FullScreenLoader';
-import { useAuthStore } from '@features/auth/store/authStore';
+import React from "react";
+import { Navigate, useLocation } from "react-router-dom";
+import { FullScreenLoader } from "@shared/components/FullScreenLoader";
+import { useAuthStore } from "@features/auth/store/authStore";
 
 interface ProtectedRouteProps {
   children: React.ReactNode;

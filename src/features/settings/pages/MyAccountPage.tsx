@@ -1,23 +1,23 @@
-import { Input } from '@core/ui/Input';
-import { Tabs } from '@core/ui/Tabs';
-import { FormField } from '@features/auth/components/FormField';
-import { SubmitButton } from '@features/auth/components/SubmitButton';
-import { useAuthStore } from '@features/auth/store/authStore';
+import { Input } from "@core/ui/Input";
+import { Tabs } from "@core/ui/Tabs";
+import { FormField } from "@features/auth/components/FormField";
+import { SubmitButton } from "@features/auth/components/SubmitButton";
+import { useAuthStore } from "@features/auth/store/authStore";
 import {
   useChangePassword,
   useRemoveAvatar,
   useUpdateProfile,
   useUploadAvatar,
-} from '@features/settings/hooks/useMyAccount';
+} from "@features/settings/hooks/useMyAccount";
 import {
   ChangePasswordFormValues,
   changePasswordSchema,
   UpdateProfileFormValues,
   updateProfileSchema,
-} from '@features/settings/schemas/my-account.schema';
-import { getApiErrorMessage } from '@shared/constants/apiErrors';
-import { toastManager } from '@shared/components/toast/toastManager';
-import { zodResolver } from '@hookform/resolvers/zod';
+} from "@features/settings/schemas/my-account.schema";
+import { getApiErrorMessage } from "@shared/constants/apiErrors";
+import { toastManager } from "@shared/components/toast/toastManager";
+import { zodResolver } from "@hookform/resolvers/zod";
 import {
   Briefcase,
   Calendar,
@@ -31,27 +31,27 @@ import {
   Shield,
   Trash2,
   User as UserIcon,
-} from 'lucide-react';
-import React, { useRef, useState } from 'react';
-import { useForm } from 'react-hook-form';
+} from "lucide-react";
+import React, { useRef, useState } from "react";
+import { useForm } from "react-hook-form";
 
-const ALLOWED_AVATAR_TYPES = ['image/png', 'image/jpeg', 'image/webp'];
+const ALLOWED_AVATAR_TYPES = ["image/png", "image/jpeg", "image/webp"];
 const MAX_AVATAR_SIZE = 2 * 1024 * 1024;
 
 const ROLE_LABELS: Record<string, string> = {
-  admin: 'Administrador',
-  manager: 'Gerente',
-  agent: 'Agente',
-  superAdmin: 'Super Admin',
+  admin: "Administrador",
+  manager: "Gerente",
+  agent: "Agente",
+  superAdmin: "Super Admin",
 };
 
-type AccountTab = 'perfil' | 'seguridad';
+type AccountTab = "perfil" | "seguridad";
 
 export const MyAccountPage: React.FC = () => {
   const user = useAuthStore((s) => s.user);
   const fileInputRef = useRef<HTMLInputElement>(null);
   const [passwordError, setPasswordError] = useState<string | null>(null);
-  const [activeTab, setActiveTab] = useState<AccountTab>('perfil');
+  const [activeTab, setActiveTab] = useState<AccountTab>("perfil");
 
   const updateProfile = useUpdateProfile();
   const uploadAvatar = useUploadAvatar();
@@ -69,9 +69,9 @@ export const MyAccountPage: React.FC = () => {
   } = useForm<UpdateProfileFormValues>({
     resolver: zodResolver(updateProfileSchema),
     values: {
-      firstName: user?.firstName ?? '',
-      lastName: user?.lastName ?? '',
-      jobTitle: user?.jobTitle ?? '',
+      firstName: user?.firstName ?? "",
+      lastName: user?.lastName ?? "",
+      jobTitle: user?.jobTitle ?? "",
     },
   });
 
@@ -83,7 +83,7 @@ export const MyAccountPage: React.FC = () => {
 
     const payload: Record<string, string> = {};
     changedKeys.forEach((key) => {
-      payload[key] = data[key] ?? '';
+      payload[key] = data[key] ?? "";
     });
 
     await updateProfile.mutateAsync(payload);
@@ -93,22 +93,22 @@ export const MyAccountPage: React.FC = () => {
 
   const handleAvatarChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
-    e.target.value = '';
+    e.target.value = "";
     if (!file) return;
 
     if (!ALLOWED_AVATAR_TYPES.includes(file.type)) {
       toastManager.add({
-        title: 'Formato no permitido',
-        description: 'Solo se aceptan imágenes PNG, JPEG o WEBP.',
-        type: 'error',
+        title: "Formato no permitido",
+        description: "Solo se aceptan imágenes PNG, JPEG o WEBP.",
+        type: "error",
       });
       return;
     }
     if (file.size > MAX_AVATAR_SIZE) {
       toastManager.add({
-        title: 'Archivo muy grande',
-        description: 'El tamaño máximo permitido es 2MB.',
-        type: 'error',
+        title: "Archivo muy grande",
+        description: "El tamaño máximo permitido es 2MB.",
+        type: "error",
       });
       return;
     }
@@ -124,9 +124,9 @@ export const MyAccountPage: React.FC = () => {
   } = useForm<ChangePasswordFormValues>({
     resolver: zodResolver(changePasswordSchema),
     defaultValues: {
-      currentPassword: '',
-      newPassword: '',
-      confirmPassword: '',
+      currentPassword: "",
+      newPassword: "",
+      confirmPassword: "",
     },
   });
 
@@ -144,10 +144,10 @@ export const MyAccountPage: React.FC = () => {
   };
 
   const fullName =
-    `${user?.firstName ?? ''} ${user?.lastName ?? ''}`.trim() ||
+    `${user?.firstName ?? ""} ${user?.lastName ?? ""}`.trim() ||
     user?.name ||
-    '';
-  const roleLabel = user?.role ? (ROLE_LABELS[user.role] ?? user.role) : '—';
+    "";
+  const roleLabel = user?.role ? (ROLE_LABELS[user.role] ?? user.role) : "—";
 
   return (
     <div className="w-full space-y-6 animate-in fade-in duration-500">
@@ -163,8 +163,8 @@ export const MyAccountPage: React.FC = () => {
       <div className="w-full bg-slate-900/50 border border-white/5 rounded-3xl overflow-hidden shadow-xl">
         <Tabs
           tabs={[
-            { key: 'perfil', label: 'Perfil', icon: UserIcon },
-            { key: 'seguridad', label: 'Seguridad', icon: Lock },
+            { key: "perfil", label: "Perfil", icon: UserIcon },
+            { key: "seguridad", label: "Seguridad", icon: Lock },
           ]}
           active={activeTab}
           onChange={setActiveTab}
@@ -172,7 +172,7 @@ export const MyAccountPage: React.FC = () => {
           className="px-6"
         />
 
-        {activeTab === 'perfil' && (
+        {activeTab === "perfil" && (
           <div className="p-6 space-y-6">
             <div className="flex items-center gap-4">
               {user?.avatarUrl ? (
@@ -183,7 +183,7 @@ export const MyAccountPage: React.FC = () => {
                 />
               ) : (
                 <div className="w-16 h-16 rounded-2xl bg-gradient-to-br from-indigo-500 to-purple-600 flex items-center justify-center text-lg font-bold text-white shadow-lg">
-                  {fullName.substring(0, 2).toUpperCase() || '??'}
+                  {fullName.substring(0, 2).toUpperCase() || "??"}
                 </div>
               )}
 
@@ -237,18 +237,18 @@ export const MyAccountPage: React.FC = () => {
                   label="Nombre(s)"
                   icon={UserIcon}
                   error={profileErrors.firstName?.message}
-                  {...registerProfile('firstName')}
+                  {...registerProfile("firstName")}
                 />
                 <Input
                   label="Apellido(s)"
                   error={profileErrors.lastName?.message}
-                  {...registerProfile('lastName')}
+                  {...registerProfile("lastName")}
                 />
                 <Input
                   label="Cargo / Puesto"
                   icon={Briefcase}
                   error={profileErrors.jobTitle?.message}
-                  {...registerProfile('jobTitle')}
+                  {...registerProfile("jobTitle")}
                 />
               </div>
 
@@ -289,12 +289,12 @@ export const MyAccountPage: React.FC = () => {
                   </label>
                   <div className="bg-slate-950/30 border border-white/5 rounded-xl py-2.5 px-4 text-sm text-slate-300">
                     {user?.createdAt
-                      ? new Date(user.createdAt).toLocaleDateString('es-ES', {
-                          day: '2-digit',
-                          month: 'long',
-                          year: 'numeric',
+                      ? new Date(user.createdAt).toLocaleDateString("es-ES", {
+                          day: "2-digit",
+                          month: "long",
+                          year: "numeric",
                         })
-                      : '—'}
+                      : "—"}
                   </div>
                 </div>
               </div>
@@ -317,7 +317,7 @@ export const MyAccountPage: React.FC = () => {
           </div>
         )}
 
-        {activeTab === 'seguridad' && (
+        {activeTab === "seguridad" && (
           <div className="p-6">
             <form
               onSubmit={handlePasswordSubmit(onPasswordSubmit)}
@@ -331,7 +331,7 @@ export const MyAccountPage: React.FC = () => {
                 autoComplete="current-password"
                 error={passwordErrors.currentPassword?.message}
                 disabled={isPasswordSubmitting}
-                {...registerPassword('currentPassword')}
+                {...registerPassword("currentPassword")}
               />
               <FormField
                 label="Nueva contraseña"
@@ -340,7 +340,7 @@ export const MyAccountPage: React.FC = () => {
                 autoComplete="new-password"
                 error={passwordErrors.newPassword?.message}
                 disabled={isPasswordSubmitting}
-                {...registerPassword('newPassword')}
+                {...registerPassword("newPassword")}
               />
               <FormField
                 label="Confirmar nueva contraseña"
@@ -349,7 +349,7 @@ export const MyAccountPage: React.FC = () => {
                 autoComplete="new-password"
                 error={passwordErrors.confirmPassword?.message}
                 disabled={isPasswordSubmitting}
-                {...registerPassword('confirmPassword')}
+                {...registerPassword("confirmPassword")}
               />
 
               {passwordError && (

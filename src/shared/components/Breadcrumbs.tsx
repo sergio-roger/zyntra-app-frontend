@@ -1,7 +1,7 @@
-import React from 'react';
-import { Link } from 'react-router-dom';
-import { ChevronRight } from 'lucide-react';
-import { findActiveModule } from '@shared/layouts/nav.config';
+import React from "react";
+import { Link } from "react-router-dom";
+import { ChevronRight } from "lucide-react";
+import { findActiveModule } from "@shared/layouts/nav.config";
 
 interface BreadcrumbsProps {
   pathname: string;

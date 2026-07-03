@@ -1,4 +1,4 @@
-import { Contact } from './contact';
+import { Contact } from "./contact";
 
 export interface ContactsListResponse {
   items: Contact[];

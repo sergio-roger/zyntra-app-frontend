@@ -1,29 +1,46 @@
-import React, { useState } from 'react';
+import React, { useState } from "react";
 import {
-  Plus, Pencil, Trash2, Loader2, AlertCircle, X, Bot, ChevronRight, Send, FlaskConical,
-} from 'lucide-react';
+  Plus,
+  Pencil,
+  Trash2,
+  Loader2,
+  AlertCircle,
+  X,
+  Bot,
+  ChevronRight,
+  Send,
+  FlaskConical,
+} from "lucide-react";
 import {
   useAiAgents,
   useCreateAiAgent,
   useUpdateAiAgent,
   useDeleteAiAgent,
   useTestAiAgent,
-} from '../hooks/useAiAgents';
-import type { AiAgent, AgentTool, CreateAgentPayload } from '../types/ai-agents.types';
+} from "../hooks/useAiAgents";
+import {
+  AiAgent,
+  AgentTool,
+  CreateAgentPayload,
+} from "../types/ai-agents.types";
 
 const ALL_TOOLS: { key: AgentTool; label: string }[] = [
-  { key: 'web_search', label: 'Búsqueda web' },
-  { key: 'knowledge_base', label: 'Base de conocimiento' },
-  { key: 'lead_capture', label: 'Captura de leads' },
-  { key: 'calendar', label: 'Calendario' },
+  { key: "web_search", label: "Búsqueda web" },
+  { key: "knowledge_base", label: "Base de conocimiento" },
+  { key: "lead_capture", label: "Captura de leads" },
+  { key: "calendar", label: "Calendario" },
 ];
 
-const MODELS = ['claude-haiku-4-5-20251001', 'claude-sonnet-4-6', 'claude-opus-4-8'];
+const MODELS = [
+  "claude-haiku-4-5-20251001",
+  "claude-sonnet-4-6",
+  "claude-opus-4-8",
+];
 
 const EMPTY_FORM: CreateAgentPayload = {
-  name: '',
+  name: "",
   model: MODELS[0],
-  system_prompt: '',
+  system_prompt: "",
   temperature: 0.7,
   tools: [],
   is_active: true,
@@ -31,20 +48,25 @@ const EMPTY_FORM: CreateAgentPayload = {
 
 // ── Sandbox panel ──────────────────────────────────────────────────────────────
 function SandboxPanel({ agent }: { agent: AiAgent }) {
-  const [message, setMessage] = useState('');
-  const [history, setHistory] = useState<{ role: 'user' | 'assistant'; text: string }[]>([]);
+  const [message, setMessage] = useState("");
+  const [history, setHistory] = useState<
+    { role: "user" | "assistant"; text: string }[]
+  >([]);
   const { mutateAsync: testAgent, isPending } = useTestAiAgent(agent.id);
 
   const handleSend = async () => {
     if (!message.trim() || isPending) return;
     const userMsg = message.trim();
-    setMessage('');
-    setHistory((h) => [...h, { role: 'user', text: userMsg }]);
+    setMessage("");
+    setHistory((h) => [...h, { role: "user", text: userMsg }]);
     try {
       const result = await testAgent(userMsg);
-      setHistory((h) => [...h, { role: 'assistant', text: result.reply }]);
+      setHistory((h) => [...h, { role: "assistant", text: result.reply }]);
     } catch {
-      setHistory((h) => [...h, { role: 'assistant', text: '⚠ Error al procesar la respuesta.' }]);
+      setHistory((h) => [
+        ...h,
+        { role: "assistant", text: "⚠ Error al procesar la respuesta." },
+      ]);
     }
   };
 
@@ -63,13 +85,13 @@ function SandboxPanel({ agent }: { agent: AiAgent }) {
         {history.map((m, i) => (
           <div
             key={i}
-            className={`flex ${m.role === 'user' ? 'justify-end' : 'justify-start'}`}
+            className={`flex ${m.role === "user" ? "justify-end" : "justify-start"}`}
           >
             <div
               className={`max-w-[80%] rounded-xl px-3 py-2 text-sm ${
-                m.role === 'user'
-                  ? 'bg-primary text-primary-content'
-                  : 'bg-base-200 text-base-content'
+                m.role === "user"
+                  ? "bg-primary text-primary-content"
+                  : "bg-base-200 text-base-content"
               }`}
             >
               {m.text}
@@ -91,10 +113,14 @@ function SandboxPanel({ agent }: { agent: AiAgent }) {
           placeholder="Escribe un mensaje..."
           value={message}
           onChange={(e) => setMessage(e.target.value)}
-          onKeyDown={(e) => e.key === 'Enter' && handleSend()}
+          onKeyDown={(e) => e.key === "Enter" && handleSend()}
           disabled={isPending}
         />
-        <button className="btn btn-primary btn-sm" onClick={handleSend} disabled={isPending || !message.trim()}>
+        <button
+          className="btn btn-primary btn-sm"
+          onClick={handleSend}
+          disabled={isPending || !message.trim()}
+        >
           <Send size={14} />
         </button>
       </div>
@@ -122,10 +148,12 @@ function AgentFormSidebar({
         }
       : { ...EMPTY_FORM },
   );
-  const [error, setError] = useState('');
+  const [error, setError] = useState("");
 
   const { mutateAsync: createAgent, isPending: creating } = useCreateAiAgent();
-  const { mutateAsync: updateAgent, isPending: updating } = useUpdateAiAgent(editing?.id ?? '');
+  const { mutateAsync: updateAgent, isPending: updating } = useUpdateAiAgent(
+    editing?.id ?? "",
+  );
   const isPending = creating || updating;
 
   const toggleTool = (tool: AgentTool) => {
@@ -138,9 +166,15 @@ function AgentFormSidebar({
   };
 
   const handleSave = async () => {
-    setError('');
-    if (!form.name?.trim()) { setError('El nombre es requerido.'); return; }
-    if (!form.system_prompt?.trim()) { setError('El prompt del sistema es requerido.'); return; }
+    setError("");
+    if (!form.name?.trim()) {
+      setError("El nombre es requerido.");
+      return;
+    }
+    if (!form.system_prompt?.trim()) {
+      setError("El prompt del sistema es requerido.");
+      return;
+    }
     try {
       if (editing) {
         await updateAgent(form);
@@ -149,8 +183,9 @@ function AgentFormSidebar({
       }
       onClose();
     } catch (err: unknown) {
-      const msg = (err as { response?: { data?: { message?: string } } })?.response?.data?.message;
-      setError(msg ?? 'Error al guardar el agente.');
+      const msg = (err as { response?: { data?: { message?: string } } })
+        ?.response?.data?.message;
+      setError(msg ?? "Error al guardar el agente.");
     }
   };
 
@@ -160,7 +195,9 @@ function AgentFormSidebar({
       data-testid="agent-form-sidebar"
     >
       <div className="flex items-center justify-between px-5 py-4 border-b border-base-300">
-        <h2 className="font-semibold">{editing ? 'Editar agente' : 'Nuevo agente'}</h2>
+        <h2 className="font-semibold">
+          {editing ? "Editar agente" : "Nuevo agente"}
+        </h2>
         <button className="btn btn-ghost btn-sm btn-square" onClick={onClose}>
           <X size={16} />
         </button>
@@ -174,7 +211,9 @@ function AgentFormSidebar({
         )}
 
         <div className="form-control gap-1">
-          <label className="label"><span className="label-text font-medium">Nombre *</span></label>
+          <label className="label">
+            <span className="label-text font-medium">Nombre *</span>
+          </label>
           <input
             type="text"
             className="input input-bordered"
@@ -184,52 +223,77 @@ function AgentFormSidebar({
         </div>
 
         <div className="form-control gap-1">
-          <label className="label"><span className="label-text font-medium">Modelo</span></label>
+          <label className="label">
+            <span className="label-text font-medium">Modelo</span>
+          </label>
           <select
             className="select select-bordered"
             value={form.model}
             onChange={(e) => setForm((f) => ({ ...f, model: e.target.value }))}
           >
-            {MODELS.map((m) => <option key={m} value={m}>{m}</option>)}
+            {MODELS.map((m) => (
+              <option key={m} value={m}>
+                {m}
+              </option>
+            ))}
           </select>
         </div>
 
         <div className="form-control gap-1">
           <label className="label">
             <span className="label-text font-medium">Prompt del sistema *</span>
-            <span className="label-text-alt text-base-content/50">{(form.system_prompt?.length ?? 0)}/8000</span>
+            <span className="label-text-alt text-base-content/50">
+              {form.system_prompt?.length ?? 0}/8000
+            </span>
           </label>
           <textarea
             className="textarea textarea-bordered h-40 text-sm font-mono"
             placeholder="Eres un asistente de ventas experto en..."
             maxLength={8000}
             value={form.system_prompt}
-            onChange={(e) => setForm((f) => ({ ...f, system_prompt: e.target.value }))}
+            onChange={(e) =>
+              setForm((f) => ({ ...f, system_prompt: e.target.value }))
+            }
           />
         </div>
 
         <div className="form-control gap-1">
           <label className="label">
             <span className="label-text font-medium">Temperatura</span>
-            <span className="label-text-alt">{form.temperature?.toFixed(1)}</span>
+            <span className="label-text-alt">
+              {form.temperature?.toFixed(1)}
+            </span>
           </label>
           <input
             type="range"
             className="range range-primary range-sm"
-            min="0" max="1" step="0.1"
+            min="0"
+            max="1"
+            step="0.1"
             value={form.temperature}
-            onChange={(e) => setForm((f) => ({ ...f, temperature: parseFloat(e.target.value) }))}
+            onChange={(e) =>
+              setForm((f) => ({
+                ...f,
+                temperature: parseFloat(e.target.value),
+              }))
+            }
           />
           <div className="flex justify-between text-xs text-base-content/40 px-0.5">
-            <span>Preciso</span><span>Creativo</span>
+            <span>Preciso</span>
+            <span>Creativo</span>
           </div>
         </div>
 
         <div className="form-control gap-2">
-          <label className="label"><span className="label-text font-medium">Herramientas</span></label>
+          <label className="label">
+            <span className="label-text font-medium">Herramientas</span>
+          </label>
           <div className="grid grid-cols-2 gap-2">
             {ALL_TOOLS.map(({ key, label }) => (
-              <label key={key} className="label cursor-pointer justify-start gap-2 bg-base-200 rounded-lg px-3 py-2">
+              <label
+                key={key}
+                className="label cursor-pointer justify-start gap-2 bg-base-200 rounded-lg px-3 py-2"
+              >
                 <input
                   type="checkbox"
                   className="checkbox checkbox-primary checkbox-sm"
@@ -248,7 +312,9 @@ function AgentFormSidebar({
               type="checkbox"
               className="toggle toggle-primary toggle-sm"
               checked={form.is_active ?? true}
-              onChange={(e) => setForm((f) => ({ ...f, is_active: e.target.checked }))}
+              onChange={(e) =>
+                setForm((f) => ({ ...f, is_active: e.target.checked }))
+              }
             />
             <span className="label-text font-medium">Agente activo</span>
           </label>
@@ -256,10 +322,16 @@ function AgentFormSidebar({
       </div>
 
       <div className="px-5 py-4 border-t border-base-300 flex justify-end gap-2">
-        <button className="btn btn-ghost" onClick={onClose}>Cancelar</button>
-        <button className="btn btn-primary gap-1" onClick={handleSave} disabled={isPending}>
+        <button className="btn btn-ghost" onClick={onClose}>
+          Cancelar
+        </button>
+        <button
+          className="btn btn-primary gap-1"
+          onClick={handleSave}
+          disabled={isPending}
+        >
           {isPending && <Loader2 size={14} className="animate-spin" />}
-          {editing ? 'Guardar cambios' : 'Crear agente'}
+          {editing ? "Guardar cambios" : "Crear agente"}
         </button>
       </div>
     </div>
@@ -275,19 +347,29 @@ export const AiAgentsPage: React.FC = () => {
   const [editingAgent, setEditingAgent] = useState<AiAgent | null>(null);
   const [sandboxAgent, setSandboxAgent] = useState<AiAgent | null>(null);
   const [deletingId, setDeletingId] = useState<string | null>(null);
-  const [deleteError, setDeleteError] = useState('');
+  const [deleteError, setDeleteError] = useState("");
 
-  const openEdit = (agent: AiAgent) => { setEditingAgent(agent); setShowForm(true); };
-  const openNew = () => { setEditingAgent(null); setShowForm(true); };
-  const closeForm = () => { setShowForm(false); setEditingAgent(null); };
+  const openEdit = (agent: AiAgent) => {
+    setEditingAgent(agent);
+    setShowForm(true);
+  };
+  const openNew = () => {
+    setEditingAgent(null);
+    setShowForm(true);
+  };
+  const closeForm = () => {
+    setShowForm(false);
+    setEditingAgent(null);
+  };
 
   const handleDelete = async (id: string) => {
     try {
       await deleteAgent(id);
       setDeletingId(null);
     } catch (err: unknown) {
-      const msg = (err as { response?: { data?: { message?: string } } })?.response?.data?.message;
-      setDeleteError(msg ?? 'No se puede eliminar el agente.');
+      const msg = (err as { response?: { data?: { message?: string } } })
+        ?.response?.data?.message;
+      setDeleteError(msg ?? "No se puede eliminar el agente.");
       setDeletingId(null);
     }
   };
@@ -309,7 +391,12 @@ export const AiAgentsPage: React.FC = () => {
       {deleteError && (
         <div className="alert alert-error mb-4 text-sm">
           <AlertCircle size={16} /> <span>{deleteError}</span>
-          <button className="btn btn-ghost btn-xs" onClick={() => setDeleteError('')}><X size={12} /></button>
+          <button
+            className="btn btn-ghost btn-xs"
+            onClick={() => setDeleteError("")}
+          >
+            <X size={12} />
+          </button>
         </div>
       )}
 
@@ -328,7 +415,9 @@ export const AiAgentsPage: React.FC = () => {
       {!isLoading && !isError && (
         <div className="flex gap-4 h-[calc(100vh-12rem)]">
           {/* Agent list */}
-          <div className={`flex flex-col gap-3 ${sandboxAgent ? 'w-1/2' : 'w-full max-w-3xl'}`}>
+          <div
+            className={`flex flex-col gap-3 ${sandboxAgent ? "w-1/2" : "w-full max-w-3xl"}`}
+          >
             {agents.length === 0 && (
               <div className="card bg-base-100 border border-base-300 shadow-sm">
                 <div className="card-body items-center text-center gap-3 py-12">
@@ -347,7 +436,9 @@ export const AiAgentsPage: React.FC = () => {
               <div
                 key={agent.id}
                 className={`card bg-base-100 border shadow-sm transition-all ${
-                  sandboxAgent?.id === agent.id ? 'border-primary' : 'border-base-300'
+                  sandboxAgent?.id === agent.id
+                    ? "border-primary"
+                    : "border-base-300"
                 }`}
               >
                 <div className="card-body flex-row items-center gap-4 py-4">
@@ -357,24 +448,36 @@ export const AiAgentsPage: React.FC = () => {
                   <div className="flex-1 min-w-0">
                     <div className="flex items-center gap-2">
                       <p className="font-medium truncate">{agent.name}</p>
-                      <span className={`badge badge-xs ${agent.is_active ? 'badge-success' : 'badge-ghost'}`}>
-                        {agent.is_active ? 'Activo' : 'Inactivo'}
+                      <span
+                        className={`badge badge-xs ${agent.is_active ? "badge-success" : "badge-ghost"}`}
+                      >
+                        {agent.is_active ? "Activo" : "Inactivo"}
                       </span>
                     </div>
-                    <p className="text-xs text-base-content/50 truncate">{agent.model}</p>
+                    <p className="text-xs text-base-content/50 truncate">
+                      {agent.model}
+                    </p>
                     <p className="text-xs text-base-content/40 mt-0.5 line-clamp-1">
                       {agent.system_prompt.slice(0, 80)}…
                     </p>
                   </div>
                   <div className="flex items-center gap-1 shrink-0">
                     <button
-                      className={`btn btn-ghost btn-sm gap-1 ${sandboxAgent?.id === agent.id ? 'text-primary' : ''}`}
-                      onClick={() => setSandboxAgent(sandboxAgent?.id === agent.id ? null : agent)}
+                      className={`btn btn-ghost btn-sm gap-1 ${sandboxAgent?.id === agent.id ? "text-primary" : ""}`}
+                      onClick={() =>
+                        setSandboxAgent(
+                          sandboxAgent?.id === agent.id ? null : agent,
+                        )
+                      }
                       title="Probar en sandbox"
                     >
                       <FlaskConical size={14} />
                     </button>
-                    <button className="btn btn-ghost btn-sm" onClick={() => openEdit(agent)} title="Editar">
+                    <button
+                      className="btn btn-ghost btn-sm"
+                      onClick={() => openEdit(agent)}
+                      title="Editar"
+                    >
                       <Pencil size={14} />
                     </button>
                     {deletingId === agent.id ? (
@@ -390,7 +493,11 @@ export const AiAgentsPage: React.FC = () => {
                           onClick={() => handleDelete(agent.id)}
                           disabled={deleting}
                         >
-                          {deleting ? <Loader2 size={12} className="animate-spin" /> : 'Confirmar'}
+                          {deleting ? (
+                            <Loader2 size={12} className="animate-spin" />
+                          ) : (
+                            "Confirmar"
+                          )}
                         </button>
                       </div>
                     ) : (

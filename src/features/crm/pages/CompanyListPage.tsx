@@ -1,65 +1,81 @@
-import { DateRange } from '@core/ui/DateRangePicker';
-import { Tabs } from '@core/ui/Tabs';
-import { CompanyCustomFieldsSidebar } from '@crm/components/CompanyCustomFieldsSidebar';
-import { CompanyExportModal } from '@crm/components/CompanyExportModal';
-import { CompanyFilters } from '@crm/components/CompanyFilters';
-import { CompanyFormSidebar } from '@crm/components/CompanyFormSidebar';
-import { CompanyImportModal } from '@crm/components/CompanyImportModal';
-import { CompanyTable } from '@crm/components/CompanyTable';
-import { CustomFieldFilterSidebar } from '@crm/components/CustomFieldFilterSidebar';
-import { Pagination } from '@crm/components/Pagination';
-import { DEFAULT_COMPANY_COLUMNS } from '@crm/constants/company-columns';
-import { useCompaniesList, useDeleteCompany } from '@crm/hooks/useCompanies';
-import { useCustomFields } from '@crm/hooks/useCustomFields';
-import { useUpdateUserPreference, useUserPreference } from '@crm/hooks/useUserPreferences';
-import { Company } from '@crm/types/company';
-import { CompanyListFilters } from '@crm/types/company-filters';
-import { TabKey } from '@crm/types/crm';
-import { SegmentCondition } from '@crm/types/segment-condition';
-import { useAuthStore } from '@features/auth/store/authStore';
-import { ColumnCustomizerModal } from '@shared/components/ColumnCustomizerModal';
-import { ConfirmModal } from '@shared/components/ConfirmModal';
-import { AlertCircle, Building, Building2, FileSpreadsheet, Loader2, Plus } from 'lucide-react';
-import React, { useEffect, useState } from 'react';
-import { useSearchParams } from 'react-router-dom';
+import { DateRange } from "@core/ui/DateRangePicker";
+import { Tabs } from "@core/ui/Tabs";
+import { CompanyCustomFieldsSidebar } from "@crm/components/CompanyCustomFieldsSidebar";
+import { CompanyExportModal } from "@crm/components/CompanyExportModal";
+import { CompanyFilters } from "@crm/components/CompanyFilters";
+import { CompanyFormSidebar } from "@crm/components/CompanyFormSidebar";
+import { CompanyImportModal } from "@crm/components/CompanyImportModal";
+import { CompanyTable } from "@crm/components/CompanyTable";
+import { CustomFieldFilterSidebar } from "@crm/components/CustomFieldFilterSidebar";
+import { Pagination } from "@crm/components/Pagination";
+import { DEFAULT_COMPANY_COLUMNS } from "@crm/constants/company-columns";
+import { useCompaniesList, useDeleteCompany } from "@crm/hooks/useCompanies";
+import { useCustomFields } from "@crm/hooks/useCustomFields";
+import {
+  useUpdateUserPreference,
+  useUserPreference,
+} from "@crm/hooks/useUserPreferences";
+import { Company } from "@crm/types/company";
+import { CompanyListFilters } from "@crm/types/company-filters";
+import { TabKey } from "@crm/types/crm";
+import { SegmentCondition } from "@crm/types/segment-condition";
+import { useAuthStore } from "@features/auth/store/authStore";
+import { ColumnCustomizerModal } from "@shared/components/ColumnCustomizerModal";
+import { ConfirmModal } from "@shared/components/ConfirmModal";
+import {
+  AlertCircle,
+  Building,
+  Building2,
+  FileSpreadsheet,
+  Loader2,
+  Plus,
+} from "lucide-react";
+import React, { useEffect, useState } from "react";
+import { useSearchParams } from "react-router-dom";
 
 const defaultFilters = (): CompanyListFilters => ({
-  search: '',
-  industryId: '',
-  ownerId: '',
-  lifecycleStageId: '',
-  employeeRange: '',
-  createdAtFrom: '',
-  createdAtTo: '',
+  search: "",
+  industryId: "",
+  ownerId: "",
+  lifecycleStageId: "",
+  employeeRange: "",
+  createdAtFrom: "",
+  createdAtTo: "",
   customFieldConditions: [],
   page: 1,
 });
 
-const serializeConditions = (conditions: SegmentCondition[]): string | undefined =>
+const serializeConditions = (
+  conditions: SegmentCondition[],
+): string | undefined =>
   conditions.length > 0 ? JSON.stringify(conditions) : undefined;
 
 const LIMIT = 20;
 
 export const CompanyListPage: React.FC = () => {
-  const [activeTab, setActiveTab] = useState<TabKey>('all');
+  const [activeTab, setActiveTab] = useState<TabKey>("all");
   const [filters, setFilters] = useState<Record<TabKey, CompanyListFilters>>({
     all: defaultFilters(),
     mine: defaultFilters(),
     unassigned: defaultFilters(),
   });
 
-  const [isCustomFieldSidebarOpen, setIsCustomFieldSidebarOpen] = useState(false);
+  const [isCustomFieldSidebarOpen, setIsCustomFieldSidebarOpen] =
+    useState(false);
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const [editing, setEditing] = useState<Company | null>(null);
-  const [customFieldsCompany, setCustomFieldsCompany] = useState<Company | null>(null);
+  const [customFieldsCompany, setCustomFieldsCompany] =
+    useState<Company | null>(null);
   const [isExportOpen, setIsExportOpen] = useState(false);
   const [isImportOpen, setIsImportOpen] = useState(false);
   const [isConfirmOpen, setIsConfirmOpen] = useState(false);
   const [companyToDelete, setCompanyToDelete] = useState<Company | null>(null);
   const [isCustomizerOpen, setIsCustomizerOpen] = useState(false);
 
-  const { data: customFields = [] } = useCustomFields('company');
-  const { data: columnPreference } = useUserPreference('companies_table_columns');
+  const { data: customFields = [] } = useCustomFields("company");
+  const { data: columnPreference } = useUserPreference(
+    "companies_table_columns",
+  );
   const updatePreferenceMutation = useUpdateUserPreference();
   const currentColumnConfig = columnPreference || DEFAULT_COMPANY_COLUMNS;
 
@@ -67,10 +83,10 @@ export const CompanyListPage: React.FC = () => {
   const currentUser = useAuthStore((s) => s.user);
   const myOwnerId = currentUser?.crm_user_id;
   const isAdminOrManager =
-    currentUser?.role === 'admin' || currentUser?.role === 'manager';
+    currentUser?.role === "admin" || currentUser?.role === "manager";
 
   useEffect(() => {
-    if (!myOwnerId && activeTab === 'mine') setActiveTab('all');
+    if (!myOwnerId && activeTab === "mine") setActiveTab("all");
   }, [myOwnerId, activeTab]);
 
   useEffect(() => {
@@ -108,10 +124,12 @@ export const CompanyListPage: React.FC = () => {
       industryId: filters.mine.industryId || undefined,
       lifecycleStageId: filters.mine.lifecycleStageId || undefined,
       employeeRange: filters.mine.employeeRange || undefined,
-      ownerId: myOwnerId || 'none',
+      ownerId: myOwnerId || "none",
       createdAtFrom: filters.mine.createdAtFrom || undefined,
       createdAtTo: filters.mine.createdAtTo || undefined,
-      customFieldFilters: serializeConditions(filters.mine.customFieldConditions),
+      customFieldFilters: serializeConditions(
+        filters.mine.customFieldConditions,
+      ),
       page: filters.mine.page,
       limit: LIMIT,
     },
@@ -123,10 +141,12 @@ export const CompanyListPage: React.FC = () => {
     industryId: filters.unassigned.industryId || undefined,
     lifecycleStageId: filters.unassigned.lifecycleStageId || undefined,
     employeeRange: filters.unassigned.employeeRange || undefined,
-    ownerId: 'unassigned',
+    ownerId: "unassigned",
     createdAtFrom: filters.unassigned.createdAtFrom || undefined,
     createdAtTo: filters.unassigned.createdAtTo || undefined,
-    customFieldFilters: serializeConditions(filters.unassigned.customFieldConditions),
+    customFieldFilters: serializeConditions(
+      filters.unassigned.customFieldConditions,
+    ),
     page: filters.unassigned.page,
     limit: LIMIT,
   });
@@ -134,15 +154,15 @@ export const CompanyListPage: React.FC = () => {
   const deleteMutation = useDeleteCompany();
 
   const activeQuery =
-    activeTab === 'all'
+    activeTab === "all"
       ? allQuery
-      : activeTab === 'mine'
+      : activeTab === "mine"
         ? mineQuery
         : unassignedQuery;
   const activeFilters = filters[activeTab];
 
   const setTabFilter = (tab: TabKey, partial: Partial<CompanyListFilters>) => {
-    const resetPage = !('page' in partial);
+    const resetPage = !("page" in partial);
     setFilters((prev) => ({
       ...prev,
       [tab]: { ...prev[tab], ...partial, ...(resetPage ? { page: 1 } : {}) },
@@ -151,12 +171,14 @@ export const CompanyListPage: React.FC = () => {
 
   const handleDateRangeChange = (range: DateRange | null) => {
     setTabFilter(activeTab, {
-      createdAtFrom: range?.from ?? '',
-      createdAtTo: range?.to ?? '',
+      createdAtFrom: range?.from ?? "",
+      createdAtTo: range?.to ?? "",
     });
   };
 
-  const handleCustomFieldConditionsChange = (conditions: SegmentCondition[]) => {
+  const handleCustomFieldConditionsChange = (
+    conditions: SegmentCondition[],
+  ) => {
     setTabFilter(activeTab, { customFieldConditions: conditions });
   };
 
@@ -166,7 +188,7 @@ export const CompanyListPage: React.FC = () => {
   };
 
   const openEdit = (c: Company) => {
-    if (!isAdminOrManager && activeTab !== 'mine') return;
+    if (!isAdminOrManager && activeTab !== "mine") return;
     setEditing(c);
     setSidebarOpen(true);
   };
@@ -196,7 +218,9 @@ export const CompanyListPage: React.FC = () => {
             Organiza y gestiona las empresas y organizaciones de tu cartera.
           </p>
           <div className="text-xs font-semibold text-slate-500">
-            <span className="text-slate-300">{allQuery.data?.total ?? 0}</span> empresa{(allQuery.data?.total ?? 0) !== 1 ? 's' : ''} registrada{(allQuery.data?.total ?? 0) !== 1 ? 's' : ''}
+            <span className="text-slate-300">{allQuery.data?.total ?? 0}</span>{" "}
+            empresa{(allQuery.data?.total ?? 0) !== 1 ? "s" : ""} registrada
+            {(allQuery.data?.total ?? 0) !== 1 ? "s" : ""}
           </div>
         </div>
 
@@ -225,26 +249,26 @@ export const CompanyListPage: React.FC = () => {
         onChange={(k) => setActiveTab(k as TabKey)}
         tabs={[
           {
-            key: 'all',
-            label: 'Todas',
+            key: "all",
+            label: "Todas",
             icon: Building2,
-            badge: allQuery.data?.total ?? '—',
+            badge: allQuery.data?.total ?? "—",
           },
           ...(myOwnerId
             ? [
                 {
-                  key: 'mine',
-                  label: 'Mis empresas',
+                  key: "mine",
+                  label: "Mis empresas",
                   icon: Building,
-                  badge: mineQuery.data?.total ?? '—',
+                  badge: mineQuery.data?.total ?? "—",
                 },
               ]
             : []),
           {
-            key: 'unassigned',
-            label: 'No asignadas',
+            key: "unassigned",
+            label: "No asignadas",
             icon: Building2,
-            badge: unassignedQuery.data?.total ?? '—',
+            badge: unassignedQuery.data?.total ?? "—",
           },
         ]}
       />
@@ -259,7 +283,7 @@ export const CompanyListPage: React.FC = () => {
         createdAtFrom={activeFilters.createdAtFrom}
         createdAtTo={activeFilters.createdAtTo}
         customFieldConditions={activeFilters.customFieldConditions}
-        showOwnerFilter={isAdminOrManager && activeTab === 'all'}
+        showOwnerFilter={isAdminOrManager && activeTab === "all"}
         onSearchChange={(v) => setTabFilter(activeTab, { search: v })}
         onIndustryChange={(v) => setTabFilter(activeTab, { industryId: v })}
         onOwnerChange={(v) => setTabFilter(activeTab, { ownerId: v })}
@@ -294,7 +318,9 @@ export const CompanyListPage: React.FC = () => {
           <AlertCircle size={24} className="text-rose-500" />
           <div className="flex-1">
             <p className="font-bold">Error de sincronización</p>
-            <p className="opacity-70">{(activeQuery.error as Error)?.message}</p>
+            <p className="opacity-70">
+              {(activeQuery.error as Error)?.message}
+            </p>
           </div>
           <button
             onClick={() => activeQuery.refetch()}
@@ -316,7 +342,7 @@ export const CompanyListPage: React.FC = () => {
             onSelect={openEdit}
             onCustomFields={(c) => setCustomFieldsCompany(c)}
             onAction={openCreate}
-            canEdit={isAdminOrManager || activeTab === 'mine'}
+            canEdit={isAdminOrManager || activeTab === "mine"}
           />
           <div className="mt-6">
             <Pagination
@@ -365,7 +391,9 @@ export const CompanyListPage: React.FC = () => {
           employeeRange: activeFilters.employeeRange || undefined,
           createdAtFrom: activeFilters.createdAtFrom || undefined,
           createdAtTo: activeFilters.createdAtTo || undefined,
-          customFieldFilters: serializeConditions(activeFilters.customFieldConditions),
+          customFieldFilters: serializeConditions(
+            activeFilters.customFieldConditions,
+          ),
         }}
       />
 
@@ -394,7 +422,7 @@ export const CompanyListPage: React.FC = () => {
         defaultColumns={DEFAULT_COMPANY_COLUMNS}
         onSave={async (newConfig) => {
           await updatePreferenceMutation.mutateAsync({
-            key: 'companies_table_columns',
+            key: "companies_table_columns",
             value: newConfig,
           });
         }}

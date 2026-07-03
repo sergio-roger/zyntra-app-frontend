@@ -1,5 +1,5 @@
-import React, { forwardRef } from 'react';
-import { LucideIcon } from 'lucide-react';
+import React, { forwardRef } from "react";
+import { LucideIcon } from "lucide-react";
 
 interface TextareaProps extends React.TextareaHTMLAttributes<HTMLTextAreaElement> {
   label?: string;
@@ -14,8 +14,8 @@ export const Textarea = forwardRef<HTMLTextAreaElement, TextareaProps>(
       label,
       icon: Icon,
       error,
-      containerClassName = '',
-      className = '',
+      containerClassName = "",
+      className = "",
       ...props
     },
     ref,
@@ -34,7 +34,7 @@ export const Textarea = forwardRef<HTMLTextAreaElement, TextareaProps>(
             className={`
               w-full bg-slate-950/50 border border-white/10 rounded-xl py-2.5 px-4 text-sm text-white placeholder-slate-600 
               focus:outline-none focus:border-primary/50 focus:ring-1 focus:ring-primary/20 transition-all resize-none
-              ${error ? 'border-rose-500/50 focus:border-rose-500 focus:ring-rose-500/20' : ''}
+              ${error ? "border-rose-500/50 focus:border-rose-500 focus:ring-rose-500/20" : ""}
               ${className}
             `}
             {...props}
@@ -50,4 +50,4 @@ export const Textarea = forwardRef<HTMLTextAreaElement, TextareaProps>(
   },
 );
 
-Textarea.displayName = 'Textarea';
+Textarea.displayName = "Textarea";
