@@ -1,11 +1,11 @@
-import React, { useEffect, useRef, useState } from "react";
+import React, { useEffect, useRef, useState } from 'react';
 import {
   useCompaniesList,
   useCreateCompany,
   useIndustrys,
-} from "@crm/hooks/useCompanies";
-import { Select } from "@core/ui/Select";
-import { Company } from "@crm/types/company";
+} from '@crm/hooks/useCompanies';
+import { Select } from '@core/ui/Select';
+import { Company } from '@crm/types/company';
 import {
   Building2,
   Globe,
@@ -19,13 +19,13 @@ import {
   X,
   ChevronDown,
   ChevronUp,
-} from "lucide-react";
+} from 'lucide-react';
 import {
   TAX_TYPE_OPTIONS,
   EMPLOYEE_RANGE_OPTIONS,
-} from "@crm/constants/company-options";
+} from '@crm/constants/company-options';
 
-type Mode = "select" | "create";
+type Mode = 'select' | 'create';
 
 interface DealCompanySearchProps {
   value: string;
@@ -34,7 +34,7 @@ interface DealCompanySearchProps {
 }
 
 const fieldCls =
-  "w-full bg-slate-950/60 border border-white/10 rounded-lg py-2.5 px-3 text-sm text-white placeholder-slate-500 focus:outline-none focus:border-indigo-500/40 focus:bg-slate-950/80 transition-all";
+  'w-full bg-slate-950/60 border border-white/10 rounded-lg py-2.5 px-3 text-sm text-white placeholder-slate-500 focus:outline-none focus:border-indigo-500/40 focus:bg-slate-950/80 transition-all';
 
 const FieldLabel: React.FC<{
   icon?: React.ReactNode;
@@ -53,22 +53,22 @@ export const DealCompanySearch: React.FC<DealCompanySearchProps> = ({
   selectedCompany,
   onChange,
 }) => {
-  const [mode, setMode] = useState<Mode>("select");
+  const [mode, setMode] = useState<Mode>('select');
   const [dropdownOpen, setDropdownOpen] = useState(false);
-  const [search, setSearch] = useState("");
+  const [search, setSearch] = useState('');
 
-  const [newName, setNewName] = useState("");
-  const [newTaxType, setNewTaxType] = useState<string | null>("RUC");
-  const [newIdentification, setNewIdentification] = useState("");
+  const [newName, setNewName] = useState('');
+  const [newTaxType, setNewTaxType] = useState<string | null>('RUC');
+  const [newIdentification, setNewIdentification] = useState('');
   const [newEmployeeRange, setNewEmployeeRange] = useState<string | null>(null);
-  const [newWebsite, setNewWebsite] = useState("");
+  const [newWebsite, setNewWebsite] = useState('');
   const [newIndustryId, setNewIndustryId] = useState<string | null>(null);
 
   const containerRef = useRef<HTMLDivElement>(null);
 
   const { data: listData } = useCompaniesList(
     { search: search || undefined, limit: 20 },
-    { enabled: dropdownOpen && mode === "select" },
+    { enabled: dropdownOpen && mode === 'select' },
   );
   const { data: industries = [] } = useIndustrys();
   const results = listData?.items ?? [];
@@ -88,33 +88,33 @@ export const DealCompanySearch: React.FC<DealCompanySearchProps> = ({
 
   useEffect(() => {
     const onKey = (e: KeyboardEvent) => {
-      if (e.key === "Escape") setDropdownOpen(false);
+      if (e.key === 'Escape') setDropdownOpen(false);
     };
-    document.addEventListener("keydown", onKey);
-    return () => document.removeEventListener("keydown", onKey);
+    document.addEventListener('keydown', onKey);
+    return () => document.removeEventListener('keydown', onKey);
   }, []);
 
   const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
     if (!dropdownOpen) {
-      if (e.key === "ArrowDown" || e.key === "Enter") {
+      if (e.key === 'ArrowDown' || e.key === 'Enter') {
         e.preventDefault();
         setDropdownOpen(true);
       }
       return;
     }
 
-    if (e.key === "ArrowDown") {
+    if (e.key === 'ArrowDown') {
       e.preventDefault();
       setSelectedIndex((prev) => (prev < results.length - 1 ? prev + 1 : prev));
-    } else if (e.key === "ArrowUp") {
+    } else if (e.key === 'ArrowUp') {
       e.preventDefault();
       setSelectedIndex((prev) => (prev > 0 ? prev - 1 : prev));
-    } else if (e.key === "Enter") {
+    } else if (e.key === 'Enter') {
       e.preventDefault();
       if (selectedIndex >= 0 && selectedIndex < results.length) {
         handleSelect(results[selectedIndex]);
       }
-    } else if (e.key === "Escape") {
+    } else if (e.key === 'Escape') {
       setDropdownOpen(false);
     }
   };
@@ -122,21 +122,21 @@ export const DealCompanySearch: React.FC<DealCompanySearchProps> = ({
   const handleSelect = (c: Company) => {
     onChange(c.id, c);
     setDropdownOpen(false);
-    setSearch("");
+    setSearch('');
   };
 
   const handleClear = () => {
-    onChange("", null);
-    setSearch("");
-    setMode("select");
+    onChange('', null);
+    setSearch('');
+    setMode('select');
   };
 
   const resetCreateForm = () => {
-    setNewName("");
-    setNewTaxType("RUC");
-    setNewIdentification("");
+    setNewName('');
+    setNewTaxType('RUC');
+    setNewIdentification('');
     setNewEmployeeRange(null);
-    setNewWebsite("");
+    setNewWebsite('');
     setNewIndustryId(null);
   };
 
@@ -145,14 +145,14 @@ export const DealCompanySearch: React.FC<DealCompanySearchProps> = ({
     try {
       const company = await createMutation.mutateAsync({
         name: newName.trim(),
-        taxType: newTaxType ?? "RUC",
+        taxType: newTaxType ?? 'RUC',
         identification: newIdentification.trim(),
-        employeeRange: newEmployeeRange ?? "",
+        employeeRange: newEmployeeRange ?? '',
         website: newWebsite.trim(),
-        industryId: newIndustryId ?? "",
-        description: "",
-        lifecycleStageId: "",
-        ownerId: "",
+        industryId: newIndustryId ?? '',
+        description: '',
+        lifecycleStageId: '',
+        ownerId: '',
         tagIds: [],
         customFields: {},
       });
@@ -237,11 +237,11 @@ export const DealCompanySearch: React.FC<DealCompanySearchProps> = ({
       <div className="grid grid-cols-2 gap-1 p-1 bg-slate-950/60 rounded-xl">
         <button
           type="button"
-          onClick={() => setMode("select")}
+          onClick={() => setMode('select')}
           className={`flex items-center justify-center gap-1.5 py-2 px-3 rounded-lg text-xs font-semibold transition-all ${
-            mode === "select"
-              ? "bg-slate-800 text-white shadow-sm border border-white/10"
-              : "text-slate-500 hover:text-slate-300"
+            mode === 'select'
+              ? 'bg-slate-800 text-white shadow-sm border border-white/10'
+              : 'text-slate-500 hover:text-slate-300'
           }`}
         >
           <Search size={11} />
@@ -250,13 +250,13 @@ export const DealCompanySearch: React.FC<DealCompanySearchProps> = ({
         <button
           type="button"
           onClick={() => {
-            setMode("create");
+            setMode('create');
             setDropdownOpen(false);
           }}
           className={`flex items-center justify-center gap-1.5 py-2 px-3 rounded-lg text-xs font-semibold transition-all ${
-            mode === "create"
-              ? "bg-indigo-600/25 text-indigo-300 shadow-sm border border-indigo-500/30"
-              : "text-slate-500 hover:text-slate-300"
+            mode === 'create'
+              ? 'bg-indigo-600/25 text-indigo-300 shadow-sm border border-indigo-500/30'
+              : 'text-slate-500 hover:text-slate-300'
           }`}
         >
           <Plus size={11} />
@@ -265,7 +265,7 @@ export const DealCompanySearch: React.FC<DealCompanySearchProps> = ({
       </div>
 
       {/* ── Select mode ── */}
-      {mode === "select" && (
+      {mode === 'select' && (
         <div className="space-y-1.5">
           <div className="relative">
             <Search
@@ -301,8 +301,8 @@ export const DealCompanySearch: React.FC<DealCompanySearchProps> = ({
                   <Building2 size={20} className="opacity-25" />
                   <p className="text-xs">
                     {search
-                      ? "Sin resultados para esa búsqueda"
-                      : "Escribe para buscar..."}
+                      ? 'Sin resultados para esa búsqueda'
+                      : 'Escribe para buscar...'}
                   </p>
                 </div>
               ) : (
@@ -314,8 +314,8 @@ export const DealCompanySearch: React.FC<DealCompanySearchProps> = ({
                         onClick={() => handleSelect(c)}
                         className={`w-full text-left px-4 py-2.5 transition-colors flex items-center gap-3 ${
                           index === selectedIndex
-                            ? "bg-indigo-500/20"
-                            : "hover:bg-white/5"
+                            ? 'bg-indigo-500/20'
+                            : 'hover:bg-white/5'
                         }`}
                       >
                         <div className="w-7 h-7 rounded-md bg-slate-800 border border-white/5 flex items-center justify-center shrink-0">
@@ -349,7 +349,7 @@ export const DealCompanySearch: React.FC<DealCompanySearchProps> = ({
       )}
 
       {/* ── Create mode ── */}
-      {mode === "create" && (
+      {mode === 'create' && (
         <div className="rounded-xl border border-indigo-500/20 bg-indigo-500/5">
           {/* Card header */}
           <div className="flex items-center gap-2 px-4 py-3 border-b border-indigo-500/10 bg-indigo-500/5 rounded-t-xl">
@@ -389,7 +389,7 @@ export const DealCompanySearch: React.FC<DealCompanySearchProps> = ({
                   <Select
                     options={TAX_TYPE_OPTIONS}
                     value={newTaxType}
-                    onChange={(v) => setNewTaxType(v ?? "RUC")}
+                    onChange={(v) => setNewTaxType(v ?? 'RUC')}
                     placeholder="Tipo..."
                     inline
                   />
@@ -447,7 +447,7 @@ export const DealCompanySearch: React.FC<DealCompanySearchProps> = ({
               <button
                 type="button"
                 onClick={() => {
-                  setMode("select");
+                  setMode('select');
                   resetCreateForm();
                 }}
                 className="px-3 py-2 rounded-lg border border-white/10 text-xs font-semibold text-slate-400 hover:bg-white/5 transition-colors"

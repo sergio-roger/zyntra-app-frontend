@@ -1,9 +1,9 @@
-import { ConditionBuilder } from "@crm/components/ConditionBuilder";
-import { SegmentPreviewPanel } from "@crm/components/SegmentPreviewPanel";
-import { Segment } from "@crm/types/segment";
-import { SegmentCondition } from "@crm/types/segment-condition";
-import { Loader2, Save, X } from "lucide-react";
-import React, { useEffect, useState } from "react";
+import { ConditionBuilder } from '@crm/components/ConditionBuilder';
+import { SegmentPreviewPanel } from '@crm/components/SegmentPreviewPanel';
+import { Segment } from '@crm/types/segment';
+import { SegmentCondition } from '@crm/types/segment-condition';
+import { Loader2, Save, X } from 'lucide-react';
+import React, { useEffect, useState } from 'react';
 
 interface SegmentEditorProps {
   segment: Segment | null;
@@ -11,7 +11,7 @@ interface SegmentEditorProps {
   onSave: (data: {
     name: string;
     description: string;
-    type: "dynamic" | "static";
+    type: 'dynamic' | 'static';
     conditions: SegmentCondition[];
   }) => void;
   onCancel: () => void;
@@ -23,19 +23,19 @@ export const SegmentEditor: React.FC<SegmentEditorProps> = ({
   onSave,
   onCancel,
 }) => {
-  const [name, setName] = useState(segment?.name ?? "");
-  const [description, setDescription] = useState(segment?.description ?? "");
-  const [type, setType] = useState<"dynamic" | "static">(
-    segment?.type ?? "dynamic",
+  const [name, setName] = useState(segment?.name ?? '');
+  const [description, setDescription] = useState(segment?.description ?? '');
+  const [type, setType] = useState<'dynamic' | 'static'>(
+    segment?.type ?? 'dynamic',
   );
   const [conditions, setConditions] = useState<SegmentCondition[]>(
     segment?.conditions ?? [],
   );
 
   useEffect(() => {
-    setName(segment?.name ?? "");
-    setDescription(segment?.description ?? "");
-    setType(segment?.type ?? "dynamic");
+    setName(segment?.name ?? '');
+    setDescription(segment?.description ?? '');
+    setType(segment?.type ?? 'dynamic');
     setConditions(segment?.conditions ?? []);
   }, [segment?.id]);
 
@@ -59,7 +59,7 @@ export const SegmentEditor: React.FC<SegmentEditorProps> = ({
         <div>
           <h3 className="text-base font-black text-white leading-tight">
             {isCreating
-              ? "Nuevo Segmento Inteligente"
+              ? 'Nuevo Segmento Inteligente'
               : `Editando: ${segment.name}`}
           </h3>
           <p className="text-xs text-slate-500 mt-1">
@@ -111,7 +111,7 @@ export const SegmentEditor: React.FC<SegmentEditorProps> = ({
               </div>
               <div>
                 <label className="block text-[11px] font-bold uppercase tracking-wider text-slate-400 mb-1.5">
-                  Descripción{" "}
+                  Descripción{' '}
                   <span className="text-slate-600 normal-case font-normal tracking-normal">
                     (opcional)
                   </span>
@@ -131,24 +131,24 @@ export const SegmentEditor: React.FC<SegmentEditorProps> = ({
                 Tipo
               </span>
               <div className="flex gap-2 ml-auto">
-                {(["dynamic", "static"] as const).map((t) => (
+                {(['dynamic', 'static'] as const).map((t) => (
                   <button
                     key={t}
                     type="button"
                     onClick={() => setType(t)}
                     className={`px-3 py-1.5 rounded-lg text-xs font-bold transition-all ${
                       type === t
-                        ? "bg-indigo-600 text-white"
-                        : "bg-slate-800 text-slate-400 hover:bg-slate-700"
+                        ? 'bg-indigo-600 text-white'
+                        : 'bg-slate-800 text-slate-400 hover:bg-slate-700'
                     }`}
                   >
-                    {t === "dynamic" ? "Dinámico" : "Estático"}
+                    {t === 'dynamic' ? 'Dinámico' : 'Estático'}
                   </button>
                 ))}
               </div>
             </div>
 
-            {type === "dynamic" && (
+            {type === 'dynamic' && (
               <div className="rounded-xl border border-slate-700/50 bg-slate-950/20 p-4">
                 <ConditionBuilder
                   conditions={conditions}

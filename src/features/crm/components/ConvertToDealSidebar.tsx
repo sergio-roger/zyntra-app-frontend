@@ -1,10 +1,10 @@
-import { Input } from "@core/ui/Input";
-import { Textarea } from "@core/ui/Textarea";
-import { usePipelines } from "@crm/hooks/useDeals";
-import { useConvertToDeal } from "@crm/hooks/useLeads";
-import { Contact } from "@crm/types/contact";
-import { ConvertToDealInput } from "@crm/types/convert-to-deal-input";
-import { DealPipelineStage } from "@crm/types/deal-pipeline-stage";
+import { Input } from '@core/ui/Input';
+import { Textarea } from '@core/ui/Textarea';
+import { usePipelines } from '@crm/hooks/useDeals';
+import { useConvertToDeal } from '@crm/hooks/useLeads';
+import { Contact } from '@crm/types/contact';
+import { ConvertToDealInput } from '@crm/types/convert-to-deal-input';
+import { DealPipelineStage } from '@crm/types/deal-pipeline-stage';
 import {
   ArrowRightCircle,
   Briefcase,
@@ -13,8 +13,8 @@ import {
   DollarSign,
   Loader2,
   X,
-} from "lucide-react";
-import React, { useEffect, useState } from "react";
+} from 'lucide-react';
+import React, { useEffect, useState } from 'react';
 
 interface ConvertToDealSidebarProps {
   open: boolean;
@@ -24,12 +24,12 @@ interface ConvertToDealSidebarProps {
 }
 
 const emptyForm = (): ConvertToDealInput => ({
-  title: "",
+  title: '',
   value: 0,
-  pipeline_id: "",
-  stage_id: "",
-  expected_close_date: "",
-  description: "",
+  pipeline_id: '',
+  stage_id: '',
+  expected_close_date: '',
+  description: '',
 });
 
 export const ConvertToDealSidebar: React.FC<ConvertToDealSidebarProps> = ({
@@ -53,12 +53,12 @@ export const ConvertToDealSidebar: React.FC<ConvertToDealSidebarProps> = ({
     setStages(defaultPipeline?.stages ?? []);
 
     setFormData({
-      title: lead ? `Negocio con ${lead.name}` : "",
+      title: lead ? `Negocio con ${lead.name}` : '',
       value: lead?.dealValue ? Number(lead.dealValue) : 0,
-      pipeline_id: defaultPipeline?.id ?? "",
-      stage_id: firstStage?.id ?? "",
-      expected_close_date: "",
-      description: "",
+      pipeline_id: defaultPipeline?.id ?? '',
+      stage_id: firstStage?.id ?? '',
+      expected_close_date: '',
+      description: '',
     });
   }, [lead, open, pipelines]);
 
@@ -70,7 +70,7 @@ export const ConvertToDealSidebar: React.FC<ConvertToDealSidebarProps> = ({
     setFormData((f) => ({
       ...f,
       pipeline_id: pipelineId,
-      stage_id: firstStage?.id ?? "",
+      stage_id: firstStage?.id ?? '',
     }));
   };
 
@@ -91,19 +91,19 @@ export const ConvertToDealSidebar: React.FC<ConvertToDealSidebarProps> = ({
       onSuccess?.();
       onClose();
     } catch (err) {
-      console.error("Error converting lead:", err);
+      console.error('Error converting lead:', err);
     }
   };
 
   return (
     <>
       <div
-        className={`fixed inset-0 bg-black/60 !mt-0 backdrop-blur-sm z-[60] transition-opacity duration-300 ${open ? "opacity-100" : "opacity-0 pointer-events-none"}`}
+        className={`fixed inset-0 bg-black/60 !mt-0 backdrop-blur-sm z-[60] transition-opacity duration-300 ${open ? 'opacity-100' : 'opacity-0 pointer-events-none'}`}
         onClick={onClose}
       />
 
       <div
-        className={`fixed inset-y-0 right-0 w-full !mt-0 max-w-md bg-slate-900 border-l border-white/10 z-[70] shadow-2xl transform transition-transform duration-300 ease-out ${open ? "translate-x-0" : "translate-x-full"}`}
+        className={`fixed inset-y-0 right-0 w-full !mt-0 max-w-md bg-slate-900 border-l border-white/10 z-[70] shadow-2xl transform transition-transform duration-300 ease-out ${open ? 'translate-x-0' : 'translate-x-full'}`}
       >
         <div className="flex flex-col h-full">
           {/* Header */}
@@ -117,7 +117,7 @@ export const ConvertToDealSidebar: React.FC<ConvertToDealSidebarProps> = ({
               </div>
               {lead && (
                 <p className="text-sm text-slate-400">
-                  Lead:{" "}
+                  Lead:{' '}
                   <span className="text-white font-medium">{lead.name}</span>
                 </p>
               )}
@@ -154,7 +154,7 @@ export const ConvertToDealSidebar: React.FC<ConvertToDealSidebarProps> = ({
                 type="number"
                 min="0"
                 placeholder="0.00"
-                value={formData.value ?? ""}
+                value={formData.value ?? ''}
                 onChange={(e) =>
                   setFormData({ ...formData, value: Number(e.target.value) })
                 }
@@ -163,7 +163,7 @@ export const ConvertToDealSidebar: React.FC<ConvertToDealSidebarProps> = ({
                 label="Fecha de cierre"
                 icon={Calendar}
                 type="date"
-                value={formData.expected_close_date ?? ""}
+                value={formData.expected_close_date ?? ''}
                 onChange={(e) =>
                   setFormData({
                     ...formData,
@@ -189,7 +189,7 @@ export const ConvertToDealSidebar: React.FC<ConvertToDealSidebarProps> = ({
                   {pipelines.map((p) => (
                     <option key={p.id} value={p.id}>
                       {p.name}
-                      {p.is_default ? " (principal)" : ""}
+                      {p.is_default ? ' (principal)' : ''}
                     </option>
                   ))}
                 </select>
@@ -217,7 +217,7 @@ export const ConvertToDealSidebar: React.FC<ConvertToDealSidebarProps> = ({
                 >
                   <option value="">Seleccionar etapa...</option>
                   {stages
-                    .filter((s) => s.type === "active")
+                    .filter((s) => s.type === 'active')
                     .map((s) => (
                       <option key={s.id} value={s.id}>
                         {s.name} ({s.probability_percent}%)
@@ -235,7 +235,7 @@ export const ConvertToDealSidebar: React.FC<ConvertToDealSidebarProps> = ({
               label="Notas del negocio"
               placeholder="Contexto, necesidades o detalles del cliente..."
               rows={4}
-              value={formData.description ?? ""}
+              value={formData.description ?? ''}
               onChange={(e) =>
                 setFormData({ ...formData, description: e.target.value })
               }
@@ -250,16 +250,16 @@ export const ConvertToDealSidebar: React.FC<ConvertToDealSidebarProps> = ({
                 <div className="grid grid-cols-2 gap-2 text-xs">
                   <div>
                     <span className="text-slate-500">Email</span>
-                    <p className="text-white truncate">{lead.email || "—"}</p>
+                    <p className="text-white truncate">{lead.email || '—'}</p>
                   </div>
                   <div>
                     <span className="text-slate-500">Teléfono</span>
-                    <p className="text-white">{lead.phone || "—"}</p>
+                    <p className="text-white">{lead.phone || '—'}</p>
                   </div>
                   <div>
                     <span className="text-slate-500">Empresa</span>
                     <p className="text-white truncate">
-                      {lead.company?.name || "—"}
+                      {lead.company?.name || '—'}
                     </p>
                   </div>
                   <div>

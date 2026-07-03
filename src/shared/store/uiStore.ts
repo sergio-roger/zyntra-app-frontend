@@ -1,4 +1,4 @@
-import { create } from "zustand";
+import { create } from 'zustand';
 
 interface UiState {
   isUserMenuOpen: boolean;
@@ -14,7 +14,7 @@ export const useUiStore = create<UiState>((set) => ({
   setUserMenuOpen: (isOpen) => set({ isUserMenuOpen: isOpen }),
   toggleUserMenu: () =>
     set((state) => ({ isUserMenuOpen: !state.isUserMenuOpen })),
-  openGroups: ["settings_general"],
+  openGroups: ['settings_general'],
   toggleGroup: (key) =>
     set((state) => ({
       openGroups: state.openGroups.includes(key)

@@ -1,5 +1,5 @@
-import React, { useState } from "react";
-import { useNavigate } from "react-router-dom";
+import React, { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import {
   Globe,
   MessageCircle,
@@ -9,9 +9,9 @@ import {
   ArrowRight,
   Loader2,
   AlertCircle,
-} from "lucide-react";
-import { useChannelStore, useChannels } from "../hooks/useChannels";
-import { ChannelType, Channel } from "../types/channels.types";
+} from 'lucide-react';
+import { useChannelStore, useChannels } from '../hooks/useChannels';
+import { ChannelType, Channel } from '../types/channels.types';
 
 const CHANNEL_ICONS: Record<string, React.ReactNode> = {
   web_chat: <Globe size={28} />,
@@ -37,8 +37,8 @@ const ChannelTypeCard: React.FC<ChannelTypeCardProps> = ({
       data-testid={`channel-card-${channelType.key}`}
       className={`card bg-base-100 border shadow-sm transition-all ${
         disabled
-          ? "opacity-60 cursor-not-allowed border-base-300"
-          : "border-base-300 hover:border-primary hover:shadow-md cursor-pointer"
+          ? 'opacity-60 cursor-not-allowed border-base-300'
+          : 'border-base-300 hover:border-primary hover:shadow-md cursor-pointer'
       }`}
     >
       <div className="card-body gap-3">
@@ -46,8 +46,8 @@ const ChannelTypeCard: React.FC<ChannelTypeCardProps> = ({
           <div
             className={`w-12 h-12 rounded-xl flex items-center justify-center ${
               disabled
-                ? "bg-base-200 text-base-content/40"
-                : "bg-primary/10 text-primary"
+                ? 'bg-base-200 text-base-content/40'
+                : 'bg-primary/10 text-primary'
             }`}
           >
             {CHANNEL_ICONS[channelType.key] ?? <Globe size={28} />}

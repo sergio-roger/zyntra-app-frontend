@@ -1,5 +1,5 @@
-import { useRolePermissions } from "@features/settings/hooks/usePermissions";
-import { CardWrapper } from "@shared/components/CardWrapper";
+import { useRolePermissions } from '@features/settings/hooks/usePermissions';
+import { CardWrapper } from '@shared/components/CardWrapper';
 import {
   ArrowRight,
   Edit,
@@ -7,9 +7,9 @@ import {
   ShieldAlert,
   ShieldCheck,
   Trash2,
-} from "lucide-react";
-import React, { createElement } from "react";
-import { useNavigate } from "react-router-dom";
+} from 'lucide-react';
+import React, { createElement } from 'react';
+import { useNavigate } from 'react-router-dom';
 
 interface RoleCardProps {
   role: {
@@ -31,9 +31,9 @@ interface RoleCardProps {
 
 const getRoleIcon = (name: string) => {
   switch (name) {
-    case "admin":
+    case 'admin':
       return ShieldAlert;
-    case "manager":
+    case 'manager':
       return ShieldCheck;
     default:
       return Shield;
@@ -51,8 +51,8 @@ export const RoleCard: React.FC<RoleCardProps> = ({
   const { data: perms, isLoading } = useRolePermissions(role.name);
 
   const activeCount =
-    role.name === "admin" ? totalMenus : (perms?.menu_ids.length ?? 0);
-  const isCustomRole = !["admin", "superAdmin", "manager", "agent"].includes(
+    role.name === 'admin' ? totalMenus : (perms?.menu_ids.length ?? 0);
+  const isCustomRole = !['admin', 'superAdmin', 'manager', 'agent'].includes(
     role.name,
   );
 
@@ -60,14 +60,14 @@ export const RoleCard: React.FC<RoleCardProps> = ({
     <CardWrapper className="p-6">
       <div className="flex items-center justify-between">
         <div
-          className={`p-3 rounded-xl border ${role.iconColor || "text-slate-400 bg-slate-500/10 border-slate-500/20"}`}
+          className={`p-3 rounded-xl border ${role.iconColor || 'text-slate-400 bg-slate-500/10 border-slate-500/20'}`}
         >
           {createElement(getRoleIcon(role.name), { size: 24 })}
         </div>
         <div className="flex items-center gap-2">
           {role.isEditable &&
             isCustomRole &&
-            user?.plan?.name === "Core Digital" && (
+            user?.plan?.name === 'Core Digital' && (
               <div className="flex items-center gap-1.5 mr-1">
                 {onEdit && (
                   <button
@@ -97,7 +97,7 @@ export const RoleCard: React.FC<RoleCardProps> = ({
             )}
           {role.badge && (
             <span
-              className={`text-[10px] font-black uppercase tracking-wider px-2.5 py-1 rounded-lg ${role.badgeColor || "bg-slate-500/10 text-slate-400"}`}
+              className={`text-[10px] font-black uppercase tracking-wider px-2.5 py-1 rounded-lg ${role.badgeColor || 'bg-slate-500/10 text-slate-400'}`}
             >
               {role.badge}
             </span>
@@ -128,7 +128,7 @@ export const RoleCard: React.FC<RoleCardProps> = ({
           )}
         </div>
 
-        {role.isEditable && user?.plan?.name === "Core Digital" ? (
+        {role.isEditable && user?.plan?.name === 'Core Digital' ? (
           <button
             onClick={() => navigate(`/settings/permissions/${role.name}`)}
             className="inline-flex items-center gap-1.5 px-4 py-2.5 rounded-xl bg-slate-800 hover:bg-slate-700 text-sm font-bold text-white transition-all group-hover:text-primary"
@@ -137,9 +137,9 @@ export const RoleCard: React.FC<RoleCardProps> = ({
           </button>
         ) : (
           <span className="text-xs text-slate-600 font-bold italic">
-            {user?.plan?.name !== "Core Digital" && role.isEditable
-              ? "Requiere Core Digital"
-              : "No editable"}
+            {user?.plan?.name !== 'Core Digital' && role.isEditable
+              ? 'Requiere Core Digital'
+              : 'No editable'}
           </span>
         )}
       </div>

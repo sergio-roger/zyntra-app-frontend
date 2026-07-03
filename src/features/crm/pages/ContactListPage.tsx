@@ -1,27 +1,27 @@
-import { DateRange } from "@core/ui/DateRangePicker";
-import { Tabs } from "@core/ui/Tabs";
-import { ContactCustomFieldsSidebar } from "@crm/components/ContactCustomFieldsSidebar";
-import { ContactExportModal } from "@crm/components/ContactExportModal";
-import { ContactFilters } from "@crm/components/ContactFilters";
-import { ContactFormSidebar } from "@crm/components/ContactFormSidebar";
-import { ContactImportModal } from "@crm/components/ContactImportModal";
-import { ContactTable } from "@crm/components/ContactTable";
-import { CustomFieldFilterSidebar } from "@crm/components/CustomFieldFilterSidebar";
-import { Pagination } from "@crm/components/Pagination";
-import { DEFAULT_COLUMNS } from "@crm/constants/contact-columns";
-import { useContactsList, useDeleteContact } from "@crm/hooks/useContacts";
-import { useCustomFields } from "@crm/hooks/useCustomFields";
+import { DateRange } from '@core/ui/DateRangePicker';
+import { Tabs } from '@core/ui/Tabs';
+import { ContactCustomFieldsSidebar } from '@crm/components/ContactCustomFieldsSidebar';
+import { ContactExportModal } from '@crm/components/ContactExportModal';
+import { ContactFilters } from '@crm/components/ContactFilters';
+import { ContactFormSidebar } from '@crm/components/ContactFormSidebar';
+import { ContactImportModal } from '@crm/components/ContactImportModal';
+import { ContactTable } from '@crm/components/ContactTable';
+import { CustomFieldFilterSidebar } from '@crm/components/CustomFieldFilterSidebar';
+import { Pagination } from '@crm/components/Pagination';
+import { DEFAULT_COLUMNS } from '@crm/constants/contact-columns';
+import { useContactsList, useDeleteContact } from '@crm/hooks/useContacts';
+import { useCustomFields } from '@crm/hooks/useCustomFields';
 import {
   useUpdateUserPreference,
   useUserPreference,
-} from "@crm/hooks/useUserPreferences";
-import { Contact } from "@crm/types/contact";
-import { TabKey } from "@crm/types/crm";
-import { SegmentCondition } from "@crm/types/segment-condition";
-import { TabFilters } from "@crm/types/tab-filters";
-import { useAuthStore } from "@features/auth/store/authStore";
-import { ColumnCustomizerModal } from "@shared/components/ColumnCustomizerModal";
-import { ConfirmModal } from "@shared/components/ConfirmModal";
+} from '@crm/hooks/useUserPreferences';
+import { Contact } from '@crm/types/contact';
+import { TabKey } from '@crm/types/crm';
+import { SegmentCondition } from '@crm/types/segment-condition';
+import { TabFilters } from '@crm/types/tab-filters';
+import { useAuthStore } from '@features/auth/store/authStore';
+import { ColumnCustomizerModal } from '@shared/components/ColumnCustomizerModal';
+import { ConfirmModal } from '@shared/components/ConfirmModal';
 import {
   AlertCircle,
   FileSpreadsheet,
@@ -30,19 +30,19 @@ import {
   UserCheck,
   UserMinus,
   Users,
-} from "lucide-react";
-import React, { useEffect, useState } from "react";
-import { useSearchParams } from "react-router-dom";
+} from 'lucide-react';
+import React, { useEffect, useState } from 'react';
+import { useSearchParams } from 'react-router-dom';
 
 const defaultFilters = (): TabFilters => ({
-  search: "",
-  source: "",
-  ownerId: "",
-  lifecycleStageId: "",
-  createdAtFrom: "",
-  createdAtTo: "",
-  lastActivityAtFrom: "",
-  lastActivityAtTo: "",
+  search: '',
+  source: '',
+  ownerId: '',
+  lifecycleStageId: '',
+  createdAtFrom: '',
+  createdAtTo: '',
+  lastActivityAtFrom: '',
+  lastActivityAtTo: '',
   customFieldConditions: [],
   page: 1,
 });
@@ -53,7 +53,7 @@ const serializeConditions = (
   conditions.length > 0 ? JSON.stringify(conditions) : undefined;
 
 export const ContactListPage: React.FC = () => {
-  const [activeTab, setActiveTab] = useState<TabKey>("all");
+  const [activeTab, setActiveTab] = useState<TabKey>('all');
   const [filters, setFilters] = useState<Record<TabKey, TabFilters>>({
     all: defaultFilters(),
     mine: defaultFilters(),
@@ -73,7 +73,7 @@ export const ContactListPage: React.FC = () => {
 
   const { data: customFields = [] } = useCustomFields();
   const { data: columnPreference } = useUserPreference(
-    "contacts_table_columns",
+    'contacts_table_columns',
   );
   const updatePreferenceMutation = useUpdateUserPreference();
 
@@ -84,11 +84,11 @@ export const ContactListPage: React.FC = () => {
   const currentUser = useAuthStore((s) => s.user);
   const myOwnerId = currentUser?.crm_user_id;
   const isAdminOrManager =
-    currentUser?.role === "admin" || currentUser?.role === "manager";
-  const canEdit = isAdminOrManager || activeTab === "mine";
+    currentUser?.role === 'admin' || currentUser?.role === 'manager';
+  const canEdit = isAdminOrManager || activeTab === 'mine';
 
   useEffect(() => {
-    if (!myOwnerId && activeTab === "mine") setActiveTab("all");
+    if (!myOwnerId && activeTab === 'mine') setActiveTab('all');
   }, [myOwnerId, activeTab]);
 
   useEffect(() => {
@@ -129,7 +129,7 @@ export const ContactListPage: React.FC = () => {
       search: filters.mine.search || undefined,
       source: filters.mine.source || undefined,
       lifecycleStageId: filters.mine.lifecycleStageId || undefined,
-      ownerId: myOwnerId || "none",
+      ownerId: myOwnerId || 'none',
       createdAtFrom: filters.mine.createdAtFrom || undefined,
       createdAtTo: filters.mine.createdAtTo || undefined,
       lastActivityAtFrom: filters.mine.lastActivityAtFrom || undefined,
@@ -147,7 +147,7 @@ export const ContactListPage: React.FC = () => {
     search: filters.unassigned.search || undefined,
     source: filters.unassigned.source || undefined,
     lifecycleStageId: filters.unassigned.lifecycleStageId || undefined,
-    ownerId: "unassigned",
+    ownerId: 'unassigned',
     createdAtFrom: filters.unassigned.createdAtFrom || undefined,
     createdAtTo: filters.unassigned.createdAtTo || undefined,
     lastActivityAtFrom: filters.unassigned.lastActivityAtFrom || undefined,
@@ -170,7 +170,7 @@ export const ContactListPage: React.FC = () => {
     : false;
 
   const setTabFilter = (tab: TabKey, partial: Partial<TabFilters>) => {
-    const resetPage = !("page" in partial);
+    const resetPage = !('page' in partial);
     setFilters((prev) => ({
       ...prev,
       [tab]: { ...prev[tab], ...partial, ...(resetPage ? { page: 1 } : {}) },
@@ -179,15 +179,15 @@ export const ContactListPage: React.FC = () => {
 
   const handleDateRangeChange = (range: DateRange | null) => {
     setTabFilter(activeTab, {
-      createdAtFrom: range?.from ?? "",
-      createdAtTo: range?.to ?? "",
+      createdAtFrom: range?.from ?? '',
+      createdAtTo: range?.to ?? '',
     });
   };
 
   const handleLastActivityDateChange = (range: DateRange | null) => {
     setTabFilter(activeTab, {
-      lastActivityAtFrom: range?.from ?? "",
-      lastActivityAtTo: range?.to ?? "",
+      lastActivityAtFrom: range?.from ?? '',
+      lastActivityAtTo: range?.to ?? '',
     });
   };
 
@@ -202,9 +202,9 @@ export const ContactListPage: React.FC = () => {
   };
 
   const activeQuery =
-    activeTab === "all"
+    activeTab === 'all'
       ? allQuery
-      : activeTab === "mine"
+      : activeTab === 'mine'
         ? mineQuery
         : unassignedQuery;
   const activeFilters = filters[activeTab];
@@ -243,13 +243,13 @@ export const ContactListPage: React.FC = () => {
           <div className="text-xs font-semibold text-slate-500">
             <span
               className={
-                isLimitReached ? "text-rose-400 font-bold" : "text-slate-300"
+                isLimitReached ? 'text-rose-400 font-bold' : 'text-slate-300'
               }
             >
               {allQuery.data?.total || 0}
             </span>
-            {" / "}
-            {contactLimit === 999999 ? "∞" : contactLimit} registrados
+            {' / '}
+            {contactLimit === 999999 ? '∞' : contactLimit} registrados
           </div>
         </div>
         <div className="flex items-center gap-3">
@@ -258,8 +258,8 @@ export const ContactListPage: React.FC = () => {
             disabled={isLimitReached}
             className={`inline-flex items-center gap-2 rounded-xl border px-5 py-2.5 text-sm font-bold transition-all ${
               isLimitReached
-                ? "bg-slate-800 border-white/5 text-slate-500 cursor-not-allowed shadow-none"
-                : "border-white/10 bg-slate-800 text-slate-300 hover:bg-slate-700 hover:-translate-y-px active:scale-95"
+                ? 'bg-slate-800 border-white/5 text-slate-500 cursor-not-allowed shadow-none'
+                : 'border-white/10 bg-slate-800 text-slate-300 hover:bg-slate-700 hover:-translate-y-px active:scale-95'
             }`}
           >
             <FileSpreadsheet size={18} /> Importar
@@ -269,8 +269,8 @@ export const ContactListPage: React.FC = () => {
             disabled={isLimitReached}
             className={`inline-flex items-center gap-2 rounded-xl px-5 py-2.5 text-sm font-bold shadow-lg transition-all ${
               isLimitReached
-                ? "bg-slate-800 text-slate-500 cursor-not-allowed shadow-none"
-                : "bg-primary text-white shadow-primary/20 hover:-translate-y-px hover:shadow-xl active:scale-95"
+                ? 'bg-slate-800 text-slate-500 cursor-not-allowed shadow-none'
+                : 'bg-primary text-white shadow-primary/20 hover:-translate-y-px hover:shadow-xl active:scale-95'
             }`}
           >
             <Plus size={18} /> Nuevo contacto
@@ -294,26 +294,26 @@ export const ContactListPage: React.FC = () => {
         onChange={(k) => setActiveTab(k as TabKey)}
         tabs={[
           {
-            key: "all",
-            label: "Todos",
+            key: 'all',
+            label: 'Todos',
             icon: Users,
-            badge: allQuery.data?.total ?? "—",
+            badge: allQuery.data?.total ?? '—',
           },
           ...(myOwnerId
             ? [
                 {
-                  key: "mine",
-                  label: "Mis contactos",
+                  key: 'mine',
+                  label: 'Mis contactos',
                   icon: UserCheck,
-                  badge: mineQuery.data?.total ?? "—",
+                  badge: mineQuery.data?.total ?? '—',
                 },
               ]
             : []),
           {
-            key: "unassigned",
-            label: "No asignados",
+            key: 'unassigned',
+            label: 'No asignados',
             icon: UserMinus,
-            badge: unassignedQuery.data?.total ?? "—",
+            badge: unassignedQuery.data?.total ?? '—',
           },
         ]}
       />
@@ -328,7 +328,7 @@ export const ContactListPage: React.FC = () => {
         lastActivityAtFrom={activeFilters.lastActivityAtFrom}
         lastActivityAtTo={activeFilters.lastActivityAtTo}
         customFieldConditions={activeFilters.customFieldConditions}
-        showOwnerFilter={isAdminOrManager && activeTab === "all"}
+        showOwnerFilter={isAdminOrManager && activeTab === 'all'}
         onSearchChange={(v) => setTabFilter(activeTab, { search: v })}
         onSourceChange={(v) => setTabFilter(activeTab, { source: v })}
         onOwnerChange={(v) => setTabFilter(activeTab, { ownerId: v })}
@@ -422,10 +422,10 @@ export const ContactListPage: React.FC = () => {
           search: activeFilters.search || undefined,
           source: activeFilters.source || undefined,
           ownerId:
-            activeTab === "mine"
+            activeTab === 'mine'
               ? myOwnerId || undefined
-              : activeTab === "unassigned"
-                ? "unassigned"
+              : activeTab === 'unassigned'
+                ? 'unassigned'
                 : activeFilters.ownerId || undefined,
           lifecycleStageId: activeFilters.lifecycleStageId || undefined,
           createdAtFrom: activeFilters.createdAtFrom || undefined,
@@ -461,7 +461,7 @@ export const ContactListPage: React.FC = () => {
         defaultColumns={DEFAULT_COLUMNS}
         onSave={async (newConfig) => {
           await updatePreferenceMutation.mutateAsync({
-            key: "contacts_table_columns",
+            key: 'contacts_table_columns',
             value: newConfig,
           });
         }}

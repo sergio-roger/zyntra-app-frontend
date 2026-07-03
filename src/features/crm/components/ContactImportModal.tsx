@@ -1,4 +1,4 @@
-import React, { useState, useRef } from "react";
+import React, { useState, useRef } from 'react';
 import {
   Upload,
   X,
@@ -7,40 +7,40 @@ import {
   ArrowRight,
   Loader2,
   AlertCircle,
-} from "lucide-react";
-import api from "@shared/api/axios";
-import { useQueryClient } from "@tanstack/react-query";
+} from 'lucide-react';
+import api from '@shared/api/axios';
+import { useQueryClient } from '@tanstack/react-query';
 
 interface ContactImportModalProps {
   open: boolean;
   onClose: () => void;
 }
 
-type Step = "upload" | "mapping" | "preview" | "importing" | "success";
+type Step = 'upload' | 'mapping' | 'preview' | 'importing' | 'success';
 
 const CRM_FIELDS = [
-  { id: "name", label: "Nombre Completo", required: true },
-  { id: "email", label: "Email", required: false },
-  { id: "phone", label: "Teléfono", required: false },
-  { id: "source", label: "Origen", required: false },
-  { id: "notes", label: "Notas", required: false },
+  { id: 'name', label: 'Nombre Completo', required: true },
+  { id: 'email', label: 'Email', required: false },
+  { id: 'phone', label: 'Teléfono', required: false },
+  { id: 'source', label: 'Origen', required: false },
+  { id: 'notes', label: 'Notas', required: false },
 ];
 
 const VALID_SOURCES = [
-  "manual",
-  "chatbot",
-  "whatsapp",
-  "instagram",
-  "email",
-  "form",
-  "import",
+  'manual',
+  'chatbot',
+  'whatsapp',
+  'instagram',
+  'email',
+  'form',
+  'import',
 ];
 
 export const ContactImportModal: React.FC<ContactImportModalProps> = ({
   open,
   onClose,
 }) => {
-  const [step, setStep] = useState<Step>("upload");
+  const [step, setStep] = useState<Step>('upload');
   const [headers, setHeaders] = useState<string[]>([]);
   const [rows, setRows] = useState<string[][]>([]);
   const [mapping, setMapping] = useState<Record<string, string>>({});
@@ -53,7 +53,7 @@ export const ContactImportModal: React.FC<ContactImportModalProps> = ({
   if (!open) return null;
 
   const reset = () => {
-    setStep("upload");
+    setStep('upload');
     setHeaders([]);
     setRows([]);
     setMapping({});
@@ -64,8 +64,8 @@ export const ContactImportModal: React.FC<ContactImportModalProps> = ({
     const selectedFile = e.target.files?.[0];
     if (!selectedFile) return;
 
-    if (!selectedFile.name.endsWith(".csv")) {
-      setError("Por favor, selecciona un archivo CSV válido.");
+    if (!selectedFile.name.endsWith('.csv')) {
+      setError('Por favor, selecciona un archivo CSV válido.');
       return;
     }
 
@@ -76,27 +76,27 @@ export const ContactImportModal: React.FC<ContactImportModalProps> = ({
     const reader = new FileReader();
     reader.onload = (e) => {
       const text = e.target?.result as string;
-      const lines = text.split(/\r?\n/).filter((line) => line.trim() !== "");
+      const lines = text.split(/\r?\n/).filter((line) => line.trim() !== '');
 
       if (lines.length < 2) {
-        setError("El archivo parece estar vacío o no tiene suficientes filas.");
+        setError('El archivo parece estar vacío o no tiene suficientes filas.');
         return;
       }
 
       // Basic CSV Parser (Handles simple quotes)
       const parseLine = (line: string) => {
         const result = [];
-        let cur = "";
+        let cur = '';
         let inQuotes = false;
         for (let i = 0; i < line.length; i++) {
           const char = line[i];
           if (char === '"') inQuotes = !inQuotes;
-          else if (char === "," && !inQuotes) {
-            result.push(cur.replace(/^"|"$/g, "").trim());
-            cur = "";
+          else if (char === ',' && !inQuotes) {
+            result.push(cur.replace(/^"|"$/g, '').trim());
+            cur = '';
           } else cur += char;
         }
-        result.push(cur.replace(/^"|"$/g, "").trim());
+        result.push(cur.replace(/^"|"$/g, '').trim());
         return result;
       };
 
@@ -112,35 +112,35 @@ export const ContactImportModal: React.FC<ContactImportModalProps> = ({
       csvHeaders.forEach((header, index) => {
         const h = header.toLowerCase();
         if (
-          h.includes("nombre") ||
-          h.includes("name") ||
-          h.includes("completo")
+          h.includes('nombre') ||
+          h.includes('name') ||
+          h.includes('completo')
         )
-          initialMapping["name"] = index.toString();
-        if (h.includes("email") || h.includes("correo"))
-          initialMapping["email"] = index.toString();
-        if (h.includes("tel") || h.includes("phone") || h.includes("cel"))
-          initialMapping["phone"] = index.toString();
-        if (h.includes("not") || h.includes("obs"))
-          initialMapping["notes"] = index.toString();
+          initialMapping['name'] = index.toString();
+        if (h.includes('email') || h.includes('correo'))
+          initialMapping['email'] = index.toString();
+        if (h.includes('tel') || h.includes('phone') || h.includes('cel'))
+          initialMapping['phone'] = index.toString();
+        if (h.includes('not') || h.includes('obs'))
+          initialMapping['notes'] = index.toString();
       });
 
       setMapping(initialMapping);
-      setStep("mapping");
+      setStep('mapping');
       setError(null);
     };
     reader.readAsText(file);
   };
 
   const handleStartImport = async () => {
-    if (!mapping["name"]) {
+    if (!mapping['name']) {
       setError(
         'El campo "Nombre" es obligatorio para realizar la importación.',
       );
       return;
     }
 
-    setStep("importing");
+    setStep('importing');
 
     try {
       const contactsToImport = rows
@@ -149,30 +149,30 @@ export const ContactImportModal: React.FC<ContactImportModalProps> = ({
           Object.entries(mapping).forEach(([crmField, csvIndex]) => {
             const val = row[parseInt(csvIndex)];
             if (!val) return;
-            if (crmField === "source") {
+            if (crmField === 'source') {
               const normalized = val.toLowerCase().trim();
               contact[crmField] = VALID_SOURCES.includes(normalized)
                 ? normalized
-                : "import";
+                : 'import';
             } else {
               contact[crmField] = val;
             }
           });
-          if (!contact.source) contact.source = "import";
+          if (!contact.source) contact.source = 'import';
           return contact;
         })
         .filter((c) => c.name);
 
-      const response = await api.post("/crm/contacts/import", contactsToImport);
+      const response = await api.post('/crm/contacts/import', contactsToImport);
       setStats({ success: response.data.count, failed: 0 });
-      setStep("success");
-      queryClient.invalidateQueries({ queryKey: ["contacts"] });
+      setStep('success');
+      queryClient.invalidateQueries({ queryKey: ['contacts'] });
     } catch (err: any) {
       setError(
         err.response?.data?.message ||
-          "Ocurrió un error durante la importación.",
+          'Ocurrió un error durante la importación.',
       );
-      setStep("mapping");
+      setStep('mapping');
     } finally {
       // Import process completed
     }
@@ -213,7 +213,7 @@ export const ContactImportModal: React.FC<ContactImportModalProps> = ({
 
         {/* Content */}
         <div className="p-8">
-          {step === "upload" && (
+          {step === 'upload' && (
             <div className="space-y-6">
               <div
                 onClick={() => fileInputRef.current?.click()}
@@ -266,7 +266,7 @@ export const ContactImportModal: React.FC<ContactImportModalProps> = ({
             </div>
           )}
 
-          {step === "mapping" && (
+          {step === 'mapping' && (
             <div className="space-y-6 animate-in slide-in-from-bottom-4 duration-300">
               <div className="flex items-center justify-between">
                 <h4 className="text-sm font-bold text-slate-200">
@@ -285,7 +285,7 @@ export const ContactImportModal: React.FC<ContactImportModalProps> = ({
                   >
                     <div className="flex-1">
                       <p className="text-xs font-bold text-white">
-                        {field.label}{" "}
+                        {field.label}{' '}
                         {field.required && (
                           <span className="text-rose-500">*</span>
                         )}
@@ -296,7 +296,7 @@ export const ContactImportModal: React.FC<ContactImportModalProps> = ({
                     </div>
                     <ArrowRight size={14} className="text-slate-600" />
                     <select
-                      value={mapping[field.id] || ""}
+                      value={mapping[field.id] || ''}
                       onChange={(e) =>
                         setMapping({ ...mapping, [field.id]: e.target.value })
                       }
@@ -322,7 +322,7 @@ export const ContactImportModal: React.FC<ContactImportModalProps> = ({
             </div>
           )}
 
-          {step === "importing" && (
+          {step === 'importing' && (
             <div className="py-12 flex flex-col items-center justify-center gap-4 animate-in fade-in">
               <div className="relative">
                 <div className="absolute inset-0 rounded-full bg-indigo-500/20 blur-xl animate-pulse" />
@@ -342,7 +342,7 @@ export const ContactImportModal: React.FC<ContactImportModalProps> = ({
             </div>
           )}
 
-          {step === "success" && (
+          {step === 'success' && (
             <div className="py-8 flex flex-col items-center justify-center gap-6 animate-in zoom-in duration-500">
               <div className="w-20 h-20 rounded-full bg-emerald-500/20 flex items-center justify-center text-emerald-500 shadow-[0_0_40px_-10px_rgba(16,185,129,0.5)]">
                 <Check size={40} />
@@ -379,14 +379,14 @@ export const ContactImportModal: React.FC<ContactImportModalProps> = ({
 
         {/* Footer */}
         <div className="p-6 border-t border-white/5 bg-slate-900/50 flex gap-3">
-          {step === "upload" ? (
+          {step === 'upload' ? (
             <button
               onClick={onClose}
               className="w-full py-3 rounded-xl bg-slate-800 text-slate-300 text-sm font-bold hover:bg-slate-700 transition-all"
             >
               Cancelar
             </button>
-          ) : step === "mapping" ? (
+          ) : step === 'mapping' ? (
             <>
               <button
                 onClick={reset}
@@ -401,7 +401,7 @@ export const ContactImportModal: React.FC<ContactImportModalProps> = ({
                 Comenzar Importación
               </button>
             </>
-          ) : step === "success" ? (
+          ) : step === 'success' ? (
             <button
               onClick={onClose}
               className="w-full py-3 rounded-xl bg-emerald-600 text-white text-sm font-bold hover:bg-emerald-500 transition-all shadow-lg shadow-emerald-500/20"

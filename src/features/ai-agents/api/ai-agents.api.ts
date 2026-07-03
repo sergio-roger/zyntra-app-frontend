@@ -1,13 +1,13 @@
-import api from "@shared/api/axios";
+import api from '@shared/api/axios';
 import {
   AiAgent,
   AgentTestResult,
   CreateAgentPayload,
   UpdateAgentPayload,
-} from "../types/ai-agents.types";
+} from '../types/ai-agents.types';
 
 const unwrap = <T>(res: unknown): T => {
-  if (res && typeof res === "object" && "data" in (res as object)) {
+  if (res && typeof res === 'object' && 'data' in (res as object)) {
     return (res as { data: T }).data;
   }
   return res as T;

@@ -1,5 +1,5 @@
 export type AgentTool =
-  "web_search" | "knowledge_base" | "lead_capture" | "calendar";
+  'web_search' | 'knowledge_base' | 'lead_capture' | 'calendar';
 
 export interface AiAgent {
   id: string;

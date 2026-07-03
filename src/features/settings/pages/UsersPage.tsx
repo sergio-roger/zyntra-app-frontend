@@ -1,12 +1,12 @@
-import { useAuthStore } from "@features/auth/store/authStore";
-import { UserFormSidebar } from "@features/settings/components/UserFormSidebar";
+import { useAuthStore } from '@features/auth/store/authStore';
+import { UserFormSidebar } from '@features/settings/components/UserFormSidebar';
 import {
   useUpdateUser,
   useUsersList,
-} from "@features/settings/hooks/useUsersTeams";
-import { CrmUser } from "@features/settings/types/settings";
-import { EmptyState } from "@shared/components/EmptyState";
-import { toastManager } from "@shared/components/toast/toastManager";
+} from '@features/settings/hooks/useUsersTeams';
+import { CrmUser } from '@features/settings/types/settings';
+import { EmptyState } from '@shared/components/EmptyState';
+import { toastManager } from '@shared/components/toast/toastManager';
 import {
   AlertCircle,
   Briefcase,
@@ -20,8 +20,8 @@ import {
   UserCheck,
   UserMinus,
   Users,
-} from "lucide-react";
-import React, { useState } from "react";
+} from 'lucide-react';
+import React, { useState } from 'react';
 
 export const UsersPage: React.FC = () => {
   const [sidebarOpen, setSidebarOpen] = useState(false);
@@ -46,48 +46,48 @@ export const UsersPage: React.FC = () => {
     (currentUser as any)?.plan_object?.user_limit ??
     999999;
   const activeUsersCount = users.filter((u) =>
-    u.status ? u.status === "active" : u.isActive,
+    u.status ? u.status === 'active' : u.isActive,
   ).length;
   const isLimitReached = activeUsersCount >= limit && limit !== 999999;
 
   const toggleStatus = async (user: CrmUser) => {
     const isCurrentlyActive = user.status
-      ? user.status === "active"
+      ? user.status === 'active'
       : user.isActive;
     if (!isCurrentlyActive && isLimitReached) {
       toastManager.add({
-        title: "Límite alcanzado",
+        title: 'Límite alcanzado',
         description: `Has alcanzado el límite de ${limit} usuarios activos permitidos en tu plan.`,
-        type: "error",
+        type: 'error',
       });
       return;
     }
-    const nextStatus = isCurrentlyActive ? "inactive" : "active";
+    const nextStatus = isCurrentlyActive ? 'inactive' : 'active';
     await updateMutation.mutateAsync({
       id: user.id,
       status: nextStatus,
-      isActive: nextStatus === "active",
+      isActive: nextStatus === 'active',
     });
   };
 
   const getRoleLabel = (role: string) => {
     switch (role) {
-      case "admin":
-        return "Administrador";
-      case "manager":
-        return "Gerente";
-      case "agent":
-        return "Agente";
-      case "superAdmin":
-        return "Super Admin";
+      case 'admin':
+        return 'Administrador';
+      case 'manager':
+        return 'Gerente';
+      case 'agent':
+        return 'Agente';
+      case 'superAdmin':
+        return 'Super Admin';
       default:
         return role;
     }
   };
 
   const renderStatusBadge = (user: CrmUser) => {
-    const status = user.status ?? (user.isActive ? "active" : "inactive");
-    if (status === "active") {
+    const status = user.status ?? (user.isActive ? 'active' : 'inactive');
+    if (status === 'active') {
       return (
         <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-lg text-[10px] font-black uppercase tracking-wider bg-emerald-500/10 text-emerald-400">
           <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse" />
@@ -95,7 +95,7 @@ export const UsersPage: React.FC = () => {
         </span>
       );
     }
-    if (status === "suspended") {
+    if (status === 'suspended') {
       return (
         <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-lg text-[10px] font-black uppercase tracking-wider bg-rose-500/10 text-rose-400">
           <span className="w-1.5 h-1.5 rounded-full bg-rose-500" />
@@ -124,12 +124,12 @@ export const UsersPage: React.FC = () => {
           <div className="text-xs font-semibold text-slate-500">
             <span
               className={
-                isLimitReached ? "text-rose-400 font-bold" : "text-slate-300"
+                isLimitReached ? 'text-rose-400 font-bold' : 'text-slate-300'
               }
             >
               {activeUsersCount}
-            </span>{" "}
-            / {limit === 999999 ? "∞" : limit} activos
+            </span>{' '}
+            / {limit === 999999 ? '∞' : limit} activos
           </div>
         </div>
         <button
@@ -137,8 +137,8 @@ export const UsersPage: React.FC = () => {
           disabled={isLimitReached}
           className={`inline-flex items-center gap-2 rounded-xl px-5 py-2.5 text-sm font-bold shadow-lg transition-all ${
             isLimitReached
-              ? "bg-slate-800 text-slate-500 cursor-not-allowed shadow-none"
-              : "bg-primary text-white shadow-primary/20 hover:-translate-y-px hover:shadow-xl active:scale-95"
+              ? 'bg-slate-800 text-slate-500 cursor-not-allowed shadow-none'
+              : 'bg-primary text-white shadow-primary/20 hover:-translate-y-px hover:shadow-xl active:scale-95'
           }`}
         >
           <Plus size={18} /> Añadir usuario
@@ -213,10 +213,10 @@ export const UsersPage: React.FC = () => {
               <tbody className="divide-y divide-white/5">
                 {users.map((user) => {
                   const isActive = user.status
-                    ? user.status === "active"
+                    ? user.status === 'active'
                     : user.isActive;
-                  const firstName = user.firstName ?? "";
-                  const lastName = user.lastName ?? "";
+                  const firstName = user.firstName ?? '';
+                  const lastName = user.lastName ?? '';
                   const fullName =
                     `${firstName} ${lastName}`.trim() || user.name;
                   const avatarUrl = user.avatarUrl;
@@ -237,7 +237,7 @@ export const UsersPage: React.FC = () => {
                               className="w-10 h-10 rounded-2xl object-cover ring-1 ring-white/10 shadow-lg"
                               onError={(e) => {
                                 (e.target as HTMLElement).style.display =
-                                  "none";
+                                  'none';
                               }}
                             />
                           ) : (
@@ -268,7 +268,7 @@ export const UsersPage: React.FC = () => {
                         <div className="flex items-center gap-2 px-3 py-1 rounded-full bg-slate-800 border border-white/5 w-fit">
                           <Shield size={12} className="text-indigo-400" />
                           <span className="text-[11px] font-bold text-slate-300">
-                            {getRoleLabel(user.role ?? "")}
+                            {getRoleLabel(user.role ?? '')}
                           </span>
                         </div>
                       </td>
@@ -311,24 +311,24 @@ export const UsersPage: React.FC = () => {
                       <td className="px-6 py-4 text-xs text-slate-400 whitespace-nowrap">
                         {user.createdAt
                           ? new Date(user.createdAt).toLocaleDateString(
-                              "es-ES",
+                              'es-ES',
                               {
-                                day: "2-digit",
-                                month: "short",
-                                year: "numeric",
+                                day: '2-digit',
+                                month: 'short',
+                                year: 'numeric',
                               },
                             )
-                          : "—"}
+                          : '—'}
                       </td>
                       <td className="px-6 py-4 text-right">
                         <div className="flex items-center justify-end gap-2">
                           <button
                             onClick={() => toggleStatus(user)}
-                            title={isActive ? "Desactivar" : "Activar"}
+                            title={isActive ? 'Desactivar' : 'Activar'}
                             className={`p-2 rounded-xl transition-all ${
                               isActive
-                                ? "text-slate-500 hover:text-rose-400 hover:bg-rose-400/10"
-                                : "text-emerald-500 hover:bg-emerald-500/10"
+                                ? 'text-slate-500 hover:text-rose-400 hover:bg-rose-400/10'
+                                : 'text-emerald-500 hover:bg-emerald-500/10'
                             }`}
                           >
                             {isActive ? (

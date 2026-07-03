@@ -1,5 +1,5 @@
-import React from "react";
-import { ChevronLeft, ChevronRight } from "lucide-react";
+import React from 'react';
+import { ChevronLeft, ChevronRight } from 'lucide-react';
 
 interface PaginationProps {
   page: number;
@@ -22,8 +22,8 @@ export const Pagination: React.FC<PaginationProps> = ({
   return (
     <div className="flex items-center justify-between text-sm text-slate-400">
       <span>
-        Página <span className="text-slate-200">{page}</span> de{" "}
-        <span className="text-slate-200">{totalPages}</span> ·{" "}
+        Página <span className="text-slate-200">{page}</span> de{' '}
+        <span className="text-slate-200">{totalPages}</span> ·{' '}
         <span className="text-slate-200">{total}</span> contactos
       </span>
       <div className="inline-flex gap-1">

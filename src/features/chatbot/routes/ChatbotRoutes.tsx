@@ -1,20 +1,20 @@
-import { lazy } from "react";
-import { RouteObject } from "react-router-dom";
-import { ProtectedRoute } from "@core/routes/ProtectedRoute";
-import { ConstructionPage } from "@shared/components/ConstructionPage";
-import { SuspenseLoader } from "@shared/components/SuspenseLoader";
-import { PermissionGuard } from "@core/routes/PermissionGuard";
-import { ModuleGuard } from "@core/components/ModuleGuard";
+import { lazy } from 'react';
+import { RouteObject } from 'react-router-dom';
+import { ProtectedRoute } from '@core/routes/ProtectedRoute';
+import { ConstructionPage } from '@shared/components/ConstructionPage';
+import { SuspenseLoader } from '@shared/components/SuspenseLoader';
+import { PermissionGuard } from '@core/routes/PermissionGuard';
+import { ModuleGuard } from '@core/components/ModuleGuard';
 
 const ConversationsPage = lazy(() =>
-  import("@features/chatbot/pages/ConversationsPage").then((m) => ({
+  import('@features/chatbot/pages/ConversationsPage').then((m) => ({
     default: m.ConversationsPage,
   })),
 );
 
 export const chatbotRoutes: RouteObject[] = [
   {
-    path: "/inbox",
+    path: '/inbox',
     element: (
       <ProtectedRoute>
         <PermissionGuard menuKey="inbox_conversations">
@@ -28,7 +28,7 @@ export const chatbotRoutes: RouteObject[] = [
     ),
   },
   {
-    path: "/inbox/automations",
+    path: '/inbox/automations',
     element: (
       <ProtectedRoute>
         <PermissionGuard menuKey="inbox_automations">
@@ -40,7 +40,7 @@ export const chatbotRoutes: RouteObject[] = [
     ),
   },
   {
-    path: "/inbox/channels",
+    path: '/inbox/channels',
     element: (
       <ProtectedRoute>
         <PermissionGuard menuKey="inbox_channels">
@@ -52,7 +52,7 @@ export const chatbotRoutes: RouteObject[] = [
     ),
   },
   {
-    path: "/chatbot",
+    path: '/chatbot',
     element: (
       <ProtectedRoute>
         <PermissionGuard menuKey="inbox_conversations">

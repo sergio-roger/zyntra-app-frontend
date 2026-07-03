@@ -1,9 +1,9 @@
-import { Company } from "./company";
-import { Contact } from "./contact";
-import { DealPipeline } from "./deal-pipeline";
-import { DealPipelineStage } from "./deal-pipeline-stage";
+import { Company } from './company';
+import { Contact } from './contact';
+import { DealPipeline } from './deal-pipeline';
+import { DealPipelineStage } from './deal-pipeline-stage';
 
-export type DealStatus = "open" | "won" | "lost" | "abandoned";
+export type DealStatus = 'open' | 'won' | 'lost' | 'abandoned';
 
 export interface Deal {
   assignedTo?: any;

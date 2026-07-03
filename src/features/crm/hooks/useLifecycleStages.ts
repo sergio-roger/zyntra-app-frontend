@@ -1,12 +1,12 @@
-import { useQuery } from "@tanstack/react-query";
-import { LifecycleStage } from "@crm/types/lifecycle-stage";
-import api from "@shared/api/axios";
+import { useQuery } from '@tanstack/react-query';
+import { LifecycleStage } from '@crm/types/lifecycle-stage';
+import api from '@shared/api/axios';
 
 export const useLifecycleStages = () => {
   return useQuery<LifecycleStage[]>({
-    queryKey: ["lifecycle-stages"],
+    queryKey: ['lifecycle-stages'],
     queryFn: async () => {
-      const res: any = await api.get("/lifecycle/stages");
+      const res: any = await api.get('/lifecycle/stages');
       const data = Array.isArray(res)
         ? res
         : Array.isArray(res?.data)

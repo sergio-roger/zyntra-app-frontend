@@ -1,6 +1,6 @@
-import React from "react";
-import { Hammer, ArrowLeft, LayoutDashboard } from "lucide-react";
-import { useNavigate } from "react-router-dom";
+import React from 'react';
+import { Hammer, ArrowLeft, LayoutDashboard } from 'lucide-react';
+import { useNavigate } from 'react-router-dom';
 
 const ConstructionPage: React.FC = () => {
   const navigate = useNavigate();
@@ -15,7 +15,7 @@ const ConstructionPage: React.FC = () => {
       </div>
 
       <h1 className="text-4xl font-black text-base-content mb-4 tracking-tight">
-        ¡Estamos construyendo algo{" "}
+        ¡Estamos construyendo algo{' '}
         <span className="text-primary italic">increíble</span>!
       </h1>
 
@@ -34,7 +34,7 @@ const ConstructionPage: React.FC = () => {
         </button>
 
         <button
-          onClick={() => navigate("/dashboard")}
+          onClick={() => navigate('/dashboard')}
           className="btn btn-primary gap-2 px-8 shadow-lg shadow-primary/20"
         >
           <LayoutDashboard size={18} />

@@ -1,9 +1,9 @@
-import { usePlanModule } from "@features/auth/hooks/usePlanModule";
-import { getMenuKeyFromPath } from "@shared/layouts/nav.config";
-import { SubNavItem } from "@shared/types/nav";
-import { Lock } from "lucide-react";
-import React from "react";
-import { NavLink } from "react-router-dom";
+import { usePlanModule } from '@features/auth/hooks/usePlanModule';
+import { getMenuKeyFromPath } from '@shared/layouts/nav.config';
+import { SubNavItem } from '@shared/types/nav';
+import { Lock } from 'lucide-react';
+import React from 'react';
+import { NavLink } from 'react-router-dom';
 
 export interface SubNavLinkProps {
   item: SubNavItem;
@@ -24,8 +24,8 @@ export const SubNavLink: React.FC<SubNavLinkProps> = ({ item, onClose }) => {
         className={({ isActive }) =>
           `group relative flex items-center gap-4 rounded-xl px-4 py-3 transition-all duration-300 ${
             isActive
-              ? "bg-gradient-to-r from-primary/10 to-transparent"
-              : "hover:bg-gradient-to-r hover:from-base-content/5 hover:to-transparent"
+              ? 'bg-gradient-to-r from-primary/10 to-transparent'
+              : 'hover:bg-gradient-to-r hover:from-base-content/5 hover:to-transparent'
           }`
         }
       >
@@ -35,16 +35,16 @@ export const SubNavLink: React.FC<SubNavLinkProps> = ({ item, onClose }) => {
               size={20}
               className={`shrink-0 transition-colors duration-300 ${
                 isActive
-                  ? "text-primary"
-                  : "text-base-content/40 group-hover:text-base-content/80"
+                  ? 'text-primary'
+                  : 'text-base-content/40 group-hover:text-base-content/80'
               }`}
             />
             <div className="flex flex-col gap-0.5">
               <span
                 className={`text-[14px] font-semibold transition-colors duration-300 flex items-center gap-1.5 ${
                   isActive
-                    ? "text-primary"
-                    : "text-base-content/80 group-hover:text-base-content/95"
+                    ? 'text-primary'
+                    : 'text-base-content/80 group-hover:text-base-content/95'
                 }`}
               >
                 {label}
@@ -61,8 +61,8 @@ export const SubNavLink: React.FC<SubNavLinkProps> = ({ item, onClose }) => {
                 <p
                   className={`text-[11px] leading-snug transition-colors duration-300 ${
                     isActive
-                      ? "text-primary/60"
-                      : "text-base-content/40 group-hover:text-base-content/60"
+                      ? 'text-primary/60'
+                      : 'text-base-content/40 group-hover:text-base-content/60'
                   }`}
                 >
                   {description}

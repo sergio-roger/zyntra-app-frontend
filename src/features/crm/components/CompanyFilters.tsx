@@ -1,10 +1,10 @@
-import { DateRange, DateRangePicker } from "@core/ui/DateRangePicker";
-import { Select } from "@core/ui/Select";
-import { EMPLOYEE_RANGE_OPTIONS } from "@crm/constants/company-options";
-import { useIndustrys } from "@crm/hooks/useCompanies";
-import { useCrmMembers } from "@crm/hooks/useCrmMembers";
-import { useLifecycleStages } from "@crm/hooks/useLifecycleStages";
-import { SegmentCondition } from "@crm/types/segment-condition";
+import { DateRange, DateRangePicker } from '@core/ui/DateRangePicker';
+import { Select } from '@core/ui/Select';
+import { EMPLOYEE_RANGE_OPTIONS } from '@crm/constants/company-options';
+import { useIndustrys } from '@crm/hooks/useCompanies';
+import { useCrmMembers } from '@crm/hooks/useCrmMembers';
+import { useLifecycleStages } from '@crm/hooks/useLifecycleStages';
+import { SegmentCondition } from '@crm/types/segment-condition';
 import {
   Building2,
   Download,
@@ -15,8 +15,8 @@ import {
   SlidersHorizontal,
   Users,
   Variable,
-} from "lucide-react";
-import React, { useState } from "react";
+} from 'lucide-react';
+import React, { useState } from 'react';
 
 interface CompanyFiltersProps {
   search: string;
@@ -76,7 +76,7 @@ export const CompanyFilters: React.FC<CompanyFiltersProps> = ({
   const stageOptions = Array.isArray(stages)
     ? stages.map((s) => ({
         value: s.id,
-        label: `${s.icon ?? ""} ${s.name}`.trim(),
+        label: `${s.icon ?? ''} ${s.name}`.trim(),
       }))
     : [];
 
@@ -135,8 +135,8 @@ export const CompanyFilters: React.FC<CompanyFiltersProps> = ({
             onClick={() => setShowAdvanced((p) => !p)}
             className={`inline-flex items-center gap-1.5 whitespace-nowrap rounded-lg border px-3 py-2 text-xs font-medium transition-colors ${
               showAdvanced
-                ? "border-indigo-500/40 bg-indigo-500/10 text-indigo-300 hover:bg-indigo-500/20"
-                : "border-white/10 bg-slate-950/40 text-slate-300 hover:border-white/20 hover:bg-white/5"
+                ? 'border-indigo-500/40 bg-indigo-500/10 text-indigo-300 hover:bg-indigo-500/20'
+                : 'border-white/10 bg-slate-950/40 text-slate-300 hover:border-white/20 hover:bg-white/5'
             }`}
           >
             <SlidersHorizontal size={14} /> Filtros avanzados
@@ -163,7 +163,7 @@ export const CompanyFilters: React.FC<CompanyFiltersProps> = ({
             <Select
               options={industryOptions}
               value={industryId || null}
-              onChange={(v) => onIndustryChange(v ?? "")}
+              onChange={(v) => onIndustryChange(v ?? '')}
               placeholder="Todas las industrias"
               clearable
               clearLabel="Todas las industrias"
@@ -175,7 +175,7 @@ export const CompanyFilters: React.FC<CompanyFiltersProps> = ({
             <Select
               options={stageOptions}
               value={lifecycleStageId || null}
-              onChange={(v) => onLifecycleStageChange(v ?? "")}
+              onChange={(v) => onLifecycleStageChange(v ?? '')}
               placeholder="Todas las etapas"
               clearable
               clearLabel="Todas las etapas"
@@ -188,7 +188,7 @@ export const CompanyFilters: React.FC<CompanyFiltersProps> = ({
             <Select
               options={EMPLOYEE_RANGE_OPTIONS}
               value={employeeRange || null}
-              onChange={(v) => onEmployeeRangeChange(v ?? "")}
+              onChange={(v) => onEmployeeRangeChange(v ?? '')}
               placeholder="Todos los empleados"
               clearable
               clearLabel="Todos los empleados"
@@ -202,7 +202,7 @@ export const CompanyFilters: React.FC<CompanyFiltersProps> = ({
               <Select
                 options={ownerOptions}
                 value={ownerId || null}
-                onChange={(v) => onOwnerChange?.(v ?? "")}
+                onChange={(v) => onOwnerChange?.(v ?? '')}
                 placeholder="Todos los propietarios"
                 clearable
                 clearLabel="Todos los propietarios"
@@ -225,8 +225,8 @@ export const CompanyFilters: React.FC<CompanyFiltersProps> = ({
               onClick={onOpenCustomFieldFilters}
               className={`inline-flex items-center gap-1.5 whitespace-nowrap rounded-lg border px-3 py-2 text-xs font-medium transition-colors ${
                 customFieldConditions.length > 0
-                  ? "border-indigo-500/40 bg-indigo-500/10 text-indigo-300 hover:bg-indigo-500/20"
-                  : "border-white/10 bg-slate-950/40 text-slate-300 hover:border-white/20 hover:bg-white/5"
+                  ? 'border-indigo-500/40 bg-indigo-500/10 text-indigo-300 hover:bg-indigo-500/20'
+                  : 'border-white/10 bg-slate-950/40 text-slate-300 hover:border-white/20 hover:bg-white/5'
               }`}
             >
               <Variable size={14} /> Otros campos

@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect } from 'react';
 import {
   Bot,
   Globe,
@@ -9,19 +9,19 @@ import {
   Plus,
   X,
   HelpCircle,
-} from "lucide-react";
-import { aiApi, ChatbotConfig } from "@features/chatbot/api/aiApi";
+} from 'lucide-react';
+import { aiApi, ChatbotConfig } from '@features/chatbot/api/aiApi';
 
 const defaultConfig: ChatbotConfig = {
-  id: "",
-  business_id: "",
-  name: "Asistente Zyntra",
-  tone: "friendly",
-  welcome_message: "¡Hola! ¿En qué puedo ayudarte hoy?",
-  locale: "es",
+  id: '',
+  business_id: '',
+  name: 'Asistente Zyntra',
+  tone: 'friendly',
+  welcome_message: '¡Hola! ¿En qué puedo ayudarte hoy?',
+  locale: 'es',
   is_active: true,
-  system_prompt_extra: "",
-  active_channels: ["web"],
+  system_prompt_extra: '',
+  active_channels: ['web'],
   theme: {},
   faqs: [],
 };
@@ -32,8 +32,8 @@ export const ChatbotPage: React.FC = () => {
   const [saving, setSaving] = useState(false);
   const [saved, setSaved] = useState(false);
   const [previewLoading, setPreviewLoading] = useState(false);
-  const [previewMessage, setPreviewMessage] = useState("");
-  const [previewResponse, setPreviewResponse] = useState("");
+  const [previewMessage, setPreviewMessage] = useState('');
+  const [previewResponse, setPreviewResponse] = useState('');
 
   const loadConfig = React.useCallback(async () => {
     try {
@@ -60,7 +60,7 @@ export const ChatbotPage: React.FC = () => {
       setSaved(true);
       setTimeout(() => setSaved(false), 2000);
     } catch (err) {
-      console.error("Error saving:", err);
+      console.error('Error saving:', err);
     } finally {
       setSaving(false);
     }
@@ -79,9 +79,9 @@ export const ChatbotPage: React.FC = () => {
           system_prompt_extra: config.system_prompt_extra,
         },
       });
-      setPreviewResponse(data.response || "Sin respuesta");
+      setPreviewResponse(data.response || 'Sin respuesta');
     } catch {
-      setPreviewResponse("Error al conectar con la IA");
+      setPreviewResponse('Error al conectar con la IA');
     } finally {
       setPreviewLoading(false);
     }
@@ -244,7 +244,7 @@ export const ChatbotPage: React.FC = () => {
             onClick={() =>
               setConfig({
                 ...config,
-                faqs: [...(config.faqs || []), { question: "", answer: "" }],
+                faqs: [...(config.faqs || []), { question: '', answer: '' }],
               })
             }
           >
@@ -319,7 +319,7 @@ export const ChatbotPage: React.FC = () => {
             placeholder="Escribe un mensaje..."
             value={previewMessage}
             onChange={(e) => setPreviewMessage(e.target.value)}
-            onKeyDown={(e) => e.key === "Enter" && handlePreview()}
+            onKeyDown={(e) => e.key === 'Enter' && handlePreview()}
           />
           <button
             className="btn btn-primary"
@@ -353,9 +353,9 @@ export const ChatbotPage: React.FC = () => {
           {saving ? (
             <Loader2 size={18} className="animate-spin" />
           ) : saved ? (
-            "¡Guardado!"
+            '¡Guardado!'
           ) : (
-            "Guardar cambios"
+            'Guardar cambios'
           )}
         </button>
       </div>

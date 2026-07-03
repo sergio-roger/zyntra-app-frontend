@@ -4,5 +4,5 @@ export interface LifecycleStage {
   icon?: string;
   id: string;
   name: string;
-  type?: "active" | "lost";
+  type?: 'active' | 'lost';
 }

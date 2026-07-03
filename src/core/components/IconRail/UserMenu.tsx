@@ -1,6 +1,6 @@
-import { useAuth } from "@features/auth/hooks/useAuth";
-import { useAuthStore } from "@features/auth/store/authStore";
-import { useUiStore } from "../../../shared/store/uiStore";
+import { useAuth } from '@features/auth/hooks/useAuth';
+import { useAuthStore } from '@features/auth/store/authStore';
+import { useUiStore } from '../../../shared/store/uiStore';
 import {
   Code2,
   CreditCard,
@@ -8,16 +8,16 @@ import {
   LogOut,
   Settings,
   Zap,
-} from "lucide-react";
-import React, { useEffect, useRef } from "react";
-import { useNavigate } from "react-router-dom";
+} from 'lucide-react';
+import React, { useEffect, useRef } from 'react';
+import { useNavigate } from 'react-router-dom';
 
 export const UserMenu: React.FC = () => {
   const user = useAuthStore((s) => s.user);
   const { isUserMenuOpen, setUserMenuOpen, toggleUserMenu } = useUiStore();
   const { logout } = useAuth();
   const navigate = useNavigate();
-  const initial = user?.name?.charAt(0).toUpperCase() ?? "?";
+  const initial = user?.name?.charAt(0).toUpperCase() ?? '?';
   const containerRef = useRef<HTMLDivElement>(null);
 
   const handleNavigate = (path: string) => {
@@ -41,10 +41,10 @@ export const UserMenu: React.FC = () => {
     };
 
     if (isUserMenuOpen) {
-      document.addEventListener("mousedown", handleClickOutside);
+      document.addEventListener('mousedown', handleClickOutside);
     }
     return () => {
-      document.removeEventListener("mousedown", handleClickOutside);
+      document.removeEventListener('mousedown', handleClickOutside);
     };
   }, [isUserMenuOpen, setUserMenuOpen]);
 
@@ -55,7 +55,7 @@ export const UserMenu: React.FC = () => {
     >
       {/* Avatar Dropdown */}
       <div
-        className={`dropdown dropdown-right dropdown-end ${isUserMenuOpen ? "dropdown-open" : ""}`}
+        className={`dropdown dropdown-right dropdown-end ${isUserMenuOpen ? 'dropdown-open' : ''}`}
       >
         <label
           tabIndex={0}
@@ -83,12 +83,12 @@ export const UserMenu: React.FC = () => {
               {user?.plan && (
                 <div className="mt-2 flex items-center gap-1.5">
                   <span
-                    className={`inline-flex items-center gap-1 rounded-full px-2 py-0.5 text-[10px] font-semibold ${user.plan_status === "active" ? "bg-primary/15 text-primary" : "bg-base-content/10 text-base-content/50"}`}
+                    className={`inline-flex items-center gap-1 rounded-full px-2 py-0.5 text-[10px] font-semibold ${user.plan_status === 'active' ? 'bg-primary/15 text-primary' : 'bg-base-content/10 text-base-content/50'}`}
                   >
                     <Zap size={9} />
                     {user.plan.name}
                   </span>
-                  {user.plan_status !== "active" && (
+                  {user.plan_status !== 'active' && (
                     <span className="text-[10px] text-warning">inactivo</span>
                   )}
                 </div>
@@ -97,7 +97,7 @@ export const UserMenu: React.FC = () => {
             <li>
               <a
                 className="text-sm py-2"
-                onClick={() => handleNavigate("/billing")}
+                onClick={() => handleNavigate('/billing')}
               >
                 <CreditCard size={14} className="text-primary" /> Facturación
               </a>
@@ -105,7 +105,7 @@ export const UserMenu: React.FC = () => {
             <li>
               <a
                 className="text-sm py-2"
-                onClick={() => handleNavigate("/settings/plans")}
+                onClick={() => handleNavigate('/settings/plans')}
               >
                 <Zap size={14} className="text-warning" /> Planes
               </a>
@@ -113,7 +113,7 @@ export const UserMenu: React.FC = () => {
             <li>
               <a
                 className="text-sm py-2"
-                onClick={() => handleNavigate("/settings")}
+                onClick={() => handleNavigate('/settings')}
               >
                 <Settings size={14} /> Configuración
               </a>
@@ -121,7 +121,7 @@ export const UserMenu: React.FC = () => {
             <li>
               <a
                 className="text-sm py-2"
-                onClick={() => handleNavigate("/construction")}
+                onClick={() => handleNavigate('/construction')}
               >
                 <Code2 size={14} /> Developers
               </a>
@@ -129,7 +129,7 @@ export const UserMenu: React.FC = () => {
             <li>
               <a
                 className="text-sm py-2"
-                onClick={() => handleNavigate("/construction")}
+                onClick={() => handleNavigate('/construction')}
               >
                 <HelpCircle size={14} /> Help
               </a>

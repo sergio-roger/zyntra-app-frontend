@@ -1,16 +1,16 @@
-import { useAuthStore } from "@features/auth/store/authStore";
-import { RoleCard } from "@features/settings/components/RoleCard";
-import { RoleFormSidebar } from "@features/settings/components/RoleFormSidebar";
+import { useAuthStore } from '@features/auth/store/authStore';
+import { RoleCard } from '@features/settings/components/RoleCard';
+import { RoleFormSidebar } from '@features/settings/components/RoleFormSidebar';
 import {
   useCreateRole,
   useDeleteRole,
   useMenusList,
   useRolesList,
   useUpdateRole,
-} from "@features/settings/hooks/usePermissions";
-import { Loader2, Plus } from "lucide-react";
-import React, { useState } from "react";
-import { useNavigate } from "react-router-dom";
+} from '@features/settings/hooks/usePermissions';
+import { Loader2, Plus } from 'lucide-react';
+import React, { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 
 export const PermissionsPage: React.FC = () => {
   const navigate = useNavigate();
@@ -24,36 +24,36 @@ export const PermissionsPage: React.FC = () => {
 
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [editingRole, setEditingRole] = useState<any | null>(null);
-  const [roleName, setRoleName] = useState("");
-  const [roleLabel, setRoleLabel] = useState("");
-  const [roleDesc, setRoleDesc] = useState("");
-  const [roleBadge, setRoleBadge] = useState("");
+  const [roleName, setRoleName] = useState('');
+  const [roleLabel, setRoleLabel] = useState('');
+  const [roleDesc, setRoleDesc] = useState('');
+  const [roleBadge, setRoleBadge] = useState('');
   const [roleIconColor, setRoleIconColor] = useState(
-    "text-primary bg-primary/10 border-primary/20",
+    'text-primary bg-primary/10 border-primary/20',
   );
-  const [createError, setCreateError] = useState("");
+  const [createError, setCreateError] = useState('');
 
   const totalMenus = allMenus.length;
   const isLoading = loadingMenus || loadingRoles;
 
   const resetForm = () => {
     setEditingRole(null);
-    setRoleName("");
-    setRoleLabel("");
-    setRoleDesc("");
-    setRoleBadge("");
-    setRoleIconColor("text-primary bg-primary/10 border-primary/20");
-    setCreateError("");
+    setRoleName('');
+    setRoleLabel('');
+    setRoleDesc('');
+    setRoleBadge('');
+    setRoleIconColor('text-primary bg-primary/10 border-primary/20');
+    setCreateError('');
   };
 
   const handleCreateOrUpdateRole = async (e: React.FormEvent) => {
     e.preventDefault();
-    setCreateError("");
+    setCreateError('');
 
-    const sanitizedName = roleName.trim().toLowerCase().replace(/\s+/g, "_");
+    const sanitizedName = roleName.trim().toLowerCase().replace(/\s+/g, '_');
     if (!editingRole && !/^[a-z0-9_]+$/.test(sanitizedName)) {
       setCreateError(
-        "El identificador del rol solo puede contener letras minúsculas, números y guiones bajos.",
+        'El identificador del rol solo puede contener letras minúsculas, números y guiones bajos.',
       );
       return;
     }
@@ -69,8 +69,8 @@ export const PermissionsPage: React.FC = () => {
             badge: roleBadge.trim() || undefined,
             iconColor: roleIconColor,
             badgeColor: roleIconColor
-              .replace("bg-", "bg-")
-              .replace("text-", "text-"),
+              .replace('bg-', 'bg-')
+              .replace('text-', 'text-'),
           },
         });
       } else {
@@ -82,8 +82,8 @@ export const PermissionsPage: React.FC = () => {
           badge: roleBadge.trim() || undefined,
           iconColor: roleIconColor,
           badgeColor: roleIconColor
-            .replace("bg-", "bg-")
-            .replace("text-", "text-"),
+            .replace('bg-', 'bg-')
+            .replace('text-', 'text-'),
         });
       }
       setIsModalOpen(false);
@@ -91,7 +91,7 @@ export const PermissionsPage: React.FC = () => {
     } catch (err: any) {
       setCreateError(
         err?.response?.data?.message ||
-          "Error al guardar el rol. Inténtalo de nuevo.",
+          'Error al guardar el rol. Inténtalo de nuevo.',
       );
     }
   };
@@ -101,9 +101,9 @@ export const PermissionsPage: React.FC = () => {
     setRoleName(role.name);
     setRoleLabel(role.label);
     setRoleDesc(role.description);
-    setRoleBadge(role.badge || "");
+    setRoleBadge(role.badge || '');
     setRoleIconColor(
-      role.iconColor || "text-primary bg-primary/10 border-primary/20",
+      role.iconColor || 'text-primary bg-primary/10 border-primary/20',
     );
     setIsModalOpen(true);
   };
@@ -117,7 +117,7 @@ export const PermissionsPage: React.FC = () => {
       try {
         await deleteRoleMutation.mutateAsync(role.name);
       } catch (err: any) {
-        alert(err?.response?.data?.message || "Error al eliminar el rol.");
+        alert(err?.response?.data?.message || 'Error al eliminar el rol.');
       }
     }
   };
@@ -139,7 +139,7 @@ export const PermissionsPage: React.FC = () => {
         </div>
 
         {/* Botón de crear rol si cuenta con el plan con permisos (Core Digital) */}
-        {user?.plan?.name === "Core Digital" && (
+        {user?.plan?.name === 'Core Digital' && (
           <button
             onClick={() => {
               resetForm();

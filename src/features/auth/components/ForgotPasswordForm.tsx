@@ -1,18 +1,18 @@
-import React, { useState } from "react";
-import { useForm } from "react-hook-form";
-import { zodResolver } from "@hookform/resolvers/zod";
-import { Mail, AlertCircle, CheckCircle2 } from "lucide-react";
-import { authApi } from "@features/auth/api/authApi";
-import { FormField } from "@features/auth/components/FormField";
-import { SubmitButton } from "@features/auth/components/SubmitButton";
+import React, { useState } from 'react';
+import { useForm } from 'react-hook-form';
+import { zodResolver } from '@hookform/resolvers/zod';
+import { Mail, AlertCircle, CheckCircle2 } from 'lucide-react';
+import { authApi } from '@features/auth/api/authApi';
+import { FormField } from '@features/auth/components/FormField';
+import { SubmitButton } from '@features/auth/components/SubmitButton';
 import {
   forgotPasswordSchema,
   ForgotPasswordFormValues,
-} from "@features/auth/schemas/forgot-password.schema";
-import { mapAuthError } from "@features/auth/lib/mapAuthError";
+} from '@features/auth/schemas/forgot-password.schema';
+import { mapAuthError } from '@features/auth/lib/mapAuthError';
 
 export const ForgotPasswordForm: React.FC = () => {
-  const [serverError, setServerError] = useState("");
+  const [serverError, setServerError] = useState('');
   const [submittedEmail, setSubmittedEmail] = useState<string | null>(null);
 
   const {
@@ -21,11 +21,11 @@ export const ForgotPasswordForm: React.FC = () => {
     formState: { errors, isSubmitting },
   } = useForm<ForgotPasswordFormValues>({
     resolver: zodResolver(forgotPasswordSchema),
-    defaultValues: { email: "" },
+    defaultValues: { email: '' },
   });
 
   const onSubmit = async (data: ForgotPasswordFormValues) => {
-    setServerError("");
+    setServerError('');
     try {
       await authApi.forgotPassword(data.email);
       setSubmittedEmail(data.email);
@@ -67,7 +67,7 @@ export const ForgotPasswordForm: React.FC = () => {
         placeholder="tu@email.com"
         autoComplete="email"
         error={errors.email?.message}
-        {...register("email")}
+        {...register('email')}
       />
 
       {serverError && (

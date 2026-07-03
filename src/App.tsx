@@ -1,6 +1,6 @@
-import { useEffect } from "react";
-import { AppRouter } from "@routes/AppRouter";
-import { useAuth } from "@features/auth/hooks/useAuth";
+import { useEffect } from 'react';
+import { AppRouter } from '@routes/AppRouter';
+import { useAuth } from '@features/auth/hooks/useAuth';
 
 function App() {
   const { checkAuth } = useAuth();

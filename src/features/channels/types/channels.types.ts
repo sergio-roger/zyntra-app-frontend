@@ -15,7 +15,7 @@ export interface Channel {
   channel_type_id: string;
   channelType: ChannelType;
   name: string;
-  status: "active" | "inactive";
+  status: 'active' | 'inactive';
   agent_id: string | null;
   config: Record<string, unknown>;
   created_at: string;
@@ -31,6 +31,6 @@ export interface CreateChannelPayload {
 
 export interface UpdateChannelPayload {
   name?: string;
-  status?: "active" | "inactive";
+  status?: 'active' | 'inactive';
   config?: Record<string, unknown>;
 }

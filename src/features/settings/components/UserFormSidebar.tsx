@@ -1,18 +1,18 @@
-import { Input } from "@core/ui/Input";
-import { Select } from "@core/ui/Select";
-import { useAuthStore } from "@features/auth/store/authStore";
-import { useRolesList } from "@features/settings/hooks/usePermissions";
+import { Input } from '@core/ui/Input';
+import { Select } from '@core/ui/Select';
+import { useAuthStore } from '@features/auth/store/authStore';
+import { useRolesList } from '@features/settings/hooks/usePermissions';
 import {
   useCreateUser,
   useUpdateUser,
-} from "@features/settings/hooks/useUsersTeams";
+} from '@features/settings/hooks/useUsersTeams';
 import {
   CrmUser,
   UserRole,
   UserStatus,
-} from "@features/settings/types/settings";
-import { toastManager } from "@shared/components/toast/toastManager";
-import { getApiErrorMessage } from "@shared/constants/apiErrors";
+} from '@features/settings/types/settings';
+import { toastManager } from '@shared/components/toast/toastManager';
+import { getApiErrorMessage } from '@shared/constants/apiErrors';
 import {
   Activity,
   Briefcase,
@@ -24,8 +24,8 @@ import {
   Shield,
   User,
   X,
-} from "lucide-react";
-import React, { useEffect, useState } from "react";
+} from 'lucide-react';
+import React, { useEffect, useState } from 'react';
 
 interface UserFormSidebarProps {
   open: boolean;
@@ -41,13 +41,13 @@ export const UserFormSidebar: React.FC<UserFormSidebarProps> = ({
   onClose,
 }) => {
   const [formData, setFormData] = useState({
-    firstName: "",
-    lastName: "",
-    email: "",
-    jobTitle: "",
-    avatarUrl: "",
-    role: "agent" as UserRole,
-    status: "active" as UserStatus,
+    firstName: '',
+    lastName: '',
+    email: '',
+    jobTitle: '',
+    avatarUrl: '',
+    role: 'agent' as UserRole,
+    status: 'active' as UserStatus,
     isAccountActivated: false,
   });
 
@@ -61,30 +61,30 @@ export const UserFormSidebar: React.FC<UserFormSidebarProps> = ({
   const planName =
     currentUser?.plan?.name ||
     (currentUser as any)?.plan_object?.name ||
-    "Impulse Pro";
+    'Impulse Pro';
 
   useEffect(() => {
     if (user) {
-      const parts = (user.name || "").split(" ");
+      const parts = (user.name || '').split(' ');
       setFormData({
-        firstName: user.firstName ?? parts[0] ?? "",
-        lastName: user.lastName ?? parts.slice(1).join(" ") ?? "",
+        firstName: user.firstName ?? parts[0] ?? '',
+        lastName: user.lastName ?? parts.slice(1).join(' ') ?? '',
         email: user.email,
-        jobTitle: user.jobTitle ?? "",
-        avatarUrl: user.avatarUrl ?? "",
-        role: user.role ?? "agent",
-        status: user.status ?? (user.isActive ? "active" : "inactive"),
+        jobTitle: user.jobTitle ?? '',
+        avatarUrl: user.avatarUrl ?? '',
+        role: user.role ?? 'agent',
+        status: user.status ?? (user.isActive ? 'active' : 'inactive'),
         isAccountActivated: Boolean(user.isAccountActivated),
       });
     } else {
       setFormData({
-        firstName: "",
-        lastName: "",
-        email: "",
-        jobTitle: "",
-        avatarUrl: "",
-        role: "agent",
-        status: "active",
+        firstName: '',
+        lastName: '',
+        email: '',
+        jobTitle: '',
+        avatarUrl: '',
+        role: 'agent',
+        status: 'active',
         isAccountActivated: false,
       });
     }
@@ -94,7 +94,7 @@ export const UserFormSidebar: React.FC<UserFormSidebarProps> = ({
     e.preventDefault();
     try {
       const name = `${formData.firstName} ${formData.lastName}`.trim();
-      const isActive = formData.status === "active";
+      const isActive = formData.status === 'active';
       if (user) {
         // eslint-disable-next-line @typescript-eslint/no-unused-vars
         const { email, ...updateFields } = formData;
@@ -110,57 +110,57 @@ export const UserFormSidebar: React.FC<UserFormSidebarProps> = ({
       onClose();
     } catch (error) {
       toastManager.add({
-        title: user ? "Error al actualizar usuario" : "Error al crear usuario",
+        title: user ? 'Error al actualizar usuario' : 'Error al crear usuario',
         description: getApiErrorMessage(error),
-        type: "error",
+        type: 'error',
       });
     }
   };
 
   const getRoleLabel = (role: any) => {
-    if (role.name === "admin") return "Administrador (Acceso Total)";
-    if (role.name === "manager") return "Gerente (Gestión de CRM y Agentes)";
-    if (role.name === "agent")
-      return planName === "BrandStart"
-        ? "Usuario Estándar (Operación Diaria)"
-        : "Agente (Operación Diaria)";
-    return `${role.label} (${role.description || "Rol Personalizado"})`;
+    if (role.name === 'admin') return 'Administrador (Acceso Total)';
+    if (role.name === 'manager') return 'Gerente (Gestión de CRM y Agentes)';
+    if (role.name === 'agent')
+      return planName === 'BrandStart'
+        ? 'Usuario Estándar (Operación Diaria)'
+        : 'Agente (Operación Diaria)';
+    return `${role.label} (${role.description || 'Rol Personalizado'})`;
   };
 
   const displayRoles = dbRoles || [];
   const filteredRoles = displayRoles.filter((role) => {
-    if (role.name === "superAdmin") return false;
-    if (role.name === "manager" && planName === "BrandStart") return false;
+    if (role.name === 'superAdmin') return false;
+    if (role.name === 'manager' && planName === 'BrandStart') return false;
     return true;
   });
 
   const statusOptions = [
-    { value: "active", label: "Activo" },
-    { value: "inactive", label: "Inactivo" },
-    { value: "suspended", label: "Suspendido" },
+    { value: 'active', label: 'Activo' },
+    { value: 'inactive', label: 'Inactivo' },
+    { value: 'suspended', label: 'Suspendido' },
   ];
 
   return (
     <>
       <div
-        className={`fixed inset-0 bg-black/60 !mt-0 backdrop-blur-sm z-[60] transition-opacity duration-300 ${open ? "opacity-100" : "opacity-0 pointer-events-none"}`}
+        className={`fixed inset-0 bg-black/60 !mt-0 backdrop-blur-sm z-[60] transition-opacity duration-300 ${open ? 'opacity-100' : 'opacity-0 pointer-events-none'}`}
         onClick={onClose}
       />
 
       <div
-        className={`fixed inset-y-0 right-0 w-full !mt-0 max-w-md bg-slate-900 border-l border-white/10 z-[70] shadow-2xl transform transition-transform duration-300 ease-out ${open ? "translate-x-0" : "translate-x-full"}`}
+        className={`fixed inset-y-0 right-0 w-full !mt-0 max-w-md bg-slate-900 border-l border-white/10 z-[70] shadow-2xl transform transition-transform duration-300 ease-out ${open ? 'translate-x-0' : 'translate-x-full'}`}
       >
         <div className="flex flex-col h-full">
           <div className="flex items-center justify-between p-6 border-b border-white/5 bg-slate-900/50 backdrop-blur-md">
             <div>
               <h3 className="text-xl font-bold text-white flex items-center gap-2">
                 <User size={20} className="text-indigo-400" />
-                {user ? "Editar Usuario" : "Nuevo Usuario"}
+                {user ? 'Editar Usuario' : 'Nuevo Usuario'}
               </h3>
               <p className="text-sm text-slate-400 mt-1">
                 {user
-                  ? "Actualiza los datos del colaborador"
-                  : "Añade un nuevo miembro a tu equipo"}
+                  ? 'Actualiza los datos del colaborador'
+                  : 'Añade un nuevo miembro a tu equipo'}
               </p>
             </div>
             <button
@@ -253,15 +253,15 @@ export const UserFormSidebar: React.FC<UserFormSidebarProps> = ({
                 if (v) {
                   const newStatus = v as UserStatus;
                   if (
-                    newStatus === "active" &&
-                    formData.status !== "active" &&
+                    newStatus === 'active' &&
+                    formData.status !== 'active' &&
                     isLimitReached
                   ) {
                     toastManager.add({
-                      title: "Límite alcanzado",
+                      title: 'Límite alcanzado',
                       description:
-                        "Has alcanzado el límite de usuarios activos permitidos en tu plan.",
-                      type: "error",
+                        'Has alcanzado el límite de usuarios activos permitidos en tu plan.',
+                      type: 'error',
                     });
                     return;
                   }
@@ -276,8 +276,8 @@ export const UserFormSidebar: React.FC<UserFormSidebarProps> = ({
                   size={20}
                   className={
                     formData.isAccountActivated
-                      ? "text-emerald-500"
-                      : "text-slate-600"
+                      ? 'text-emerald-500'
+                      : 'text-slate-600'
                   }
                 />
                 <div>
@@ -286,8 +286,8 @@ export const UserFormSidebar: React.FC<UserFormSidebarProps> = ({
                   </p>
                   <p className="text-xs text-slate-500">
                     {formData.isAccountActivated
-                      ? "El usuario ha verificado su cuenta"
-                      : "Pendiente de activación por el usuario"}
+                      ? 'El usuario ha verificado su cuenta'
+                      : 'Pendiente de activación por el usuario'}
                   </p>
                 </div>
               </div>
@@ -299,10 +299,10 @@ export const UserFormSidebar: React.FC<UserFormSidebarProps> = ({
                     isAccountActivated: !formData.isAccountActivated,
                   })
                 }
-                className={`relative inline-flex h-6 w-11 items-center rounded-full transition-colors focus:outline-none ${formData.isAccountActivated ? "bg-emerald-600" : "bg-slate-700"}`}
+                className={`relative inline-flex h-6 w-11 items-center rounded-full transition-colors focus:outline-none ${formData.isAccountActivated ? 'bg-emerald-600' : 'bg-slate-700'}`}
               >
                 <span
-                  className={`inline-block h-4 w-4 transform rounded-full bg-white transition-transform ${formData.isAccountActivated ? "translate-x-6" : "translate-x-1"}`}
+                  className={`inline-block h-4 w-4 transform rounded-full bg-white transition-transform ${formData.isAccountActivated ? 'translate-x-6' : 'translate-x-1'}`}
                 />
               </button>
             </div>
@@ -332,7 +332,7 @@ export const UserFormSidebar: React.FC<UserFormSidebarProps> = ({
                 ) : (
                   <Check size={18} />
                 )}
-                {user ? "Guardar Cambios" : "Crear Usuario"}
+                {user ? 'Guardar Cambios' : 'Crear Usuario'}
               </button>
             </div>
           </div>

@@ -1,19 +1,19 @@
-import { Badge } from "@core/ui/Badge";
+import { Badge } from '@core/ui/Badge';
 import {
   GripVertical,
   Lock,
   MoreHorizontal,
   Settings2,
   Trash2,
-} from "lucide-react";
-import React from "react";
+} from 'lucide-react';
+import React from 'react';
 
 interface LifecycleStage {
   id?: string;
   name: string;
   description: string;
   icon: string;
-  type: "active" | "lost";
+  type: 'active' | 'lost';
   is_default: boolean;
   is_won: boolean;
   is_system: boolean;
@@ -28,31 +28,31 @@ interface LifecycleStageCardProps {
   onUpdateDescription: (newDesc: string) => void;
   onSetDefault: () => void;
   onDelete: () => void;
-  accentColor?: "primary" | "amber";
+  accentColor?: 'primary' | 'amber';
 }
 
 export const LifecycleStageCard: React.FC<LifecycleStageCardProps> = ({
   stage,
   index,
-  labelPrefix = "Etapa",
+  labelPrefix = 'Etapa',
   onUpdateName,
   onUpdateDescription,
   onSetDefault,
   onDelete,
-  accentColor = "primary",
+  accentColor = 'primary',
 }) => {
   const [showDescription, setShowDescription] = React.useState(false);
-  const isAmber = accentColor === "amber";
+  const isAmber = accentColor === 'amber';
   const focusBorderClass = isAmber
-    ? "focus:border-amber-500/40"
-    : "focus:border-primary/40";
+    ? 'focus:border-amber-500/40'
+    : 'focus:border-primary/40';
   const hoverColorClass = isAmber
-    ? "hover:text-amber-500"
-    : "hover:text-primary";
+    ? 'hover:text-amber-500'
+    : 'hover:text-primary';
 
   return (
     <div
-      className={`group relative bg-base-100 ${isAmber ? "bg-base-100/50" : ""} rounded-xl p-4 border border-base-content/5 ${isAmber ? "hover:border-amber-500/30" : "hover:border-primary/30"} transition-all`}
+      className={`group relative bg-base-100 ${isAmber ? 'bg-base-100/50' : ''} rounded-xl p-4 border border-base-content/5 ${isAmber ? 'hover:border-amber-500/30' : 'hover:border-primary/30'} transition-all`}
     >
       <div className="flex items-center gap-4">
         {!isAmber && (
@@ -62,7 +62,7 @@ export const LifecycleStageCard: React.FC<LifecycleStageCardProps> = ({
         )}
 
         <div
-          className={`h-10 w-10 shrink-0 flex items-center justify-center rounded-lg ${isAmber ? "bg-base-200/50" : "bg-base-200"} text-xl shadow-inner mt-1`}
+          className={`h-10 w-10 shrink-0 flex items-center justify-center rounded-lg ${isAmber ? 'bg-base-200/50' : 'bg-base-200'} text-xl shadow-inner mt-1`}
         >
           {stage.icon}
         </div>
@@ -70,7 +70,7 @@ export const LifecycleStageCard: React.FC<LifecycleStageCardProps> = ({
         <div className="flex-1 min-w-0">
           <div className="flex items-center justify-between mb-2">
             <span
-              className={`text-[9px] uppercase tracking-wider font-bold ${isAmber ? "text-base-content/20" : "text-base-content/30"}`}
+              className={`text-[9px] uppercase tracking-wider font-bold ${isAmber ? 'text-base-content/20' : 'text-base-content/30'}`}
             >
               {labelPrefix} {index + 1}
             </span>
@@ -94,7 +94,7 @@ export const LifecycleStageCard: React.FC<LifecycleStageCardProps> = ({
             onClick={() => setShowDescription(!showDescription)}
             className={`text-[10px] text-base-content/40 mt-1 flex items-center gap-1 cursor-pointer ${hoverColorClass} transition-colors`}
           >
-            {showDescription ? "Ocultar descripción" : "Mostrar descripción"}
+            {showDescription ? 'Ocultar descripción' : 'Mostrar descripción'}
           </button>
 
           {showDescription && (
@@ -121,9 +121,9 @@ export const LifecycleStageCard: React.FC<LifecycleStageCardProps> = ({
             tabIndex={0}
             className="dropdown-content z-[1] menu p-2 shadow-xl bg-base-200 rounded-xl w-56 border border-base-content/5"
           >
-            <li className={stage.is_default ? "disabled" : ""}>
+            <li className={stage.is_default ? 'disabled' : ''}>
               <a
-                className={`text-xs font-medium flex items-center gap-2 py-2 ${stage.is_default ? "pointer-events-none opacity-50" : ""}`}
+                className={`text-xs font-medium flex items-center gap-2 py-2 ${stage.is_default ? 'pointer-events-none opacity-50' : ''}`}
                 onClick={() => !stage.is_default && onSetDefault()}
               >
                 <Settings2 size={14} />
@@ -131,9 +131,9 @@ export const LifecycleStageCard: React.FC<LifecycleStageCardProps> = ({
               </a>
             </li>
             <div className="divider my-0 opacity-10"></div>
-            <li className={stage.is_system ? "disabled" : ""}>
+            <li className={stage.is_system ? 'disabled' : ''}>
               <a
-                className={`text-xs font-medium text-error flex items-center justify-between gap-2 py-2 ${stage.is_system ? "pointer-events-none opacity-50" : "hover:bg-error/10"}`}
+                className={`text-xs font-medium text-error flex items-center justify-between gap-2 py-2 ${stage.is_system ? 'pointer-events-none opacity-50' : 'hover:bg-error/10'}`}
                 onClick={() => !stage.is_system && onDelete()}
               >
                 <div className="flex items-center gap-2">

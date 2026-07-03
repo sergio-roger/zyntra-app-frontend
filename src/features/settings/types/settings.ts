@@ -3,7 +3,7 @@ export type {
   UserRole,
   UserStatus,
   Team,
-} from "@features/auth/types/auth.types";
+} from '@features/auth/types/auth.types';
 
 export interface CreateUserInput {
   avatarUrl?: string;
@@ -15,7 +15,7 @@ export interface CreateUserInput {
   lastName?: string;
   name?: string;
   role: string;
-  status?: "active" | "inactive" | "suspended";
+  status?: 'active' | 'inactive' | 'suspended';
 }
 
 export interface CreateTeamInput {

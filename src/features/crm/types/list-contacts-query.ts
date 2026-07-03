@@ -1,6 +1,6 @@
-import { ContactSource } from "./contact";
+import { ContactSource } from './contact';
 
-export type TabKey = "all" | "mine" | "unassigned";
+export type TabKey = 'all' | 'mine' | 'unassigned';
 
 export interface ListContactsQuery {
   createdAtFrom?: string;

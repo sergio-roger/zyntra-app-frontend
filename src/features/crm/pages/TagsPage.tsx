@@ -1,9 +1,9 @@
-import { TagFormSidebar } from "@crm/components/TagFormSidebar";
-import { useRemoveTag, useTags } from "@crm/hooks/useTags";
-import { Tag } from "@crm/types/tag";
-import { ConfirmModal } from "@shared/components/ConfirmModal";
-import { EmptyState } from "@shared/components/EmptyState";
-import { Tabs } from "@core/ui/Tabs";
+import { TagFormSidebar } from '@crm/components/TagFormSidebar';
+import { useRemoveTag, useTags } from '@crm/hooks/useTags';
+import { Tag } from '@crm/types/tag';
+import { ConfirmModal } from '@shared/components/ConfirmModal';
+import { EmptyState } from '@shared/components/EmptyState';
+import { Tabs } from '@core/ui/Tabs';
 import {
   AlertCircle,
   Edit2,
@@ -12,20 +12,20 @@ import {
   Search,
   Tag as TagIcon,
   Trash2,
-} from "lucide-react";
-import React, { useState } from "react";
+} from 'lucide-react';
+import React, { useState } from 'react';
 
 export const TagsPage: React.FC = () => {
-  const [activeTab, setActiveTab] = useState<"contact" | "company">("contact");
+  const [activeTab, setActiveTab] = useState<'contact' | 'company'>('contact');
   const { data: tags, isLoading, isError, error } = useTags(activeTab);
   const removeMutation = useRemoveTag();
 
   const tabItems = [
-    { key: "contact" as const, label: "Contactos" },
-    { key: "company" as const, label: "Empresas" },
+    { key: 'contact' as const, label: 'Contactos' },
+    { key: 'company' as const, label: 'Empresas' },
   ];
 
-  const [search, setSearch] = useState("");
+  const [search, setSearch] = useState('');
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
   const [editingTag, setEditingTag] = useState<Tag | null>(null);
 
@@ -142,7 +142,7 @@ export const TagsPage: React.FC = () => {
               <div>
                 <h3 className="font-bold text-white text-lg">{tag.name}</h3>
                 <p className="text-xs text-slate-500 mt-1 line-clamp-2 min-h-[32px]">
-                  {tag.description || "Sin descripción"}
+                  {tag.description || 'Sin descripción'}
                 </p>
               </div>
 
@@ -167,9 +167,9 @@ export const TagsPage: React.FC = () => {
                 description={
                   search
                     ? `No se encontraron etiquetas que coincidan con "${search}"`
-                    : "Aún no has creado etiquetas para segmentar a tus contactos."
+                    : 'Aún no has creado etiquetas para segmentar a tus contactos.'
                 }
-                actionLabel={search ? undefined : "Crear mi primera etiqueta"}
+                actionLabel={search ? undefined : 'Crear mi primera etiqueta'}
                 onAction={search ? undefined : () => handleOpenSidebar()}
               />
             </div>

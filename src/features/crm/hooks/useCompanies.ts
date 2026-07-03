@@ -1,16 +1,16 @@
-import { companiesApi } from "@crm/api/companies.api";
+import { companiesApi } from '@crm/api/companies.api';
 import {
   CreateCompanyInput,
   ListCompaniesQuery,
   UpdateCompanyInput,
-} from "@crm/types/company";
-import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+} from '@crm/types/company';
+import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 
 export const companiesKeys = {
-  all: ["companies"] as const,
-  list: (query: ListCompaniesQuery) => ["companies", "list", query] as const,
-  detail: (id: string) => ["companies", "detail", id] as const,
-  industries: ["companies", "industries"] as const,
+  all: ['companies'] as const,
+  list: (query: ListCompaniesQuery) => ['companies', 'list', query] as const,
+  detail: (id: string) => ['companies', 'detail', id] as const,
+  industries: ['companies', 'industries'] as const,
 };
 
 const invalidateLists = (qc: ReturnType<typeof useQueryClient>) => {
@@ -33,7 +33,7 @@ export const useCompaniesList = (
 export const useCompany = (id: string | null) =>
   useQuery({
     enabled: Boolean(id),
-    queryKey: companiesKeys.detail(id ?? ""),
+    queryKey: companiesKeys.detail(id ?? ''),
     queryFn: async () => {
       const res = await companiesApi.get(id as string);
       return res.data;

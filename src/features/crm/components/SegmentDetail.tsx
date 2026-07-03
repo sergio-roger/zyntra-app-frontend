@@ -1,12 +1,12 @@
-import React, { useState, useEffect } from "react";
-import { Edit2, Filter, Loader2, Pencil, Tag, Users } from "lucide-react";
-import { EmptyState } from "@shared/components/EmptyState";
-import { useSegmentContacts } from "@crm/hooks/useSegments";
-import { Segment } from "@crm/types/segment";
-import { Contact } from "@crm/types/contact";
-import { Pagination } from "@crm/components/Pagination";
-import { SourceBadge } from "@crm/components/badges";
-import { ContactFormSidebar } from "@crm/components/ContactFormSidebar";
+import React, { useState, useEffect } from 'react';
+import { Edit2, Filter, Loader2, Pencil, Tag, Users } from 'lucide-react';
+import { EmptyState } from '@shared/components/EmptyState';
+import { useSegmentContacts } from '@crm/hooks/useSegments';
+import { Segment } from '@crm/types/segment';
+import { Contact } from '@crm/types/contact';
+import { Pagination } from '@crm/components/Pagination';
+import { SourceBadge } from '@crm/components/badges';
+import { ContactFormSidebar } from '@crm/components/ContactFormSidebar';
 
 interface SegmentDetailProps {
   segment: Segment;
@@ -46,15 +46,15 @@ export const SegmentDetail: React.FC<SegmentDetailProps> = ({
             {segment.name}
           </h2>
           <p className="text-xs text-slate-400 mt-0.5">
-            {segment.description || "Sin descripción."}
+            {segment.description || 'Sin descripción.'}
           </p>
           {segment.conditions?.length > 0 && (
             <div className="flex items-center gap-1.5 mt-2">
               <Filter size={10} className="text-slate-500" />
               <span className="text-[10px] text-slate-500 font-medium">
                 {segment.conditions.length} regla
-                {segment.conditions.length !== 1 ? "s" : ""} activa
-                {segment.conditions.length !== 1 ? "s" : ""}
+                {segment.conditions.length !== 1 ? 's' : ''} activa
+                {segment.conditions.length !== 1 ? 's' : ''}
               </span>
             </div>
           )}
@@ -115,7 +115,7 @@ export const SegmentDetail: React.FC<SegmentDetailProps> = ({
                       <td className="px-4 py-3">
                         <div className="flex flex-col">
                           <span className="text-slate-200 text-xs">
-                            {c.email ?? "—"}
+                            {c.email ?? '—'}
                           </span>
                           {c.phone && (
                             <span className="text-slate-500 text-[10px] mt-0.5">

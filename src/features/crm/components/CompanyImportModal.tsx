@@ -1,4 +1,4 @@
-import React, { useRef, useState } from "react";
+import React, { useRef, useState } from 'react';
 import {
   AlertCircle,
   Building2,
@@ -7,12 +7,12 @@ import {
   Loader2,
   Upload,
   X,
-} from "lucide-react";
-import { companiesApi } from "@crm/api/companies.api";
-import { useQueryClient } from "@tanstack/react-query";
-import { companiesKeys } from "@crm/hooks/useCompanies";
+} from 'lucide-react';
+import { companiesApi } from '@crm/api/companies.api';
+import { useQueryClient } from '@tanstack/react-query';
+import { companiesKeys } from '@crm/hooks/useCompanies';
 
-type Step = "upload" | "preview" | "importing" | "success";
+type Step = 'upload' | 'preview' | 'importing' | 'success';
 
 interface ParsedRow {
   name: string;
@@ -28,36 +28,36 @@ interface CompanyImportModalProps {
 }
 
 const HEADER_MAP: Record<string, keyof ParsedRow> = {
-  nombre: "name",
-  name: "name",
-  empresa: "name",
-  company: "name",
-  ruc: "identification",
-  identificacion: "identification",
-  identificación: "identification",
-  identification: "identification",
-  nit: "identification",
-  web: "website",
-  website: "website",
-  sitio: "website",
-  url: "website",
-  empleados: "num_employees",
-  employees: "num_employees",
-  num_employees: "num_employees",
-  descripcion: "description",
-  descripción: "description",
-  description: "description",
-  notas: "description",
+  nombre: 'name',
+  name: 'name',
+  empresa: 'name',
+  company: 'name',
+  ruc: 'identification',
+  identificacion: 'identification',
+  identificación: 'identification',
+  identification: 'identification',
+  nit: 'identification',
+  web: 'website',
+  website: 'website',
+  sitio: 'website',
+  url: 'website',
+  empleados: 'num_employees',
+  employees: 'num_employees',
+  num_employees: 'num_employees',
+  descripcion: 'description',
+  descripción: 'description',
+  description: 'description',
+  notas: 'description',
 };
 
 function parseCSV(text: string): ParsedRow[] {
   const lines = text.split(/\r?\n/).filter((l) => l.trim());
   if (lines.length < 2) return [];
 
-  const rawHeaders = lines[0].split(",").map((h) =>
+  const rawHeaders = lines[0].split(',').map((h) =>
     h
       .trim()
-      .replace(/^["']|["']$/g, "")
+      .replace(/^["']|["']$/g, '')
       .toLowerCase(),
   );
 
@@ -68,14 +68,14 @@ function parseCSV(text: string): ParsedRow[] {
   const rows: ParsedRow[] = [];
   for (let i = 1; i < lines.length; i++) {
     const cells = lines[i]
-      .split(",")
-      .map((c) => c.trim().replace(/^["']|["']$/g, ""));
+      .split(',')
+      .map((c) => c.trim().replace(/^["']|["']$/g, ''));
     const obj: Partial<ParsedRow> = {};
     fieldMap.forEach((field, idx) => {
       if (!field) return;
       const val = cells[idx]?.trim();
       if (!val) return;
-      if (field === "num_employees") {
+      if (field === 'num_employees') {
         const n = parseInt(val, 10);
         if (!isNaN(n)) obj.num_employees = n;
       } else {
@@ -91,7 +91,7 @@ export const CompanyImportModal: React.FC<CompanyImportModalProps> = ({
   open,
   onClose,
 }) => {
-  const [step, setStep] = useState<Step>("upload");
+  const [step, setStep] = useState<Step>('upload');
   const [parsedRows, setParsedRows] = useState<ParsedRow[]>([]);
   const [importedCount, setImportedCount] = useState(0);
   const [error, setError] = useState<string | null>(null);
@@ -99,11 +99,11 @@ export const CompanyImportModal: React.FC<CompanyImportModalProps> = ({
   const qc = useQueryClient();
 
   const reset = () => {
-    setStep("upload");
+    setStep('upload');
     setParsedRows([]);
     setImportedCount(0);
     setError(null);
-    if (fileRef.current) fileRef.current.value = "";
+    if (fileRef.current) fileRef.current.value = '';
   };
 
   const handleClose = () => {
@@ -125,12 +125,12 @@ export const CompanyImportModal: React.FC<CompanyImportModalProps> = ({
           return;
         }
         setParsedRows(rows);
-        setStep("preview");
+        setStep('preview');
       } catch {
-        setError("Error al leer el archivo. Usa formato CSV UTF-8.");
+        setError('Error al leer el archivo. Usa formato CSV UTF-8.');
       }
     };
-    reader.readAsText(file, "utf-8");
+    reader.readAsText(file, 'utf-8');
   };
 
   const handleDrop = (e: React.DragEvent) => {
@@ -140,15 +140,15 @@ export const CompanyImportModal: React.FC<CompanyImportModalProps> = ({
   };
 
   const handleImport = async () => {
-    setStep("importing");
+    setStep('importing');
     try {
       const res = await companiesApi.import(parsedRows);
       setImportedCount((res as any)?.data?.count ?? parsedRows.length);
       qc.invalidateQueries({ queryKey: companiesKeys.all });
-      setStep("success");
+      setStep('success');
     } catch {
-      setError("Error al importar. Verifica los datos e intenta de nuevo.");
-      setStep("preview");
+      setError('Error al importar. Verifica los datos e intenta de nuevo.');
+      setStep('preview');
     }
   };
 
@@ -188,7 +188,7 @@ export const CompanyImportModal: React.FC<CompanyImportModalProps> = ({
 
           <div className="p-6 space-y-5">
             {/* Upload step */}
-            {step === "upload" && (
+            {step === 'upload' && (
               <>
                 <div
                   onDrop={handleDrop}
@@ -199,7 +199,7 @@ export const CompanyImportModal: React.FC<CompanyImportModalProps> = ({
                   <Upload size={32} className="text-slate-500" />
                   <div className="text-center">
                     <p className="text-sm font-medium text-slate-300">
-                      Arrastra tu CSV aquí o{" "}
+                      Arrastra tu CSV aquí o{' '}
                       <span className="text-indigo-400">
                         haz clic para elegir
                       </span>
@@ -225,8 +225,8 @@ export const CompanyImportModal: React.FC<CompanyImportModalProps> = ({
                     Columnas soportadas:
                   </p>
                   <p>
-                    <span className="text-indigo-300 font-mono">nombre</span>{" "}
-                    (requerido),{" "}
+                    <span className="text-indigo-300 font-mono">nombre</span>{' '}
+                    (requerido),{' '}
                     <span className="font-mono text-slate-400">
                       ruc / identificación, web, empleados, descripción
                     </span>
@@ -243,7 +243,7 @@ export const CompanyImportModal: React.FC<CompanyImportModalProps> = ({
             )}
 
             {/* Preview step */}
-            {step === "preview" && (
+            {step === 'preview' && (
               <>
                 <div className="flex items-center gap-3 rounded-xl border border-indigo-500/20 bg-indigo-500/10 px-4 py-3 text-sm">
                   <FileSpreadsheet
@@ -251,10 +251,10 @@ export const CompanyImportModal: React.FC<CompanyImportModalProps> = ({
                     className="text-indigo-400 shrink-0"
                   />
                   <p className="text-indigo-300">
-                    Se importarán{" "}
+                    Se importarán{' '}
                     <span className="font-bold">
                       {parsedRows.length} empresa
-                      {parsedRows.length !== 1 ? "s" : ""}
+                      {parsedRows.length !== 1 ? 's' : ''}
                     </span>
                     . Las empresas con nombre duplicado serán omitidas.
                   </p>
@@ -288,10 +288,10 @@ export const CompanyImportModal: React.FC<CompanyImportModalProps> = ({
                             </span>
                           </td>
                           <td className="px-3 py-2 text-slate-400">
-                            {r.identification ?? "—"}
+                            {r.identification ?? '—'}
                           </td>
                           <td className="px-3 py-2 text-slate-400 truncate max-w-[100px]">
-                            {r.website ?? "—"}
+                            {r.website ?? '—'}
                           </td>
                         </tr>
                       ))}
@@ -314,7 +314,7 @@ export const CompanyImportModal: React.FC<CompanyImportModalProps> = ({
             )}
 
             {/* Importing step */}
-            {step === "importing" && (
+            {step === 'importing' && (
               <div className="flex flex-col items-center justify-center gap-4 py-10">
                 <Loader2 size={36} className="animate-spin text-primary" />
                 <p className="text-sm text-slate-400 animate-pulse">
@@ -324,7 +324,7 @@ export const CompanyImportModal: React.FC<CompanyImportModalProps> = ({
             )}
 
             {/* Success step */}
-            {step === "success" && (
+            {step === 'success' && (
               <div className="flex flex-col items-center justify-center gap-4 py-10">
                 <CheckCircle2 size={48} className="text-emerald-400" />
                 <div className="text-center">
@@ -332,10 +332,10 @@ export const CompanyImportModal: React.FC<CompanyImportModalProps> = ({
                     ¡Importación completada!
                   </p>
                   <p className="mt-1 text-sm text-slate-400">
-                    Se importaron{" "}
+                    Se importaron{' '}
                     <span className="font-bold text-emerald-400">
                       {importedCount}
-                    </span>{" "}
+                    </span>{' '}
                     empresas correctamente.
                   </p>
                 </div>
@@ -345,7 +345,7 @@ export const CompanyImportModal: React.FC<CompanyImportModalProps> = ({
 
           {/* Footer */}
           <div className="flex items-center justify-end gap-3 border-t border-white/10 px-6 py-4">
-            {step === "upload" && (
+            {step === 'upload' && (
               <button
                 onClick={handleClose}
                 className="rounded-xl border border-white/10 bg-slate-800 px-4 py-2 text-sm font-semibold text-slate-300 hover:bg-slate-700 transition-colors"
@@ -354,7 +354,7 @@ export const CompanyImportModal: React.FC<CompanyImportModalProps> = ({
               </button>
             )}
 
-            {step === "preview" && (
+            {step === 'preview' && (
               <>
                 <button
                   onClick={reset}
@@ -371,7 +371,7 @@ export const CompanyImportModal: React.FC<CompanyImportModalProps> = ({
               </>
             )}
 
-            {step === "success" && (
+            {step === 'success' && (
               <button
                 onClick={handleClose}
                 className="inline-flex items-center gap-2 rounded-xl bg-emerald-600 px-5 py-2 text-sm font-bold text-white hover:bg-emerald-500 transition-colors"

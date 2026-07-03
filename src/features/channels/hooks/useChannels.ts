@@ -1,20 +1,20 @@
-import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
-import { useAuthStore } from "@features/auth/store/authStore";
-import { channelsApi } from "../api/channels.api";
+import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
+import { useAuthStore } from '@features/auth/store/authStore';
+import { channelsApi } from '../api/channels.api';
 import {
   CreateChannelPayload,
   UpdateChannelPayload,
-} from "../types/channels.types";
+} from '../types/channels.types';
 
-const useBusinessId = () => useAuthStore((s) => s.user?.id ?? "");
+const useBusinessId = () => useAuthStore((s) => s.user?.id ?? '');
 
 export const useChannelStore = () =>
-  useQuery({ queryKey: ["channel-store"], queryFn: channelsApi.getStore });
+  useQuery({ queryKey: ['channel-store'], queryFn: channelsApi.getStore });
 
 export const useChannels = () => {
   const businessId = useBusinessId();
   return useQuery({
-    queryKey: ["channels", businessId],
+    queryKey: ['channels', businessId],
     queryFn: () => channelsApi.list(businessId),
     enabled: !!businessId,
   });
@@ -23,7 +23,7 @@ export const useChannels = () => {
 export const useChannel = (channelId: string) => {
   const businessId = useBusinessId();
   return useQuery({
-    queryKey: ["channels", businessId, channelId],
+    queryKey: ['channels', businessId, channelId],
     queryFn: () => channelsApi.get(businessId, channelId),
     enabled: !!businessId && !!channelId,
   });
@@ -36,7 +36,7 @@ export const useCreateChannel = () => {
     mutationFn: (payload: CreateChannelPayload) =>
       channelsApi.create(businessId, payload),
     onSuccess: () =>
-      qc.invalidateQueries({ queryKey: ["channels", businessId] }),
+      qc.invalidateQueries({ queryKey: ['channels', businessId] }),
   });
 };
 
@@ -47,7 +47,7 @@ export const useUpdateChannel = (channelId: string) => {
     mutationFn: (payload: UpdateChannelPayload) =>
       channelsApi.update(businessId, channelId, payload),
     onSuccess: () =>
-      qc.invalidateQueries({ queryKey: ["channels", businessId] }),
+      qc.invalidateQueries({ queryKey: ['channels', businessId] }),
   });
 };
 
@@ -58,7 +58,7 @@ export const useDeleteChannel = () => {
     mutationFn: (channelId: string) =>
       channelsApi.remove(businessId, channelId),
     onSuccess: () =>
-      qc.invalidateQueries({ queryKey: ["channels", businessId] }),
+      qc.invalidateQueries({ queryKey: ['channels', businessId] }),
   });
 };
 
@@ -69,8 +69,8 @@ export const useAssignAgent = (channelId: string) => {
     mutationFn: (agentId: string) =>
       channelsApi.assignAgent(businessId, channelId, agentId),
     onSuccess: () => {
-      qc.invalidateQueries({ queryKey: ["channels", businessId] });
-      qc.invalidateQueries({ queryKey: ["channels", businessId, channelId] });
+      qc.invalidateQueries({ queryKey: ['channels', businessId] });
+      qc.invalidateQueries({ queryKey: ['channels', businessId, channelId] });
     },
   });
 };
@@ -81,8 +81,8 @@ export const useUnassignAgent = (channelId: string) => {
   return useMutation({
     mutationFn: () => channelsApi.unassignAgent(businessId, channelId),
     onSuccess: () => {
-      qc.invalidateQueries({ queryKey: ["channels", businessId] });
-      qc.invalidateQueries({ queryKey: ["channels", businessId, channelId] });
+      qc.invalidateQueries({ queryKey: ['channels', businessId] });
+      qc.invalidateQueries({ queryKey: ['channels', businessId, channelId] });
     },
   });
 };

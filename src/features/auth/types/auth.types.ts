@@ -1,6 +1,6 @@
-import { Plan } from "@features/auth/types/plan";
+import { Plan } from '@features/auth/types/plan';
 
-export type ModuleAccessLevel = "full" | "read_only" | "locked";
+export type ModuleAccessLevel = 'full' | 'read_only' | 'locked';
 
 export interface MenuNode {
   id: string;
@@ -14,7 +14,7 @@ export interface MenuNode {
 }
 
 export type UserRole = string;
-export type UserStatus = "active" | "inactive" | "suspended";
+export type UserStatus = 'active' | 'inactive' | 'suspended';
 
 export interface Team {
   businessId: string;

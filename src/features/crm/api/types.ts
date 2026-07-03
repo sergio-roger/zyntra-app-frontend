@@ -1,5 +1,5 @@
-import { ActivityType } from "@crm/types/crm";
-import { Contact } from "@crm/types/contact";
+import { ActivityType } from '@crm/types/crm';
+import { Contact } from '@crm/types/contact';
 
 export interface CreateContactInput {
   customFields?: Record<string, any>;
@@ -10,7 +10,7 @@ export interface CreateContactInput {
   notes?: string;
   ownerId?: string | null;
   phone?: string;
-  source?: Contact["source"];
+  source?: Contact['source'];
   tags?: string[];
 }
 
@@ -40,7 +40,7 @@ export interface CreateCustomFieldInput {
 }
 
 export type UpdateCustomFieldInput = Partial<
-  Omit<CreateCustomFieldInput, "name" | "type">
+  Omit<CreateCustomFieldInput, 'name' | 'type'>
 > & {
   is_active?: boolean;
 };

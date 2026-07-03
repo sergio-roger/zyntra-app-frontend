@@ -1,13 +1,13 @@
-import api from "@shared/api/axios";
+import api from '@shared/api/axios';
 import {
   Channel,
   ChannelType,
   CreateChannelPayload,
   UpdateChannelPayload,
-} from "../types/channels.types";
+} from '../types/channels.types';
 
 const unwrap = <T>(res: unknown): T => {
-  if (res && typeof res === "object" && "data" in (res as object)) {
+  if (res && typeof res === 'object' && 'data' in (res as object)) {
     return (res as { data: T }).data;
   }
   return res as T;
@@ -15,7 +15,7 @@ const unwrap = <T>(res: unknown): T => {
 
 export const channelsApi = {
   getStore: (): Promise<ChannelType[]> =>
-    api.get("/channels/store").then(unwrap),
+    api.get('/channels/store').then(unwrap),
 
   list: (businessId: string): Promise<Channel[]> =>
     api.get(`/businesses/${businessId}/channels`).then(unwrap),

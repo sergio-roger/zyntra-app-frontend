@@ -1,25 +1,25 @@
-import { Input } from "@core/ui/Input";
-import { Select } from "@core/ui/Select";
-import { Tabs } from "@core/ui/Tabs";
-import { Textarea } from "@core/ui/Textarea";
-import { useAuthStore } from "@features/auth/store/authStore";
+import { Input } from '@core/ui/Input';
+import { Select } from '@core/ui/Select';
+import { Tabs } from '@core/ui/Tabs';
+import { Textarea } from '@core/ui/Textarea';
+import { useAuthStore } from '@features/auth/store/authStore';
 import {
   EMPLOYEE_RANGE_OPTIONS,
   TAX_TYPE_OPTIONS,
-} from "@crm/constants/company-options";
+} from '@crm/constants/company-options';
 import {
   useCreateCompany,
   useIndustrys,
   useUpdateCompany,
-} from "@crm/hooks/useCompanies";
-import { useCrmUsers } from "@crm/hooks/useCrmUsers";
-import { useLifecycleStages } from "@crm/hooks/useLifecycleStages";
-import { useTags } from "@crm/hooks/useTags";
-import { Company, CompanyFormData } from "@crm/types/company";
+} from '@crm/hooks/useCompanies';
+import { useCrmUsers } from '@crm/hooks/useCrmUsers';
+import { useLifecycleStages } from '@crm/hooks/useLifecycleStages';
+import { useTags } from '@crm/hooks/useTags';
+import { Company, CompanyFormData } from '@crm/types/company';
 import {
   defaultCompanyFormData,
   formDataFromCompany,
-} from "@crm/utils/company-form.utils";
+} from '@crm/utils/company-form.utils';
 import {
   Building2,
   Check,
@@ -31,8 +31,8 @@ import {
   Save,
   Tag as TagIcon,
   X,
-} from "lucide-react";
-import React, { useEffect, useState } from "react";
+} from 'lucide-react';
+import React, { useEffect, useState } from 'react';
 
 interface CompanyFormSidebarProps {
   open: boolean;
@@ -47,17 +47,17 @@ export const CompanyFormSidebar: React.FC<CompanyFormSidebarProps> = ({
 }) => {
   const { user: currentUser } = useAuthStore();
   const isAdmin =
-    currentUser?.role === "admin" || currentUser?.role === "manager";
+    currentUser?.role === 'admin' || currentUser?.role === 'manager';
 
   const [formData, setFormData] = useState<CompanyFormData>(
     defaultCompanyFormData,
   );
-  const [activeTab, setActiveTab] = useState<"info" | "advanced">("info");
+  const [activeTab, setActiveTab] = useState<'info' | 'advanced'>('info');
 
   const { data: industries = [] } = useIndustrys();
   const { data: users = [] } = useCrmUsers();
   const { data: stages = [] } = useLifecycleStages();
-  const { data: availableTags = [] } = useTags("company");
+  const { data: availableTags = [] } = useTags('company');
 
   const createMutation = useCreateCompany();
   const updateMutation = useUpdateCompany();
@@ -74,7 +74,7 @@ export const CompanyFormSidebar: React.FC<CompanyFormSidebarProps> = ({
       }
       setFormData(initial);
     }
-    setActiveTab("info");
+    setActiveTab('info');
   }, [company, open, isAdmin, currentUser]);
 
   const set = (patch: Partial<CompanyFormData>) =>
@@ -118,24 +118,24 @@ export const CompanyFormSidebar: React.FC<CompanyFormSidebarProps> = ({
   return (
     <>
       <div
-        className={`fixed inset-0 bg-black/60 !mt-0 backdrop-blur-sm z-[60] transition-opacity duration-300 ${open ? "opacity-100" : "opacity-0 pointer-events-none"}`}
+        className={`fixed inset-0 bg-black/60 !mt-0 backdrop-blur-sm z-[60] transition-opacity duration-300 ${open ? 'opacity-100' : 'opacity-0 pointer-events-none'}`}
         onClick={onClose}
       />
 
       <div
-        className={`fixed inset-y-0 right-0 w-full !mt-0 max-w-md bg-slate-900 border-l border-white/10 z-[70] shadow-2xl transform transition-transform duration-300 ease-out ${open ? "translate-x-0" : "translate-x-full"}`}
+        className={`fixed inset-y-0 right-0 w-full !mt-0 max-w-md bg-slate-900 border-l border-white/10 z-[70] shadow-2xl transform transition-transform duration-300 ease-out ${open ? 'translate-x-0' : 'translate-x-full'}`}
       >
         <div className="flex flex-col h-full">
           {/* Header */}
           <div className="flex items-center justify-between p-6 border-b border-white/5">
             <div>
               <h3 className="text-xl font-bold text-white">
-                {company ? "Editar empresa" : "Nueva empresa"}
+                {company ? 'Editar empresa' : 'Nueva empresa'}
               </h3>
               <p className="text-sm text-slate-400 mt-1">
                 {company
-                  ? "Actualiza la información de la empresa"
-                  : "Registra una nueva empresa en tu CRM"}
+                  ? 'Actualiza la información de la empresa'
+                  : 'Registra una nueva empresa en tu CRM'}
               </p>
             </div>
             <button
@@ -149,11 +149,11 @@ export const CompanyFormSidebar: React.FC<CompanyFormSidebarProps> = ({
           {/* Tabs */}
           <Tabs
             active={activeTab}
-            onChange={(k) => setActiveTab(k as "info" | "advanced")}
+            onChange={(k) => setActiveTab(k as 'info' | 'advanced')}
             className="mt-4"
             tabs={[
-              { key: "info", label: "Información", icon: Building2 },
-              { key: "advanced", label: "Avanzado", icon: FileText },
+              { key: 'info', label: 'Información', icon: Building2 },
+              { key: 'advanced', label: 'Avanzado', icon: FileText },
             ]}
           />
 
@@ -163,7 +163,7 @@ export const CompanyFormSidebar: React.FC<CompanyFormSidebarProps> = ({
             onSubmit={handleSubmit}
             className="flex-1 overflow-y-auto p-6 space-y-8"
           >
-            {activeTab === "info" ? (
+            {activeTab === 'info' ? (
               <div className="space-y-8 animate-in fade-in slide-in-from-right-4 duration-300">
                 {/* Basic Info */}
                 <div className="space-y-4">
@@ -185,7 +185,7 @@ export const CompanyFormSidebar: React.FC<CompanyFormSidebarProps> = ({
                         <Select
                           options={TAX_TYPE_OPTIONS}
                           value={formData.taxType}
-                          onChange={(v) => set({ taxType: v ?? "RUC" })}
+                          onChange={(v) => set({ taxType: v ?? 'RUC' })}
                           label="Tipo"
                         />
                       </div>
@@ -213,7 +213,7 @@ export const CompanyFormSidebar: React.FC<CompanyFormSidebarProps> = ({
                       label="Rango de empleados"
                       options={EMPLOYEE_RANGE_OPTIONS}
                       value={formData.employeeRange || null}
-                      onChange={(v) => set({ employeeRange: v ?? "" })}
+                      onChange={(v) => set({ employeeRange: v ?? '' })}
                       clearable
                       clearLabel="Sin definir"
                       placeholder="Selecciona el tamaño"
@@ -224,7 +224,7 @@ export const CompanyFormSidebar: React.FC<CompanyFormSidebarProps> = ({
                         label="Industria"
                         options={industryOptions}
                         value={formData.industryId || null}
-                        onChange={(v) => set({ industryId: v ?? "" })}
+                        onChange={(v) => set({ industryId: v ?? '' })}
                         clearable
                         clearLabel="Sin industria"
                         placeholder="Selecciona una industria"
@@ -236,7 +236,7 @@ export const CompanyFormSidebar: React.FC<CompanyFormSidebarProps> = ({
                         label="Propietario de la empresa"
                         options={ownerOptions}
                         value={formData.ownerId || null}
-                        onChange={(v) => set({ ownerId: v ?? "" })}
+                        onChange={(v) => set({ ownerId: v ?? '' })}
                         clearable
                         clearLabel="Sin propietario"
                         placeholder="Asignar a un usuario..."
@@ -260,8 +260,8 @@ export const CompanyFormSidebar: React.FC<CompanyFormSidebarProps> = ({
                           onClick={() => set({ lifecycleStageId: s.id })}
                           className={`flex items-center gap-2 p-3 rounded-xl border text-left transition-all ${
                             formData.lifecycleStageId === s.id
-                              ? "bg-primary/10 border-primary text-white shadow-lg shadow-primary/10"
-                              : "bg-slate-950/30 border-white/5 text-slate-400 hover:border-white/20"
+                              ? 'bg-primary/10 border-primary text-white shadow-lg shadow-primary/10'
+                              : 'bg-slate-950/30 border-white/5 text-slate-400 hover:border-white/20'
                           }`}
                         >
                           <span className="text-lg">{s.icon}</span>
@@ -295,8 +295,8 @@ export const CompanyFormSidebar: React.FC<CompanyFormSidebarProps> = ({
                           }}
                           className={`flex items-center gap-1.5 px-3 py-1.5 rounded-full border transition-all ${
                             isSelected
-                              ? "text-white border-transparent"
-                              : "bg-slate-950/30 border-white/5 text-slate-400 hover:border-white/10"
+                              ? 'text-white border-transparent'
+                              : 'bg-slate-950/30 border-white/5 text-slate-400 hover:border-white/10'
                           }`}
                           style={
                             isSelected ? { backgroundColor: tag.color } : {}
@@ -351,7 +351,7 @@ export const CompanyFormSidebar: React.FC<CompanyFormSidebarProps> = ({
               ) : (
                 <Save size={18} />
               )}
-              {company ? "Actualizar empresa" : "Guardar empresa"}
+              {company ? 'Actualizar empresa' : 'Guardar empresa'}
             </button>
           </div>
         </div>

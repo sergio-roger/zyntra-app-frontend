@@ -1,7 +1,7 @@
-import { Input } from "@core/ui/Input";
-import { Textarea } from "@core/ui/Textarea";
-import { useCreateTag, useUpdateTag } from "@crm/hooks/useTags";
-import { Tag } from "@crm/types/tag";
+import { Input } from '@core/ui/Input';
+import { Textarea } from '@core/ui/Textarea';
+import { useCreateTag, useUpdateTag } from '@crm/hooks/useTags';
+import { Tag } from '@crm/types/tag';
 import {
   AlignLeft,
   Check,
@@ -10,8 +10,8 @@ import {
   Tag as TagIcon,
   Type,
   X,
-} from "lucide-react";
-import React, { useEffect, useState } from "react";
+} from 'lucide-react';
+import React, { useEffect, useState } from 'react';
 
 interface TagFormSidebarProps {
   open: boolean;
@@ -27,9 +27,9 @@ export const TagFormSidebar: React.FC<TagFormSidebarProps> = ({
   onClose,
 }) => {
   const [formData, setFormData] = useState({
-    name: "",
-    color: "#6366f1",
-    description: "",
+    name: '',
+    color: '#6366f1',
+    description: '',
   });
 
   const createMutation = useCreateTag();
@@ -41,13 +41,13 @@ export const TagFormSidebar: React.FC<TagFormSidebarProps> = ({
       setFormData({
         name: tag.name,
         color: tag.color,
-        description: tag.description || "",
+        description: tag.description || '',
       });
     } else {
       setFormData({
-        name: "",
-        color: "#6366f1",
-        description: "",
+        name: '',
+        color: '#6366f1',
+        description: '',
       });
     }
   }, [tag, open]);
@@ -59,7 +59,7 @@ export const TagFormSidebar: React.FC<TagFormSidebarProps> = ({
     } else {
       await createMutation.mutateAsync({
         ...formData,
-        entity_type: defaultEntityType || "contact",
+        entity_type: defaultEntityType || 'contact',
       });
     }
     onClose();
@@ -69,13 +69,13 @@ export const TagFormSidebar: React.FC<TagFormSidebarProps> = ({
     <>
       {/* Overlay */}
       <div
-        className={`fixed inset-0 bg-black/60 !mt-0 backdrop-blur-sm z-[60] transition-opacity duration-300 ${open ? "opacity-100" : "opacity-0 pointer-events-none"}`}
+        className={`fixed inset-0 bg-black/60 !mt-0 backdrop-blur-sm z-[60] transition-opacity duration-300 ${open ? 'opacity-100' : 'opacity-0 pointer-events-none'}`}
         onClick={onClose}
       />
 
       {/* Sidebar */}
       <div
-        className={`fixed inset-y-0 right-0 w-full !mt-0 max-w-md bg-slate-900 border-l border-white/10 z-[70] shadow-2xl transform transition-transform duration-300 ease-out ${open ? "translate-x-0" : "translate-x-full"}`}
+        className={`fixed inset-y-0 right-0 w-full !mt-0 max-w-md bg-slate-900 border-l border-white/10 z-[70] shadow-2xl transform transition-transform duration-300 ease-out ${open ? 'translate-x-0' : 'translate-x-full'}`}
       >
         <div className="flex flex-col h-full">
           {/* Header */}
@@ -83,12 +83,12 @@ export const TagFormSidebar: React.FC<TagFormSidebarProps> = ({
             <div>
               <h3 className="text-xl font-bold text-white flex items-center gap-2">
                 <TagIcon size={20} className="text-indigo-400" />
-                {tag ? "Editar Etiqueta" : "Nueva Etiqueta"}
+                {tag ? 'Editar Etiqueta' : 'Nueva Etiqueta'}
               </h3>
               <p className="text-sm text-slate-400 mt-1">
                 {tag
-                  ? "Modifica los detalles de la etiqueta"
-                  : "Crea una nueva etiqueta para segmentar"}
+                  ? 'Modifica los detalles de la etiqueta'
+                  : 'Crea una nueva etiqueta para segmentar'}
               </p>
             </div>
             <button
@@ -193,7 +193,7 @@ export const TagFormSidebar: React.FC<TagFormSidebarProps> = ({
                 ) : (
                   <Check size={18} />
                 )}
-                {tag ? "Guardar Cambios" : "Crear Etiqueta"}
+                {tag ? 'Guardar Cambios' : 'Crear Etiqueta'}
               </button>
             </div>
           </div>

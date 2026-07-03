@@ -1,5 +1,5 @@
-import React, { useState } from "react";
-import { useNavigate, useSearchParams } from "react-router-dom";
+import React, { useState } from 'react';
+import { useNavigate, useSearchParams } from 'react-router-dom';
 import {
   Globe,
   Check,
@@ -8,22 +8,22 @@ import {
   ArrowRight,
   Loader2,
   AlertCircle,
-} from "lucide-react";
-import { useCreateChannel } from "../hooks/useChannels";
+} from 'lucide-react';
+import { useCreateChannel } from '../hooks/useChannels';
 
-const STEPS = ["Información", "Configuración", "Listo"] as const;
+const STEPS = ['Información', 'Configuración', 'Listo'] as const;
 type Step = 0 | 1 | 2;
 
 interface WebChatConfig {
-  position: "bottom-right" | "bottom-left";
+  position: 'bottom-right' | 'bottom-left';
   primaryColor: string;
   allowedDomains: string;
 }
 
 const DEFAULT_CONFIG: WebChatConfig = {
-  position: "bottom-right",
-  primaryColor: "#6366f1",
-  allowedDomains: "",
+  position: 'bottom-right',
+  primaryColor: '#6366f1',
+  allowedDomains: '',
 };
 
 function StepIndicator({ current }: { current: Step }) {
@@ -32,7 +32,7 @@ function StepIndicator({ current }: { current: Step }) {
       {STEPS.map((label, i) => (
         <li
           key={label}
-          className={`step ${i <= current ? "step-primary" : ""}`}
+          className={`step ${i <= current ? 'step-primary' : ''}`}
         >
           {label}
         </li>
@@ -55,7 +55,7 @@ function CopyButton({ text }: { text: string }) {
       ) : (
         <Copy size={14} />
       )}
-      {copied ? "Copiado" : "Copiar"}
+      {copied ? 'Copiado' : 'Copiar'}
     </button>
   );
 }
@@ -63,17 +63,17 @@ function CopyButton({ text }: { text: string }) {
 export const ChannelWizardPage: React.FC = () => {
   const navigate = useNavigate();
   const [params] = useSearchParams();
-  const typeId = params.get("type") ?? "";
-  const typeKey = params.get("key") ?? "web_chat";
-  const typeLabel = params.get("label")
-    ? decodeURIComponent(params.get("label")!)
-    : "Canal";
+  const typeId = params.get('type') ?? '';
+  const typeKey = params.get('key') ?? 'web_chat';
+  const typeLabel = params.get('label')
+    ? decodeURIComponent(params.get('label')!)
+    : 'Canal';
 
   const [step, setStep] = useState<Step>(0);
-  const [name, setName] = useState("");
+  const [name, setName] = useState('');
   const [webConfig, setWebConfig] = useState<WebChatConfig>(DEFAULT_CONFIG);
-  const [embedCode, setEmbedCode] = useState("");
-  const [formError, setFormError] = useState("");
+  const [embedCode, setEmbedCode] = useState('');
+  const [formError, setFormError] = useState('');
 
   const { mutateAsync: createChannel, isPending } = useCreateChannel();
 
@@ -83,19 +83,19 @@ export const ChannelWizardPage: React.FC = () => {
       return;
     }
     if (step === 1) {
-      setFormError("");
+      setFormError('');
       if (!name.trim()) {
-        setFormError("El nombre del canal es requerido.");
+        setFormError('El nombre del canal es requerido.');
         return;
       }
       try {
         const config: Record<string, unknown> = {};
-        if (typeKey === "web_chat") {
+        if (typeKey === 'web_chat') {
           config.position = webConfig.position;
           config.primaryColor = webConfig.primaryColor;
           if (webConfig.allowedDomains.trim()) {
             config.allowedDomains = webConfig.allowedDomains
-              .split(",")
+              .split(',')
               .map((d) => d.trim())
               .filter(Boolean);
           }
@@ -105,12 +105,12 @@ export const ChannelWizardPage: React.FC = () => {
           name: name.trim(),
           config,
         });
-        setEmbedCode(channel.embedCode ?? "");
+        setEmbedCode(channel.embedCode ?? '');
         setStep(2);
       } catch (err: unknown) {
         const msg = (err as { response?: { data?: { message?: string } } })
           ?.response?.data?.message;
-        setFormError(msg ?? "Error al crear el canal. Inténtalo de nuevo.");
+        setFormError(msg ?? 'Error al crear el canal. Inténtalo de nuevo.');
       }
     }
   };
@@ -121,7 +121,7 @@ export const ChannelWizardPage: React.FC = () => {
         className="btn btn-ghost btn-sm gap-1 mb-6"
         onClick={() =>
           step === 0
-            ? navigate("/settings/channels")
+            ? navigate('/settings/channels')
             : setStep((s) => (s - 1) as Step)
         }
       >
@@ -141,14 +141,14 @@ export const ChannelWizardPage: React.FC = () => {
               <div>
                 <h2 className="font-semibold text-lg">{typeLabel}</h2>
                 <p className="text-sm text-base-content/60">
-                  {typeKey === "web_chat"
-                    ? "Chat en tiempo real embebido en tu sitio web."
-                    : "Canal de mensajería."}
+                  {typeKey === 'web_chat'
+                    ? 'Chat en tiempo real embebido en tu sitio web.'
+                    : 'Canal de mensajería.'}
                 </p>
               </div>
             </div>
 
-            {typeKey === "web_chat" && (
+            {typeKey === 'web_chat' && (
               <div className="bg-base-200 rounded-lg p-4 text-sm space-y-1">
                 <p className="font-medium mb-2">¿Qué incluye?</p>
                 <p>• Widget de chat para tu sitio web</p>
@@ -192,7 +192,7 @@ export const ChannelWizardPage: React.FC = () => {
               />
             </div>
 
-            {typeKey === "web_chat" && (
+            {typeKey === 'web_chat' && (
               <>
                 <div className="form-control gap-1">
                   <label className="label">
@@ -206,7 +206,7 @@ export const ChannelWizardPage: React.FC = () => {
                     onChange={(e) =>
                       setWebConfig((c) => ({
                         ...c,
-                        position: e.target.value as WebChatConfig["position"],
+                        position: e.target.value as WebChatConfig['position'],
                       }))
                     }
                   >
@@ -287,7 +287,7 @@ export const ChannelWizardPage: React.FC = () => {
                 {isPending ? (
                   <Loader2 size={14} className="animate-spin" />
                 ) : null}
-                {isPending ? "Creando..." : "Crear canal"}
+                {isPending ? 'Creando...' : 'Crear canal'}
                 {!isPending && <ArrowRight size={14} />}
               </button>
             </div>
@@ -325,20 +325,20 @@ export const ChannelWizardPage: React.FC = () => {
             )}
 
             <div className="bg-base-200 rounded-lg p-3 text-sm text-base-content/70">
-              Pega este código antes del cierre de la etiqueta{" "}
+              Pega este código antes del cierre de la etiqueta{' '}
               <code className="font-mono">&lt;/body&gt;</code> en tu sitio web.
             </div>
 
             <div className="card-actions justify-between">
               <button
                 className="btn btn-ghost btn-sm gap-1"
-                onClick={() => navigate("/settings/channels")}
+                onClick={() => navigate('/settings/channels')}
               >
                 Ver todos los canales
               </button>
               <button
                 className="btn btn-primary gap-1"
-                onClick={() => navigate("/settings/agents")}
+                onClick={() => navigate('/settings/agents')}
               >
                 Asignar agente de IA <ArrowRight size={14} />
               </button>

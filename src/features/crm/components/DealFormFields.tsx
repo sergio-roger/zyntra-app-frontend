@@ -1,16 +1,16 @@
-import React, { useCallback } from "react";
-import { Input } from "@core/ui/Input";
-import { Select } from "@core/ui/Select";
-import { Textarea } from "@core/ui/Textarea";
-import { AsyncSelectMultiple } from "@core/ui/AsyncSelectMultiple";
-import { DealCompanySearch } from "@crm/components/DealCompanySearch";
-import { crmApi } from "@crm/api/crm.api";
-import { CreateDealInput } from "@crm/types/create-deal-input";
-import { Contact } from "@crm/types/contact";
-import { ContactsListResponse } from "@crm/types/contacts-list-response";
-import { Company } from "@crm/types/company";
-import { DealPipeline } from "@crm/types/deal-pipeline";
-import { DealPipelineStage } from "@crm/types/deal-pipeline-stage";
+import React, { useCallback } from 'react';
+import { Input } from '@core/ui/Input';
+import { Select } from '@core/ui/Select';
+import { Textarea } from '@core/ui/Textarea';
+import { AsyncSelectMultiple } from '@core/ui/AsyncSelectMultiple';
+import { DealCompanySearch } from '@crm/components/DealCompanySearch';
+import { crmApi } from '@crm/api/crm.api';
+import { CreateDealInput } from '@crm/types/create-deal-input';
+import { Contact } from '@crm/types/contact';
+import { ContactsListResponse } from '@crm/types/contacts-list-response';
+import { Company } from '@crm/types/company';
+import { DealPipeline } from '@crm/types/deal-pipeline';
+import { DealPipelineStage } from '@crm/types/deal-pipeline-stage';
 import {
   Briefcase,
   Building2,
@@ -20,7 +20,7 @@ import {
   Layers,
   TrendingUp,
   Users,
-} from "lucide-react";
+} from 'lucide-react';
 
 interface DealFormFieldsProps {
   formData: CreateDealInput;
@@ -39,24 +39,24 @@ interface SectionHeaderProps {
   icon: React.ReactNode;
   label: string;
   badge?: string;
-  accent?: "slate" | "indigo" | "emerald";
+  accent?: 'slate' | 'indigo' | 'emerald';
 }
 
 const SectionHeader: React.FC<SectionHeaderProps> = ({
   icon,
   label,
   badge,
-  accent = "slate",
+  accent = 'slate',
 }) => {
   const styles = {
-    slate: "text-slate-300 bg-slate-800 border-white/10",
-    indigo: "text-indigo-300 bg-indigo-500/10 border-indigo-500/20",
-    emerald: "text-emerald-300 bg-emerald-500/10 border-emerald-500/20",
+    slate: 'text-slate-300 bg-slate-800 border-white/10',
+    indigo: 'text-indigo-300 bg-indigo-500/10 border-indigo-500/20',
+    emerald: 'text-emerald-300 bg-emerald-500/10 border-emerald-500/20',
   };
   const badgeStyles = {
-    slate: "text-slate-500 bg-slate-800/80",
-    indigo: "text-indigo-400/70 bg-indigo-500/10",
-    emerald: "text-emerald-400/70 bg-emerald-500/10",
+    slate: 'text-slate-500 bg-slate-800/80',
+    indigo: 'text-indigo-400/70 bg-indigo-500/10',
+    emerald: 'text-emerald-400/70 bg-emerald-500/10',
   };
 
   return (
@@ -189,7 +189,7 @@ export const DealFormFields: React.FC<DealFormFieldsProps> = ({
         label="Fecha de cierre estimada"
         icon={Calendar}
         type="date"
-        value={formData.expectedCloseDate ?? ""}
+        value={formData.expectedCloseDate ?? ''}
         onChange={(e) => onChange({ expectedCloseDate: e.target.value })}
       />
 
@@ -197,7 +197,7 @@ export const DealFormFields: React.FC<DealFormFieldsProps> = ({
         label="Descripción / Notas"
         placeholder="Detalles sobre el alcance, requerimientos, etc."
         rows={3}
-        value={formData.description ?? ""}
+        value={formData.description ?? ''}
         onChange={(e) => onChange({ description: e.target.value })}
       />
 
@@ -233,7 +233,7 @@ export const DealFormFields: React.FC<DealFormFieldsProps> = ({
       />
 
       <DealCompanySearch
-        value={formData.companyId ?? ""}
+        value={formData.companyId ?? ''}
         selectedCompany={selectedCompany}
         onChange={onCompanyChange}
       />

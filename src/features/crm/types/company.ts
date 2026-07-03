@@ -1,8 +1,8 @@
-import { PaginatedResponse } from "@core/types/api";
-import { CrmMember } from "@crm/types/crm-member";
-import { Industry } from "@crm/types/industry";
-import { LifecycleStage } from "@crm/types/lifecycle-stage";
-import { Tag } from "@crm/types/tag";
+import { PaginatedResponse } from '@core/types/api';
+import { CrmMember } from '@crm/types/crm-member';
+import { Industry } from '@crm/types/industry';
+import { LifecycleStage } from '@crm/types/lifecycle-stage';
+import { Tag } from '@crm/types/tag';
 
 export interface Company {
   businessId: string;
@@ -73,7 +73,7 @@ export interface RawCompany {
   website?: string | null;
 }
 
-export type CreateCompanyInput = Partial<Omit<CompanyFormData, "name">> & {
+export type CreateCompanyInput = Partial<Omit<CompanyFormData, 'name'>> & {
   name: string;
 };
 

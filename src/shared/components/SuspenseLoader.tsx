@@ -1,4 +1,4 @@
-import { Suspense, ReactNode } from "react";
+import { Suspense, ReactNode } from 'react';
 
 interface SuspenseLoaderProps {
   children: ReactNode;

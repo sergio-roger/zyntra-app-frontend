@@ -1,16 +1,16 @@
-import { segmentsApi } from "@crm/api/segments.api";
-import { CreateSegmentInput } from "@crm/types/create-segment-input";
-import { UpdateSegmentInput } from "@crm/types/update-segment-input";
-import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+import { segmentsApi } from '@crm/api/segments.api';
+import { CreateSegmentInput } from '@crm/types/create-segment-input';
+import { UpdateSegmentInput } from '@crm/types/update-segment-input';
+import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 
 export const segmentsKeys = {
-  all: ["segments"] as const,
-  lists: () => ["segments", "list"] as const,
-  detail: (id: string) => ["segments", "detail", id] as const,
+  all: ['segments'] as const,
+  lists: () => ['segments', 'list'] as const,
+  detail: (id: string) => ['segments', 'detail', id] as const,
   contacts: (id: string, query: { page?: number; limit?: number }) =>
-    ["segments", "contacts", id, query] as const,
+    ['segments', 'contacts', id, query] as const,
   preview: (conditions: any[], query: { page?: number; limit?: number }) =>
-    ["segments", "preview", conditions, query] as const,
+    ['segments', 'preview', conditions, query] as const,
 };
 
 export const useSegmentsList = () =>

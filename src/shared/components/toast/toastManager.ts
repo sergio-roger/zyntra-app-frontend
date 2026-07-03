@@ -1,4 +1,4 @@
-import { Toast } from "@base-ui/react/toast";
+import { Toast } from '@base-ui/react/toast';
 
 /**
  * Global toast manager — can be used outside React components

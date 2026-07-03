@@ -1,9 +1,9 @@
-import { Input } from "@core/ui/Input";
-import { Textarea } from "@core/ui/Textarea";
-import { useContactsList } from "@crm/hooks/useContacts";
-import { useCreateTask, useUpdateTask } from "@crm/hooks/useCrmTasks";
-import { TaskPriority } from "@crm/types/crm";
-import { CrmTask } from "@crm/types/crm-task";
+import { Input } from '@core/ui/Input';
+import { Textarea } from '@core/ui/Textarea';
+import { useContactsList } from '@crm/hooks/useContacts';
+import { useCreateTask, useUpdateTask } from '@crm/hooks/useCrmTasks';
+import { TaskPriority } from '@crm/types/crm';
+import { CrmTask } from '@crm/types/crm-task';
 import {
   AlertCircle,
   AlignLeft,
@@ -14,8 +14,8 @@ import {
   Type,
   User,
   X,
-} from "lucide-react";
-import React, { useEffect, useState } from "react";
+} from 'lucide-react';
+import React, { useEffect, useState } from 'react';
 
 interface TaskFormSidebarProps {
   open: boolean;
@@ -33,12 +33,12 @@ export const TaskFormSidebar: React.FC<TaskFormSidebarProps> = ({
   onClose,
 }) => {
   const [formData, setFormData] = useState({
-    title: "",
-    description: "",
-    dueDate: "",
-    priority: "medium" as TaskPriority,
-    contactId: "",
-    dealId: "",
+    title: '',
+    description: '',
+    dueDate: '',
+    priority: 'medium' as TaskPriority,
+    contactId: '',
+    dealId: '',
   });
 
   const { data: contactsData } = useContactsList({ limit: 100 });
@@ -54,20 +54,20 @@ export const TaskFormSidebar: React.FC<TaskFormSidebarProps> = ({
     if (task) {
       setFormData({
         title: task.title,
-        description: task.description || "",
+        description: task.description || '',
         dueDate: new Date(task.dueDate).toISOString().slice(0, 16), // datetime-local format
         priority: task.priority,
-        contactId: task.contactId || "",
-        dealId: task.dealId || "",
+        contactId: task.contactId || '',
+        dealId: task.dealId || '',
       });
     } else {
       setFormData({
-        title: "",
-        description: "",
+        title: '',
+        description: '',
         dueDate: new Date(Date.now() + 86400000).toISOString().slice(0, 16), // Tomorrow
-        priority: "medium",
-        contactId: contactId || "",
-        dealId: dealId || "",
+        priority: 'medium',
+        contactId: contactId || '',
+        dealId: dealId || '',
       });
     }
   }, [task, contactId, dealId, open]);
@@ -86,13 +86,13 @@ export const TaskFormSidebar: React.FC<TaskFormSidebarProps> = ({
     <>
       {/* Overlay */}
       <div
-        className={`fixed inset-0 bg-black/60 !mt-0 backdrop-blur-sm z-[60] transition-opacity duration-300 ${open ? "opacity-100" : "opacity-0 pointer-events-none"}`}
+        className={`fixed inset-0 bg-black/60 !mt-0 backdrop-blur-sm z-[60] transition-opacity duration-300 ${open ? 'opacity-100' : 'opacity-0 pointer-events-none'}`}
         onClick={onClose}
       />
 
       {/* Sidebar */}
       <div
-        className={`fixed inset-y-0 right-0 w-full !mt-0 max-w-md bg-slate-900 border-l border-white/10 z-[70] shadow-2xl transform transition-transform duration-300 ease-out ${open ? "translate-x-0" : "translate-x-full"}`}
+        className={`fixed inset-y-0 right-0 w-full !mt-0 max-w-md bg-slate-900 border-l border-white/10 z-[70] shadow-2xl transform transition-transform duration-300 ease-out ${open ? 'translate-x-0' : 'translate-x-full'}`}
       >
         <div className="flex flex-col h-full">
           {/* Header */}
@@ -103,12 +103,12 @@ export const TaskFormSidebar: React.FC<TaskFormSidebarProps> = ({
                   size={20}
                   className="text-indigo-400 border-2 border-indigo-400 rounded-md p-0.5"
                 />
-                {task ? "Editar Tarea" : "Nueva Tarea"}
+                {task ? 'Editar Tarea' : 'Nueva Tarea'}
               </h3>
               <p className="text-sm text-slate-400 mt-1">
                 {task
-                  ? "Modifica los detalles del recordatorio"
-                  : "Asegura el seguimiento de tu contacto"}
+                  ? 'Modifica los detalles del recordatorio'
+                  : 'Asegura el seguimiento de tu contacto'}
               </p>
             </div>
             <button
@@ -235,7 +235,7 @@ export const TaskFormSidebar: React.FC<TaskFormSidebarProps> = ({
                 ) : (
                   <Check size={18} />
                 )}
-                {task ? "Guardar Cambios" : "Crear Tarea"}
+                {task ? 'Guardar Cambios' : 'Crear Tarea'}
               </button>
             </div>
           </div>

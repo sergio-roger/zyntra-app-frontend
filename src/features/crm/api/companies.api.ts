@@ -1,4 +1,4 @@
-import { ExportColumn } from "@core/types/api";
+import { ExportColumn } from '@core/types/api';
 import {
   CompaniesListResponse,
   Company,
@@ -7,13 +7,13 @@ import {
   RawCompany,
   RawCompanyListResponse,
   UpdateCompanyInput,
-} from "@crm/types/company";
+} from '@crm/types/company';
 import {
   buildQueryString,
   mapCompany,
   mapCompanyList,
-} from "@crm/utils/company-api.utils";
-import api from "@shared/api/axios";
+} from '@crm/utils/company-api.utils';
+import api from '@shared/api/axios';
 
 export const companiesApi = {
   list: (
@@ -32,7 +32,7 @@ export const companiesApi = {
 
   create: (input: CreateCompanyInput): Promise<{ data: Company }> =>
     api
-      .post<RawCompany, RawCompany>("/crm/companies", input)
+      .post<RawCompany, RawCompany>('/crm/companies', input)
       .then((res) => ({ data: mapCompany(res) })),
 
   update: (id: string, input: UpdateCompanyInput): Promise<{ data: Company }> =>
@@ -47,9 +47,9 @@ export const companiesApi = {
     columns: ExportColumn[];
   }): Promise<Blob> =>
     api.post<Blob, Blob>(
-      "/crm/companies/export",
+      '/crm/companies/export',
       { ...params.filters, columns: params.columns },
-      { responseType: "blob" },
+      { responseType: 'blob' },
     ),
 
   import: (
@@ -62,11 +62,11 @@ export const companiesApi = {
     }>,
   ): Promise<{ data: { count: number } }> =>
     api
-      .post<{ count: number }, { count: number }>("/crm/companies/import", rows)
+      .post<{ count: number }, { count: number }>('/crm/companies/import', rows)
       .then((res) => ({ data: res })),
 
   listIndustries: (): Promise<{ data: Array<{ id: string; name: string }> }> =>
-    api.get<unknown>("/crm/industries").then((res: any) => {
+    api.get<unknown>('/crm/industries').then((res: any) => {
       const list = Array.isArray(res)
         ? res
         : Array.isArray(res?.data)

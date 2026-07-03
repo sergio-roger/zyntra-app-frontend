@@ -1,10 +1,10 @@
 export type CustomFieldType =
-  "text" | "number" | "date" | "select" | "checkbox" | "url";
+  'text' | 'number' | 'date' | 'select' | 'checkbox' | 'url';
 
 export interface CustomField {
   businessId: string;
   createdAt: string;
-  entity_type: "contact" | "company";
+  entity_type: 'contact' | 'company';
   id: string;
   is_active: boolean;
   label: string;
