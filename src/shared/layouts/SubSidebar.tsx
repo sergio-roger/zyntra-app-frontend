@@ -1,155 +1,15 @@
-import React, { useState, useEffect, useMemo } from 'react';
-import { NavLink, useLocation } from 'react-router-dom';
-import { usePlanModule } from '@features/auth/hooks/usePlanModule';
-import { X, Lock, ChevronDown } from 'lucide-react';
-import { getMenuKeyFromPath } from './nav.config';
-import { NavModule, SubNavItem, SubNavGroup, SubNavEntry } from '@shared/types/nav';
-import { useAuthStore } from '@features/auth/store/authStore';
-
-// ─── Type guard ────────────────────────────────────────────────────────────────
+import { useAuthStore } from '@/features/auth/store/authStore';
+import { getMenuKeyFromPath } from '@shared/layouts/nav.config';
+import { SubNavGroupItem } from '@shared/layouts/SubNavGroupItem';
+import { SubNavLink } from '@shared/layouts/SubNavLink';
+import { useUiStore } from '@shared/store/uiStore';
+import { NavModule, SubNavEntry, SubNavGroup, SubNavItem } from '@shared/types/nav';
+import { X } from 'lucide-react';
+import React, { useEffect, useMemo } from 'react';
+import { useLocation } from 'react-router-dom';
 
 const isGroup = (entry: SubNavEntry): entry is SubNavGroup =>
   (entry as SubNavGroup).type === 'group';
-
-// ─── Leaf nav link ─────────────────────────────────────────────────────────────
-
-interface SubNavLinkProps {
-  item: SubNavItem;
-  onClose: () => void;
-}
-
-const SubNavLink: React.FC<SubNavLinkProps> = ({ item, onClose }) => {
-  const { to, label, icon: Icon, description } = item;
-  const itemKey = getMenuKeyFromPath(to);
-  const { isLocked, isReadOnly } = usePlanModule(itemKey);
-
-  return (
-    <li>
-      <NavLink
-        to={to}
-        end
-        onClick={onClose}
-        className={({ isActive }) =>
-          `group relative flex items-center gap-4 rounded-xl px-4 py-3 transition-all duration-300 ${
-            isActive
-              ? 'bg-gradient-to-r from-primary/10 to-transparent'
-              : 'hover:bg-gradient-to-r hover:from-base-content/5 hover:to-transparent'
-          }`
-        }
-      >
-        {({ isActive }) => (
-          <>
-            <Icon
-              size={20}
-              className={`shrink-0 transition-colors duration-300 ${
-                isActive
-                  ? 'text-primary'
-                  : 'text-base-content/40 group-hover:text-base-content/80'
-              }`}
-            />
-            <div className="flex flex-col gap-0.5">
-              <span
-                className={`text-[14px] font-semibold transition-colors duration-300 flex items-center gap-1.5 ${
-                  isActive
-                    ? 'text-primary'
-                    : 'text-base-content/80 group-hover:text-base-content/95'
-                }`}
-              >
-                {label}
-                {isLocked && (
-                  <Lock size={12} className="text-warning shrink-0" />
-                )}
-                {isReadOnly && (
-                  <span className="badge badge-warning badge-outline text-[9px] h-4 font-extrabold uppercase shrink-0">
-                    Solo Lectura
-                  </span>
-                )}
-              </span>
-              {description && (
-                <p
-                  className={`text-[11px] leading-snug transition-colors duration-300 ${
-                    isActive
-                      ? 'text-primary/60'
-                      : 'text-base-content/40 group-hover:text-base-content/60'
-                  }`}
-                >
-                  {description}
-                </p>
-              )}
-            </div>
-          </>
-        )}
-      </NavLink>
-    </li>
-  );
-};
-
-// ─── Group accordion ───────────────────────────────────────────────────────────
-
-interface SubNavGroupItemProps {
-  group: SubNavGroup;
-  isOpen: boolean;
-  onToggle: () => void;
-  allowedChildrenKeys: Set<string>;
-  onClose: () => void;
-}
-
-const SubNavGroupItem: React.FC<SubNavGroupItemProps> = ({
-  group,
-  isOpen,
-  onToggle,
-  allowedChildrenKeys,
-  onClose,
-}) => {
-  const { label, icon: Icon, description, children } = group;
-
-  const visibleChildren = children.filter((child) =>
-    allowedChildrenKeys.has(getMenuKeyFromPath(child.to)),
-  );
-
-  if (visibleChildren.length === 0) return null;
-
-  return (
-    <li>
-      <button
-        onClick={onToggle}
-        className="w-full flex items-center gap-3 px-4 py-2.5 rounded-xl transition-all duration-200 hover:bg-base-content/5 text-left"
-      >
-        <Icon size={15} className="shrink-0 text-base-content/35 mt-0.5" />
-        <div className="flex-1 flex flex-col gap-0.5">
-          <span className="text-[11px] font-bold uppercase tracking-wider text-base-content/45">
-            {label}
-          </span>
-          {description && (
-            <p className="text-[10px] leading-snug text-base-content/30">
-              {description}
-            </p>
-          )}
-        </div>
-        <ChevronDown
-          size={13}
-          className={`shrink-0 text-base-content/30 transition-transform duration-200 mt-0.5 ${
-            isOpen ? 'rotate-180' : ''
-          }`}
-        />
-      </button>
-
-      <div
-        className={`overflow-hidden transition-all duration-200 ${
-          isOpen ? 'max-h-96 opacity-100' : 'max-h-0 opacity-0'
-        }`}
-      >
-        <ul className="flex flex-col gap-0.5 mt-1 ml-5 pl-3 border-l border-base-content/10">
-          {visibleChildren.map((child) => (
-            <SubNavLink key={child.to} item={child} onClose={onClose} />
-          ))}
-        </ul>
-      </div>
-    </li>
-  );
-};
-
-// ─── SubSidebar ────────────────────────────────────────────────────────────────
 
 interface SubSidebarProps {
   module: NavModule;
@@ -199,28 +59,15 @@ export const SubSidebar: React.FC<SubSidebarProps> = ({
     return null;
   }, [pathname, module.children]);
 
-  const [openGroups, setOpenGroups] = useState<Set<string>>(() =>
-    activeGroupKey ? new Set([activeGroupKey]) : new Set(),
-  );
+  const { openGroups, toggleGroup, setOpenGroups } = useUiStore();
 
-  // Auto-open group when navigating to a child route
   useEffect(() => {
     if (activeGroupKey) {
-      setOpenGroups((prev) => {
-        if (prev.has(activeGroupKey)) return prev;
-        return new Set([...prev, activeGroupKey]);
-      });
+      if (!openGroups.includes(activeGroupKey)) {
+        setOpenGroups([...openGroups, activeGroupKey]);
+      }
     }
-  }, [activeGroupKey]);
-
-  const toggleGroup = (key: string) => {
-    setOpenGroups((prev) => {
-      const next = new Set(prev);
-      if (next.has(key)) next.delete(key);
-      else next.add(key);
-      return next;
-    });
-  };
+  }, [activeGroupKey, openGroups, setOpenGroups]);
 
   const level1Keys = allowedChildrenMap.get(dbModuleKey) ?? new Set<string>();
 
@@ -273,7 +120,7 @@ export const SubSidebar: React.FC<SubSidebarProps> = ({
                       <SubNavGroupItem
                         key={entry.key}
                         group={entry}
-                        isOpen={openGroups.has(entry.key)}
+                        isOpen={openGroups.includes(entry.key)}
                         onToggle={() => toggleGroup(entry.key)}
                         allowedChildrenKeys={
                           allowedChildrenMap.get(entry.key) ?? new Set()
