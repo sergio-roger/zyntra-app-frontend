@@ -5,6 +5,7 @@ import {
   useUsersList,
 } from '@features/settings/hooks/useUsersTeams';
 import { CrmUser } from '@features/settings/types/settings';
+import { Avatar } from '@shared/components/Avatar';
 import { EmptyState } from '@shared/components/EmptyState';
 import { toastManager } from '@shared/components/toast/toastManager';
 import {
@@ -230,21 +231,14 @@ export const UsersPage: React.FC = () => {
                     >
                       <td className="px-6 py-4">
                         <div className="flex items-center gap-3">
-                          {avatarUrl ? (
-                            <img
-                              src={avatarUrl}
-                              alt={fullName}
-                              className="w-10 h-10 rounded-2xl object-cover ring-1 ring-white/10 shadow-lg"
-                              onError={(e) => {
-                                (e.target as HTMLElement).style.display =
-                                  'none';
-                              }}
-                            />
-                          ) : (
-                            <div className="w-10 h-10 rounded-2xl bg-gradient-to-br from-indigo-500 to-purple-600 flex items-center justify-center text-sm font-bold text-white shadow-lg shrink-0">
-                              {fullName.substring(0, 2).toUpperCase()}
-                            </div>
-                          )}
+                          <Avatar
+                            name={fullName}
+                            email={user.email}
+                            avatarUrl={avatarUrl}
+                            size={40}
+                            rounded="2xl"
+                            className="ring-1 ring-white/10"
+                          />
                           <div>
                             <p className="text-sm font-bold text-white">
                               {fullName}

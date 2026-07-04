@@ -1,5 +1,6 @@
 import { useAuth } from '@features/auth/hooks/useAuth';
 import { useAuthStore } from '@features/auth/store/authStore';
+import { Avatar } from '@shared/components/Avatar';
 import { useUiStore } from '../../../shared/store/uiStore';
 import {
   Code2,
@@ -17,7 +18,6 @@ export const UserMenu: React.FC = () => {
   const { isUserMenuOpen, setUserMenuOpen, toggleUserMenu } = useUiStore();
   const { logout } = useAuth();
   const navigate = useNavigate();
-  const initial = user?.name?.charAt(0).toUpperCase() ?? '?';
   const containerRef = useRef<HTMLDivElement>(null);
 
   const handleNavigate = (path: string) => {
@@ -63,9 +63,15 @@ export const UserMenu: React.FC = () => {
             e.stopPropagation();
             toggleUserMenu();
           }}
-          className="flex h-9 w-9 cursor-pointer items-center justify-center rounded-full bg-gradient-to-br from-primary to-secondary text-primary-content ring-2 ring-primary/30 ring-offset-2 ring-offset-base-300/80 transition-transform hover:scale-110"
+          className="block cursor-pointer rounded-full transition-transform hover:scale-110"
         >
-          <span className="text-xs font-bold">{initial}</span>
+          <Avatar
+            name={user?.name}
+            email={user?.email}
+            avatarUrl={user?.avatarUrl}
+            size={36}
+            className="ring-2 ring-primary/30 ring-offset-2 ring-offset-base-300/80"
+          />
         </label>
 
         {isUserMenuOpen && (
