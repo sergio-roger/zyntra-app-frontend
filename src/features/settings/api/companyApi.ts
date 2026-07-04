@@ -13,6 +13,11 @@ export const companyApi = {
     return api.post<unknown, { data: { logoUrl: string } }>(
       '/settings/company/logo',
       formData,
+      {
+        headers: {
+          'Content-Type': 'multipart/form-data',
+        },
+      },
     );
   },
 

@@ -39,6 +39,11 @@ export const authApi = {
     return api.post<unknown, { data: { avatarUrl: string } }>(
       '/auth/me/avatar',
       formData,
+      {
+        headers: {
+          'Content-Type': 'multipart/form-data',
+        },
+      },
     );
   },
 
