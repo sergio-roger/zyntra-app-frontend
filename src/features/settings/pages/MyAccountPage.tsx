@@ -1,5 +1,6 @@
 import { Input } from '@core/ui/Input';
 import { Textarea } from '@core/ui/Textarea';
+import { Accordion } from '@core/ui/Accordion';
 import { Tabs } from '@core/ui/Tabs';
 import { SubmitButton } from '@features/auth/components/SubmitButton';
 import { useAuthStore } from '@features/auth/store/authStore';
@@ -89,7 +90,6 @@ const ROLE_LABELS: Record<string, string> = {
   agent: 'Agente',
   superAdmin: 'Super Admin',
 };
-
 
 
 type AccountTab = 'perfil' | 'seguridad';
@@ -352,66 +352,68 @@ export const MyAccountPage: React.FC = () => {
                     {...registerProfile('bio')}
                   />
 
-                  {(user?.teams?.length ?? 0) > 0 && (
-                    <section className="space-y-2 pt-2">
-                      <h4 className="flex items-center gap-1.5 text-[10px] font-black uppercase tracking-widest text-slate-500">
-                        <Users size={12} />
-                        Equipos
-                      </h4>
-                      <div className="flex flex-wrap gap-1.5 px-1">
-                        {user!.teams!.map((team) => (
-                          <div
-                            key={team.id}
-                            className="flex items-center gap-1.5 px-2 py-1 rounded-lg bg-slate-900/40 border border-white/5"
-                          >
+                  <Accordion title="Información adicional">
+                    {(user?.teams?.length ?? 0) > 0 && (
+                      <section className="space-y-2">
+                        <h4 className="flex items-center gap-1.5 text-[10px] font-black uppercase tracking-widest text-slate-500">
+                          <Users size={12} />
+                          Equipos
+                        </h4>
+                        <div className="flex flex-wrap gap-1.5 px-1">
+                          {user!.teams!.map((team) => (
                             <div
-                              className="w-2 h-2 rounded-full shrink-0"
-                              style={{ backgroundColor: team.color }}
-                            />
-                            <span className="text-[10px] font-bold text-slate-300 whitespace-nowrap">
-                              {team.name}
-                            </span>
-                          </div>
-                        ))}
-                      </div>
-                    </section>
-                  )}
-
-                  <section className="space-y-2 pt-2">
-                    <h4 className="text-[10px] font-black uppercase tracking-widest text-slate-500">
-                      Antigüedad
-                    </h4>
-                    <ProfileInfoRow
-                      icon={Calendar}
-                      value={
-                        user?.createdAt
-                          ? `Miembro desde ${new Date(
-                              user.createdAt,
-                            ).toLocaleDateString('es-ES', {
-                              day: '2-digit',
-                              month: 'long',
-                              year: 'numeric',
-                            })}`
-                          : '—'
-                      }
-                    />
-                    {user?.isAccountActivated && user?.activatedAt && (
-                      <ProfileInfoRow
-                        icon={CheckCircle2}
-                        value={`Cuenta activada el ${new Date(
-                          user.activatedAt,
-                        ).toLocaleDateString('es-ES', {
-                          day: '2-digit',
-                          month: 'long',
-                          year: 'numeric',
-                        })}`}
-                      />
+                              key={team.id}
+                              className="flex items-center gap-1.5 px-2 py-1 rounded-lg bg-slate-900/40 border border-white/5"
+                            >
+                              <div
+                                className="w-2 h-2 rounded-full shrink-0"
+                                style={{ backgroundColor: team.color }}
+                              />
+                              <span className="text-[10px] font-bold text-slate-300 whitespace-nowrap">
+                                {team.name}
+                              </span>
+                            </div>
+                          ))}
+                        </div>
+                      </section>
                     )}
-                  </section>
+
+                    <section className="space-y-2">
+                      <h4 className="text-[10px] font-black uppercase tracking-widest text-slate-500">
+                        Antigüedad
+                      </h4>
+                      <ProfileInfoRow
+                        icon={Calendar}
+                        value={
+                          user?.createdAt
+                            ? `Miembro desde ${new Date(
+                                user.createdAt,
+                              ).toLocaleDateString('es-ES', {
+                                day: '2-digit',
+                                month: 'long',
+                                year: 'numeric',
+                              })}`
+                            : '—'
+                        }
+                      />
+                      {user?.isAccountActivated && user?.activatedAt && (
+                        <ProfileInfoRow
+                          icon={CheckCircle2}
+                          value={`Cuenta activada el ${new Date(
+                            user.activatedAt,
+                          ).toLocaleDateString('es-ES', {
+                            day: '2-digit',
+                            month: 'long',
+                            year: 'numeric',
+                          })}`}
+                        />
+                      )}
+                    </section>
+                  </Accordion>
                 </form>
               </div>
 
-              <div className="pt-4 border-t border-white/5">
+              <div className="pt-4">
                 <button
                   type="submit"
                   form="profile-edit-form"
