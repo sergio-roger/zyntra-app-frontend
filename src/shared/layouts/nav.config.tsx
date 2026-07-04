@@ -53,6 +53,7 @@ const PATH_TO_KEY_MAP: Record<string, string> = {
   '/settings/configuracion-negocio': 'settings_business',
   '/settings/configuracion': 'settings_config',
   '/settings/my-account': 'settings_my_account',
+  '/settings/my-company': 'settings_my_company',
   '/settings/users': 'settings_users',
   '/settings/teams': 'settings_teams',
   '/settings/roles': 'settings_roles',

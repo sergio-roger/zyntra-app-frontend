@@ -305,6 +305,7 @@ export const NAV_MODULES: NavModule[] = [
             icon: Settings,
           },
           { to: '/settings/my-account', label: 'Mi cuenta', icon: UserRound },
+          { to: '/settings/my-company', label: 'Mi empresa', icon: Building2 },
           { to: '/settings/plans', label: 'Planes', icon: Zap },
         ],
       },

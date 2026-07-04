@@ -95,6 +95,19 @@ export const settingsRoutes: RouteObject[] = [
         ),
       },
       {
+        path: 'my-company',
+        element: (
+          <PermissionGuard menuKey="settings_my_company">
+            <SuspenseLoader>
+              <ConstructionPage
+                title="Mi Empresa"
+                description="Gestión de datos de la empresa, facturación y configuraciones globales del negocio."
+              />
+            </SuspenseLoader>
+          </PermissionGuard>
+        ),
+      },
+      {
         path: 'users',
         element: (
           <PermissionGuard menuKey="settings_users">
