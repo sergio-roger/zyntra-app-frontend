@@ -98,6 +98,8 @@ describe('MyAccountPage', () => {
   it('shows a validation error and does not call the API when the avatar format is invalid', async () => {
     renderPage();
 
+    fireEvent.click(screen.getByRole('button', { name: /cambiar foto/i }));
+
     const file = new File(['not an image'], 'malicious.txt', {
       type: 'text/plain',
     });

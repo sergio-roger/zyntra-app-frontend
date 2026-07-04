@@ -4,6 +4,7 @@ import { Accordion } from '@core/ui/Accordion';
 import { Tabs } from '@core/ui/Tabs';
 import { SubmitButton } from '@features/auth/components/SubmitButton';
 import { useAuthStore } from '@features/auth/store/authStore';
+import { AvatarUploadModal } from '@features/settings/components/AvatarUploadModal';
 import {
   useChangePassword,
   useRemoveAvatar,
@@ -18,7 +19,6 @@ import {
 } from '@features/settings/schemas/my-account.schema';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { Avatar } from '@shared/components/Avatar';
-import { toastManager } from '@shared/components/toast/toastManager';
 import { getApiErrorMessage } from '@shared/constants/apiErrors';
 import {
   Activity,
@@ -38,7 +38,7 @@ import {
   User as UserIcon,
   Users,
 } from 'lucide-react';
-import React, { useRef, useState } from 'react';
+import React, { useState } from 'react';
 import { useForm } from 'react-hook-form';
 
 type MockActivity = {
@@ -81,9 +81,6 @@ const MOCK_ACTIVITIES: MockActivity[] = [
   },
 ];
 
-const ALLOWED_AVATAR_TYPES = ['image/png', 'image/jpeg', 'image/webp'];
-const MAX_AVATAR_SIZE = 2 * 1024 * 1024;
-
 const ROLE_LABELS: Record<string, string> = {
   admin: 'Administrador',
   manager: 'Gerente',
@@ -108,9 +105,9 @@ const ProfileInfoRow: React.FC<{
 
 export const MyAccountPage: React.FC = () => {
   const user = useAuthStore((s) => s.user);
-  const fileInputRef = useRef<HTMLInputElement>(null);
   const [passwordError, setPasswordError] = useState<string | null>(null);
   const [activeTab, setActiveTab] = useState<AccountTab>('perfil');
+  const [isAvatarModalOpen, setIsAvatarModalOpen] = useState(false);
 
 
   const updateProfile = useUpdateProfile();
@@ -153,31 +150,10 @@ export const MyAccountPage: React.FC = () => {
     await updateProfile.mutateAsync(payload);
   };
 
-  const handleAvatarClick = () => fileInputRef.current?.click();
-
-  const handleAvatarChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const file = e.target.files?.[0];
-    e.target.value = '';
-    if (!file) return;
-
-    if (!ALLOWED_AVATAR_TYPES.includes(file.type)) {
-      toastManager.add({
-        title: 'Formato no permitido',
-        description: 'Solo se aceptan imágenes PNG, JPEG o WEBP.',
-        type: 'error',
-      });
-      return;
-    }
-    if (file.size > MAX_AVATAR_SIZE) {
-      toastManager.add({
-        title: 'Archivo muy grande',
-        description: 'El tamaño máximo permitido es 2MB.',
-        type: 'error',
-      });
-      return;
-    }
-
-    uploadAvatar.mutate(file);
+  const handleAvatarUpload = (file: File) => {
+    uploadAvatar.mutate(file, {
+      onSuccess: () => setIsAvatarModalOpen(false),
+    });
   };
 
   const {
@@ -262,17 +238,9 @@ export const MyAccountPage: React.FC = () => {
                 </div>
 
                 <div className="flex items-center gap-3">
-                  <input
-                    ref={fileInputRef}
-                    type="file"
-                    accept="image/png,image/jpeg,image/webp"
-                    className="hidden"
-                    onChange={handleAvatarChange}
-                    aria-label="Subir avatar"
-                  />
                   <button
                     type="button"
-                    onClick={handleAvatarClick}
+                    onClick={() => setIsAvatarModalOpen(true)}
                     disabled={uploadAvatar.isPending}
                     className="inline-flex items-center gap-2 rounded-xl px-3 py-2 text-xs font-bold bg-slate-800 text-slate-300 hover:bg-slate-700 transition-all disabled:opacity-50"
                   >
@@ -533,6 +501,16 @@ export const MyAccountPage: React.FC = () => {
           </div>
         )}
       </div>
+
+      <AvatarUploadModal
+        isOpen={isAvatarModalOpen}
+        onClose={() => setIsAvatarModalOpen(false)}
+        onUpload={handleAvatarUpload}
+        isUploading={uploadAvatar.isPending}
+        currentAvatarUrl={user?.avatarUrl}
+        name={fullName}
+        email={user?.email}
+      />
     </div>
   );
 };
