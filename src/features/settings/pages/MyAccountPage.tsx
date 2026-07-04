@@ -24,21 +24,18 @@ import {
   Briefcase,
   Calendar,
   CheckCircle2,
-  Clock,
   ImagePlus,
   Info,
   Loader2,
   Lock,
   LucideIcon,
   Mail,
-  Pencil,
   Phone,
   Save,
   Shield,
   Trash2,
   User as UserIcon,
   Users,
-  X,
 } from 'lucide-react';
 import React, { useRef, useState } from 'react';
 import { useForm } from 'react-hook-form';
@@ -93,20 +90,7 @@ const ROLE_LABELS: Record<string, string> = {
   superAdmin: 'Super Admin',
 };
 
-const STATUS_LABELS: Record<string, { label: string; className: string }> = {
-  active: {
-    label: 'Activo',
-    className: 'bg-emerald-500/10 text-emerald-400 border-emerald-500/20',
-  },
-  inactive: {
-    label: 'Inactivo',
-    className: 'bg-slate-500/10 text-slate-400 border-slate-500/20',
-  },
-  suspended: {
-    label: 'Suspendido',
-    className: 'bg-rose-500/10 text-rose-400 border-rose-500/20',
-  },
-};
+
 
 type AccountTab = 'perfil' | 'seguridad';
 
@@ -127,7 +111,7 @@ export const MyAccountPage: React.FC = () => {
   const fileInputRef = useRef<HTMLInputElement>(null);
   const [passwordError, setPasswordError] = useState<string | null>(null);
   const [activeTab, setActiveTab] = useState<AccountTab>('perfil');
-  const [isEditingProfile, setIsEditingProfile] = useState(false);
+
 
   const updateProfile = useUpdateProfile();
   const uploadAvatar = useUploadAvatar();
@@ -256,9 +240,9 @@ export const MyAccountPage: React.FC = () => {
 
         {activeTab === 'perfil' && (
           <div className="grid grid-cols-1 gap-6 p-6 lg:grid-cols-[360px_1fr]">
-            {/* Columna izquierda: tarjeta de perfil */}
-            <div className="rounded-2xl border border-white/5 bg-slate-950/30 p-5">
-              <div className="flex items-start justify-between gap-3">
+            {/* Columna izquierda: tarjeta de perfil directamente editable */}
+            <div className="rounded-2xl border border-white/5 bg-slate-950/30 p-5 space-y-5 flex flex-col justify-between">
+              <div className="space-y-5">
                 <div className="flex items-center gap-3">
                   <Avatar
                     name={fullName}
@@ -266,81 +250,87 @@ export const MyAccountPage: React.FC = () => {
                     avatarUrl={user?.avatarUrl}
                     size={56}
                     rounded="2xl"
-                    className="ring-1 ring-white/10"
+                    className="ring-1 ring-white/10 shrink-0"
                   />
                   <div className="min-w-0">
                     <p className="truncate text-base font-bold text-white">
                       {fullName || '—'}
                     </p>
-                    <p className="truncate text-xs text-slate-500">
-                      {user?.jobTitle || roleLabel}
-                    </p>
+                    <div className="flex items-center gap-1 text-xs text-slate-500">
+                      <Shield size={12} className="text-slate-400" />
+                      <span>{roleLabel}</span>
+                    </div>
                   </div>
                 </div>
-                <button
-                  type="button"
-                  onClick={() => setIsEditingProfile((v) => !v)}
-                  aria-label={
-                    isEditingProfile ? 'Cancelar edición' : 'Editar perfil'
-                  }
-                  className="inline-flex h-8 w-8 shrink-0 items-center justify-center rounded-lg bg-slate-800 text-slate-300 hover:bg-slate-700 transition-all"
-                >
-                  {isEditingProfile ? <X size={14} /> : <Pencil size={14} />}
-                </button>
-              </div>
 
-              <div className="my-5 h-px bg-white/5" />
+                <div className="flex items-center gap-3">
+                  <input
+                    ref={fileInputRef}
+                    type="file"
+                    accept="image/png,image/jpeg,image/webp"
+                    className="hidden"
+                    onChange={handleAvatarChange}
+                    aria-label="Subir avatar"
+                  />
+                  <button
+                    type="button"
+                    onClick={handleAvatarClick}
+                    disabled={uploadAvatar.isPending}
+                    className="inline-flex items-center gap-2 rounded-xl px-3 py-2 text-xs font-bold bg-slate-800 text-slate-300 hover:bg-slate-700 transition-all disabled:opacity-50"
+                  >
+                    {uploadAvatar.isPending ? (
+                      <Loader2 size={14} className="animate-spin" />
+                    ) : (
+                      <ImagePlus size={14} />
+                    )}
+                    Cambiar foto
+                  </button>
+                  {user?.avatarUrl && (
+                    <button
+                      type="button"
+                      onClick={() => removeAvatar.mutate()}
+                      disabled={removeAvatar.isPending}
+                      className="inline-flex items-center gap-2 rounded-xl px-3 py-2 text-xs font-bold bg-rose-500/10 text-rose-400 hover:bg-rose-500/20 transition-all disabled:opacity-50"
+                    >
+                      <Trash2 size={14} />
+                      Quitar
+                    </button>
+                  )}
+                </div>
 
-              {isEditingProfile ? (
+                <div className="h-px bg-white/5" />
+
                 <form
                   onSubmit={handleProfileSubmit(onProfileSubmit)}
                   className="space-y-4"
+                  id="profile-edit-form"
                 >
-                  <div className="flex items-center gap-3">
-                    <input
-                      ref={fileInputRef}
-                      type="file"
-                      accept="image/png,image/jpeg,image/webp"
-                      className="hidden"
-                      onChange={handleAvatarChange}
-                      aria-label="Subir avatar"
+                  <div className="grid grid-cols-2 gap-3">
+                    <Input
+                      label="Nombre(s)"
+                      icon={UserIcon}
+                      error={profileErrors.firstName?.message}
+                      {...registerProfile('firstName')}
                     />
-                    <button
-                      type="button"
-                      onClick={handleAvatarClick}
-                      disabled={uploadAvatar.isPending}
-                      className="inline-flex items-center gap-2 rounded-xl px-3 py-2 text-xs font-bold bg-slate-800 text-slate-300 hover:bg-slate-700 transition-all disabled:opacity-50"
-                    >
-                      {uploadAvatar.isPending ? (
-                        <Loader2 size={14} className="animate-spin" />
-                      ) : (
-                        <ImagePlus size={14} />
-                      )}
-                      Cambiar foto
-                    </button>
-                    {user?.avatarUrl && (
-                      <button
-                        type="button"
-                        onClick={() => removeAvatar.mutate()}
-                        disabled={removeAvatar.isPending}
-                        className="inline-flex items-center gap-2 rounded-xl px-3 py-2 text-xs font-bold bg-rose-500/10 text-rose-400 hover:bg-rose-500/20 transition-all disabled:opacity-50"
-                      >
-                        <Trash2 size={14} />
-                        Quitar
-                      </button>
-                    )}
+                    <Input
+                      label="Apellido(s)"
+                      error={profileErrors.lastName?.message}
+                      {...registerProfile('lastName')}
+                    />
                   </div>
-
                   <Input
-                    label="Nombre(s)"
-                    icon={UserIcon}
-                    error={profileErrors.firstName?.message}
-                    {...registerProfile('firstName')}
+                    label="Correo electrónico"
+                    icon={Mail}
+                    value={user?.email ?? ''}
+                    disabled
+                    readOnly
                   />
                   <Input
-                    label="Apellido(s)"
-                    error={profileErrors.lastName?.message}
-                    {...registerProfile('lastName')}
+                    label="Rol"
+                    icon={Shield}
+                    value={roleLabel}
+                    disabled
+                    readOnly
                   />
                   <Input
                     label="Cargo / Puesto"
@@ -349,7 +339,7 @@ export const MyAccountPage: React.FC = () => {
                     {...registerProfile('jobTitle')}
                   />
                   <Input
-                    label="Teléfono"
+                    label="Teléfono / Celular"
                     icon={Phone}
                     error={profileErrors.phone?.message}
                     {...registerProfile('phone')}
@@ -372,68 +362,8 @@ export const MyAccountPage: React.FC = () => {
                     )}
                   </div>
 
-                  <div className="flex justify-end">
-                    <button
-                      type="submit"
-                      disabled={isProfileSubmitting || updateProfile.isPending}
-                      className="inline-flex items-center gap-2 rounded-xl px-4 py-2 text-xs font-bold bg-indigo-600 text-white shadow-lg shadow-indigo-500/20 hover:bg-indigo-500 transition-all disabled:opacity-50"
-                    >
-                      {updateProfile.isPending ? (
-                        <Loader2 size={14} className="animate-spin" />
-                      ) : (
-                        <Save size={14} />
-                      )}
-                      Guardar cambios
-                    </button>
-                  </div>
-                </form>
-              ) : (
-                <div className="space-y-5">
-                  <section className="space-y-2">
-                    <h4 className="text-[10px] font-black uppercase tracking-widest text-slate-500">
-                      Cuenta
-                    </h4>
-                    <ProfileInfoRow icon={Mail} value={user?.email ?? '—'}>
-                      {user?.isAccountActivated ? (
-                        <span className="ml-auto shrink-0 inline-flex items-center gap-1 px-2 py-0.5 rounded-lg text-[10px] font-bold bg-emerald-500/10 text-emerald-400 border border-emerald-500/20">
-                          <CheckCircle2 size={10} /> Verificada
-                        </span>
-                      ) : (
-                        <span className="ml-auto shrink-0 inline-flex items-center gap-1 px-2 py-0.5 rounded-lg text-[10px] font-bold bg-amber-500/10 text-amber-400 border border-amber-500/20">
-                          <Clock size={10} /> Sin verificar
-                        </span>
-                      )}
-                    </ProfileInfoRow>
-                    <ProfileInfoRow icon={Shield} value={roleLabel}>
-                      {user?.status &&
-                        (() => {
-                          const status =
-                            STATUS_LABELS[user.status] ?? STATUS_LABELS.active;
-                          return (
-                            <span
-                              className={`ml-auto shrink-0 inline-flex items-center px-2 py-0.5 rounded-lg text-[10px] font-bold border ${status.className}`}
-                            >
-                              {status.label}
-                            </span>
-                          );
-                        })()}
-                    </ProfileInfoRow>
-                    <ProfileInfoRow icon={Briefcase} value={user?.jobTitle || 'Sin cargo especificado'} />
-                    <ProfileInfoRow icon={Phone} value={user?.phone || 'Sin teléfono especificado'} />
-                  </section>
-
-                  <section className="space-y-2">
-                    <h4 className="flex items-center gap-1.5 text-[10px] font-black uppercase tracking-widest text-slate-500">
-                      <Info size={12} />
-                      Biografía
-                    </h4>
-                    <div className="rounded-xl border border-white/5 bg-slate-900/20 p-3 text-xs text-slate-300 min-h-[60px] leading-relaxed">
-                      {user?.bio || <span className="text-slate-500 italic">No has añadido una biografía todavía.</span>}
-                    </div>
-                  </section>
-
                   {(user?.teams?.length ?? 0) > 0 && (
-                    <section className="space-y-2">
+                    <section className="space-y-2 pt-2">
                       <h4 className="flex items-center gap-1.5 text-[10px] font-black uppercase tracking-widest text-slate-500">
                         <Users size={12} />
                         Equipos
@@ -457,18 +387,7 @@ export const MyAccountPage: React.FC = () => {
                     </section>
                   )}
 
-                  {user?.bio && (
-                    <section className="space-y-2">
-                      <h4 className="text-[10px] font-black uppercase tracking-widest text-slate-500">
-                        Biografía
-                      </h4>
-                      <p className="rounded-xl bg-slate-900/40 px-3 py-2.5 text-sm text-slate-300 whitespace-pre-wrap">
-                        {user.bio}
-                      </p>
-                    </section>
-                  )}
-
-                  <section className="space-y-2">
+                  <section className="space-y-2 pt-2">
                     <h4 className="text-[10px] font-black uppercase tracking-widest text-slate-500">
                       Antigüedad
                     </h4>
@@ -499,8 +418,24 @@ export const MyAccountPage: React.FC = () => {
                       />
                     )}
                   </section>
-                </div>
-              )}
+                </form>
+              </div>
+
+              <div className="pt-4 border-t border-white/5">
+                <button
+                  type="submit"
+                  form="profile-edit-form"
+                  disabled={isProfileSubmitting || updateProfile.isPending}
+                  className="w-full inline-flex items-center justify-center gap-2 rounded-xl px-4 py-2.5 text-sm font-bold bg-indigo-600 text-white shadow-lg shadow-indigo-500/20 hover:bg-indigo-500 transition-all disabled:opacity-50"
+                >
+                  {updateProfile.isPending ? (
+                    <Loader2 size={16} className="animate-spin" />
+                  ) : (
+                    <Save size={16} />
+                  )}
+                  Guardar cambios
+                </button>
+              </div>
             </div>
 
             {/* Columna derecha: actividad */}
