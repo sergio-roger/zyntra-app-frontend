@@ -16,6 +16,16 @@ export const updateProfileSchema = z.object({
     .max(120, 'Máximo 120 caracteres')
     .optional()
     .or(z.literal('')),
+  phone: z
+    .string()
+    .max(30, 'Máximo 30 caracteres')
+    .optional()
+    .or(z.literal('')),
+  bio: z
+    .string()
+    .max(280, 'Máximo 280 caracteres')
+    .optional()
+    .or(z.literal('')),
 });
 
 export type UpdateProfileFormValues = z.infer<typeof updateProfileSchema>;

@@ -17,13 +17,13 @@ export type UserRole = string;
 export type UserStatus = 'active' | 'inactive' | 'suspended';
 
 export interface Team {
-  businessId: string;
-  color: string;
-  createdAt: string;
-  description: string | null;
   id: string;
-  members: User[];
   name: string;
+  color: string;
+  businessId?: string;
+  createdAt?: string;
+  description?: string | null;
+  members?: User[];
 }
 
 export type User = {
@@ -38,9 +38,12 @@ export type User = {
   businessId?: string;
   avatarUrl?: string | null;
   jobTitle?: string | null;
+  phone?: string | null;
+  bio?: string | null;
   isAccountActivated?: boolean;
   isActive?: boolean;
   status?: UserStatus;
+  activatedAt?: string | null;
   createdAt?: string;
   teams?: Team[];
 };
@@ -60,6 +63,8 @@ export type UpdateProfileInput = {
   firstName?: string;
   lastName?: string;
   jobTitle?: string;
+  phone?: string;
+  bio?: string;
 };
 
 export type ChangePasswordInput = {

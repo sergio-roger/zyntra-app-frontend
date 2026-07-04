@@ -26,15 +26,18 @@ import {
   CheckCircle2,
   Clock,
   ImagePlus,
+  Info,
   Loader2,
   Lock,
   LucideIcon,
   Mail,
   Pencil,
+  Phone,
   Save,
   Shield,
   Trash2,
   User as UserIcon,
+  Users,
   X,
 } from 'lucide-react';
 import React, { useRef, useState } from 'react';
@@ -90,6 +93,21 @@ const ROLE_LABELS: Record<string, string> = {
   superAdmin: 'Super Admin',
 };
 
+const STATUS_LABELS: Record<string, { label: string; className: string }> = {
+  active: {
+    label: 'Activo',
+    className: 'bg-emerald-500/10 text-emerald-400 border-emerald-500/20',
+  },
+  inactive: {
+    label: 'Inactivo',
+    className: 'bg-slate-500/10 text-slate-400 border-slate-500/20',
+  },
+  suspended: {
+    label: 'Suspendido',
+    className: 'bg-rose-500/10 text-rose-400 border-rose-500/20',
+  },
+};
+
 type AccountTab = 'perfil' | 'seguridad';
 
 const ProfileInfoRow: React.FC<{
@@ -130,6 +148,8 @@ export const MyAccountPage: React.FC = () => {
       firstName: user?.firstName ?? '',
       lastName: user?.lastName ?? '',
       jobTitle: user?.jobTitle ?? '',
+      phone: user?.phone ?? '',
+      bio: user?.bio ?? '',
     },
   });
 
@@ -328,6 +348,29 @@ export const MyAccountPage: React.FC = () => {
                     error={profileErrors.jobTitle?.message}
                     {...registerProfile('jobTitle')}
                   />
+                  <Input
+                    label="Teléfono"
+                    icon={Phone}
+                    error={profileErrors.phone?.message}
+                    {...registerProfile('phone')}
+                  />
+                  <div className="space-y-1.5">
+                    <label className="flex items-center gap-2 text-xs font-bold text-slate-400 uppercase tracking-wider ml-1">
+                      <Info size={14} className="text-slate-500" />
+                      Biografía
+                    </label>
+                    <textarea
+                      rows={3}
+                      maxLength={280}
+                      className="w-full resize-none bg-slate-950/50 border border-white/10 rounded-xl py-2.5 px-4 text-sm text-white placeholder-slate-600 focus:outline-none focus:border-primary/50 focus:ring-1 focus:ring-primary/20 transition-all"
+                      {...registerProfile('bio')}
+                    />
+                    {profileErrors.bio?.message && (
+                      <p className="text-[10px] font-medium text-rose-400 ml-1">
+                        {profileErrors.bio.message}
+                      </p>
+                    )}
+                  </div>
 
                   <div className="flex justify-end">
                     <button
@@ -361,8 +404,69 @@ export const MyAccountPage: React.FC = () => {
                         </span>
                       )}
                     </ProfileInfoRow>
-                    <ProfileInfoRow icon={Shield} value={roleLabel} />
+                    <ProfileInfoRow icon={Shield} value={roleLabel}>
+                      {user?.status &&
+                        (() => {
+                          const status =
+                            STATUS_LABELS[user.status] ?? STATUS_LABELS.active;
+                          return (
+                            <span
+                              className={`ml-auto shrink-0 inline-flex items-center px-2 py-0.5 rounded-lg text-[10px] font-bold border ${status.className}`}
+                            >
+                              {status.label}
+                            </span>
+                          );
+                        })()}
+                    </ProfileInfoRow>
+                    <ProfileInfoRow icon={Briefcase} value={user?.jobTitle || 'Sin cargo especificado'} />
+                    <ProfileInfoRow icon={Phone} value={user?.phone || 'Sin teléfono especificado'} />
                   </section>
+
+                  <section className="space-y-2">
+                    <h4 className="flex items-center gap-1.5 text-[10px] font-black uppercase tracking-widest text-slate-500">
+                      <Info size={12} />
+                      Biografía
+                    </h4>
+                    <div className="rounded-xl border border-white/5 bg-slate-900/20 p-3 text-xs text-slate-300 min-h-[60px] leading-relaxed">
+                      {user?.bio || <span className="text-slate-500 italic">No has añadido una biografía todavía.</span>}
+                    </div>
+                  </section>
+
+                  {(user?.teams?.length ?? 0) > 0 && (
+                    <section className="space-y-2">
+                      <h4 className="flex items-center gap-1.5 text-[10px] font-black uppercase tracking-widest text-slate-500">
+                        <Users size={12} />
+                        Equipos
+                      </h4>
+                      <div className="flex flex-wrap gap-1.5 px-1">
+                        {user!.teams!.map((team) => (
+                          <div
+                            key={team.id}
+                            className="flex items-center gap-1.5 px-2 py-1 rounded-lg bg-slate-900/40 border border-white/5"
+                          >
+                            <div
+                              className="w-2 h-2 rounded-full shrink-0"
+                              style={{ backgroundColor: team.color }}
+                            />
+                            <span className="text-[10px] font-bold text-slate-300 whitespace-nowrap">
+                              {team.name}
+                            </span>
+                          </div>
+                        ))}
+                      </div>
+                    </section>
+                  )}
+
+                  {user?.bio && (
+                    <section className="space-y-2">
+                      <h4 className="text-[10px] font-black uppercase tracking-widest text-slate-500">
+                        Biografía
+                      </h4>
+                      <p className="rounded-xl bg-slate-900/40 px-3 py-2.5 text-sm text-slate-300 whitespace-pre-wrap">
+                        {user.bio}
+                      </p>
+                    </section>
+                  )}
 
                   <section className="space-y-2">
                     <h4 className="text-[10px] font-black uppercase tracking-widest text-slate-500">
@@ -382,6 +486,18 @@ export const MyAccountPage: React.FC = () => {
                           : '—'
                       }
                     />
+                    {user?.isAccountActivated && user?.activatedAt && (
+                      <ProfileInfoRow
+                        icon={CheckCircle2}
+                        value={`Cuenta activada el ${new Date(
+                          user.activatedAt,
+                        ).toLocaleDateString('es-ES', {
+                          day: '2-digit',
+                          month: 'long',
+                          year: 'numeric',
+                        })}`}
+                      />
+                    )}
                   </section>
                 </div>
               )}
