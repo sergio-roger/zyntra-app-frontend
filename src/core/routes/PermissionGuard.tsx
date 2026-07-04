@@ -13,10 +13,18 @@ export const PermissionGuard: React.FC<{
 
   if (isAdmin) return <>{children}</>;
 
-  // Verificar si la key existe en el árbol de permisos permitidos
-  const hasPermission = allowedMenus?.some(
-    (m) => m.key === menuKey || m.children?.some((c) => c.key === menuKey),
-  );
+  const checkHasPermission = (menus: any[] | null | undefined, key: string): boolean => {
+    if (!menus) return false;
+    for (const m of menus) {
+      if (m.key === key) return true;
+      if (m.children && m.children.length > 0) {
+        if (checkHasPermission(m.children, key)) return true;
+      }
+    }
+    return false;
+  };
+
+  const hasPermission = checkHasPermission(allowedMenus, menuKey);
 
   if (!hasPermission) {
     return <Navigate to="/dashboard" replace />;
