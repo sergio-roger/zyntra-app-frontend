@@ -4,7 +4,7 @@ import {
   useUpdateUser,
   useUsersList,
 } from '@features/settings/hooks/useUsersTeams';
-import { CrmUser } from '@features/settings/types/settings';
+import { User } from '@features/settings/types/settings';
 import { Avatar } from '@shared/components/Avatar';
 import { EmptyState } from '@shared/components/EmptyState';
 import { toastManager } from '@shared/components/toast/toastManager';
@@ -26,7 +26,7 @@ import React, { useState } from 'react';
 
 export const UsersPage: React.FC = () => {
   const [sidebarOpen, setSidebarOpen] = useState(false);
-  const [editingUser, setEditingUser] = useState<CrmUser | null>(null);
+  const [editingUser, setEditingUser] = useState<User | null>(null);
   const currentUser = useAuthStore((s) => s.user);
 
   const { data: users = [], isLoading, isError, error } = useUsersList();
@@ -37,7 +37,7 @@ export const UsersPage: React.FC = () => {
     setSidebarOpen(true);
   };
 
-  const openEdit = (user: CrmUser) => {
+  const openEdit = (user: User) => {
     setEditingUser(user);
     setSidebarOpen(true);
   };
@@ -51,7 +51,7 @@ export const UsersPage: React.FC = () => {
   ).length;
   const isLimitReached = activeUsersCount >= limit && limit !== 999999;
 
-  const toggleStatus = async (user: CrmUser) => {
+  const toggleStatus = async (user: User) => {
     const isCurrentlyActive = user.status
       ? user.status === 'active'
       : user.isActive;
@@ -86,7 +86,7 @@ export const UsersPage: React.FC = () => {
     }
   };
 
-  const renderStatusBadge = (user: CrmUser) => {
+  const renderStatusBadge = (user: User) => {
     const status = user.status ?? (user.isActive ? 'active' : 'inactive');
     if (status === 'active') {
       return (

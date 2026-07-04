@@ -35,7 +35,6 @@ export type User = {
   role: UserRole | null;
   plan: Plan;
   plan_status: string;
-  crm_user_id?: string | null;
   businessId?: string;
   avatarUrl?: string | null;
   jobTitle?: string | null;

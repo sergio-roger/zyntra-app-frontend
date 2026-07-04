@@ -7,7 +7,7 @@ import {
   useUpdateUser,
 } from '@features/settings/hooks/useUsersTeams';
 import {
-  CrmUser,
+  User as UserModel,
   UserRole,
   UserStatus,
 } from '@features/settings/types/settings';
@@ -29,7 +29,7 @@ import React, { useEffect, useState } from 'react';
 
 interface UserFormSidebarProps {
   open: boolean;
-  user: CrmUser | null;
+  user: UserModel | null;
   isLimitReached?: boolean;
   onClose: () => void;
 }

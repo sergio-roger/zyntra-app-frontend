@@ -48,7 +48,7 @@ export const ContactFormSidebar: React.FC<ContactFormSidebarProps> = ({
   const updateMutation = useUpdateContact();
 
   const [formData, setFormData] = useState<ContactFormData>(() =>
-    defaultContactFormData(stages, user?.crm_user_id),
+    defaultContactFormData(stages, user?.id),
   );
 
   const [activeTab, setActiveTab] = useState<'info' | 'advanced'>('info');
@@ -58,7 +58,7 @@ export const ContactFormSidebar: React.FC<ContactFormSidebarProps> = ({
     setFormData(
       contact
         ? formDataFromContact(contact)
-        : defaultContactFormData(stages, user?.crm_user_id),
+        : defaultContactFormData(stages, user?.id),
     );
     setActiveTab('info');
   }, [contact, stages, open, user]);
@@ -178,7 +178,7 @@ export const ContactFormSidebar: React.FC<ContactFormSidebarProps> = ({
                           options={members.map((m) => ({
                             value: m.id,
                             label:
-                              m.id === user?.crm_user_id
+                              m.id === user?.id
                                 ? `${m.name} (Yo)`
                                 : m.name,
                           }))}
@@ -190,7 +190,7 @@ export const ContactFormSidebar: React.FC<ContactFormSidebarProps> = ({
                           clearLabel="Sin asignar"
                           placeholder="Sin asignar"
                           displayValue={(id) =>
-                            id === user?.crm_user_id
+                            id === user?.id
                               ? 'Propietario (Yo)'
                               : (members.find((m) => m.id === id)?.name ?? '')
                           }

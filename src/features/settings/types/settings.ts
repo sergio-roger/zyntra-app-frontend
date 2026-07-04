@@ -1,5 +1,5 @@
 export type {
-  User as CrmUser,
+  User,
   UserRole,
   UserStatus,
   Team,

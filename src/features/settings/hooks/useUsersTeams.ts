@@ -1,14 +1,14 @@
 import {
   CreateTeamInput,
   CreateUserInput,
-  CrmUser,
+  User,
   Team,
 } from '@features/settings/types/settings';
 import api from '@shared/api/axios';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 
 export function useUsersList() {
-  return useQuery<CrmUser[]>({
+  return useQuery<User[]>({
     queryKey: ['settings-users'],
     queryFn: async () => {
       const { data } = await api.get('/settings/users');
@@ -34,7 +34,7 @@ export function useCreateUser() {
 export function useUpdateUser() {
   const queryClient = useQueryClient();
   return useMutation({
-    mutationFn: async ({ id, ...input }: Partial<CrmUser> & { id: string }) => {
+    mutationFn: async ({ id, ...input }: Partial<User> & { id: string }) => {
       const { data } = await api.patch(`/settings/users/${id}`, input);
       return data;
     },

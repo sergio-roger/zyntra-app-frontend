@@ -32,7 +32,7 @@ vi.mock('@features/auth/store/authStore', () => {
 });
 
 const mockUser = {
-  id: 'biz-1',
+  id: 'user-1',
   name: 'Ana Gomez',
   firstName: 'Ana',
   lastName: 'Gomez',
@@ -40,7 +40,6 @@ const mockUser = {
   role: 'agent',
   plan: null,
   plan_status: 'active',
-  crm_user_id: 'crm-1',
   avatarUrl: null,
   jobTitle: 'Agente de Ventas',
   isAccountActivated: true,

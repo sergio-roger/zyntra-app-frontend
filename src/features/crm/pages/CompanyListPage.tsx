@@ -81,7 +81,7 @@ export const CompanyListPage: React.FC = () => {
 
   const [, setSearchParams] = useSearchParams();
   const currentUser = useAuthStore((s) => s.user);
-  const myOwnerId = currentUser?.crm_user_id;
+  const myOwnerId = currentUser?.id;
   const isAdminOrManager =
     currentUser?.role === 'admin' || currentUser?.role === 'manager';
 

@@ -4,7 +4,7 @@ import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 
 const useEffectiveUserId = () => {
   const user = useAuthStore((s) => s.user);
-  return user?.crm_user_id ?? user?.id ?? null;
+  return user?.id ?? null;
 };
 
 export const preferenceKeys = {
