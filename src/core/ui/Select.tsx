@@ -1,11 +1,8 @@
+import { SelectOption } from '@core/ui/select.types';
+import { useSelect } from '@core/ui/useSelect';
+import { findSelectedOption, getTriggerLabel } from '@core/ui/utils/select.utils';
 import { Check, ChevronDown, LucideIcon } from 'lucide-react';
-import React, { forwardRef, useEffect, useRef, useState } from 'react';
-
-export interface SelectOption<TValue = string> {
-  value: TValue;
-  label: string;
-  disabled?: boolean;
-}
+import React, { forwardRef } from 'react';
 
 interface SelectProps<TValue = string> {
   // Data
@@ -14,6 +11,7 @@ interface SelectProps<TValue = string> {
   onChange: (value: TValue | null) => void;
 
   // UI
+  id?: string;
   label?: string;
   icon?: LucideIcon;
   placeholder?: string;
@@ -42,6 +40,7 @@ function SelectInner<TValue = string>(
     options,
     value,
     onChange,
+    id,
     label,
     icon: Icon,
     placeholder = 'Seleccionar...',
@@ -57,95 +56,25 @@ function SelectInner<TValue = string>(
   }: SelectProps<TValue>,
   ref: React.ForwardedRef<HTMLButtonElement>,
 ) {
-  const [open, setOpen] = useState(false);
-  const [focusedIndex, setFocusedIndex] = useState(-1);
-  const containerRef = useRef<HTMLDivElement>(null);
-  const listRef = useRef<HTMLDivElement>(null);
+  const {
+    open,
+    focusedIndex,
+    setOpen,
+    containerRef,
+    listRef,
+    handleKeyDown,
+    selectAtIndex,
+  } = useSelect(id, options, clearable, onChange);
 
-  const totalItems = (clearable ? 1 : 0) + options.length;
-
-  // Close on outside click or Escape
-  useEffect(() => {
-    const onMouse = (e: MouseEvent) => {
-      if (
-        containerRef.current &&
-        !containerRef.current.contains(e.target as Node)
-      ) {
-        setOpen(false);
-      }
-    };
-    const onKey = (e: KeyboardEvent) => {
-      if (e.key === 'Escape') setOpen(false);
-    };
-    document.addEventListener('mousedown', onMouse);
-    document.addEventListener('keydown', onKey);
-    return () => {
-      document.removeEventListener('mousedown', onMouse);
-      document.removeEventListener('keydown', onKey);
-    };
-  }, []);
-
-  // Reset focused index when dropdown closes
-  useEffect(() => {
-    if (!open) setFocusedIndex(-1);
-  }, [open]);
-
-  // Scroll focused item into view
-  useEffect(() => {
-    if (focusedIndex < 0 || !listRef.current) return;
-    const domItems =
-      listRef.current.querySelectorAll<HTMLElement>('[role="option"]');
-    domItems[focusedIndex]?.scrollIntoView({ block: 'nearest' });
-  }, [focusedIndex]);
-
-  const selectAtIndex = (idx: number) => {
-    if (clearable && idx === 0) {
-      onChange(null);
-    } else {
-      const opt = options[clearable ? idx - 1 : idx];
-      if (opt && !opt.disabled) onChange(opt.value);
-    }
-    setOpen(false);
-  };
-
-  const handleKeyDown = (e: React.KeyboardEvent<HTMLButtonElement>) => {
-    if (!open) {
-      if (e.key === 'ArrowDown' || e.key === 'ArrowUp') {
-        e.preventDefault();
-        setOpen(true);
-        setFocusedIndex(e.key === 'ArrowDown' ? 0 : totalItems - 1);
-      }
-      return;
-    }
-    switch (e.key) {
-      case 'ArrowDown':
-        e.preventDefault();
-        setFocusedIndex((i) => (i < totalItems - 1 ? i + 1 : i));
-        break;
-      case 'ArrowUp':
-        e.preventDefault();
-        setFocusedIndex((i) => (i > 0 ? i - 1 : 0));
-        break;
-      case 'Enter':
-      case ' ':
-        if (focusedIndex >= 0) {
-          e.preventDefault();
-          selectAtIndex(focusedIndex);
-        }
-        break;
-      case 'Escape':
-        e.preventDefault();
-        setOpen(false);
-        break;
-    }
-  };
-
-  const selectedOption = options.find((o) => o.value === value);
+  const selectedOption = findSelectedOption(options, value);
   const hasValue = !!value;
 
-  const triggerLabel = displayValue
-    ? displayValue(value ?? null, selectedOption)
-    : (selectedOption?.label ?? placeholder);
+  const triggerLabel = getTriggerLabel(
+    value,
+    selectedOption,
+    placeholder,
+    displayValue,
+  );
 
   return (
     <div className={`space-y-1.5 ${containerClassName}`}>
@@ -161,17 +90,17 @@ function SelectInner<TValue = string>(
           ref={ref}
           type="button"
           disabled={disabled}
-          onClick={() => setOpen((v) => !v)}
+          onClick={() => setOpen(!open)}
           onKeyDown={handleKeyDown}
           aria-haspopup="listbox"
           aria-expanded={open}
           className={`
-            w-full bg-slate-950/50 border border-white/10 rounded-xl py-2.5 px-4 text-sm text-left
+            w-full bg-transparent border-b border-white/10 py-2.5 px-1 text-sm text-left
             flex items-center justify-between gap-2
-            focus:outline-none focus:border-primary/50 focus:ring-1 focus:ring-primary/20 transition-all
+            focus:outline-none focus:border-primary focus:ring-0
             disabled:opacity-50 disabled:cursor-not-allowed
-            ${open ? 'border-primary/50 ring-1 ring-primary/20' : 'hover:border-white/20'}
-            ${error ? 'border-rose-500/50 focus:border-rose-500 focus:ring-rose-500/20' : ''}
+            ${open ? 'border-primary' : ''}
+            ${error ? 'border-rose-500/50 focus:border-rose-500' : ''}
             ${className}
           `}
         >
@@ -224,10 +153,7 @@ function SelectInner<TValue = string>(
                   role="option"
                   aria-selected={isSelected}
                   disabled={option.disabled}
-                  onClick={() => {
-                    onChange(option.value);
-                    setOpen(false);
-                  }}
+                  onClick={() => selectAtIndex(itemIdx)}
                   className={`
                     w-full px-4 py-2.5 text-sm text-left transition-colors
                     flex items-center justify-between

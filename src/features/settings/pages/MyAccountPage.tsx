@@ -1,6 +1,6 @@
 import { Input } from '@core/ui/Input';
+import { Textarea } from '@core/ui/Textarea';
 import { Tabs } from '@core/ui/Tabs';
-import { FormField } from '@features/auth/components/FormField';
 import { SubmitButton } from '@features/auth/components/SubmitButton';
 import { useAuthStore } from '@features/auth/store/authStore';
 import {
@@ -308,14 +308,12 @@ export const MyAccountPage: React.FC = () => {
                       label="Nombre(s)"
                       icon={UserIcon}
                       placeholder="Ingresa tu nombre"
-                      className="!bg-transparent !border-t-transparent !border-x-transparent !border-b-transparent focus:!border-t-transparent focus:!border-x-transparent focus:!border-b-indigo-500 focus:!ring-0 focus:!shadow-none !rounded-none !px-1 transition-all duration-200"
                       error={profileErrors.firstName?.message}
                       {...registerProfile('firstName')}
                     />
                     <Input
                       label="Apellido(s)"
                       placeholder="Ingresa tu apellido"
-                      className="!bg-transparent !border-t-transparent !border-x-transparent !border-b-transparent focus:!border-t-transparent focus:!border-x-transparent focus:!border-b-indigo-500 focus:!ring-0 focus:!shadow-none !rounded-none !px-1 transition-all duration-200"
                       error={profileErrors.lastName?.message}
                       {...registerProfile('lastName')}
                     />
@@ -326,14 +324,13 @@ export const MyAccountPage: React.FC = () => {
                     value={user?.email ?? ''}
                     disabled
                     readOnly
-                    className="!bg-transparent !border-none !rounded-none !px-1 !text-slate-500 cursor-not-allowed"
+                    className="!border-none !text-slate-500 cursor-not-allowed"
                   />
 
                   <Input
                     label="Cargo / Puesto"
                     icon={Briefcase}
                     placeholder="Sin cargo especificado"
-                    className="!bg-transparent !border-t-transparent !border-x-transparent !border-b-transparent focus:!border-t-transparent focus:!border-x-transparent focus:!border-b-indigo-500 focus:!ring-0 focus:!shadow-none !rounded-none !px-1 transition-all duration-200"
                     error={profileErrors.jobTitle?.message}
                     {...registerProfile('jobTitle')}
                   />
@@ -341,28 +338,19 @@ export const MyAccountPage: React.FC = () => {
                     label="Teléfono / Celular"
                     icon={Phone}
                     placeholder="Sin teléfono especificado"
-                    className="!bg-transparent !border-t-transparent !border-x-transparent !border-b-transparent focus:!border-t-transparent focus:!border-x-transparent focus:!border-b-indigo-500 focus:!ring-0 focus:!shadow-none !rounded-none !px-1 transition-all duration-200"
                     error={profileErrors.phone?.message}
                     {...registerProfile('phone')}
                   />
-                  <div className="space-y-1.5">
-                    <label className="flex items-center gap-2 text-xs font-bold text-slate-400 uppercase tracking-wider ml-1">
-                      <Info size={14} className="text-slate-500" />
-                      Biografía
-                    </label>
-                    <textarea
-                      rows={3}
-                      maxLength={280}
-                      placeholder="No has añadido una biografía todavía."
-                      className="w-full resize-none bg-transparent border-t-transparent border-x-transparent border-b-transparent focus:border-t-transparent focus:border-x-transparent focus:border-b-indigo-500 focus:ring-0 focus:shadow-none rounded-none py-2 px-1 text-sm text-white placeholder-slate-600 focus:outline-none transition-all duration-200"
-                      {...registerProfile('bio')}
-                    />
-                    {profileErrors.bio?.message && (
-                      <p className="text-[10px] font-medium text-rose-400 ml-1">
-                        {profileErrors.bio.message}
-                      </p>
-                    )}
-                  </div>
+                  
+                  <Textarea
+                    label="Biografía"
+                    icon={Info}
+                    rows={3}
+                    maxLength={280}
+                    placeholder="No has añadido una biografía todavía."
+                    error={profileErrors.bio?.message}
+                    {...registerProfile('bio')}
+                  />
 
                   {(user?.teams?.length ?? 0) > 0 && (
                     <section className="space-y-2 pt-2">
@@ -500,7 +488,7 @@ export const MyAccountPage: React.FC = () => {
               noValidate
               className="flex max-w-md flex-col gap-4"
             >
-              <FormField
+              <Input
                 label="Contraseña actual"
                 icon={Lock}
                 type="password"
@@ -509,7 +497,7 @@ export const MyAccountPage: React.FC = () => {
                 disabled={isPasswordSubmitting}
                 {...registerPassword('currentPassword')}
               />
-              <FormField
+              <Input
                 label="Nueva contraseña"
                 icon={Lock}
                 type="password"
@@ -518,7 +506,7 @@ export const MyAccountPage: React.FC = () => {
                 disabled={isPasswordSubmitting}
                 {...registerPassword('newPassword')}
               />
-              <FormField
+              <Input
                 label="Confirmar nueva contraseña"
                 icon={Lock}
                 type="password"
