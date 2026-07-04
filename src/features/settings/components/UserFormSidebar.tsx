@@ -221,15 +221,17 @@ export const UserFormSidebar: React.FC<UserFormSidebarProps> = ({
               placeholder="Ej: Gerente de Ventas"
             />
 
-            <Input
-              label="Foto de Perfil (URL)"
-              icon={ImageIcon}
-              value={formData.avatarUrl}
-              onChange={(e) =>
-                setFormData({ ...formData, avatarUrl: e.target.value })
-              }
-              placeholder="https://example.com/avatar.jpg"
-            />
+            {!user && (
+              <Input
+                label="Foto de Perfil (URL)"
+                icon={ImageIcon}
+                value={formData.avatarUrl}
+                onChange={(e) =>
+                  setFormData({ ...formData, avatarUrl: e.target.value })
+                }
+                placeholder="https://example.com/avatar.jpg"
+              />
+            )}
 
             <Select
               label="Rol del Usuario"
