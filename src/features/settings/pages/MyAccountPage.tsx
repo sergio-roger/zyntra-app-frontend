@@ -15,10 +15,10 @@ import {
   UpdateProfileFormValues,
   updateProfileSchema,
 } from '@features/settings/schemas/my-account.schema';
-import { getApiErrorMessage } from '@shared/constants/apiErrors';
-import { toastManager } from '@shared/components/toast/toastManager';
-import { Avatar } from '@shared/components/Avatar';
 import { zodResolver } from '@hookform/resolvers/zod';
+import { Avatar } from '@shared/components/Avatar';
+import { toastManager } from '@shared/components/toast/toastManager';
+import { getApiErrorMessage } from '@shared/constants/apiErrors';
 import {
   Activity,
   Briefcase,
@@ -129,8 +129,8 @@ export const MyAccountPage: React.FC = () => {
   } = useForm<UpdateProfileFormValues>({
     resolver: zodResolver(updateProfileSchema),
     values: {
-      firstName: user?.firstName ?? '',
-      lastName: user?.lastName ?? '',
+      firstName: user?.firstName || (user?.name ? user.name.split(' ')[0] : ''),
+      lastName: user?.lastName || (user?.name ? user.name.split(' ').slice(1).join(' ') : ''),
       jobTitle: user?.jobTitle ?? '',
       phone: user?.phone ?? '',
       bio: user?.bio ?? '',
@@ -142,7 +142,6 @@ export const MyAccountPage: React.FC = () => {
       keyof UpdateProfileFormValues
     >;
     if (changedKeys.length === 0) {
-      setIsEditingProfile(false);
       return;
     }
 
@@ -152,7 +151,6 @@ export const MyAccountPage: React.FC = () => {
     });
 
     await updateProfile.mutateAsync(payload);
-    setIsEditingProfile(false);
   };
 
   const handleAvatarClick = () => fileInputRef.current?.click();
@@ -309,11 +307,15 @@ export const MyAccountPage: React.FC = () => {
                     <Input
                       label="Nombre(s)"
                       icon={UserIcon}
+                      placeholder="Ingresa tu nombre"
+                      className="!bg-transparent !border-t-transparent !border-x-transparent !border-b-transparent focus:!border-t-transparent focus:!border-x-transparent focus:!border-b-indigo-500 focus:!ring-0 focus:!shadow-none !rounded-none !px-1 transition-all duration-200"
                       error={profileErrors.firstName?.message}
                       {...registerProfile('firstName')}
                     />
                     <Input
                       label="Apellido(s)"
+                      placeholder="Ingresa tu apellido"
+                      className="!bg-transparent !border-t-transparent !border-x-transparent !border-b-transparent focus:!border-t-transparent focus:!border-x-transparent focus:!border-b-indigo-500 focus:!ring-0 focus:!shadow-none !rounded-none !px-1 transition-all duration-200"
                       error={profileErrors.lastName?.message}
                       {...registerProfile('lastName')}
                     />
@@ -324,23 +326,22 @@ export const MyAccountPage: React.FC = () => {
                     value={user?.email ?? ''}
                     disabled
                     readOnly
+                    className="!bg-transparent !border-none !rounded-none !px-1 !text-slate-500 cursor-not-allowed"
                   />
-                  <Input
-                    label="Rol"
-                    icon={Shield}
-                    value={roleLabel}
-                    disabled
-                    readOnly
-                  />
+
                   <Input
                     label="Cargo / Puesto"
                     icon={Briefcase}
+                    placeholder="Sin cargo especificado"
+                    className="!bg-transparent !border-t-transparent !border-x-transparent !border-b-transparent focus:!border-t-transparent focus:!border-x-transparent focus:!border-b-indigo-500 focus:!ring-0 focus:!shadow-none !rounded-none !px-1 transition-all duration-200"
                     error={profileErrors.jobTitle?.message}
                     {...registerProfile('jobTitle')}
                   />
                   <Input
                     label="Teléfono / Celular"
                     icon={Phone}
+                    placeholder="Sin teléfono especificado"
+                    className="!bg-transparent !border-t-transparent !border-x-transparent !border-b-transparent focus:!border-t-transparent focus:!border-x-transparent focus:!border-b-indigo-500 focus:!ring-0 focus:!shadow-none !rounded-none !px-1 transition-all duration-200"
                     error={profileErrors.phone?.message}
                     {...registerProfile('phone')}
                   />
@@ -352,7 +353,8 @@ export const MyAccountPage: React.FC = () => {
                     <textarea
                       rows={3}
                       maxLength={280}
-                      className="w-full resize-none bg-slate-950/50 border border-white/10 rounded-xl py-2.5 px-4 text-sm text-white placeholder-slate-600 focus:outline-none focus:border-primary/50 focus:ring-1 focus:ring-primary/20 transition-all"
+                      placeholder="No has añadido una biografía todavía."
+                      className="w-full resize-none bg-transparent border-t-transparent border-x-transparent border-b-transparent focus:border-t-transparent focus:border-x-transparent focus:border-b-indigo-500 focus:ring-0 focus:shadow-none rounded-none py-2 px-1 text-sm text-white placeholder-slate-600 focus:outline-none transition-all duration-200"
                       {...registerProfile('bio')}
                     />
                     {profileErrors.bio?.message && (
