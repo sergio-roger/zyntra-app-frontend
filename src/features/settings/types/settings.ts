@@ -49,3 +49,23 @@ export interface RolePermissions {
   menuIds: string[];
   role: string;
 }
+
+export interface Company {
+  id: string;
+  name: string;
+  email: string | null;
+  phone: string | null;
+  address: string | null;
+  tax_id: string | null;
+  website: string | null;
+  logo_url: string | null;
+}
+
+export interface UpdateCompanyInput {
+  name?: string;
+  email?: string;
+  phone?: string;
+  address?: string;
+  tax_id?: string;
+  website?: string;
+}

@@ -1,6 +1,5 @@
 import { SubNavItem, NavModule } from '@shared/types/nav';
 import { NAV_MODULES } from '@shared/constants/navigation';
-
 export { SubNavItem, NavModule };
 export { NAV_MODULES };
 
