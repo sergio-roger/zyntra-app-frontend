@@ -7,14 +7,26 @@ import { ResetPasswordPage } from '@features/auth/pages/ResetPasswordPage';
 export const authRoutes: RouteObject[] = [
   {
     path: '/login',
-    element: <PublicOnlyRoute><LoginPage /></PublicOnlyRoute>
+    element: (
+      <PublicOnlyRoute>
+        <LoginPage />
+      </PublicOnlyRoute>
+    ),
   },
   {
     path: '/forgot-password',
-    element: <PublicOnlyRoute><ForgotPasswordPage /></PublicOnlyRoute>
+    element: (
+      <PublicOnlyRoute>
+        <ForgotPasswordPage />
+      </PublicOnlyRoute>
+    ),
   },
   {
     path: '/reset-password',
-    element: <PublicOnlyRoute><ResetPasswordPage /></PublicOnlyRoute>
-  }
+    element: (
+      <PublicOnlyRoute>
+        <ResetPasswordPage />
+      </PublicOnlyRoute>
+    ),
+  },
 ];

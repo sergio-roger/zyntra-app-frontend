@@ -21,6 +21,23 @@ vi.mock('@features/auth/store/authStore', () => ({
   useAuthStore: vi.fn(),
 }));
 
+vi.mock('@features/settings/hooks/usePermissions', () => ({
+  useRolesList: vi.fn(() => ({
+    data: [
+      { id: 'admin-id', name: 'admin', label: 'Administrador' },
+      { id: 'manager-id', name: 'manager', label: 'Gerente' },
+      { id: 'agent-id', name: 'agent', label: 'Agente' },
+    ],
+    isLoading: false,
+  })),
+  useCreateRole: vi.fn(),
+  useUpdateRole: vi.fn(),
+  useDeleteRole: vi.fn(),
+  useMenusList: vi.fn(),
+  useRolePermissions: vi.fn(),
+  useUpdatePermissions: vi.fn(),
+}));
+
 vi.mock('@shared/components/toast/toastManager', () => ({
   toastManager: {
     add: vi.fn(),
@@ -35,9 +52,8 @@ const createWrapper = () => {
       },
     },
   });
-  return ({ children }: { children: React.ReactNode }) => (
-    React.createElement(QueryClientProvider, { client: queryClient }, children)
-  );
+  return ({ children }: { children: React.ReactNode }) =>
+    React.createElement(QueryClientProvider, { client: queryClient }, children);
 };
 
 describe('UsersPage - User Limits', () => {
@@ -60,9 +76,36 @@ describe('UsersPage - User Limits', () => {
 
     // Currently 2 active users (less than limit) and 1 inactive user
     const mockUsers = [
-      { id: '1', name: 'User One', email: 'one@test.com', role: 'admin', is_active: true, teams: [] },
-      { id: '2', name: 'User Two', email: 'two@test.com', role: 'agent', is_active: true, teams: [] },
-      { id: '3', name: 'User Three', email: 'three@test.com', role: 'agent', is_active: false, teams: [] },
+      {
+        id: '1',
+        name: 'User One',
+        email: 'one@test.com',
+        role: 'admin',
+        is_active: true,
+        isActive: true,
+        status: 'active',
+        teams: [],
+      },
+      {
+        id: '2',
+        name: 'User Two',
+        email: 'two@test.com',
+        role: 'agent',
+        is_active: true,
+        isActive: true,
+        status: 'active',
+        teams: [],
+      },
+      {
+        id: '3',
+        name: 'User Three',
+        email: 'three@test.com',
+        role: 'agent',
+        is_active: false,
+        isActive: false,
+        status: 'inactive',
+        teams: [],
+      },
     ];
 
     vi.mocked(useUsersTeamsHook.useUsersList).mockReturnValue({
@@ -75,7 +118,7 @@ describe('UsersPage - User Limits', () => {
       <MemoryRouter>
         <UsersPage />
       </MemoryRouter>,
-      { wrapper: createWrapper() }
+      { wrapper: createWrapper() },
     );
 
     // Verify "Añadir usuario" button is active/enabled
@@ -83,19 +126,27 @@ describe('UsersPage - User Limits', () => {
     expect(addButton).not.toBeDisabled();
 
     // Verify warning banner is not present
-    expect(screen.queryByText(/Has alcanzado el límite/i)).not.toBeInTheDocument();
+    expect(
+      screen.queryByText(/Has alcanzado el límite/i),
+    ).not.toBeInTheDocument();
 
     // Try to activate the inactive user (third user)
     const activateButtons = screen.getAllByRole('button');
     // The status toggle button for the inactive user has title "Activar" or is the one with UserCheck icon
     // Let's click it: it triggers toggleStatus
-    const inactiveUserToggle = activateButtons.find(btn => btn.title === 'Activar');
+    const inactiveUserToggle = activateButtons.find(
+      (btn) => btn.title === 'Activar',
+    );
     expect(inactiveUserToggle).toBeDefined();
-    
+
     fireEvent.click(inactiveUserToggle!);
 
     // Should call mutateAsync to activate user
-    expect(mockMutateAsync).toHaveBeenCalledWith({ id: '3', is_active: true });
+    expect(mockMutateAsync).toHaveBeenCalledWith({
+      id: '3',
+      status: 'active',
+      isActive: true,
+    });
     expect(toastManager.add).not.toHaveBeenCalled();
   });
 
@@ -108,9 +159,36 @@ describe('UsersPage - User Limits', () => {
 
     // Currently 2 active users (equals limit) and 1 inactive user
     const mockUsers = [
-      { id: '1', name: 'User One', email: 'one@test.com', role: 'admin', is_active: true, teams: [] },
-      { id: '2', name: 'User Two', email: 'two@test.com', role: 'agent', is_active: true, teams: [] },
-      { id: '3', name: 'User Three', email: 'three@test.com', role: 'agent', is_active: false, teams: [] },
+      {
+        id: '1',
+        name: 'User One',
+        email: 'one@test.com',
+        role: 'admin',
+        is_active: true,
+        isActive: true,
+        status: 'active',
+        teams: [],
+      },
+      {
+        id: '2',
+        name: 'User Two',
+        email: 'two@test.com',
+        role: 'agent',
+        is_active: true,
+        isActive: true,
+        status: 'active',
+        teams: [],
+      },
+      {
+        id: '3',
+        name: 'User Three',
+        email: 'three@test.com',
+        role: 'agent',
+        is_active: false,
+        isActive: false,
+        status: 'inactive',
+        teams: [],
+      },
     ];
 
     vi.mocked(useUsersTeamsHook.useUsersList).mockReturnValue({
@@ -123,7 +201,7 @@ describe('UsersPage - User Limits', () => {
       <MemoryRouter>
         <UsersPage />
       </MemoryRouter>,
-      { wrapper: createWrapper() }
+      { wrapper: createWrapper() },
     );
 
     // Verify "Añadir usuario" button is disabled
@@ -131,11 +209,15 @@ describe('UsersPage - User Limits', () => {
     expect(addButton).toBeDisabled();
 
     // Verify warning banner is present
-    expect(screen.getByText(/Has alcanzado el límite de 2 usuarios activos/i)).toBeInTheDocument();
+    expect(
+      screen.getByText(/Has alcanzado el límite de 2 usuarios activos/i),
+    ).toBeInTheDocument();
 
     // Try to activate the inactive user (third user)
     const activateButtons = screen.getAllByRole('button');
-    const inactiveUserToggle = activateButtons.find(btn => btn.title === 'Activar');
+    const inactiveUserToggle = activateButtons.find(
+      (btn) => btn.title === 'Activar',
+    );
     expect(inactiveUserToggle).toBeDefined();
 
     fireEvent.click(inactiveUserToggle!);
@@ -144,19 +226,31 @@ describe('UsersPage - User Limits', () => {
     expect(mockMutateAsync).not.toHaveBeenCalled();
     expect(toastManager.add).toHaveBeenCalledWith({
       title: 'Límite alcanzado',
-      description: 'Has alcanzado el límite de 2 usuarios activos permitidos en tu plan.',
+      description:
+        'Has alcanzado el límite de 2 usuarios activos permitidos en tu plan.',
       type: 'error',
     });
   });
 
   it('should display "1 / 10" when plan is Core Digital with a limit of 10', () => {
     vi.mocked(useAuthStore).mockImplementation((selector: any) => {
-      const state = { user: { plan: { name: 'Core Digital', user_limit: 10 } } };
+      const state = {
+        user: { plan: { name: 'Core Digital', user_limit: 10 } },
+      };
       return selector ? selector(state) : state;
     });
 
     const mockUsers = [
-      { id: '1', name: 'User One', email: 'one@test.com', role: 'admin', is_active: true, teams: [] },
+      {
+        id: '1',
+        name: 'User One',
+        email: 'one@test.com',
+        role: 'admin',
+        is_active: true,
+        isActive: true,
+        status: 'active',
+        teams: [],
+      },
     ];
 
     vi.mocked(useUsersTeamsHook.useUsersList).mockReturnValue({
@@ -169,7 +263,7 @@ describe('UsersPage - User Limits', () => {
       <MemoryRouter>
         <UsersPage />
       </MemoryRouter>,
-      { wrapper: createWrapper() }
+      { wrapper: createWrapper() },
     );
 
     // Verify counter shows "1 / 10"

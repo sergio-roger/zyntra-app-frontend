@@ -1,8 +1,16 @@
-import React from 'react';
-import { useNavigate } from 'react-router-dom';
-import { Shield, ShieldAlert, ShieldCheck, ArrowRight, Loader2 } from 'lucide-react';
-import { useMenusList, useRolePermissions, useRolesList } from '@features/settings/hooks/usePermissions';
 import { useAuthStore } from '@features/auth/store/authStore';
+import { RoleCard } from '@features/settings/components/RoleCard';
+import { RoleFormSidebar } from '@features/settings/components/RoleFormSidebar';
+import {
+  useCreateRole,
+  useDeleteRole,
+  useMenusList,
+  useRolesList,
+  useUpdateRole,
+} from '@features/settings/hooks/usePermissions';
+import { Loader2, Plus } from 'lucide-react';
+import React, { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 
 export const PermissionsPage: React.FC = () => {
   const navigate = useNavigate();
@@ -10,107 +18,185 @@ export const PermissionsPage: React.FC = () => {
 
   const { data: allMenus = [], isLoading: loadingMenus } = useMenusList();
   const { data: dbRoles = [], isLoading: loadingRoles } = useRolesList();
-  const { data: managerPerms, isLoading: loadingManager } = useRolePermissions('manager');
-  const { data: agentPerms, isLoading: loadingAgent } = useRolePermissions('agent');
+  const createRoleMutation = useCreateRole();
+  const updateRoleMutation = useUpdateRole();
+  const deleteRoleMutation = useDeleteRole();
+
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [editingRole, setEditingRole] = useState<any | null>(null);
+  const [roleName, setRoleName] = useState('');
+  const [roleLabel, setRoleLabel] = useState('');
+  const [roleDesc, setRoleDesc] = useState('');
+  const [roleBadge, setRoleBadge] = useState('');
+  const [roleIconColor, setRoleIconColor] = useState(
+    'text-primary bg-primary/10 border-primary/20',
+  );
+  const [createError, setCreateError] = useState('');
 
   const totalMenus = allMenus.length;
-  const isLoading = loadingMenus || loadingRoles || loadingManager || loadingAgent;
+  const isLoading = loadingMenus || loadingRoles;
 
-  const getRoleIcon = (name: string) => {
-    switch (name) {
-      case 'admin': return ShieldAlert;
-      case 'manager': return ShieldCheck;
-      default: return Shield;
+  const resetForm = () => {
+    setEditingRole(null);
+    setRoleName('');
+    setRoleLabel('');
+    setRoleDesc('');
+    setRoleBadge('');
+    setRoleIconColor('text-primary bg-primary/10 border-primary/20');
+    setCreateError('');
+  };
+
+  const handleCreateOrUpdateRole = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setCreateError('');
+
+    const sanitizedName = roleName.trim().toLowerCase().replace(/\s+/g, '_');
+    if (!editingRole && !/^[a-z0-9_]+$/.test(sanitizedName)) {
+      setCreateError(
+        'El identificador del rol solo puede contener letras minúsculas, números y guiones bajos.',
+      );
+      return;
+    }
+
+    try {
+      if (editingRole) {
+        // Modo Edición
+        await updateRoleMutation.mutateAsync({
+          roleName: editingRole.name,
+          data: {
+            label: roleLabel.trim(),
+            description: roleDesc.trim(),
+            badge: roleBadge.trim() || undefined,
+            iconColor: roleIconColor,
+            badgeColor: roleIconColor
+              .replace('bg-', 'bg-')
+              .replace('text-', 'text-'),
+          },
+        });
+      } else {
+        // Modo Creación
+        await createRoleMutation.mutateAsync({
+          name: sanitizedName,
+          label: roleLabel.trim(),
+          description: roleDesc.trim(),
+          badge: roleBadge.trim() || undefined,
+          iconColor: roleIconColor,
+          badgeColor: roleIconColor
+            .replace('bg-', 'bg-')
+            .replace('text-', 'text-'),
+        });
+      }
+      setIsModalOpen(false);
+      resetForm();
+    } catch (err: any) {
+      setCreateError(
+        err?.response?.data?.message ||
+          'Error al guardar el rol. Inténtalo de nuevo.',
+      );
     }
   };
 
-  const getRoleActiveCount = (name: string) => {
-    switch (name) {
-      case 'admin': return totalMenus;
-      case 'manager': return managerPerms?.menu_ids.length ?? 0;
-      case 'agent': return agentPerms?.menu_ids.length ?? 0;
-      default: return 0;
+  const handleEditClick = (role: any) => {
+    setEditingRole(role);
+    setRoleName(role.name);
+    setRoleLabel(role.label);
+    setRoleDesc(role.description);
+    setRoleBadge(role.badge || '');
+    setRoleIconColor(
+      role.iconColor || 'text-primary bg-primary/10 border-primary/20',
+    );
+    setIsModalOpen(true);
+  };
+
+  const handleDeleteClick = async (role: any) => {
+    if (
+      window.confirm(
+        `¿Estás seguro de que deseas eliminar el rol "${role.label}"? Se revocarán todos los permisos asociados.`,
+      )
+    ) {
+      try {
+        await deleteRoleMutation.mutateAsync(role.name);
+      } catch (err: any) {
+        alert(err?.response?.data?.message || 'Error al eliminar el rol.');
+      }
     }
   };
+
+  const isMutationPending =
+    createRoleMutation.isPending || updateRoleMutation.isPending;
 
   return (
     <div className="space-y-6 animate-in fade-in duration-500">
       <div className="flex flex-wrap items-center justify-between gap-4">
         <div>
-          <h2 className="text-xl font-bold text-white tracking-tight">Permisos de Acceso</h2>
-          <p className="text-sm text-slate-400">Define qué secciones y funcionalidades puede ver cada rol en la plataforma.</p>
+          <h2 className="text-xl font-bold text-white tracking-tight">
+            Permisos de Acceso
+          </h2>
+          <p className="text-sm text-slate-400">
+            Define qué secciones y funcionalidades puede ver cada rol en la
+            plataforma.
+          </p>
         </div>
-        {user?.plan && (
-          <div className="flex items-center gap-2 bg-slate-900 border border-white/5 px-4 py-2.5 rounded-2xl">
-            <span className="text-xs text-slate-400 font-bold uppercase tracking-wider">Plan Activo:</span>
-            <span className="text-sm text-indigo-400 font-extrabold">{user.plan.name}</span>
-            {user.plan_status && (
-              <span className={`text-[10px] font-black uppercase tracking-wider px-2 py-0.5 rounded-md ${
-                user.plan_status === 'active' ? 'bg-emerald-500/10 text-emerald-400' : 'bg-amber-500/10 text-amber-400'
-              }`}>
-                {user.plan_status === 'active' ? 'Activo' : user.plan_status}
-              </span>
-            )}
-          </div>
+
+        {/* Botón de crear rol si cuenta con el plan con permisos (Core Digital) */}
+        {user?.plan?.name === 'Core Digital' && (
+          <button
+            onClick={() => {
+              resetForm();
+              setIsModalOpen(true);
+            }}
+            className="flex items-center gap-2 px-5 py-2.5 rounded-xl bg-gradient-to-r from-primary to-secondary text-primary-content font-bold text-sm shadow-lg shadow-primary/20 hover:scale-[1.02] active:scale-95 transition-all"
+          >
+            <Plus size={16} />
+            Crear nuevo rol
+          </button>
         )}
       </div>
 
       {isLoading ? (
         <div className="flex flex-col items-center justify-center py-32 space-y-4">
           <Loader2 className="animate-spin text-primary" size={40} />
-          <p className="text-sm text-slate-500 font-medium">Cargando información de roles...</p>
+          <p className="text-sm text-slate-500 font-medium">
+            Cargando información de roles y permisos...
+          </p>
         </div>
       ) : (
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-          {dbRoles.map((role) => {
-            const Icon = getRoleIcon(role.name);
-            const activeCount = getRoleActiveCount(role.name);
-
-            return (
-              <div
-                key={role.id}
-                className="flex flex-col bg-slate-900/50 border border-white/5 rounded-3xl p-6 shadow-xl relative group hover:border-white/10 transition-all hover:-translate-y-0.5"
-              >
-                <div className="flex items-center justify-between">
-                  <div className={`p-3 rounded-2xl border ${role.iconColor || 'text-slate-400 bg-slate-500/10 border-slate-500/20'}`}>
-                    <Icon size={24} />
-                  </div>
-                  {role.badge && (
-                    <span className={`text-[10px] font-black uppercase tracking-wider px-2.5 py-1 rounded-lg ${role.badgeColor || 'bg-slate-500/10 text-slate-400'}`}>
-                      {role.badge}
-                    </span>
-                  )}
-                </div>
-
-                <div className="mt-6 flex-1 space-y-2">
-                  <h3 className="text-lg font-bold text-white">{role.label}</h3>
-                  <p className="text-sm text-slate-400 leading-relaxed">{role.description}</p>
-                </div>
-
-                <div className="mt-8 pt-6 border-t border-white/5 flex items-center justify-between">
-                  <div>
-                    <span className="text-2xl font-extrabold text-white">{activeCount}</span>
-                    <span className="text-xs text-slate-500 font-bold ml-1">/ {totalMenus} permisos</span>
-                  </div>
-
-                  {role.isEditable && user?.plan?.name === 'Core Digital' ? (
-                    <button
-                      onClick={() => navigate(`/settings/permissions/${role.name}`)}
-                      className="inline-flex items-center gap-1.5 px-4 py-2.5 rounded-xl bg-slate-800 hover:bg-slate-700 text-sm font-bold text-white transition-all group-hover:text-primary"
-                    >
-                      Configurar <ArrowRight size={16} />
-                    </button>
-                  ) : (
-                    <span className="text-xs text-slate-600 font-bold italic">
-                      {user?.plan?.name !== 'Core Digital' && role.isEditable ? 'Requiere Core Digital' : 'No editable'}
-                    </span>
-                  )}
-                </div>
-              </div>
-            );
-          })}
+          {dbRoles.map((role) => (
+            <RoleCard
+              key={role.id}
+              role={role}
+              totalMenus={totalMenus}
+              user={user}
+              navigate={navigate}
+              onEdit={() => handleEditClick(role)}
+              onDelete={() => handleDeleteClick(role)}
+            />
+          ))}
         </div>
       )}
+
+      <RoleFormSidebar
+        open={isModalOpen}
+        editingRole={editingRole}
+        roleName={roleName}
+        roleLabel={roleLabel}
+        roleDesc={roleDesc}
+        roleBadge={roleBadge}
+        roleIconColor={roleIconColor}
+        createError={createError}
+        isMutationPending={isMutationPending}
+        onRoleNameChange={setRoleName}
+        onRoleLabelChange={setRoleLabel}
+        onRoleDescChange={setRoleDesc}
+        onRoleBadgeChange={setRoleBadge}
+        onRoleIconColorChange={setRoleIconColor}
+        onClose={() => {
+          setIsModalOpen(false);
+          resetForm();
+        }}
+        onSubmit={handleCreateOrUpdateRole}
+      />
     </div>
   );
 };

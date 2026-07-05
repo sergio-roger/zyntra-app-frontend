@@ -1,42 +1,45 @@
-import { Contact, ActivityType } from '@crm/types';
+import { ActivityType } from '@crm/types/crm';
 
 export interface CreateContactInput {
-  name: string;
+  channelId?: string;
+  customFields?: Record<string, any>;
   email?: string;
-  phone?: string;
-  stage?: Contact['stage'];
-  lifecycle_stage_id?: string;
-  source?: Contact['source'];
-  tags?: string[];
+  isLead?: boolean;
+  lifecycleStageId?: string;
+  name: string;
   notes?: string;
-  custom_fields?: Record<string, any>;
-  is_lead?: boolean;
+  ownerId?: string | null;
+  phone?: string;
+  tags?: string[];
 }
 
 export type UpdateContactInput = Partial<CreateContactInput>;
 
 export interface CreateActivityInput {
-  type: ActivityType;
   content: string;
   metadata?: Record<string, unknown>;
+  type: ActivityType;
 }
 
 export interface CreateTagInput {
-  name: string;
   color?: string;
   description?: string;
+  entity_type?: string;
+  name: string;
 }
 
 export type UpdateTagInput = Partial<CreateTagInput>;
 
 export interface CreateCustomFieldInput {
-  name: string;
   label: string;
-  type: string;
+  name: string;
   options?: string[];
   required?: boolean;
+  type: string;
 }
 
-export type UpdateCustomFieldInput = Partial<Omit<CreateCustomFieldInput, 'name' | 'type'>> & {
+export type UpdateCustomFieldInput = Partial<
+  Omit<CreateCustomFieldInput, 'name' | 'type'>
+> & {
   is_active?: boolean;
 };

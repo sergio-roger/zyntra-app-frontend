@@ -1,9 +1,9 @@
 /// <reference types="vitest" />
-import { defineConfig } from "vitest/config";
-import react from "@vitejs/plugin-react";
-import tailwindcss from "tailwindcss";
-import autoprefixer from "autoprefixer";
-import path from "node:path";
+import { defineConfig } from 'vitest/config';
+import react from '@vitejs/plugin-react';
+import tailwindcss from 'tailwindcss';
+import autoprefixer from 'autoprefixer';
+import path from 'node:path';
 
 export default defineConfig({
   plugins: [react()],
@@ -14,17 +14,18 @@ export default defineConfig({
   },
   resolve: {
     alias: {
-      "@": path.resolve(__dirname, "./src"),
-      "@features": path.resolve(__dirname, "./src/features"),
-      "@shared": path.resolve(__dirname, "./src/shared"),
-      "@routes": path.resolve(__dirname, "./src/routes"),
-      "@core": path.resolve(__dirname, "./src/core"),
-      "@crm": path.resolve(__dirname, "./src/features/crm"),
+      '@': path.resolve(__dirname, './src'),
+      '@features': path.resolve(__dirname, './src/features'),
+      '@shared': path.resolve(__dirname, './src/shared'),
+      '@routes': path.resolve(__dirname, './src/routes'),
+      '@core': path.resolve(__dirname, './src/core'),
+      '@crm': path.resolve(__dirname, './src/features/crm'),
     },
   },
   test: {
     globals: true,
-    environment: "jsdom",
-    setupFiles: "./src/test/setup.ts",
+    environment: 'jsdom',
+    setupFiles: './src/test/setup.ts',
+    exclude: ['**/node_modules/**', '**/dist/**', '**/e2e/**', '**/cypress/**'],
   },
 });

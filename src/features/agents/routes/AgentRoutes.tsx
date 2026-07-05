@@ -17,7 +17,7 @@ export const agentRoutes: RouteObject[] = [
           </SuspenseLoader>
         </ModuleGuard>
       </PermissionGuard>
-    )
+    ),
   },
   {
     path: '/agents/content',
@@ -29,7 +29,7 @@ export const agentRoutes: RouteObject[] = [
           </SuspenseLoader>
         </ModuleGuard>
       </PermissionGuard>
-    )
+    ),
   },
   {
     path: '/agents/analysis',
@@ -41,12 +41,11 @@ export const agentRoutes: RouteObject[] = [
           </SuspenseLoader>
         </ModuleGuard>
       </PermissionGuard>
-    )
+    ),
   },
 
   {
     path: '/agents',
-    element: <Navigate to="/agents/strategy" replace />
-  }
+    element: <Navigate to="/agents/strategy" replace />,
+  },
 ];
-

@@ -1,44 +1,16 @@
-import React from 'react';
+import { Contact } from '@crm/types/contact';
 import {
   Archive,
   ArrowRightCircle,
-  Bot,
-  FileText,
-  Mail,
-  MessageCircle,
-  Share2,
-  Upload,
-  User,
   Inbox,
 } from 'lucide-react';
-import { Contact, ContactSource } from '@crm/types';
-import { SOURCE_LABELS } from '@crm/types';
+import React from 'react';
 
 interface LeadsTableProps {
   leads: Contact[];
   onArchive: (lead: Contact) => void;
   onConvert: (lead: Contact) => void;
 }
-
-const SOURCE_ICONS: Record<ContactSource, React.ReactNode> = {
-  manual: <User size={12} />,
-  chatbot: <Bot size={12} />,
-  whatsapp: <MessageCircle size={12} />,
-  instagram: <Share2 size={12} />,
-  email: <Mail size={12} />,
-  form: <FileText size={12} />,
-  import: <Upload size={12} />,
-};
-
-const SOURCE_COLORS: Record<ContactSource, string> = {
-  manual: 'bg-slate-500/20 text-slate-300 border-slate-500/20',
-  chatbot: 'bg-violet-500/20 text-violet-300 border-violet-500/20',
-  whatsapp: 'bg-emerald-500/20 text-emerald-300 border-emerald-500/20',
-  instagram: 'bg-pink-500/20 text-pink-300 border-pink-500/20',
-  email: 'bg-blue-500/20 text-blue-300 border-blue-500/20',
-  form: 'bg-amber-500/20 text-amber-300 border-amber-500/20',
-  import: 'bg-cyan-500/20 text-cyan-300 border-cyan-500/20',
-};
 
 const AVATAR_COLORS = [
   'bg-violet-500/30 text-violet-300',
@@ -52,7 +24,8 @@ const AVATAR_COLORS = [
 
 function getAvatarColor(name: string): string {
   let hash = 0;
-  for (let i = 0; i < name.length; i++) hash = name.charCodeAt(i) + ((hash << 5) - hash);
+  for (let i = 0; i < name.length; i++)
+    hash = name.charCodeAt(i) + ((hash << 5) - hash);
   return AVATAR_COLORS[Math.abs(hash) % AVATAR_COLORS.length];
 }
 
@@ -74,10 +47,17 @@ function relativeTime(dateStr: string): string {
   if (hrs < 24) return `hace ${hrs}h`;
   const days = Math.floor(hrs / 24);
   if (days < 30) return `hace ${days}d`;
-  return new Date(dateStr).toLocaleDateString('es', { day: '2-digit', month: 'short' });
+  return new Date(dateStr).toLocaleDateString('es', {
+    day: '2-digit',
+    month: 'short',
+  });
 }
 
-export const LeadsTable: React.FC<LeadsTableProps> = ({ leads, onArchive, onConvert }) => {
+export const LeadsTable: React.FC<LeadsTableProps> = ({
+  leads,
+  onArchive,
+  onConvert,
+}) => {
   if (leads.length === 0) {
     return (
       <div className="flex flex-col items-center justify-center py-24 gap-4">
@@ -85,8 +65,12 @@ export const LeadsTable: React.FC<LeadsTableProps> = ({ leads, onArchive, onConv
           <Inbox size={32} />
         </div>
         <div className="text-center">
-          <p className="text-slate-300 font-bold text-sm">No hay leads en el inbox</p>
-          <p className="text-slate-500 text-xs mt-1">Los nuevos leads aparecerán aquí automáticamente.</p>
+          <p className="text-slate-300 font-bold text-sm">
+            No hay leads en el inbox
+          </p>
+          <p className="text-slate-500 text-xs mt-1">
+            Los nuevos leads aparecerán aquí automáticamente.
+          </p>
         </div>
       </div>
     );
@@ -97,12 +81,24 @@ export const LeadsTable: React.FC<LeadsTableProps> = ({ leads, onArchive, onConv
       <table className="w-full text-sm">
         <thead>
           <tr className="border-b border-white/5">
-            <th className="text-left px-5 py-3 text-[10px] font-bold uppercase tracking-widest text-slate-500">Lead</th>
-            <th className="text-left px-5 py-3 text-[10px] font-bold uppercase tracking-widest text-slate-500 hidden md:table-cell">Contacto</th>
-            <th className="text-left px-5 py-3 text-[10px] font-bold uppercase tracking-widest text-slate-500 hidden lg:table-cell">Fuente</th>
-            <th className="text-left px-5 py-3 text-[10px] font-bold uppercase tracking-widest text-slate-500 hidden xl:table-cell">Etiqueta</th>
-            <th className="text-left px-5 py-3 text-[10px] font-bold uppercase tracking-widest text-slate-500 hidden lg:table-cell">Registrado</th>
-            <th className="text-right px-5 py-3 text-[10px] font-bold uppercase tracking-widest text-slate-500">Acciones</th>
+            <th className="text-left px-5 py-3 text-[10px] font-bold uppercase tracking-widest text-slate-500">
+              Lead
+            </th>
+            <th className="text-left px-5 py-3 text-[10px] font-bold uppercase tracking-widest text-slate-500 hidden md:table-cell">
+              Contacto
+            </th>
+            <th className="text-left px-5 py-3 text-[10px] font-bold uppercase tracking-widest text-slate-500 hidden lg:table-cell">
+              Canal
+            </th>
+            <th className="text-left px-5 py-3 text-[10px] font-bold uppercase tracking-widest text-slate-500 hidden xl:table-cell">
+              Etiqueta
+            </th>
+            <th className="text-left px-5 py-3 text-[10px] font-bold uppercase tracking-widest text-slate-500 hidden lg:table-cell">
+              Registrado
+            </th>
+            <th className="text-right px-5 py-3 text-[10px] font-bold uppercase tracking-widest text-slate-500">
+              Acciones
+            </th>
           </tr>
         </thead>
         <tbody>
@@ -110,6 +106,7 @@ export const LeadsTable: React.FC<LeadsTableProps> = ({ leads, onArchive, onConv
             const avatarColor = getAvatarColor(lead.name);
             const initials = getInitials(lead.name);
             const firstTag = lead.tags?.[0];
+            const channelName = lead.channel?.name || 'Manual';
 
             return (
               <tr
@@ -119,13 +116,19 @@ export const LeadsTable: React.FC<LeadsTableProps> = ({ leads, onArchive, onConv
                 {/* Lead / Avatar + Name */}
                 <td className="px-5 py-3.5">
                   <div className="flex items-center gap-3">
-                    <div className={`h-9 w-9 rounded-xl flex items-center justify-center text-xs font-black shrink-0 ${avatarColor}`}>
+                    <div
+                      className={`h-9 w-9 rounded-xl flex items-center justify-center text-xs font-black shrink-0 ${avatarColor}`}
+                    >
                       {initials}
                     </div>
                     <div className="min-w-0">
-                      <p className="text-white font-semibold text-sm truncate max-w-[140px]">{lead.name}</p>
-                      {lead.company_name && (
-                        <p className="text-slate-500 text-xs truncate max-w-[140px]">{lead.company_name}</p>
+                      <p className="text-white font-semibold text-sm truncate max-w-[140px]">
+                        {lead.name}
+                      </p>
+                      {lead.company?.name && (
+                        <p className="text-slate-500 text-xs truncate max-w-[140px]">
+                          {lead.company.name}
+                        </p>
                       )}
                     </div>
                   </div>
@@ -134,16 +137,19 @@ export const LeadsTable: React.FC<LeadsTableProps> = ({ leads, onArchive, onConv
                 {/* Contact info */}
                 <td className="px-5 py-3.5 hidden md:table-cell">
                   <div className="flex flex-col gap-0.5">
-                    <span className="text-slate-300 text-xs truncate max-w-[180px]">{lead.email || '—'}</span>
-                    <span className="text-slate-500 text-xs">{lead.phone || '—'}</span>
+                    <span className="text-slate-300 text-xs truncate max-w-[180px]">
+                      {lead.email || '—'}
+                    </span>
+                    <span className="text-slate-500 text-xs">
+                      {lead.phone || '—'}
+                    </span>
                   </div>
                 </td>
 
-                {/* Source */}
+                {/* Channel */}
                 <td className="px-5 py-3.5 hidden lg:table-cell">
-                  <span className={`inline-flex items-center gap-1.5 px-2 py-1 rounded-lg border text-[11px] font-semibold ${SOURCE_COLORS[lead.source]}`}>
-                    {SOURCE_ICONS[lead.source]}
-                    {SOURCE_LABELS[lead.source]}
+                  <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-lg text-xs font-semibold bg-indigo-500/10 text-indigo-400 border border-indigo-500/20">
+                    {channelName}
                   </span>
                 </td>
 
@@ -167,7 +173,9 @@ export const LeadsTable: React.FC<LeadsTableProps> = ({ leads, onArchive, onConv
 
                 {/* Created at */}
                 <td className="px-5 py-3.5 hidden lg:table-cell">
-                  <span className="text-slate-500 text-xs">{relativeTime(lead.created_at)}</span>
+                  <span className="text-slate-500 text-xs">
+                    {relativeTime(lead.createdAt)}
+                  </span>
                 </td>
 
                 {/* Actions */}

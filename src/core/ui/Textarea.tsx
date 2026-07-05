@@ -9,11 +9,26 @@ interface TextareaProps extends React.TextareaHTMLAttributes<HTMLTextAreaElement
 }
 
 export const Textarea = forwardRef<HTMLTextAreaElement, TextareaProps>(
-  ({ label, icon: Icon, error, containerClassName = '', className = '', ...props }, ref) => {
+  (
+    {
+      label,
+      icon: Icon,
+      error,
+      containerClassName = '',
+      className = '',
+      ...props
+    },
+    ref,
+  ) => {
+    const textareaId = props.id || (label ? `textarea-${label.toLowerCase().replace(/[^a-z0-9]/g, '-')}` : undefined);
+
     return (
       <div className={`space-y-1.5 ${containerClassName}`}>
         {label && (
-          <label className="flex items-center gap-2 text-xs font-bold text-slate-400 uppercase tracking-wider ml-1">
+          <label
+            htmlFor={textareaId}
+            className="flex items-center gap-2 text-xs font-bold text-slate-400 uppercase tracking-wider ml-1"
+          >
             {Icon && <Icon size={14} className="text-slate-500" />}
             {label}
           </label>
@@ -21,10 +36,11 @@ export const Textarea = forwardRef<HTMLTextAreaElement, TextareaProps>(
         <div className="relative group">
           <textarea
             ref={ref}
+            id={textareaId}
             className={`
-              w-full bg-slate-950/50 border border-white/10 rounded-xl py-2.5 px-4 text-sm text-white placeholder-slate-600 
-              focus:outline-none focus:border-primary/50 focus:ring-1 focus:ring-primary/20 transition-all resize-none
-              ${error ? 'border-rose-500/50 focus:border-rose-500 focus:ring-rose-500/20' : ''}
+              w-full bg-transparent border-b border-white/10 py-2 px-1 text-sm text-white placeholder-slate-600 
+              focus:outline-none focus:border-primary focus:ring-0 resize-none
+              ${error ? 'border-rose-500/50 focus:border-rose-500' : ''}
               ${className}
             `}
             {...props}
@@ -37,7 +53,7 @@ export const Textarea = forwardRef<HTMLTextAreaElement, TextareaProps>(
         )}
       </div>
     );
-  }
+  },
 );
 
 Textarea.displayName = 'Textarea';

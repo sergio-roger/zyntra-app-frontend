@@ -14,8 +14,18 @@ vi.mock('./SideRail', () => ({
   SideRail: ({ isSidebarOpen, onToggleSidebar }: any) => (
     <div data-testid="side-rail">
       SideRail Open: {isSidebarOpen ? 'true' : 'false'}
-      <button onClick={() => onToggleSidebar(true)} data-testid="toggle-subsidebar-true">Open Sub</button>
-      <button onClick={() => onToggleSidebar(false)} data-testid="toggle-subsidebar-false">Close Sub</button>
+      <button
+        onClick={() => onToggleSidebar(true)}
+        data-testid="toggle-subsidebar-true"
+      >
+        Open Sub
+      </button>
+      <button
+        onClick={() => onToggleSidebar(false)}
+        data-testid="toggle-subsidebar-false"
+      >
+        Close Sub
+      </button>
     </div>
   ),
 }));
@@ -24,7 +34,9 @@ vi.mock('./SubSidebar', () => ({
   SubSidebar: ({ isOpen, onClose }: any) => (
     <div data-testid="sub-sidebar">
       SubSidebar Open: {isOpen ? 'true' : 'false'}
-      <button onClick={onClose} data-testid="close-subsidebar">Close All</button>
+      <button onClick={onClose} data-testid="close-subsidebar">
+        Close All
+      </button>
     </div>
   ),
 }));
@@ -46,7 +58,7 @@ describe('AppShell Layout Responsive States', () => {
     render(
       <MemoryRouter>
         <AppShell />
-      </MemoryRouter>
+      </MemoryRouter>,
     );
 
     expect(screen.getByText('Plan:')).toBeInTheDocument();
@@ -57,11 +69,11 @@ describe('AppShell Layout Responsive States', () => {
     render(
       <MemoryRouter>
         <AppShell />
-      </MemoryRouter>
+      </MemoryRouter>,
     );
 
     const hamburger = screen.getByRole('button', { name: /abrir navegación/i });
-    
+
     // Initially mobile rail should be closed (SideRail Open: false)
     expect(screen.getByText('SideRail Open: false')).toBeInTheDocument();
 
@@ -75,7 +87,7 @@ describe('AppShell Layout Responsive States', () => {
     render(
       <MemoryRouter>
         <AppShell />
-      </MemoryRouter>
+      </MemoryRouter>,
     );
 
     const hamburger = screen.getByRole('button', { name: /abrir navegación/i });
@@ -93,7 +105,7 @@ describe('AppShell Layout Responsive States', () => {
     render(
       <MemoryRouter>
         <AppShell />
-      </MemoryRouter>
+      </MemoryRouter>,
     );
 
     const hamburger = screen.getByRole('button', { name: /abrir navegación/i });

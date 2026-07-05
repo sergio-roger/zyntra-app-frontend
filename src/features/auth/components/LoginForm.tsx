@@ -1,14 +1,17 @@
-import React from 'react';
-import { Link } from 'react-router-dom';
-import { useForm } from 'react-hook-form';
-import { zodResolver } from '@hookform/resolvers/zod';
-import { Mail, Lock } from 'lucide-react';
-import { useAuth } from '@features/auth/hooks/useAuth';
 import { FormField } from '@features/auth/components/FormField';
 import { SubmitButton } from '@features/auth/components/SubmitButton';
-import { loginSchema, type LoginFormValues } from '@features/auth/schemas/login.schema';
+import { useAuth } from '@features/auth/hooks/useAuth';
 import { extractApiErrors } from '@features/auth/lib/mapAuthError';
+import {
+  LoginFormValues,
+  loginSchema,
+} from '@features/auth/schemas/login.schema';
+import { zodResolver } from '@hookform/resolvers/zod';
 import { toastManager } from '@shared/components/toast/toastManager';
+import { Lock, Mail } from 'lucide-react';
+import React, { useState } from 'react';
+import { useForm } from 'react-hook-form';
+import { Link } from 'react-router-dom';
 
 interface LoginFormProps {
   onSuccess?: () => void;
@@ -16,6 +19,7 @@ interface LoginFormProps {
 
 export const LoginForm: React.FC<LoginFormProps> = ({ onSuccess }) => {
   const { login } = useAuth();
+  const [showPassword, setShowPassword] = useState(false);
 
   const {
     register,
@@ -49,7 +53,11 @@ export const LoginForm: React.FC<LoginFormProps> = ({ onSuccess }) => {
   };
 
   return (
-    <form onSubmit={handleSubmit(onSubmit)} noValidate className="flex flex-col gap-4">
+    <form
+      onSubmit={handleSubmit(onSubmit)}
+      noValidate
+      className="flex flex-col gap-4"
+    >
       <FormField
         label="Email"
         icon={Mail}
@@ -65,17 +73,49 @@ export const LoginForm: React.FC<LoginFormProps> = ({ onSuccess }) => {
         <FormField
           label="Contraseña"
           icon={Lock}
-          type="password"
+          type={showPassword ? 'text' : 'password'}
           placeholder="••••••••"
           autoComplete="current-password"
           error={errors.password?.message}
           disabled={isSubmitting}
           {...register('password')}
         />
-        <div className="mt-2 text-right">
+        <div className="mt-2 flex items-center justify-between">
+          <label className="mt-2 group flex cursor-pointer select-none items-center gap-2">
+            <input
+              type="checkbox"
+              checked={showPassword}
+              onChange={(e) => setShowPassword(e.target.checked)}
+              className="sr-only"
+            />
+            <span
+              className={`flex h-4 w-4 shrink-0 items-center justify-center rounded border shadow-inner transition-all duration-200 ${
+                showPassword
+                  ? 'border-transparent bg-gradient-to-br from-indigo-500 to-violet-600 shadow-indigo-500/30'
+                  : 'border-white/10 bg-slate-950/60 group-hover:border-white/20'
+              }`}
+            >
+              {showPassword && (
+                <svg
+                  viewBox="0 0 10 8"
+                  fill="none"
+                  stroke="currentColor"
+                  strokeWidth="1.8"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  className="h-2.5 w-2.5 text-white"
+                >
+                  <path d="M1 4l3 3 5-6" />
+                </svg>
+              )}
+            </span>
+            <span className="text-xs text-slate-400 transition-colors group-hover:text-slate-300">
+              Ver contraseña
+            </span>
+          </label>
           <Link
             to="/forgot-password"
-            className="text-xs text-slate-400 transition-colors hover:text-indigo-400"
+            className="mt-2 text-xs text-slate-400 transition-colors hover:text-indigo-400"
           >
             ¿Olvidaste tu contraseña?
           </Link>

@@ -1,5 +1,5 @@
 import React from 'react';
-import { NavModule } from '../../../shared/layouts/nav.config';
+import { NavModule } from '@shared/types/nav';
 import { usePlanModule } from '@features/auth/hooks/usePlanModule';
 import { Lock } from 'lucide-react';
 
@@ -45,7 +45,9 @@ export const RailLink: React.FC<RailLinkProps> = ({
         </div>
         <span
           className={`text-[10px] leading-tight font-medium transition-colors ${
-            active ? 'text-primary' : 'text-base-content/40 group-hover:text-base-content/60'
+            active
+              ? 'text-primary'
+              : 'text-base-content/40 group-hover:text-base-content/60'
           }`}
         >
           {module.label}

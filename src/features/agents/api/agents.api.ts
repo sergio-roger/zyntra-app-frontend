@@ -1,19 +1,14 @@
 import api from '@shared/api/axios';
-import { AgentTask, CreateTaskDto } from '../types';
+import { ApiResponse, unwrap } from '@core/types/api';
+import { AgentTask, CreateTaskDto } from '@features/agents/types/agents';
 
 export const agentsApi = {
-  getTasks: async (): Promise<AgentTask[]> => {
-    const { data } = await api.get('/tasks');
-    return data;
-  },
+  getTasks: (): Promise<AgentTask[]> =>
+    api.get<unknown, ApiResponse<AgentTask[]>>('/tasks').then(unwrap),
 
-  getTask: async (id: string): Promise<AgentTask> => {
-    const { data } = await api.get(`/tasks/${id}`);
-    return data;
-  },
+  getTask: (id: string): Promise<AgentTask> =>
+    api.get<unknown, ApiResponse<AgentTask>>(`/tasks/${id}`).then(unwrap),
 
-  createTask: async (dto: CreateTaskDto): Promise<AgentTask> => {
-    const { data } = await api.post('/tasks', dto);
-    return data;
-  },
+  createTask: (dto: CreateTaskDto): Promise<AgentTask> =>
+    api.post<unknown, ApiResponse<AgentTask>>('/tasks', dto).then(unwrap),
 };

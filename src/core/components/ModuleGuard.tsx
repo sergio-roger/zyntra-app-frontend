@@ -9,7 +9,11 @@ interface ModuleGuardProps {
   fallback?: React.ReactNode;
 }
 
-export const ModuleGuard: React.FC<ModuleGuardProps> = ({ menuKey, children, fallback }) => {
+export const ModuleGuard: React.FC<ModuleGuardProps> = ({
+  menuKey,
+  children,
+  fallback,
+}) => {
   const { isLocked, isReadOnly } = usePlanModule(menuKey);
 
   if (isLocked) {

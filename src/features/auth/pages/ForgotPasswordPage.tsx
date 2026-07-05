@@ -13,7 +13,10 @@ export const ForgotPasswordPage: React.FC = () => {
       footer={
         <>
           ¿Recordaste tu contraseña?{' '}
-          <Link to="/login" className="font-medium text-indigo-400 hover:underline">
+          <Link
+            to="/login"
+            className="font-medium text-indigo-400 hover:underline"
+          >
             Volver al inicio de sesión
           </Link>
         </>

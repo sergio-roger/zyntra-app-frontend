@@ -3,13 +3,14 @@ import { crmApi } from '@crm/api/crm.api';
 
 export const fieldsKeys = {
   all: ['crm', 'fields'] as const,
+  byType: (type?: string) => ['crm', 'fields', type ?? 'all'] as const,
 };
 
-export const useCustomFields = () =>
+export const useCustomFields = (entityType?: string) =>
   useQuery({
-    queryKey: fieldsKeys.all,
+    queryKey: fieldsKeys.byType(entityType),
     queryFn: async () => {
-      const res = await crmApi.listFields();
+      const res = await crmApi.listFields(entityType);
       return res.data;
     },
   });
@@ -17,8 +18,14 @@ export const useCustomFields = () =>
 export const useCreateField = () => {
   const queryClient = useQueryClient();
   return useMutation({
-    mutationFn: (input: { name: string; label: string; type: string; options?: string[]; required?: boolean }) =>
-      crmApi.createField(input),
+    mutationFn: (input: {
+      entity_type?: string;
+      name: string;
+      label: string;
+      type: string;
+      options?: string[];
+      required?: boolean;
+    }) => crmApi.createField(input),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: fieldsKeys.all });
     },
@@ -28,8 +35,16 @@ export const useCreateField = () => {
 export const useUpdateField = () => {
   const queryClient = useQueryClient();
   return useMutation({
-    mutationFn: ({ id, ...input }: { id: string; label?: string; options?: string[]; required?: boolean; is_active?: boolean }) =>
-      crmApi.updateField(id, input),
+    mutationFn: ({
+      id,
+      ...input
+    }: {
+      id: string;
+      label?: string;
+      options?: string[];
+      required?: boolean;
+      is_active?: boolean;
+    }) => crmApi.updateField(id, input),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: fieldsKeys.all });
     },

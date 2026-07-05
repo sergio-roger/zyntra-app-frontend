@@ -14,7 +14,7 @@ vi.mock('@features/auth/store/authStore', () => ({
 vi.mock('react-router-dom', async () => {
   const actual = await vi.importActual('react-router-dom');
   return {
-    ...actual as any,
+    ...(actual as any),
     useNavigate: () => vi.fn(),
   };
 });
@@ -43,7 +43,7 @@ describe('Guards', () => {
               }
             />
           </Routes>
-        </MemoryRouter>
+        </MemoryRouter>,
       );
 
       expect(screen.getByText('Admin Content')).toBeInTheDocument();
@@ -66,9 +66,12 @@ describe('Guards', () => {
                 </AdminGuard>
               }
             />
-            <Route path="/settings/users" element={<div>Redirect Target</div>} />
+            <Route
+              path="/settings/users"
+              element={<div>Redirect Target</div>}
+            />
           </Routes>
-        </MemoryRouter>
+        </MemoryRouter>,
       );
 
       expect(screen.queryByText('Admin Content')).not.toBeInTheDocument();
@@ -98,7 +101,7 @@ describe('Guards', () => {
               }
             />
           </Routes>
-        </MemoryRouter>
+        </MemoryRouter>,
       );
 
       expect(screen.getByText('Contacts Content')).toBeInTheDocument();
@@ -130,7 +133,7 @@ describe('Guards', () => {
               }
             />
           </Routes>
-        </MemoryRouter>
+        </MemoryRouter>,
       );
 
       expect(screen.getByText('Contacts Content')).toBeInTheDocument();
@@ -163,7 +166,7 @@ describe('Guards', () => {
             />
             <Route path="/dashboard" element={<div>Dashboard Content</div>} />
           </Routes>
-        </MemoryRouter>
+        </MemoryRouter>,
       );
 
       expect(screen.queryByText('Contacts Content')).not.toBeInTheDocument();
@@ -191,7 +194,7 @@ describe('Guards', () => {
           <ModuleGuard menuKey="crm">
             <div>CRM Enabled Content</div>
           </ModuleGuard>
-        </MemoryRouter>
+        </MemoryRouter>,
       );
 
       expect(screen.getByText('CRM Enabled Content')).toBeInTheDocument();
@@ -216,7 +219,7 @@ describe('Guards', () => {
           <ModuleGuard menuKey="crm">
             <div>CRM Locked Content</div>
           </ModuleGuard>
-        </MemoryRouter>
+        </MemoryRouter>,
       );
 
       expect(screen.queryByText('CRM Locked Content')).not.toBeInTheDocument();
@@ -242,11 +245,13 @@ describe('Guards', () => {
           <ModuleGuard menuKey="crm">
             <div>CRM ReadOnly Content</div>
           </ModuleGuard>
-        </MemoryRouter>
+        </MemoryRouter>,
       );
 
       expect(screen.getByText('CRM ReadOnly Content')).toBeInTheDocument();
-      expect(screen.getByText('Solo lectura — actualiza tu plan para editar')).toBeInTheDocument();
+      expect(
+        screen.getByText('Solo lectura — actualiza tu plan para editar'),
+      ).toBeInTheDocument();
     });
   });
 });

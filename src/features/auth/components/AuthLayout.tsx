@@ -11,7 +11,7 @@ interface AuthLayoutProps {
 
 const features = [
   { icon: Bot, label: 'Agentes IA multitarea trabajando 24/7' },
-  { icon: MessageSquare, label: 'Chatbots y CRM unificados' },
+  { icon: MessageSquare, label: 'Canales y CRM unificados' },
   { icon: BarChart3, label: 'Analítica de marketing en tiempo real' },
 ];
 
@@ -52,7 +52,10 @@ export const AuthLayout: React.FC<AuthLayoutProps> = ({
 
           <ul className="space-y-4">
             {features.map(({ icon: Icon, label }) => (
-              <li key={label} className="flex items-center gap-3 text-slate-300">
+              <li
+                key={label}
+                className="flex items-center gap-3 text-slate-300"
+              >
                 <span className="flex h-9 w-9 items-center justify-center rounded-lg bg-white/5 ring-1 ring-white/10">
                   <Icon size={18} className="text-indigo-400" />
                 </span>
@@ -83,14 +86,18 @@ export const AuthLayout: React.FC<AuthLayoutProps> = ({
               <div className="mx-auto mb-5 flex h-14 w-14 items-center justify-center rounded-2xl bg-gradient-to-br from-indigo-500 to-violet-600 shadow-lg shadow-indigo-500/40 ring-1 ring-white/20">
                 {icon}
               </div>
-              <h1 className="text-2xl font-bold tracking-tight sm:text-3xl">{title}</h1>
+              <h1 className="text-2xl font-bold tracking-tight sm:text-3xl">
+                {title}
+              </h1>
               <p className="mt-2 text-sm text-slate-400">{subtitle}</p>
             </div>
 
             {children}
 
             {footer && (
-              <p className="mt-8 text-center text-sm text-slate-400">{footer}</p>
+              <p className="mt-8 text-center text-sm text-slate-400">
+                {footer}
+              </p>
             )}
           </div>
         </div>

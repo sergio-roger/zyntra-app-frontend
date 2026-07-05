@@ -39,8 +39,8 @@ export const ConfirmModal: React.FC<ConfirmModalProps> = ({
   return (
     <div className="fixed inset-0 z-[100] flex items-center justify-center p-4">
       {/* Backdrop */}
-      <div 
-        className="absolute inset-0 bg-black/60 backdrop-blur-sm transition-opacity" 
+      <div
+        className="absolute inset-0 bg-black/60 backdrop-blur-sm transition-opacity"
         onClick={onClose}
       />
 
@@ -48,10 +48,12 @@ export const ConfirmModal: React.FC<ConfirmModalProps> = ({
       <div className="relative w-full max-w-md transform overflow-hidden rounded-2xl bg-slate-900 border border-white/10 shadow-2xl transition-all">
         <div className="p-6">
           <div className="flex items-start gap-4">
-            <div className={`flex h-10 w-10 shrink-0 items-center justify-center rounded-xl ${iconStyles[variant]}`}>
+            <div
+              className={`flex h-10 w-10 shrink-0 items-center justify-center rounded-xl ${iconStyles[variant]}`}
+            >
               <AlertTriangle size={20} />
             </div>
-            
+
             <div className="flex-1">
               <h3 className="text-lg font-bold text-white leading-6">
                 {title}
@@ -61,7 +63,7 @@ export const ConfirmModal: React.FC<ConfirmModalProps> = ({
               </p>
             </div>
 
-            <button 
+            <button
               onClick={onClose}
               className="p-1 rounded-lg text-slate-500 hover:text-white hover:bg-white/5 transition-colors"
             >

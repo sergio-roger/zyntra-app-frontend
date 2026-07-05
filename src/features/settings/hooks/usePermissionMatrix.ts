@@ -1,24 +1,32 @@
-import { useMenusList, useRolePermissions, useUpdatePermissions } from '@features/settings/hooks/usePermissions';
+import {
+  useMenusList,
+  useRolePermissions,
+  useUpdatePermissions,
+} from '@features/settings/hooks/usePermissions';
+import { Menu } from '@features/settings/types/settings';
 import { toastManager } from '@shared/components/toast/toastManager';
-import { Menu } from '@features/settings/types';
 
 interface UsePermissionMatrixParams {
-  roleKey: 'manager' | 'agent';
+  roleKey: string;
   readOnly?: boolean;
 }
 
-type ToggleStrategy = (menu: Menu, allMenus: Menu[], currentIds: string[]) => string[];
+type ToggleStrategy = (
+  menu: Menu,
+  allMenus: Menu[],
+  currentIds: string[],
+) => string[];
 
 const toggleStrategies: Record<'check' | 'uncheck', ToggleStrategy> = {
   check: (menu, allMenus, currentIds) => {
     const nextIds = new Set(currentIds);
     nextIds.add(menu.id);
 
-    if (menu.parent_key) {
-      const parent = allMenus.find((m) => m.key === menu.parent_key);
+    if (menu.parentKey) {
+      const parent = allMenus.find((m) => m.key === menu.parentKey);
       if (parent) nextIds.add(parent.id);
     } else {
-      const children = allMenus.filter((m) => m.parent_key === menu.key);
+      const children = allMenus.filter((m) => m.parentKey === menu.key);
       children.forEach((c) => nextIds.add(c.id));
     }
     return Array.from(nextIds);
@@ -27,22 +35,26 @@ const toggleStrategies: Record<'check' | 'uncheck', ToggleStrategy> = {
     const nextIds = new Set(currentIds);
     nextIds.delete(menu.id);
 
-    if (!menu.parent_key) {
-      const children = allMenus.filter((m) => m.parent_key === menu.key);
+    if (!menu.parentKey) {
+      const children = allMenus.filter((m) => m.parentKey === menu.key);
       children.forEach((c) => nextIds.delete(c.id));
     }
     return Array.from(nextIds);
   },
 };
 
-export function usePermissionMatrix({ roleKey, readOnly = false }: UsePermissionMatrixParams) {
+export function usePermissionMatrix({
+  roleKey,
+  readOnly = false,
+}: UsePermissionMatrixParams) {
   const { data: allMenus, isLoading: loadingMenus } = useMenusList();
-  const { data: rolePerms, isLoading: loadingPerms } = useRolePermissions(roleKey);
+  const { data: rolePerms, isLoading: loadingPerms } =
+    useRolePermissions(roleKey);
   const updateMutation = useUpdatePermissions(roleKey);
 
   const isLoading = loadingMenus || loadingPerms;
-  const activeMenuIds = rolePerms?.menu_ids || [];
-  const roots = allMenus ? allMenus.filter((m) => m.parent_key === null) : [];
+  const activeMenuIds = rolePerms?.menuIds || [];
+  const roots = allMenus ? allMenus.filter((m) => m.parentKey === null) : [];
 
   const handleToggle = (menuId: string, checked: boolean) => {
     if (readOnly || !allMenus) return;
@@ -51,7 +63,11 @@ export function usePermissionMatrix({ roleKey, readOnly = false }: UsePermission
     if (!menu) return;
 
     const strategyKey = checked ? 'check' : 'uncheck';
-    const nextIds = toggleStrategies[strategyKey](menu, allMenus, activeMenuIds);
+    const nextIds = toggleStrategies[strategyKey](
+      menu,
+      allMenus,
+      activeMenuIds,
+    );
 
     updateMutation.mutate(nextIds, {
       onError: () => {

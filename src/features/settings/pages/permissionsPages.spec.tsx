@@ -17,6 +17,18 @@ vi.mock('../hooks/usePermissions', () => ({
     mutate: vi.fn(),
   })),
   useRolesList: vi.fn(),
+  useCreateRole: vi.fn(() => ({
+    mutateAsync: vi.fn(),
+    isPending: false,
+  })),
+  useUpdateRole: vi.fn(() => ({
+    mutateAsync: vi.fn(),
+    isPending: false,
+  })),
+  useDeleteRole: vi.fn(() => ({
+    mutateAsync: vi.fn(),
+    isPending: false,
+  })),
 }));
 
 vi.mock('@features/auth/store/authStore', () => ({
@@ -31,9 +43,8 @@ const createWrapper = () => {
       },
     },
   });
-  return ({ children }: { children: React.ReactNode }) => (
-    React.createElement(QueryClientProvider, { client: queryClient }, children)
-  );
+  return ({ children }: { children: React.ReactNode }) =>
+    React.createElement(QueryClientProvider, { client: queryClient }, children);
 };
 
 describe('Permissions Pages', () => {
@@ -45,9 +56,36 @@ describe('Permissions Pages', () => {
     });
     vi.mocked(usePermsHook.useRolesList).mockReturnValue({
       data: [
-        { id: '1', name: 'admin', label: 'Administrador', description: 'Control total', isEditable: false, badge: 'Acceso Total', badgeColor: '', iconColor: '' },
-        { id: '2', name: 'manager', label: 'Gerente', description: 'Gestión', isEditable: true, badge: 'Configurable', badgeColor: '', iconColor: '' },
-        { id: '3', name: 'agent', label: 'Agente', description: 'Operación', isEditable: true, badge: 'Configurable', badgeColor: '', iconColor: '' },
+        {
+          id: '1',
+          name: 'admin',
+          label: 'Administrador',
+          description: 'Control total',
+          isEditable: false,
+          badge: 'Acceso Total',
+          badgeColor: '',
+          iconColor: '',
+        },
+        {
+          id: '2',
+          name: 'manager',
+          label: 'Gerente',
+          description: 'Gestión',
+          isEditable: true,
+          badge: 'Configurable',
+          badgeColor: '',
+          iconColor: '',
+        },
+        {
+          id: '3',
+          name: 'agent',
+          label: 'Agente',
+          description: 'Operación',
+          isEditable: true,
+          badge: 'Configurable',
+          badgeColor: '',
+          iconColor: '',
+        },
       ],
       isLoading: false,
     } as any);
@@ -56,12 +94,20 @@ describe('Permissions Pages', () => {
   describe('PermissionsPage', () => {
     it('should render 3 roles card correctly', async () => {
       vi.mocked(usePermsHook.useMenusList).mockReturnValue({
-        data: [{ id: '1', key: 'dashboard', label: 'Dashboard', path: '/dashboard', parent_key: null }],
+        data: [
+          {
+            id: '1',
+            key: 'dashboard',
+            label: 'Dashboard',
+            path: '/dashboard',
+            parentKey: null,
+          },
+        ],
         isLoading: false,
       } as any);
 
       vi.mocked(usePermsHook.useRolePermissions).mockReturnValue({
-        data: { role: 'agent', menu_ids: ['1'] },
+        data: { role: 'agent', menuIds: ['1'] },
         isLoading: false,
       } as any);
 
@@ -69,7 +115,7 @@ describe('Permissions Pages', () => {
         <MemoryRouter>
           <PermissionsPage />
         </MemoryRouter>,
-        { wrapper: createWrapper() }
+        { wrapper: createWrapper() },
       );
 
       expect(screen.getByText('Administrador')).toBeInTheDocument();
@@ -83,13 +129,18 @@ describe('Permissions Pages', () => {
       render(
         <MemoryRouter initialEntries={['/settings/permissions/admin']}>
           <Routes>
-            <Route path="/settings/permissions/:role" element={<RolePermissionsPage />} />
+            <Route
+              path="/settings/permissions/:role"
+              element={<RolePermissionsPage />}
+            />
           </Routes>
         </MemoryRouter>,
-        { wrapper: createWrapper() }
+        { wrapper: createWrapper() },
       );
 
-      expect(screen.getByText('Rol no válido o no configurable.')).toBeInTheDocument();
+      expect(
+        screen.getByText('Rol no válido o no configurable.'),
+      ).toBeInTheDocument();
     });
 
     it('should render matrix header if role is manager', () => {
@@ -99,20 +150,25 @@ describe('Permissions Pages', () => {
       } as any);
 
       vi.mocked(usePermsHook.useRolePermissions).mockReturnValue({
-        data: { role: 'manager', menu_ids: [] },
+        data: { role: 'manager', menuIds: [] },
         isLoading: false,
       } as any);
 
       render(
         <MemoryRouter initialEntries={['/settings/permissions/manager']}>
           <Routes>
-            <Route path="/settings/permissions/:role" element={<RolePermissionsPage />} />
+            <Route
+              path="/settings/permissions/:role"
+              element={<RolePermissionsPage />}
+            />
           </Routes>
         </MemoryRouter>,
-        { wrapper: createWrapper() }
+        { wrapper: createWrapper() },
       );
 
-      expect(screen.getByText('Configurar Permisos: Gerente')).toBeInTheDocument();
+      expect(
+        screen.getByText('Configurar Permisos: Gerente'),
+      ).toBeInTheDocument();
     });
   });
 });

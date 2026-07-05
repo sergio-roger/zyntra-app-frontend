@@ -1,5 +1,11 @@
 import api from '@shared/api/axios';
-import { Deal, ListDealsQuery, DealStage } from '@crm/types';
+import { ApiResponse } from '@core/types/api';
+import { UpdateDealInput } from '@crm/types/crm';
+import { Deal } from '@crm/types/deal';
+import { ListDealsQuery } from '@crm/types/list-deals-query';
+import { CreateDealInput } from '@crm/types/create-deal-input';
+import { KanbanResponse } from '@crm/types/kanban-response';
+import { DealStageHistoryRecord } from '@crm/types/deal-stage-history-record';
 
 const buildQS = (q: Record<string, unknown>): string => {
   const sp = new URLSearchParams();
@@ -12,22 +18,33 @@ const buildQS = (q: Record<string, unknown>): string => {
 
 export const dealsApi = {
   list: (query: ListDealsQuery = {}) =>
-    api.get<unknown, { data: { items: Deal[]; total: number; page: number; totalPages: number } }>(
-      `/crm/deals${buildQS(query as Record<string, unknown>)}`,
+    api.get<
+      unknown,
+      ApiResponse<{
+        items: Deal[];
+        total: number;
+        page: number;
+        totalPages: number;
+      }>
+    >(`/crm/deals${buildQS(query as Record<string, unknown>)}`),
+
+  kanban: (pipelineId: string) =>
+    api.get<unknown, ApiResponse<KanbanResponse>>(
+      `/crm/deals/kanban/${pipelineId}`,
     ),
 
-  kanban: () => 
-    api.get<unknown, { data: Record<DealStage, Deal[]> }>('/crm/deals/kanban'),
+  get: (id: string) => api.get<unknown, ApiResponse<Deal>>(`/crm/deals/${id}`),
 
-  get: (id: string) => 
-    api.get<unknown, { data: Deal }>(`/crm/deals/${id}`),
+  history: (id: string) =>
+    api.get<unknown, ApiResponse<DealStageHistoryRecord[]>>(
+      `/crm/deals/${id}/history`,
+    ),
 
-  create: (input: Partial<Deal>) =>
-    api.post<unknown, { data: Deal }>('/crm/deals', input),
+  create: (input: CreateDealInput) =>
+    api.post<unknown, ApiResponse<Deal>>('/crm/deals', input),
 
-  update: (id: string, input: Partial<Deal>) =>
-    api.patch<unknown, { data: Deal }>(`/crm/deals/${id}`, input),
+  update: (id: string, input: UpdateDealInput) =>
+    api.patch<unknown, ApiResponse<Deal>>(`/crm/deals/${id}`, input),
 
-  remove: (id: string) => 
-    api.delete(`/crm/deals/${id}`),
+  remove: (id: string) => api.delete(`/crm/deals/${id}`),
 };

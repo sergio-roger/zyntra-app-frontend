@@ -7,7 +7,7 @@ import { FormField } from '@features/auth/components/FormField';
 import { SubmitButton } from '@features/auth/components/SubmitButton';
 import {
   resetPasswordSchema,
-  type ResetPasswordFormValues,
+  ResetPasswordFormValues,
 } from '@features/auth/schemas/reset-password.schema';
 import { mapAuthError } from '@features/auth/lib/mapAuthError';
 
@@ -56,7 +56,11 @@ export const ResetPasswordForm: React.FC<ResetPasswordFormProps> = ({
   };
 
   return (
-    <form onSubmit={handleSubmit(onSubmit)} noValidate className="flex flex-col gap-4">
+    <form
+      onSubmit={handleSubmit(onSubmit)}
+      noValidate
+      className="flex flex-col gap-4"
+    >
       <FormField
         label="Nueva contraseña"
         icon={Lock}

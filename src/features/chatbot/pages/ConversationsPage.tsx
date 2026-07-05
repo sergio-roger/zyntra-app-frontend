@@ -1,11 +1,17 @@
-import { aiApi, Conversation, ConversationDetail } from '@features/chatbot/api/aiApi';
+import { aiApi } from '@features/chatbot/api/aiApi';
+import {
+  Conversation,
+  ConversationDetail,
+} from '@features/chatbot/types/chatbot.types';
 import { Clock, Loader2, RefreshCw, User } from 'lucide-react';
 import React, { useEffect, useState } from 'react';
 
 export const ConversationsPage: React.FC = () => {
   const [conversations, setConversations] = useState<Conversation[]>([]);
   const [loading, setLoading] = useState(true);
-  const [selectedConv, setSelectedConv] = useState<ConversationDetail | null>(null);
+  const [selectedConv, setSelectedConv] = useState<ConversationDetail | null>(
+    null,
+  );
   const [loadingDetail, setLoadingDetail] = useState(false);
 
   const loadConversations = React.useCallback(async () => {
@@ -73,19 +79,20 @@ export const ConversationsPage: React.FC = () => {
       <div className="flex items-center justify-between">
         <div>
           <h1 className="text-2xl font-bold">Conversaciones</h1>
-          <p className="text-base-content/60">
-            Chats atendidos por tu chatbot
-          </p>
+          <p className="text-base-content/60">Historial de chats y conversaciones</p>
         </div>
         <button className="btn btn-outline btn-sm" onClick={loadConversations}>
           <RefreshCw size={16} />
         </button>
       </div>
 
-      <div className="grid gap-6 lg:grid-cols-3" style={{ gridTemplateColumns: '1fr 2fr' }}>
+      <div
+        className="grid gap-6 lg:grid-cols-3"
+        style={{ gridTemplateColumns: '1fr 2fr' }}
+      >
         <div className="card bg-base-200 p-4">
           <h2 className="font-semibold mb-4">Recientes</h2>
-          
+
           {conversations.length === 0 ? (
             <p className="text-sm text-base-content/60">
               No hay conversaciones aún
@@ -96,22 +103,26 @@ export const ConversationsPage: React.FC = () => {
                 <button
                   key={conv.id}
                   className={`w-full text-left p-3 rounded-lg hover:bg-base-300 transition ${
-                    selectedConv?.id === conv.id ? 'bg-primary/20 border border-primary' : ''
+                    selectedConv?.id === conv.id
+                      ? 'bg-primary/20 border border-primary'
+                      : ''
                   }`}
                   onClick={() => selectConversation(conv.id)}
                 >
                   <div className="flex items-center justify-between">
                     <span className="font-medium flex items-center gap-2">
                       <User size={14} />
-                      {conv.contact_name}
+                      {conv.contactName}
                     </span>
-                    <span className={`badge badge-sm ${getStatusBadge(conv.status)}`}>
+                    <span
+                      className={`badge badge-sm ${getStatusBadge(conv.status)}`}
+                    >
                       {conv.status}
                     </span>
                   </div>
                   <div className="flex items-center gap-1 text-xs text-base-content/60 mt-1">
                     <Clock size={12} />
-                    {formatDate(conv.last_message_at || conv.started_at)}
+                    {formatDate(conv.lastMessageAt || conv.startedAt)}
                   </div>
                 </button>
               ))}
@@ -121,7 +132,7 @@ export const ConversationsPage: React.FC = () => {
 
         <div className="card bg-base-200 p-4 lg:col-span-2">
           <h2 className="font-semibold mb-4">Detalle</h2>
-          
+
           {!selectedConv ? (
             <p className="text-sm text-base-content/60">
               Selecciona una conversación para ver los mensajes
@@ -134,13 +145,17 @@ export const ConversationsPage: React.FC = () => {
             <div>
               <div className="flex items-center justify-between mb-4 pb-4 border-b border-base-300">
                 <div>
-                  <span className="font-medium">{selectedConv.contact_name}</span>
-                  <span className={`badge badge-sm ml-2 ${getStatusBadge(selectedConv.status)}`}>
+                  <span className="font-medium">
+                    {selectedConv.contactName}
+                  </span>
+                  <span
+                    className={`badge badge-sm ml-2 ${getStatusBadge(selectedConv.status)}`}
+                  >
                     {selectedConv.status}
                   </span>
                 </div>
                 <span className="text-sm text-base-content/60">
-                  Inicio: {formatDate(selectedConv.started_at)}
+                  Inicio: {formatDate(selectedConv.startedAt)}
                 </span>
               </div>
 
@@ -156,7 +171,7 @@ export const ConversationsPage: React.FC = () => {
                       {msg.content}
                     </div>
                     <div className="chat-footer text-xs opacity-50">
-                      {formatDate(msg.created_at)}
+                      {formatDate(msg.createdAt)}
                     </div>
                   </div>
                 ))}

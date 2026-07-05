@@ -36,7 +36,9 @@ interface LockedModuleOverlayProps {
   menuKey: string;
 }
 
-export const LockedModuleOverlay: React.FC<LockedModuleOverlayProps> = ({ menuKey }) => {
+export const LockedModuleOverlay: React.FC<LockedModuleOverlayProps> = ({
+  menuKey,
+}) => {
   const navigate = useNavigate();
   const suggestedPlan = PLAN_NAMES[menuKey] ?? 'Impulse Pro';
 

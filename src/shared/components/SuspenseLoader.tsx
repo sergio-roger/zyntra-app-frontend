@@ -5,7 +5,7 @@ interface SuspenseLoaderProps {
 }
 
 export const SuspenseLoader = ({ children }: SuspenseLoaderProps) => (
-  <Suspense 
+  <Suspense
     fallback={
       <div className="flex h-full min-h-[400px] items-center justify-center p-8">
         <span className="loading loading-spinner loading-lg text-primary"></span>

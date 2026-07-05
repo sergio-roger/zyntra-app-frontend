@@ -1,5 +1,11 @@
 import React from 'react';
-import { Hammer, ArrowLeft, LayoutDashboard, Sparkles, Clock } from 'lucide-react';
+import {
+  Hammer,
+  ArrowLeft,
+  LayoutDashboard,
+  Sparkles,
+  Clock,
+} from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 
 interface ConstructionPageProps {
@@ -8,8 +14,8 @@ interface ConstructionPageProps {
 }
 
 export const ConstructionPage: React.FC<ConstructionPageProps> = ({
-  title = "¡Estamos construyendo algo increíble!",
-  description = "Esta sección está siendo desarrollada por nuestro equipo de ingeniería para ofrecerte la mejor experiencia posible. Estará lista muy pronto."
+  title = '¡Estamos construyendo algo increíble!',
+  description = 'Esta sección está siendo desarrollada por nuestro equipo de ingeniería para ofrecerte la mejor experiencia posible. Estará lista muy pronto.',
 }) => {
   const navigate = useNavigate();
 
@@ -24,13 +30,18 @@ export const ConstructionPage: React.FC<ConstructionPageProps> = ({
           </div>
         </div>
       </div>
-      
+
       <h1 className="text-4xl font-black text-base-content mb-4 tracking-tight max-w-2xl mx-auto md:text-5xl">
         {title.includes('increíble') ? (
-          <>¡Estamos construyendo algo <span className="text-primary italic">increíble</span>!</>
-        ) : title}
+          <>
+            ¡Estamos construyendo algo{' '}
+            <span className="text-primary italic">increíble</span>!
+          </>
+        ) : (
+          title
+        )}
       </h1>
-      
+
       <p className="text-base-content/60 max-w-md mx-auto mb-10 text-lg leading-relaxed">
         {description}
       </p>
@@ -45,17 +56,17 @@ export const ConstructionPage: React.FC<ConstructionPageProps> = ({
           <span>Desarrollo en curso</span>
         </div>
       </div>
-      
+
       <div className="flex flex-wrap items-center justify-center gap-4">
-        <button 
+        <button
           onClick={() => navigate(-1)}
           className="btn btn-ghost gap-2 px-8"
         >
           <ArrowLeft size={18} />
           Volver atrás
         </button>
-        
-        <button 
+
+        <button
           onClick={() => navigate('/dashboard')}
           className="btn btn-primary gap-2 px-8 shadow-lg shadow-primary/20"
         >

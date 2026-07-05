@@ -17,13 +17,17 @@ export const ResetPasswordPage: React.FC = () => {
         title="Enlace inválido"
         subtitle="El enlace de restablecimiento es inválido o ha expirado"
         footer={
-          <Link to="/forgot-password" className="font-medium text-indigo-400 hover:underline">
+          <Link
+            to="/forgot-password"
+            className="font-medium text-indigo-400 hover:underline"
+          >
             Solicitar uno nuevo
           </Link>
         }
       >
         <div className="rounded-xl border border-amber-500/30 bg-amber-500/10 p-5 text-center text-sm text-amber-200">
-          Vuelve a la página de "Olvidé mi contraseña" para recibir un nuevo enlace.
+          Vuelve a la página de "Olvidé mi contraseña" para recibir un nuevo
+          enlace.
         </div>
       </AuthLayout>
     );
@@ -52,7 +56,10 @@ export const ResetPasswordPage: React.FC = () => {
       title="Nueva contraseña"
       subtitle="Define una contraseña segura para tu cuenta"
       footer={
-        <Link to="/login" className="font-medium text-indigo-400 hover:underline">
+        <Link
+          to="/login"
+          className="font-medium text-indigo-400 hover:underline"
+        >
           Cancelar
         </Link>
       }

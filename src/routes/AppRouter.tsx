@@ -25,15 +25,44 @@ const AppRoutes = () => {
         ...chatbotRoutes,
         ...agentRoutes,
         ...settingsRoutes,
-        { path: '/funnels/*', element: <ModuleGuard menuKey="funnels"><ConstructionPage /></ModuleGuard> },
-        { path: '/avatar/*', element: <ModuleGuard menuKey="avatar"><ConstructionPage /></ModuleGuard> },
-        { path: '/analytics/*', element: <ModuleGuard menuKey="analytics"><ConstructionPage /></ModuleGuard> },
-        { path: '/billing', element: <ConstructionPage title="Facturación" description="Gestiona tu plan y métodos de pago." /> },
-        { path: '/construction', element: <ConstructionPage /> }
-      ]
+        {
+          path: '/funnels/*',
+          element: (
+            <ModuleGuard menuKey="funnels">
+              <ConstructionPage />
+            </ModuleGuard>
+          ),
+        },
+        {
+          path: '/avatar/*',
+          element: (
+            <ModuleGuard menuKey="avatar">
+              <ConstructionPage />
+            </ModuleGuard>
+          ),
+        },
+        {
+          path: '/analytics/*',
+          element: (
+            <ModuleGuard menuKey="analytics">
+              <ConstructionPage />
+            </ModuleGuard>
+          ),
+        },
+        {
+          path: '/billing',
+          element: (
+            <ConstructionPage
+              title="Facturación"
+              description="Gestiona tu plan y métodos de pago."
+            />
+          ),
+        },
+        { path: '/construction', element: <ConstructionPage /> },
+      ],
     },
     { path: '/', element: <Navigate to="/login" /> },
-    { path: '*', element: <Navigate to="/login" /> }
+    { path: '*', element: <Navigate to="/login" /> },
   ]);
 };
 

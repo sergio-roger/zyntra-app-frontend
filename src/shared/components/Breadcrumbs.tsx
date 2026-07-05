@@ -9,9 +9,26 @@ interface BreadcrumbsProps {
 
 export const Breadcrumbs: React.FC<BreadcrumbsProps> = ({ pathname }) => {
   const module = findActiveModule(pathname);
-  const sub = module?.children?.find(
-    (c) => pathname === c.to || pathname.startsWith(`${c.to}/`),
-  );
+  
+  let sub: { label: string } | undefined;
+  if (module?.children) {
+    for (const c of module.children) {
+      if ('to' in c) {
+        if (pathname === c.to || pathname.startsWith(`${c.to}/`)) {
+          sub = c;
+          break;
+        }
+      } else {
+        const found = c.children.find(
+          (child) => pathname === child.to || pathname.startsWith(`${child.to}/`),
+        );
+        if (found) {
+          sub = found;
+          break;
+        }
+      }
+    }
+  }
 
   return (
     <nav

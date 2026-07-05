@@ -9,11 +9,26 @@ interface InputProps extends React.InputHTMLAttributes<HTMLInputElement> {
 }
 
 export const Input = forwardRef<HTMLInputElement, InputProps>(
-  ({ label, icon: Icon, error, containerClassName = '', className = '', ...props }, ref) => {
+  (
+    {
+      label,
+      icon: Icon,
+      error,
+      containerClassName = '',
+      className = '',
+      ...props
+    },
+    ref,
+  ) => {
+    const inputId = props.id || (label ? `input-${label.toLowerCase().replace(/[^a-z0-9]/g, '-')}` : undefined);
+
     return (
       <div className={`space-y-1.5 ${containerClassName}`}>
         {label && (
-          <label className="flex items-center gap-2 text-xs font-bold text-slate-400 uppercase tracking-wider ml-1">
+          <label
+            htmlFor={inputId}
+            className="flex items-center gap-2 text-xs font-bold text-slate-400 uppercase tracking-wider ml-1"
+          >
             {Icon && <Icon size={14} className="text-slate-500" />}
             {label}
           </label>
@@ -26,11 +41,12 @@ export const Input = forwardRef<HTMLInputElement, InputProps>(
           )}
           <input
             ref={ref}
+            id={inputId}
             className={`
-              w-full bg-slate-950/50 border border-white/10 rounded-xl py-2.5 px-4 text-sm text-white placeholder-slate-600 
-              focus:outline-none focus:border-primary/50 focus:ring-1 focus:ring-primary/20 transition-all
+              w-full bg-transparent border-b border-white/10 py-2.5 px-1 text-sm text-white placeholder-slate-600 
+              focus:outline-none focus:border-primary focus:ring-0
               ${Icon && !label ? 'pl-10' : ''}
-              ${error ? 'border-rose-500/50 focus:border-rose-500 focus:ring-rose-500/20' : ''}
+              ${error ? 'border-rose-500/50 focus:border-rose-500' : ''}
               ${className}
             `}
             {...props}
@@ -43,7 +59,7 @@ export const Input = forwardRef<HTMLInputElement, InputProps>(
         )}
       </div>
     );
-  }
+  },
 );
 
 Input.displayName = 'Input';

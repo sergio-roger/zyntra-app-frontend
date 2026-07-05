@@ -1,7 +1,10 @@
 import { useCallback } from 'react';
 import { authApi } from '@features/auth/api/authApi';
 import { useAuthStore } from '@features/auth/store/authStore';
-import { LoginCredentials, RegisterData } from '@features/auth/types/auth.types';
+import {
+  LoginCredentials,
+  RegisterData,
+} from '@features/auth/types/auth.types';
 
 export const useAuth = () => {
   const {

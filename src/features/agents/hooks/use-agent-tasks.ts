@@ -1,6 +1,6 @@
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { agentsApi } from '../api/agents.api';
-import { AgentTaskStatus } from '../types';
+import { AgentTaskStatus } from '@features/agents/types/agents';
 
 export const useAgentTasks = () => {
   const queryClient = useQueryClient();
@@ -11,7 +11,9 @@ export const useAgentTasks = () => {
     refetchInterval: (query) => {
       // Si hay alguna tarea pendiente o ejecutándose, hacemos polling cada 3 segundos
       const hasPending = query.state.data?.some(
-        (t) => t.status === AgentTaskStatus.PENDING || t.status === AgentTaskStatus.RUNNING
+        (t) =>
+          t.status === AgentTaskStatus.PENDING ||
+          t.status === AgentTaskStatus.RUNNING,
       );
       return hasPending ? 3000 : false;
     },

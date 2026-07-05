@@ -22,9 +22,15 @@ interface PublicOnlyRouteProps {
   children: React.ReactNode;
 }
 
-export const PublicOnlyRoute: React.FC<PublicOnlyRouteProps> = ({ children }) => {
+export const PublicOnlyRoute: React.FC<PublicOnlyRouteProps> = ({
+  children,
+}) => {
   const { isAuthenticated, isLoading } = useAuthStore();
 
   if (isLoading) return <FullScreenLoader />;
-  return isAuthenticated ? <Navigate to="/dashboard" replace /> : <>{children}</>;
+  return isAuthenticated ? (
+    <Navigate to="/dashboard" replace />
+  ) : (
+    <>{children}</>
+  );
 };

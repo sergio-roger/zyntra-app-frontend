@@ -12,14 +12,15 @@ export const RolePermissionsPage: React.FC = () => {
 
   const { data: dbRoles = [], isLoading } = useRolesList();
 
-  const roleKey = role as 'manager' | 'agent' | 'admin';
-  const roleInfo = dbRoles.find((r) => r.name === roleKey);
+  const roleInfo = dbRoles.find((r) => r.name === role);
 
   if (isLoading) {
     return (
       <div className="flex flex-col items-center justify-center py-32 space-y-4">
         <Loader2 className="animate-spin text-primary" size={40} />
-        <p className="text-sm text-slate-500 font-medium">Cargando información del rol...</p>
+        <p className="text-sm text-slate-500 font-medium">
+          Cargando información del rol...
+        </p>
       </div>
     );
   }
@@ -35,13 +36,14 @@ export const RolePermissionsPage: React.FC = () => {
         </button>
         <div className="bg-slate-900 border border-white/5 rounded-3xl p-12 text-center text-slate-400">
           Tu plan actual no permite la edición dinámica de permisos. Actualiza a{' '}
-          <span className="font-semibold text-primary">Core Digital</span> para desbloquear esta funcionalidad.
+          <span className="font-semibold text-primary">Core Digital</span> para
+          desbloquear esta funcionalidad.
         </div>
       </div>
     );
   }
 
-  if (!roleInfo || roleKey === 'admin') {
+  if (!roleInfo || ['admin', 'superAdmin'].includes(role || '')) {
     return (
       <div className="space-y-6">
         <button
@@ -57,7 +59,7 @@ export const RolePermissionsPage: React.FC = () => {
     );
   }
 
-  const configRoleKey = roleKey as 'manager' | 'agent';
+  const configRoleKey = role as string;
 
   return (
     <div className="space-y-6 animate-in fade-in duration-500">
@@ -75,17 +77,12 @@ export const RolePermissionsPage: React.FC = () => {
           </h2>
           <p className="text-sm text-slate-400">{roleInfo.description}</p>
         </div>
-        {user?.plan && (
-          <div className="flex items-center gap-2 bg-slate-900 border border-white/5 px-4 py-2.5 rounded-2xl">
-            <span className="text-xs text-slate-400 font-bold uppercase tracking-wider">Plan Activo:</span>
-            <span className="text-sm text-indigo-400 font-extrabold">{user.plan.name}</span>
-          </div>
-        )}
       </div>
 
       <div className="bg-slate-950/20 border border-white/5 rounded-3xl p-6 md:p-8">
         <div className="mb-6 bg-slate-900/40 border border-indigo-500/10 rounded-2xl p-4 text-xs text-indigo-300">
-          Nota: Los cambios realizados en la matriz de permisos se guardan de forma automática e inmediata.
+          Nota: Los cambios realizados en la matriz de permisos se guardan de
+          forma automática e inmediata.
         </div>
         <PermissionMatrix roleKey={configRoleKey} />
       </div>

@@ -24,9 +24,13 @@ export const PermissionToggle: React.FC<PermissionToggleProps> = ({
       <div className="flex flex-col gap-0.5">
         <div className="flex items-center gap-2">
           <span className="text-sm font-bold text-white">{label}</span>
-          {isPending && <Loader2 size={14} className="text-indigo-400 animate-spin" />}
+          {isPending && (
+            <Loader2 size={14} className="text-indigo-400 animate-spin" />
+          )}
         </div>
-        {description && <p className="text-xs text-slate-400 leading-normal">{description}</p>}
+        {description && (
+          <p className="text-xs text-slate-400 leading-normal">{description}</p>
+        )}
       </div>
       <button
         type="button"

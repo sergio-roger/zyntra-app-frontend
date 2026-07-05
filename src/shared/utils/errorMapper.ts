@@ -5,7 +5,8 @@ export const ERROR_CODE_MAP: Record<string, string> = {
   E0004: 'Pago requerido o suscripción expirada.', // Payment Required
   E0005: 'No tienes permisos para realizar esta acción.', // Forbidden
   E0006: 'El recurso solicitado no fue encontrado.', // Not Found
-  E0007: 'Demasiados intentos. Por favor, espera unos minutos antes de volver a intentar.', // Too Many Requests
+  E0007:
+    'Demasiados intentos. Por favor, espera unos minutos antes de volver a intentar.', // Too Many Requests
   E5000: 'Error interno del servidor. Inténtalo de nuevo más tarde.',
   E5001: 'Error en la conexión con el servidor (Bad Gateway).',
   E5002: 'El servicio no está disponible temporalmente.',
@@ -17,11 +18,18 @@ export interface ApiError {
   description: string;
 }
 
-export const getFriendlyErrorMessage = (code: string, defaultDescription?: string): string => {
+export const getFriendlyErrorMessage = (
+  code: string,
+  defaultDescription?: string,
+): string => {
   // Traducir mensajes comunes del backend si vienen en inglés o con descripciones estándar
   const descLower = defaultDescription?.toLowerCase() || '';
 
-  if (code === 'E0001' || descLower === 'unauthorized' || descLower.includes('credentials')) {
+  if (
+    code === 'E0001' ||
+    descLower === 'unauthorized' ||
+    descLower.includes('credentials')
+  ) {
     return ERROR_CODE_MAP.E0001;
   }
 

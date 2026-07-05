@@ -1,22 +1,23 @@
-import React, { useState } from 'react';
-import {
-  Loader2,
-  AlertCircle,
-  Search,
-  Inbox,
-  RefreshCw,
-} from 'lucide-react';
-import { useLeadsList, useArchiveLead } from '@crm/hooks/useLeads';
-import { LeadsTable } from '@crm/components/LeadsTable';
 import { ConvertToDealSidebar } from '@crm/components/ConvertToDealSidebar';
-import { Contact } from '@crm/types';
+import { LeadsTable } from '@crm/components/LeadsTable';
+import { Pagination } from '@crm/components/Pagination';
+import { useArchiveLead, useLeadsList } from '@crm/hooks/useLeads';
+import { Contact } from '@crm/types/contact';
+import { AlertCircle, Inbox, Loader2, RefreshCw, Search } from 'lucide-react';
+import React, { useState } from 'react';
 
 export const InboxLeadsPage: React.FC = () => {
   const [search, setSearch] = useState('');
   const [selectedLead, setSelectedLead] = useState<Contact | null>(null);
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
 
-  const { data, isLoading, isError, error, refetch } = useLeadsList({ search: search || undefined });
+  const [page, setPage] = useState(1);
+
+  const { data, isLoading, isError, error, refetch } = useLeadsList({
+    search: search || undefined,
+    page,
+    limit: 20,
+  });
   const archiveMutation = useArchiveLead();
 
   const leads = data?.items ?? [];
@@ -28,7 +29,12 @@ export const InboxLeadsPage: React.FC = () => {
   };
 
   const handleArchive = async (lead: Contact) => {
-    if (!confirm(`¿Archivar el lead "${lead.name}"? No aparecerá más en el inbox.`)) return;
+    if (
+      !confirm(
+        `¿Archivar el lead "${lead.name}"? No aparecerá más en el inbox.`,
+      )
+    )
+      return;
     await archiveMutation.mutateAsync(lead.id);
   };
 
@@ -38,7 +44,9 @@ export const InboxLeadsPage: React.FC = () => {
       <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
         <div className="flex flex-col gap-1">
           <div className="flex items-center gap-3">
-            <h2 className="text-2xl font-black text-white tracking-tight">Inbox Leads</h2>
+            <h2 className="text-2xl font-black text-white tracking-tight">
+              Inbox Leads
+            </h2>
             {!isLoading && (
               <div className="flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-primary/10 text-primary border border-primary/20 text-[10px] font-black uppercase tracking-widest">
                 {total} leads
@@ -52,7 +60,10 @@ export const InboxLeadsPage: React.FC = () => {
 
         <div className="flex items-center gap-3">
           <div className="relative">
-            <Search className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-500" size={15} />
+            <Search
+              className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-500"
+              size={15}
+            />
             <input
               type="text"
               placeholder="Buscar lead..."
@@ -79,7 +90,9 @@ export const InboxLeadsPage: React.FC = () => {
               <Inbox size={20} />
             </div>
             <div>
-              <p className="text-[10px] font-bold text-slate-500 uppercase tracking-widest">Total Leads</p>
+              <p className="text-[10px] font-bold text-slate-500 uppercase tracking-widest">
+                Total Leads
+              </p>
               <h3 className="text-xl font-black text-white">{total}</h3>
             </div>
           </div>
@@ -88,7 +101,9 @@ export const InboxLeadsPage: React.FC = () => {
               <Search size={20} />
             </div>
             <div>
-              <p className="text-[10px] font-bold text-slate-500 uppercase tracking-widest">Esta página</p>
+              <p className="text-[10px] font-bold text-slate-500 uppercase tracking-widest">
+                Esta página
+              </p>
               <h3 className="text-xl font-black text-white">{leads.length}</h3>
             </div>
           </div>
@@ -104,7 +119,9 @@ export const InboxLeadsPage: React.FC = () => {
           </div>
           <div className="flex flex-col items-center gap-1">
             <p className="text-slate-200 text-sm font-bold">Cargando leads</p>
-            <p className="text-slate-500 text-[10px] uppercase font-bold tracking-tighter">Sincronizando...</p>
+            <p className="text-slate-500 text-[10px] uppercase font-bold tracking-tighter">
+              Sincronizando...
+            </p>
           </div>
         </div>
       )}
@@ -115,7 +132,9 @@ export const InboxLeadsPage: React.FC = () => {
           <div className="rounded-3xl bg-rose-500/10 p-8 text-rose-400 border border-rose-500/20">
             <AlertCircle size={48} className="mx-auto mb-4" />
             <h3 className="text-xl font-black">Error de Conexión</h3>
-            <p className="text-sm opacity-70 mt-2">{(error as Error)?.message}</p>
+            <p className="text-sm opacity-70 mt-2">
+              {(error as Error)?.message}
+            </p>
           </div>
           <button
             onClick={() => refetch()}
@@ -128,11 +147,17 @@ export const InboxLeadsPage: React.FC = () => {
 
       {/* Table */}
       {!isLoading && !isError && (
-        <div className="animate-in fade-in slide-in-from-bottom-4 duration-500">
+        <div className="animate-in fade-in slide-in-from-bottom-4 duration-500 flex flex-col gap-4">
           <LeadsTable
             leads={leads}
             onArchive={handleArchive}
             onConvert={handleConvert}
+          />
+          <Pagination
+            page={page}
+            totalPages={data?.totalPages ?? 1}
+            total={total}
+            onChange={setPage}
           />
         </div>
       )}

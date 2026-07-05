@@ -1,5 +1,8 @@
 import api from '@shared/api/axios';
-import { Contact, ContactsListResponse, ConvertToDealInput, Deal } from '@crm/types';
+import { ApiResponse } from '@core/types/api';
+import { ConvertToDealInput } from '@crm/types/convert-to-deal-input';
+import { Deal } from '@crm/types/deal';
+import { mapContact, mapContactsList } from '@crm/api/crm.api';
 
 const buildQS = (q: Record<string, unknown>): string => {
   const sp = new URLSearchParams();
@@ -12,7 +15,7 @@ const buildQS = (q: Record<string, unknown>): string => {
 
 export interface ListLeadsQuery {
   search?: string;
-  source?: string;
+  channelId?: string;
   tag?: string;
   page?: number;
   limit?: number;
@@ -20,13 +23,20 @@ export interface ListLeadsQuery {
 
 export const leadsApi = {
   list: (query: ListLeadsQuery = {}) =>
-    api.get<unknown, { data: ContactsListResponse }>(
-      `/crm/contacts${buildQS({ ...query, stage: 'lead', is_archived: false } as Record<string, unknown>)}`,
-    ),
+    api
+      .get<unknown, ApiResponse<any>>(
+        `/crm/contacts${buildQS({ ...query } as Record<string, unknown>)}`,
+      )
+      .then((r) => ({ data: mapContactsList(r.data) })),
 
   archive: (id: string) =>
-    api.patch<unknown, { data: Contact }>(`/crm/contacts/${id}/archive`, {}),
+    api
+      .patch<unknown, ApiResponse<any>>(`/crm/contacts/${id}/archive`, {})
+      .then((r) => ({ data: mapContact(r.data) })),
 
   convertToDeal: (id: string, input: ConvertToDealInput) =>
-    api.post<unknown, { data: Deal }>(`/crm/contacts/${id}/convert-to-deal`, input),
+    api.post<unknown, ApiResponse<Deal>>(
+      `/crm/contacts/${id}/convert-to-deal`,
+      input,
+    ),
 };

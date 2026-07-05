@@ -7,7 +7,7 @@ import { FormField } from '@features/auth/components/FormField';
 import { SubmitButton } from '@features/auth/components/SubmitButton';
 import {
   registerSchema,
-  type RegisterFormValues,
+  RegisterFormValues,
 } from '@features/auth/schemas/register.schema';
 import { mapAuthError } from '@features/auth/lib/mapAuthError';
 
@@ -57,7 +57,11 @@ export const RegisterForm: React.FC<RegisterFormProps> = ({ onSuccess }) => {
   };
 
   return (
-    <form onSubmit={handleSubmit(onSubmit)} noValidate className="flex flex-col gap-4">
+    <form
+      onSubmit={handleSubmit(onSubmit)}
+      noValidate
+      className="flex flex-col gap-4"
+    >
       <FormField
         label="Nombre del negocio"
         icon={User}
