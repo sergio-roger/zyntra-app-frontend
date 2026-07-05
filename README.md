@@ -1,73 +1,95 @@
-# React + TypeScript + Vite
+# Zyntra App — Frontend Portal 🌐
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+This is the React frontend application for Zyntra (also known as planchat), a modern platform for managing businesses, multi-channel AI agents (chatbots), and customer relationship management (CRM).
 
-Currently, two official plugins are available:
+---
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Oxc](https://oxc.rs)
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/)
+## 🚀 Key Features
 
-## React Compiler
+### 1. 🤖 AI Agent Center
+- Configure AI agents and chatbot logic.
+- Set up system instructions, agent identity, behavior, and credentials.
+- Assign dedicated agents to specific communication channels.
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+### 2. 🔌 Integrations & Channel Store
+- Manage and configure multi-channel integrations (Web Chat widgets, WhatsApp, Instagram, etc.).
+- Multi-instance widget channels support (allowing multiple active widgets per business).
 
-## Expanding the ESLint configuration
+### 3. 👥 CRM & Segment Management
+- **Contacts & Companies**: Full CRUD operations for leads and organizations.
+- **Dynamic Segments**: Create smart segments using custom condition builders (filtering by channel, tags, lifecycle stage, values).
+- **Custom Fields & Tags**: Tailor metadata collection per business.
+- **Import/Export**: Bulk import via CSV mapping interfaces and export data to CSV.
 
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
+### 4. ⚙️ Settings & Team Administration
+- **Permissions Matrix**: Complete workspace access control mapping menus to user roles (`admin`, `manager`, `agent`, etc.).
+- **Team Management**: Form teams and assign members to them.
+- **Account & Plans**: Configure user profile data, upload avatars, and select subscription tiers.
 
-```js
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
+---
 
-      // Remove tseslint.configs.recommended and replace with this
-      tseslint.configs.recommendedTypeChecked,
-      // Alternatively, use this for stricter rules
-      tseslint.configs.strictTypeChecked,
-      // Optionally, add this for stylistic rules
-      tseslint.configs.stylisticTypeChecked,
+## 🛠️ Tech Stack
+- **Framework**: [React 19](https://react.dev/) + [TypeScript](https://www.typescriptlang.org/)
+- **Build Tool**: [Vite 8](https://vite.dev/)
+- **State Management**: [Zustand](https://zustand.docs.pmnd.rs/) (for global UI & Auth states)
+- **API & Cache**: [React Query (TanStack Query) v5](https://tanstack.com/query/latest) + [Axios](https://axios-http.com/)
+- **Forms & Validation**: [React Hook Form](https://react-hook-form.com/) + [Zod](https://zod.dev/)
+- **Styling**: [Tailwind CSS v3](https://tailwindcss.com/) + [DaisyUI v4](https://daisyui.com/)
+- **Testing**: [Vitest](https://vitest.dev/) (Unit/Component) + [Playwright](https://playwright.dev/) (E2E)
 
-      // Other configs...
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
+---
+
+## 📁 Project Structure
+
+```
+src/
+├── core/                  # Core routing, global layouts, configurations
+├── features/              # Feature-based modular structure
+│   ├── auth/              # Authentication flows and components
+│   ├── channels/          # Integrations, Channel Store, and configurations
+│   ├── crm/               # CRM Contacts, Companies, Segments, Filters, and Kanban
+│   ├── settings/          # Users, Teams, Permissions, Account details
+│   └── ...
+├── shared/                # Common components, hooks, utilities, and axios setup
+└── main.tsx               # Entry point
 ```
 
-You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
+---
 
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x'
-import reactDom from 'eslint-plugin-react-dom'
+## 🏃 Run Locally
 
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-      // Enable lint rules for React
-      reactX.configs['recommended-typescript'],
-      // Enable lint rules for React DOM
-      reactDom.configs.recommended,
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
-```
+### Prerequisites
+- Node.js (v18+)
+- Local backend services running or set up
+
+### Development Scripts
+
+1. **Install dependencies**:
+   ```bash
+   npm install
+   ```
+
+2. **Start the development server**:
+   ```bash
+   npm run start:dev
+   ```
+
+3. **Build the production package**:
+   ```bash
+   npm run build
+   ```
+
+4. **Run component/unit tests (Vitest)**:
+   ```bash
+   npm run test
+   ```
+
+5. **Run end-to-end integration tests (Playwright)**:
+   ```bash
+   npm run test:e2e
+   ```
+
+6. **Lint codebase (ESLint)**:
+   ```bash
+   npm run lint
+   ```
