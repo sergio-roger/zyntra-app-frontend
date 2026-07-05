@@ -74,6 +74,10 @@ export const ChannelsListPage: React.FC = () => {
     }
   };
 
+  const handleRedirectToStore = () => {
+    navigate('/settings/channels');
+  };
+
   if (isLoading) {
     return (
       <div className="flex items-center justify-center h-64">
@@ -97,7 +101,7 @@ export const ChannelsListPage: React.FC = () => {
   }
 
   return (
-    <div className="p-6 max-w-5xl">
+    <div className="p-6">
       <div className="flex items-center justify-between mb-6">
         <div>
           <h1 className="text-2xl font-bold">Mis Canales</h1>
@@ -120,8 +124,8 @@ export const ChannelsListPage: React.FC = () => {
           icon={Radio}
           title="Aún no tienes canales"
           description="Crea tu primer canal para empezar a recibir mensajes de tus clientes."
-          actionLabel="Crear canal web"
-          onAction={webChatType ? handleCreate : undefined}
+          actionLabel="Crear canal"
+          onAction={handleRedirectToStore}
         />
       ) : (
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">

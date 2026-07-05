@@ -115,7 +115,7 @@ export const ChannelDetailPage: React.FC = () => {
   const assignedAgent = agents.find((a) => a.id === channel.agent_id);
 
   return (
-    <div className="p-6 max-w-2xl">
+    <div className="p-6">
       <button
         className="btn btn-ghost btn-sm gap-1 mb-6"
         onClick={() => navigate('/settings/channels')}

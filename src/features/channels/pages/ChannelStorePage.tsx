@@ -31,6 +31,10 @@ const ChannelTypeCard: React.FC<ChannelTypeCardProps> = ({
   onActivate,
 }) => {
   const disabled = !channelType.is_available;
+  const isWebChat = channelType.key === 'web_chat';
+  
+  // Si es web_chat, siempre permitimos crear múltiples, por lo que no se muestra como "Activo" permanente.
+  const isCurrentlyActive = existingChannel && !isWebChat;
 
   return (
     <div
@@ -57,8 +61,10 @@ const ChannelTypeCard: React.FC<ChannelTypeCardProps> = ({
               <span className="badge badge-ghost badge-sm gap-1">
                 <Lock size={10} /> Próximamente
               </span>
-            ) : existingChannel ? (
+            ) : isCurrentlyActive ? (
               <span className="badge badge-success badge-sm">Activo</span>
+            ) : isWebChat && existingChannel ? (
+              <span className="badge badge-info badge-sm">Configurado</span>
             ) : (
               <span className="badge badge-primary badge-outline badge-sm">
                 Disponible
@@ -81,7 +87,7 @@ const ChannelTypeCard: React.FC<ChannelTypeCardProps> = ({
             <button className="btn btn-ghost btn-sm" disabled>
               No disponible
             </button>
-          ) : existingChannel ? (
+          ) : isCurrentlyActive ? (
             <button
               className="btn btn-ghost btn-sm gap-1"
               onClick={() => onActivate(channelType)}
@@ -94,7 +100,7 @@ const ChannelTypeCard: React.FC<ChannelTypeCardProps> = ({
               className="btn btn-primary btn-sm gap-1"
               onClick={() => onActivate(channelType)}
             >
-              <Plus size={14} /> Activar
+              <Plus size={14} /> {isWebChat && existingChannel ? 'Agregar otro' : 'Activar'}
             </button>
           )}
         </div>
@@ -115,6 +121,14 @@ export const ChannelStorePage: React.FC = () => {
   const isLoading = loadingStore || loadingChannels;
 
   const handleActivate = (ct: ChannelType) => {
+    // Si es web_chat permitimos agregar múltiples, ignorando el chequeo de canal existente
+    if (ct.key === 'web_chat') {
+      navigate(
+        `/settings/channels/new?type=${ct.id}&key=${ct.key}&label=${encodeURIComponent(ct.label)}`,
+      );
+      return;
+    }
+
     const existing = channels.find((c) => c.channelType?.key === ct.key);
     if (existing) {
       navigate(`/settings/channels/${existing.id}`);
@@ -143,7 +157,7 @@ export const ChannelStorePage: React.FC = () => {
   }
 
   return (
-    <div className="p-6 max-w-4xl">
+    <div className="p-6">
       <div className="mb-6">
         <h1 className="text-2xl font-bold">Canal Store</h1>
         <p className="text-base-content/60 mt-1">
