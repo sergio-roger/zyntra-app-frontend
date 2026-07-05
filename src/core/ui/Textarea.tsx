@@ -20,10 +20,15 @@ export const Textarea = forwardRef<HTMLTextAreaElement, TextareaProps>(
     },
     ref,
   ) => {
+    const textareaId = props.id || (label ? `textarea-${label.toLowerCase().replace(/[^a-z0-9]/g, '-')}` : undefined);
+
     return (
       <div className={`space-y-1.5 ${containerClassName}`}>
         {label && (
-          <label className="flex items-center gap-2 text-xs font-bold text-slate-400 uppercase tracking-wider ml-1">
+          <label
+            htmlFor={textareaId}
+            className="flex items-center gap-2 text-xs font-bold text-slate-400 uppercase tracking-wider ml-1"
+          >
             {Icon && <Icon size={14} className="text-slate-500" />}
             {label}
           </label>
@@ -31,6 +36,7 @@ export const Textarea = forwardRef<HTMLTextAreaElement, TextareaProps>(
         <div className="relative group">
           <textarea
             ref={ref}
+            id={textareaId}
             className={`
               w-full bg-transparent border-b border-white/10 py-2 px-1 text-sm text-white placeholder-slate-600 
               focus:outline-none focus:border-primary focus:ring-0 resize-none

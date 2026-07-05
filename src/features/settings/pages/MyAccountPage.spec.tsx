@@ -70,7 +70,7 @@ describe('MyAccountPage', () => {
     expect(screen.getByDisplayValue('Ana')).toBeInTheDocument();
     expect(screen.getByDisplayValue('Gomez')).toBeInTheDocument();
     expect(screen.getByDisplayValue('Agente de Ventas')).toBeInTheDocument();
-    expect(screen.getByText('ana@zyntra.com')).toBeInTheDocument();
+    expect(screen.getByDisplayValue('ana@zyntra.com')).toBeInTheDocument();
   });
 
   it('submits only the changed profile fields and shows a success toast', async () => {

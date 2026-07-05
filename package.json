@@ -3,6 +3,8 @@
   "private": true,
   "version": "1.0.0",
   "type": "module",
+  "description": "The frontend UI for managing Zyntra's AI agents and channels.",
+  "author": "Sergio Floreano",
   "scripts": {
     "start:dev": "vite",
     "build": "tsc -b && vite build",

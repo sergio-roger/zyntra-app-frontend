@@ -82,6 +82,8 @@ describe('UsersPage - User Limits', () => {
         email: 'one@test.com',
         role: 'admin',
         is_active: true,
+        isActive: true,
+        status: 'active',
         teams: [],
       },
       {
@@ -90,6 +92,8 @@ describe('UsersPage - User Limits', () => {
         email: 'two@test.com',
         role: 'agent',
         is_active: true,
+        isActive: true,
+        status: 'active',
         teams: [],
       },
       {
@@ -98,6 +102,8 @@ describe('UsersPage - User Limits', () => {
         email: 'three@test.com',
         role: 'agent',
         is_active: false,
+        isActive: false,
+        status: 'inactive',
         teams: [],
       },
     ];
@@ -140,7 +146,6 @@ describe('UsersPage - User Limits', () => {
       id: '3',
       status: 'active',
       isActive: true,
-      is_active: true,
     });
     expect(toastManager.add).not.toHaveBeenCalled();
   });
@@ -160,6 +165,8 @@ describe('UsersPage - User Limits', () => {
         email: 'one@test.com',
         role: 'admin',
         is_active: true,
+        isActive: true,
+        status: 'active',
         teams: [],
       },
       {
@@ -168,6 +175,8 @@ describe('UsersPage - User Limits', () => {
         email: 'two@test.com',
         role: 'agent',
         is_active: true,
+        isActive: true,
+        status: 'active',
         teams: [],
       },
       {
@@ -176,6 +185,8 @@ describe('UsersPage - User Limits', () => {
         email: 'three@test.com',
         role: 'agent',
         is_active: false,
+        isActive: false,
+        status: 'inactive',
         teams: [],
       },
     ];
@@ -236,6 +247,8 @@ describe('UsersPage - User Limits', () => {
         email: 'one@test.com',
         role: 'admin',
         is_active: true,
+        isActive: true,
+        status: 'active',
         teams: [],
       },
     ];

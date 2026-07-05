@@ -35,7 +35,7 @@ describe('LoginForm', () => {
     );
 
     expect(screen.getByLabelText(/email/i)).toBeInTheDocument();
-    expect(screen.getByLabelText(/contraseña/i)).toBeInTheDocument();
+    expect(screen.getByLabelText(/^contraseña$/i)).toBeInTheDocument();
     expect(
       screen.getByRole('button', { name: /iniciar sesión/i }),
     ).toBeInTheDocument();
@@ -71,7 +71,7 @@ describe('LoginForm', () => {
     fireEvent.change(screen.getByLabelText(/email/i), {
       target: { value: 'test@example.com' },
     });
-    fireEvent.change(screen.getByLabelText(/contraseña/i), {
+    fireEvent.change(screen.getByLabelText(/^contraseña$/i), {
       target: { value: 'password123' },
     });
 
@@ -109,7 +109,7 @@ describe('LoginForm', () => {
     fireEvent.change(screen.getByLabelText(/email/i), {
       target: { value: 'test@example.com' },
     });
-    fireEvent.change(screen.getByLabelText(/contraseña/i), {
+    fireEvent.change(screen.getByLabelText(/^contraseña$/i), {
       target: { value: 'password123' },
     });
 
