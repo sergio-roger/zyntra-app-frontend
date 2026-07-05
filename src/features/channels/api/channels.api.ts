@@ -3,6 +3,7 @@ import {
   Channel,
   ChannelType,
   CreateChannelPayload,
+  EmbedSnippetResponse,
   UpdateChannelPayload,
 } from '../types/channels.types';
 
@@ -14,20 +15,26 @@ const unwrap = <T>(res: unknown): T => {
 };
 
 export const channelsApi = {
+  // ── Channel Store (catálogo de tipos disponibles) ────────────────────────
   getStore: (): Promise<ChannelType[]> =>
-    api.get('/channels/store').then(unwrap),
+    api.get('/channels/store').then(unwrap<ChannelType[]>),
 
+  // ── CRUD de canales del business ─────────────────────────────────────────
   list: (businessId: string): Promise<Channel[]> =>
-    api.get(`/businesses/${businessId}/channels`).then(unwrap),
+    api.get(`/businesses/${businessId}/channels`).then(unwrap<Channel[]>),
 
   get: (businessId: string, channelId: string): Promise<Channel> =>
-    api.get(`/businesses/${businessId}/channels/${channelId}`).then(unwrap),
+    api
+      .get(`/businesses/${businessId}/channels/${channelId}`)
+      .then(unwrap<Channel>),
 
   create: (
     businessId: string,
     payload: CreateChannelPayload,
   ): Promise<Channel> =>
-    api.post(`/businesses/${businessId}/channels`, payload).then(unwrap),
+    api
+      .post(`/businesses/${businessId}/channels`, payload)
+      .then(unwrap<Channel>),
 
   update: (
     businessId: string,
@@ -36,14 +43,17 @@ export const channelsApi = {
   ): Promise<Channel> =>
     api
       .patch(`/businesses/${businessId}/channels/${channelId}`, payload)
-      .then(unwrap),
+      .then(unwrap<Channel>),
 
   remove: (
     businessId: string,
     channelId: string,
   ): Promise<{ success: boolean }> =>
-    api.delete(`/businesses/${businessId}/channels/${channelId}`).then(unwrap),
+    api
+      .delete(`/businesses/${businessId}/channels/${channelId}`)
+      .then(unwrap<{ success: boolean }>),
 
+  // ── Agente asignado ──────────────────────────────────────────────────────
   assignAgent: (
     businessId: string,
     channelId: string,
@@ -53,10 +63,16 @@ export const channelsApi = {
       .post(`/businesses/${businessId}/channels/${channelId}/agent`, {
         agentId,
       })
-      .then(unwrap),
+      .then(unwrap<Channel>),
 
   unassignAgent: (businessId: string, channelId: string): Promise<Channel> =>
     api
       .delete(`/businesses/${businessId}/channels/${channelId}/agent`)
-      .then(unwrap),
+      .then(unwrap<Channel>),
+
+  // ── Embed snippet (solo canales de tipo web_chat) ────────────────────────
+  getEmbedSnippet: (channelId: string): Promise<EmbedSnippetResponse> =>
+    api
+      .get(`/channels/${channelId}/embed-snippet`)
+      .then(unwrap<EmbedSnippetResponse>),
 };

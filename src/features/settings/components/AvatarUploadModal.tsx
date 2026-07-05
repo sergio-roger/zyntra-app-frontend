@@ -104,7 +104,7 @@ export const AvatarUploadModal: React.FC<AvatarUploadModalProps> = ({
   };
 
   return (
-    <div className="fixed inset-0 z-[100] flex items-center justify-center p-4">
+    <div className="fixed inset-0 z-[100] flex items-center justify-center p-4 !mt-0">
       <div
         className="absolute inset-0 bg-slate-950/80 backdrop-blur-md transition-opacity animate-in fade-in duration-300"
         onClick={busy ? undefined : onClose}
@@ -128,16 +128,16 @@ export const AvatarUploadModal: React.FC<AvatarUploadModalProps> = ({
           </button>
         </div>
 
-        <div className="p-6 space-y-4">
-          <input
-            ref={fileInputRef}
-            type="file"
-            accept="image/png,image/jpeg,image/webp"
-            className="hidden"
-            onChange={handleFileChange}
-            aria-label="Subir avatar"
-          />
+        <input
+          ref={fileInputRef}
+          type="file"
+          accept="image/png,image/jpeg,image/webp"
+          hidden
+          onChange={handleFileChange}
+          aria-label="Subir avatar"
+        />
 
+        <div className="p-6 space-y-4">
           {imageSrc ? (
             <div className="space-y-4">
               <div className="relative h-72 w-full overflow-hidden rounded-2xl bg-slate-950">
@@ -171,7 +171,7 @@ export const AvatarUploadModal: React.FC<AvatarUploadModalProps> = ({
           ) : (
             <div
               onClick={handleSelectClick}
-              className="flex flex-col items-center justify-center gap-4 rounded-2xl border-2 border-dashed border-white/10 bg-slate-950/30 py-10 cursor-pointer hover:border-indigo-500/50 hover:bg-indigo-500/5 transition-all"
+              className="flex h-72 flex-col items-center justify-center gap-4 rounded-2xl border-2 border-dashed border-white/10 bg-slate-950/30 cursor-pointer hover:border-indigo-500/50 hover:bg-indigo-500/5 transition-all"
             >
               <Avatar
                 name={name}

@@ -11,6 +11,7 @@ import {
   TrendingUp,
   Search,
   Share2,
+  Radio,
   Inbox as InboxIcon,
   Filter,
   Zap,
@@ -165,6 +166,15 @@ export const NAV_MODULES: NavModule[] = [
         description: 'WhatsApp, Messenger, Web.',
       },
     ],
+  },
+  {
+    key: 'channels',
+    label: 'Mis Canales',
+    icon: Radio,
+    match: '/channels',
+    to: '/channels',
+    description: 'Administra los canales de comunicación con tus clientes.',
+    color: 'text-primary',
   },
   {
     key: 'funnels',

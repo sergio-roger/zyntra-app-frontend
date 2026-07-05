@@ -1,36 +1,42 @@
 export interface ChannelType {
-  id: string;
-  key: string;
-  label: string;
+  config_schema: Record<string, unknown>;
   description: string | null;
   icon_url: string | null;
+  id: string;
   is_available: boolean;
-  config_schema: Record<string, unknown>;
+  key: string;
+  label: string;
   sort_order: number;
 }
 
 export interface Channel {
-  id: string;
+  agent_id: string | null;
   business_id: string;
   channel_type_id: string;
   channelType: ChannelType;
-  name: string;
-  status: 'active' | 'inactive';
-  agent_id: string | null;
   config: Record<string, unknown>;
   created_at: string;
-  updated_at: string;
   embedCode?: string;
+  id: string;
+  name: string;
+  status: 'active' | 'inactive';
+  updated_at: string;
 }
 
 export interface CreateChannelPayload {
   channelTypeId: string;
-  name: string;
   config?: Record<string, unknown>;
+  name: string;
 }
 
 export interface UpdateChannelPayload {
+  config?: Record<string, unknown>;
   name?: string;
   status?: 'active' | 'inactive';
-  config?: Record<string, unknown>;
+}
+
+export interface EmbedSnippetResponse {
+  business_id: string;
+  channel_id: string;
+  snippet: string;
 }

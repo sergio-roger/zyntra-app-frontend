@@ -4,6 +4,7 @@ import { crmRoutes } from '@crm/routes/CrmRoutes';
 import { agentRoutes } from '@features/agents/routes/AgentRoutes';
 import { authRoutes } from '@features/auth/routes/AuthRoutes';
 import { chatbotRoutes } from '@features/chatbot/routes/ChatbotRoutes';
+import { channelsRoutes } from '@features/channels/routes/ChannelsRoutes';
 import { dashboardRoutes } from '@features/dashboard/routes/DashboardRoutes';
 import { settingsRoutes } from '@features/settings/routes/SettingsRoutes';
 import { ConstructionPage } from '@shared/components/ConstructionPage';
@@ -24,6 +25,7 @@ const AppRoutes = () => {
         ...crmRoutes,
         ...chatbotRoutes,
         ...agentRoutes,
+        ...channelsRoutes,
         ...settingsRoutes,
         {
           path: '/funnels/*',

@@ -27,6 +27,7 @@ const PATH_TO_KEY_MAP: Record<string, string> = {
   '/inbox/conversations': 'inbox_conversations',
   '/inbox/automations': 'inbox_automations',
   '/inbox/channels': 'inbox_channels',
+  '/channels': 'channels',
   '/funnels': 'funnels',
   '/funnels/dashboard': 'funnels_dashboard',
   '/funnels/builder': 'funnels_builder',
