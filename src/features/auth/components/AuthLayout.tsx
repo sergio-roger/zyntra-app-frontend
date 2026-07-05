@@ -11,7 +11,7 @@ interface AuthLayoutProps {
 
 const features = [
   { icon: Bot, label: 'Agentes IA multitarea trabajando 24/7' },
-  { icon: MessageSquare, label: 'Chatbots y CRM unificados' },
+  { icon: MessageSquare, label: 'Canales y CRM unificados' },
   { icon: BarChart3, label: 'Analítica de marketing en tiempo real' },
 ];
 

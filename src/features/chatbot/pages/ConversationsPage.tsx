@@ -79,7 +79,7 @@ export const ConversationsPage: React.FC = () => {
       <div className="flex items-center justify-between">
         <div>
           <h1 className="text-2xl font-bold">Conversaciones</h1>
-          <p className="text-base-content/60">Chats atendidos por tu chatbot</p>
+          <p className="text-base-content/60">Historial de chats y conversaciones</p>
         </div>
         <button className="btn btn-outline btn-sm" onClick={loadConversations}>
           <RefreshCw size={16} />

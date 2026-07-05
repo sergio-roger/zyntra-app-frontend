@@ -13,7 +13,7 @@ import { SOURCE_LABELS, ContactSource } from '@crm/types/crm';
 
 const SOURCE_ICONS: Record<ContactSource, LucideIcon> = {
   manual: Hand,
-  chatbot: MessageSquare,
+  web_chat: MessageSquare,
   whatsapp: Phone,
   instagram: Camera,
   email: Mail,

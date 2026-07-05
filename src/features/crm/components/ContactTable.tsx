@@ -5,7 +5,6 @@ import { OwnerDisplay } from '@shared/components/OwnerDisplay';
 import { ColumnConfig } from '@shared/types/column';
 import { Pencil, Settings2, Trash2, User } from 'lucide-react';
 import React from 'react';
-import { SourceBadge } from './badges';
 
 interface ContactTableProps {
   contacts: Contact[];
@@ -80,7 +79,7 @@ const RENDERERS: Record<
       </span>
     );
   },
-  source: (c) => <SourceBadge source={c.source} />,
+  channel: (c) => <span className="text-slate-300">{c.channel?.name ?? '—'}</span>,
   owner: (c) => <OwnerDisplay owner={c.owner} />,
   notes: (c) => (
     <span

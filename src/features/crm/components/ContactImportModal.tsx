@@ -28,7 +28,7 @@ const CRM_FIELDS = [
 
 const VALID_SOURCES = [
   'manual',
-  'chatbot',
+  'web_chat',
   'whatsapp',
   'instagram',
   'email',

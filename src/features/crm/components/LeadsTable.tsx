@@ -3,7 +3,6 @@ import { ContactSource, SOURCE_LABELS } from '@crm/types/crm';
 import {
   Archive,
   ArrowRightCircle,
-  Bot,
   FileText,
   Inbox,
   Mail,
@@ -22,7 +21,7 @@ interface LeadsTableProps {
 
 const SOURCE_ICONS: Record<ContactSource, React.ReactNode> = {
   manual: <User size={12} />,
-  chatbot: <Bot size={12} />,
+  web_chat: <MessageCircle size={12} />,
   whatsapp: <MessageCircle size={12} />,
   instagram: <Share2 size={12} />,
   email: <Mail size={12} />,
@@ -32,7 +31,7 @@ const SOURCE_ICONS: Record<ContactSource, React.ReactNode> = {
 
 const SOURCE_COLORS: Record<ContactSource, string> = {
   manual: 'bg-slate-500/20 text-slate-300 border-slate-500/20',
-  chatbot: 'bg-violet-500/20 text-violet-300 border-violet-500/20',
+  web_chat: 'bg-violet-500/20 text-violet-300 border-violet-500/20',
   whatsapp: 'bg-emerald-500/20 text-emerald-300 border-emerald-500/20',
   instagram: 'bg-pink-500/20 text-pink-300 border-pink-500/20',
   email: 'bg-blue-500/20 text-blue-300 border-blue-500/20',

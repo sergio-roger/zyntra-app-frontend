@@ -3,11 +3,11 @@ import { CrmMember } from './crm-member';
 import { Tag } from './tag';
 
 export type ContactSource =
-  'manual' | 'chatbot' | 'whatsapp' | 'instagram' | 'email' | 'form' | 'import';
+  'manual' | 'web_chat' | 'whatsapp' | 'instagram' | 'email' | 'form' | 'import';
 
 export const SOURCES: ContactSource[] = [
   'manual',
-  'chatbot',
+  'web_chat',
   'whatsapp',
   'instagram',
   'email',
@@ -16,7 +16,7 @@ export const SOURCES: ContactSource[] = [
 ];
 
 export const SOURCE_LABELS: Record<ContactSource, string> = {
-  chatbot: 'Chatbot',
+  web_chat: 'Web Chat',
   email: 'Email',
   form: 'Formulario',
   import: 'Importación',
@@ -49,7 +49,9 @@ export interface Contact {
   ownerId: string | null;
   phone: string | null;
   score: number | null;
-  source: ContactSource;
+  channelId: string | null;
+  channel: { id: string; name: string } | null;
   tags: Tag[];
   updatedAt: string;
 }
+
