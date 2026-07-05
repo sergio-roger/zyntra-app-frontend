@@ -23,12 +23,19 @@ export const AppShell: React.FC = () => {
   const { pathname } = useLocation();
   const [isMobileRailOpen, setIsMobileRailOpen] = useState(false);
   const [isSubSidebarOpen, setIsSubSidebarOpen] = useState(false);
+  const [selectedModuleOverride, setSelectedModuleOverride] = useState<NavModule | null>(null);
+  
   const activeModule = findActiveModule(pathname);
+  
+  useEffect(() => {
+    setSelectedModuleOverride(null);
+  }, [pathname]);
 
   useEffect(() => {
+    const currentModule = selectedModuleOverride || activeModule;
     if (
-      activeModule &&
-      (!activeModule.children || activeModule.children.length === 0)
+      currentModule &&
+      (!currentModule.children || currentModule.children.length === 0)
     ) {
       const timer = setTimeout(() => {
         setIsSubSidebarOpen(false);
@@ -36,7 +43,7 @@ export const AppShell: React.FC = () => {
       }, 0);
       return () => clearTimeout(timer);
     }
-  }, [activeModule]);
+  }, [activeModule, selectedModuleOverride]);
 
   return (
     <div className="flex h-screen overflow-hidden bg-base-100 text-base-content">
@@ -52,7 +59,7 @@ export const AppShell: React.FC = () => {
       )}
 
       <SideRail
-        activeKey={activeModule?.key}
+        activeKey={selectedModuleOverride?.key || activeModule?.key}
         onToggleSidebar={(open) => {
           setIsSubSidebarOpen(open);
           if (!open) {
@@ -60,11 +67,12 @@ export const AppShell: React.FC = () => {
           }
         }}
         isSidebarOpen={isMobileRailOpen}
+        onSelectModuleOverride={setSelectedModuleOverride}
       />
 
       <SubSidebar
         isOpen={isSubSidebarOpen}
-        module={activeModule || DEFAULT_MODULE}
+        module={selectedModuleOverride || activeModule || DEFAULT_MODULE}
         onClose={() => {
           setIsSubSidebarOpen(false);
           setIsMobileRailOpen(false);

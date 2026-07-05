@@ -1,34 +1,27 @@
-import React, { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { EmbedSnippetModal } from '@features/channels/components/EmbedSnippetModal';
+import { CHANNEL_ICONS } from '@features/channels/constants/channels.constants';
+import {
+  useChannelsQuery,
+  useChannelStoreQuery,
+  useDeleteChannelMutation,
+} from '@features/channels/hooks/channels.queries';
+import { Channel } from '@features/channels/types/channels.types';
+import { ConfirmModal } from '@shared/components/ConfirmModal';
+import { EmptyState } from '@shared/components/EmptyState';
+import { toastManager } from '@shared/components/toast/toastManager';
 import {
   AlertCircle,
   Bot,
   Code2,
   Globe,
   Loader2,
-  MessageCircle,
   Plus,
   Radio,
-  Send,
   Settings2,
-  Trash2,
+  Trash2
 } from 'lucide-react';
-import { ConfirmModal } from '@shared/components/ConfirmModal';
-import { EmptyState } from '@shared/components/EmptyState';
-import { toastManager } from '@shared/components/toast/toastManager';
-import {
-  useChannelsQuery,
-  useChannelStoreQuery,
-  useDeleteChannelMutation,
-} from '../hooks/channels.queries';
-import { Channel } from '../types/channels.types';
-import { EmbedSnippetModal } from '../components/EmbedSnippetModal';
-
-const CHANNEL_ICONS: Record<string, React.ReactNode> = {
-  web_chat: <Globe size={22} />,
-  facebook: <MessageCircle size={22} />,
-  telegram: <Send size={22} />,
-};
+import React, { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 
 export const ChannelsListPage: React.FC = () => {
   const navigate = useNavigate();
@@ -164,7 +157,9 @@ export const ChannelsListPage: React.FC = () => {
                 <div className="card-actions justify-end mt-1 gap-1">
                   <button
                     className="btn btn-ghost btn-sm gap-1"
-                    onClick={() => navigate(`/settings/channels/${channel.id}`)}
+                    onClick={() =>
+                      navigate(`/settings/channels/${channel.id}/edit`)
+                    }
                   >
                     <Settings2 size={14} /> Editar
                   </button>

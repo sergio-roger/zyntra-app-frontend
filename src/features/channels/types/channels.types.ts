@@ -1,3 +1,12 @@
+export interface WebChannelConfig {
+  greeting?: string;
+  assistantName?: string;
+  primaryColor: string;
+  position: 'bottom-left' | 'bottom-right';
+  theme: 'light' | 'dark' | 'auto';
+  allowedDomains: string[];
+}
+
 export interface ChannelType {
   config_schema: Record<string, unknown>;
   description: string | null;

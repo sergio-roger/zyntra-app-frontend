@@ -11,9 +11,9 @@ const ChannelStorePage = lazy(() =>
     default: m.ChannelStorePage,
   })),
 );
-const ChannelWizardPage = lazy(() =>
-  import('@features/channels/pages/ChannelWizardPage').then((m) => ({
-    default: m.ChannelWizardPage,
+const WebChannelStepFormPage = lazy(() =>
+  import('@features/channels/pages/WebChannelStepFormPage').then((m) => ({
+    default: m.WebChannelStepFormPage,
   })),
 );
 const ChannelDetailPage = lazy(() =>
@@ -180,7 +180,7 @@ export const settingsRoutes: RouteObject[] = [
           <PermissionGuard menuKey="settings_channels">
             <ModuleGuard menuKey="settings_channels">
               <SuspenseLoader>
-                <ChannelWizardPage />
+                <WebChannelStepFormPage />
               </SuspenseLoader>
             </ModuleGuard>
           </PermissionGuard>
@@ -193,6 +193,18 @@ export const settingsRoutes: RouteObject[] = [
             <ModuleGuard menuKey="settings_channels">
               <SuspenseLoader>
                 <ChannelDetailPage />
+              </SuspenseLoader>
+            </ModuleGuard>
+          </PermissionGuard>
+        ),
+      },
+      {
+        path: 'channels/:channelId/edit',
+        element: (
+          <PermissionGuard menuKey="settings_channels">
+            <ModuleGuard menuKey="settings_channels">
+              <SuspenseLoader>
+                <WebChannelStepFormPage />
               </SuspenseLoader>
             </ModuleGuard>
           </PermissionGuard>

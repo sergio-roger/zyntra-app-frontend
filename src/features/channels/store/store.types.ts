@@ -1,33 +1,34 @@
-import { CreateChannelPayload } from '@features/channels/types/channels.types';
+import { WebChannelFormValues } from '@features/channels/schemas/web-channel.schema';
 
-/** Pasos posibles del wizard de creación de canal */
-export type ChannelWizardStep = 'select-type' | 'configure' | 'confirm';
+/** Pasos del stepform de creación/edición de un canal web */
+export type WebChannelFormStep =
+  | 'identity'
+  | 'appearance'
+  | 'security'
+  | 'agent'
+  | 'summary';
 
-export interface ChannelDraft extends Partial<CreateChannelPayload> {
-  /** ID del ChannelType seleccionado por el usuario */
-  channelTypeId?: string;
-  /** Nombre provisional ingresado en el wizard */
-  name?: string;
-  /** Config parcial del canal (dependiente del tipo) */
-  config?: Record<string, unknown>;
-}
+export type { WebChannelFormValues };
 
 export interface ChannelsUiState {
   // ── Canal seleccionado (en lista o panel de detalle) ──────────────────
   selectedChannelId: string | null;
   setSelectedChannelId: (id: string | null) => void;
 
-  // ── Wizard de creación/edición ────────────────────────────────────────
-  wizardStep: ChannelWizardStep;
-  setWizardStep: (step: ChannelWizardStep) => void;
-  wizardNextStep: () => void;
-  wizardPrevStep: () => void;
+  // ── Stepform de creación/edición de canal web ─────────────────────────
+  formStep: WebChannelFormStep;
+  setFormStep: (step: WebChannelFormStep) => void;
+  formNextStep: () => void;
+  formPrevStep: () => void;
 
-  // ── Borrador en edición ───────────────────────────────────────────────
-  draft: ChannelDraft;
-  setDraft: (partial: Partial<ChannelDraft>) => void;
-  resetDraft: () => void;
+  formValues: WebChannelFormValues;
+  setFormValues: (partial: Partial<WebChannelFormValues>) => void;
 
-  // ── Reset completo (al salir del wizard) ──────────────────────────────
-  resetWizard: () => void;
+  /** Snapshot tomado al entrar al stepform, usado para el dirty-check */
+  initialValues: WebChannelFormValues | null;
+  setInitialValues: (values: WebChannelFormValues) => void;
+  isDirty: () => boolean;
+
+  /** Reinicia paso, borrador y snapshot inicial */
+  resetForm: () => void;
 }

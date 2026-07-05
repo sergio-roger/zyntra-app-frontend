@@ -1,42 +1,62 @@
 import { create } from 'zustand';
-import { ChannelDraft, ChannelsUiState } from '@features/channels/store/store.types';
-import { WIZARD_STEPS } from '@features/channels/constants/channels.constants';
+import {
+  ChannelsUiState,
+  WebChannelFormValues,
+} from '@features/channels/store/store.types';
+import { WEB_CHANNEL_FORM_STEPS } from '@features/channels/constants/channels.constants';
 
-const initialDraft: ChannelDraft = {};
+export const DEFAULT_WEB_CHANNEL_FORM_VALUES: WebChannelFormValues = {
+  name: '',
+  greeting: '',
+  assistantName: 'Asistente',
+  primaryColor: '#6366f1',
+  position: 'bottom-right',
+  theme: 'auto',
+  allowedDomains: [],
+  agentId: null,
+};
 
 export const useChannelsStore = create<ChannelsUiState>((set, get) => ({
   // ── Canal seleccionado ────────────────────────────────────────────────
   selectedChannelId: null,
   setSelectedChannelId: (id) => set({ selectedChannelId: id }),
 
-  // ── Wizard ────────────────────────────────────────────────────────────
-  wizardStep: 'select-type',
-  setWizardStep: (step) => set({ wizardStep: step }),
+  // ── Stepform ──────────────────────────────────────────────────────────
+  formStep: 'identity',
+  setFormStep: (step) => set({ formStep: step }),
 
-  wizardNextStep: () => {
-    const current = get().wizardStep;
-    const idx = WIZARD_STEPS.indexOf(current);
-    const next = WIZARD_STEPS[idx + 1];
-    if (next) set({ wizardStep: next });
+  formNextStep: () => {
+    const current = get().formStep;
+    const idx = WEB_CHANNEL_FORM_STEPS.indexOf(current);
+    const next = WEB_CHANNEL_FORM_STEPS[idx + 1];
+    if (next) set({ formStep: next });
   },
 
-  wizardPrevStep: () => {
-    const current = get().wizardStep;
-    const idx = WIZARD_STEPS.indexOf(current);
-    const prev = WIZARD_STEPS[idx - 1];
-    if (prev) set({ wizardStep: prev });
+  formPrevStep: () => {
+    const current = get().formStep;
+    const idx = WEB_CHANNEL_FORM_STEPS.indexOf(current);
+    const prev = WEB_CHANNEL_FORM_STEPS[idx - 1];
+    if (prev) set({ formStep: prev });
   },
 
-  // ── Borrador ──────────────────────────────────────────────────────────
-  draft: initialDraft,
-  setDraft: (partial) =>
-    set((s) => ({ draft: { ...s.draft, ...partial } })),
-  resetDraft: () => set({ draft: initialDraft }),
+  formValues: DEFAULT_WEB_CHANNEL_FORM_VALUES,
+  setFormValues: (partial) =>
+    set((s) => ({ formValues: { ...s.formValues, ...partial } })),
 
-  // ── Reset completo del wizard ─────────────────────────────────────────
-  resetWizard: () =>
+  initialValues: null,
+  setInitialValues: (values) =>
+    set({ initialValues: values, formValues: values }),
+
+  isDirty: () => {
+    const { formValues, initialValues } = get();
+    if (!initialValues) return false;
+    return JSON.stringify(formValues) !== JSON.stringify(initialValues);
+  },
+
+  resetForm: () =>
     set({
-      wizardStep: 'select-type',
-      draft: initialDraft,
+      formStep: 'identity',
+      formValues: DEFAULT_WEB_CHANNEL_FORM_VALUES,
+      initialValues: null,
     }),
 }));

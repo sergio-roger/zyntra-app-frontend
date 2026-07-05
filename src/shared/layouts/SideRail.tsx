@@ -1,18 +1,21 @@
+import { BrandLogo } from '@core/components/IconRail/BrandLogo';
+import { RailNavigation } from '@core/components/IconRail/RailNavigation';
+import { UserMenu } from '@core/components/IconRail/UserMenu';
+import { NavModule } from '@shared/types/nav';
 import React from 'react';
-import { BrandLogo } from '../../core/components/IconRail/BrandLogo';
-import { RailNavigation } from '../../core/components/IconRail/RailNavigation';
-import { UserMenu } from '../../core/components/IconRail/UserMenu';
 
 interface SideRailProps {
   activeKey?: string;
   isSidebarOpen: boolean;
   onToggleSidebar: (open: boolean) => void;
+  onSelectModuleOverride: (module: NavModule) => void;
 }
 
 export const SideRail: React.FC<SideRailProps> = ({
   activeKey,
   isSidebarOpen,
   onToggleSidebar,
+  onSelectModuleOverride,
 }) => {
   return (
     <aside
@@ -25,7 +28,11 @@ export const SideRail: React.FC<SideRailProps> = ({
     >
       <BrandLogo isSidebarOpen={isSidebarOpen} onToggle={onToggleSidebar} />
 
-      <RailNavigation activeKey={activeKey} onToggleSidebar={onToggleSidebar} />
+      <RailNavigation
+        activeKey={activeKey}
+        onToggleSidebar={onToggleSidebar}
+        onSelectModuleOverride={onSelectModuleOverride}
+      />
 
       <UserMenu />
     </aside>
