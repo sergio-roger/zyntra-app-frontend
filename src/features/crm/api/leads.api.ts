@@ -1,4 +1,5 @@
 import api from '@shared/api/axios';
+import { ApiResponse } from '@core/types/api';
 import { ConvertToDealInput } from '@crm/types/convert-to-deal-input';
 import { Deal } from '@crm/types/deal';
 import { mapContact, mapContactsList } from '@crm/api/crm.api';
@@ -23,18 +24,18 @@ export interface ListLeadsQuery {
 export const leadsApi = {
   list: (query: ListLeadsQuery = {}) =>
     api
-      .get<unknown, { data: any }>(
+      .get<unknown, ApiResponse<any>>(
         `/crm/contacts${buildQS({ ...query } as Record<string, unknown>)}`,
       )
       .then((r) => ({ data: mapContactsList(r.data) })),
 
   archive: (id: string) =>
     api
-      .patch<unknown, { data: any }>(`/crm/contacts/${id}/archive`, {})
+      .patch<unknown, ApiResponse<any>>(`/crm/contacts/${id}/archive`, {})
       .then((r) => ({ data: mapContact(r.data) })),
 
   convertToDeal: (id: string, input: ConvertToDealInput) =>
-    api.post<unknown, { data: Deal }>(
+    api.post<unknown, ApiResponse<Deal>>(
       `/crm/contacts/${id}/convert-to-deal`,
       input,
     ),

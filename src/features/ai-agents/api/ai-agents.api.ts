@@ -1,4 +1,5 @@
 import api from '@shared/api/axios';
+import { ApiResponse, unwrap } from '@core/types/api';
 import {
   AiAgent,
   AgentTestResult,
@@ -6,22 +7,26 @@ import {
   UpdateAgentPayload,
 } from '../types/ai-agents.types';
 
-const unwrap = <T>(res: unknown): T => {
-  if (res && typeof res === 'object' && 'data' in (res as object)) {
-    return (res as { data: T }).data;
-  }
-  return res as T;
-};
-
 export const aiAgentsApi = {
   list: (businessId: string): Promise<AiAgent[]> =>
-    api.get(`/businesses/${businessId}/agents`).then(unwrap),
+    api
+      .get<unknown, ApiResponse<AiAgent[]>>(`/businesses/${businessId}/agents`)
+      .then(unwrap),
 
   get: (businessId: string, agentId: string): Promise<AiAgent> =>
-    api.get(`/businesses/${businessId}/agents/${agentId}`).then(unwrap),
+    api
+      .get<unknown, ApiResponse<AiAgent>>(
+        `/businesses/${businessId}/agents/${agentId}`,
+      )
+      .then(unwrap),
 
   create: (businessId: string, payload: CreateAgentPayload): Promise<AiAgent> =>
-    api.post(`/businesses/${businessId}/agents`, payload).then(unwrap),
+    api
+      .post<unknown, ApiResponse<AiAgent>>(
+        `/businesses/${businessId}/agents`,
+        payload,
+      )
+      .then(unwrap),
 
   update: (
     businessId: string,
@@ -29,14 +34,21 @@ export const aiAgentsApi = {
     payload: UpdateAgentPayload,
   ): Promise<AiAgent> =>
     api
-      .patch(`/businesses/${businessId}/agents/${agentId}`, payload)
+      .patch<unknown, ApiResponse<AiAgent>>(
+        `/businesses/${businessId}/agents/${agentId}`,
+        payload,
+      )
       .then(unwrap),
 
   remove: (
     businessId: string,
     agentId: string,
   ): Promise<{ success: boolean }> =>
-    api.delete(`/businesses/${businessId}/agents/${agentId}`).then(unwrap),
+    api
+      .delete<unknown, ApiResponse<{ success: boolean }>>(
+        `/businesses/${businessId}/agents/${agentId}`,
+      )
+      .then(unwrap),
 
   test: (
     businessId: string,
@@ -44,6 +56,9 @@ export const aiAgentsApi = {
     message: string,
   ): Promise<AgentTestResult> =>
     api
-      .post(`/businesses/${businessId}/agents/${agentId}/test`, { message })
+      .post<unknown, ApiResponse<AgentTestResult>>(
+        `/businesses/${businessId}/agents/${agentId}/test`,
+        { message },
+      )
       .then(unwrap),
 };

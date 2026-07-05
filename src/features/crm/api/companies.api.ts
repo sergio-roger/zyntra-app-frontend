@@ -1,4 +1,4 @@
-import { ExportColumn } from '@core/types/api';
+import { ApiResponse, ExportColumn } from '@core/types/api';
 import {
   CompaniesListResponse,
   Company,
@@ -20,25 +20,25 @@ export const companiesApi = {
     query: ListCompaniesQuery = {},
   ): Promise<{ data: CompaniesListResponse }> =>
     api
-      .get<RawCompanyListResponse, RawCompanyListResponse>(
+      .get<unknown, ApiResponse<RawCompanyListResponse>>(
         `/crm/companies${buildQueryString(query as Record<string, string | number | boolean | undefined>)}`,
       )
-      .then((res) => ({ data: mapCompanyList(res) })),
+      .then((res) => ({ data: mapCompanyList(res.data) })),
 
   get: (id: string): Promise<{ data: Company }> =>
     api
-      .get<RawCompany, RawCompany>(`/crm/companies/${id}`)
-      .then((res) => ({ data: mapCompany(res) })),
+      .get<unknown, ApiResponse<RawCompany>>(`/crm/companies/${id}`)
+      .then((res) => ({ data: mapCompany(res.data) })),
 
   create: (input: CreateCompanyInput): Promise<{ data: Company }> =>
     api
-      .post<RawCompany, RawCompany>('/crm/companies', input)
-      .then((res) => ({ data: mapCompany(res) })),
+      .post<unknown, ApiResponse<RawCompany>>('/crm/companies', input)
+      .then((res) => ({ data: mapCompany(res.data) })),
 
   update: (id: string, input: UpdateCompanyInput): Promise<{ data: Company }> =>
     api
-      .patch<RawCompany, RawCompany>(`/crm/companies/${id}`, input)
-      .then((res) => ({ data: mapCompany(res) })),
+      .patch<unknown, ApiResponse<RawCompany>>(`/crm/companies/${id}`, input)
+      .then((res) => ({ data: mapCompany(res.data) })),
 
   remove: (id: string): Promise<void> => api.delete(`/crm/companies/${id}`),
 
@@ -62,18 +62,16 @@ export const companiesApi = {
     }>,
   ): Promise<{ data: { count: number } }> =>
     api
-      .post<{ count: number }, { count: number }>('/crm/companies/import', rows)
-      .then((res) => ({ data: res })),
+      .post<unknown, ApiResponse<{ count: number }>>(
+        '/crm/companies/import',
+        rows,
+      )
+      .then((res) => ({ data: res.data })),
 
   listIndustries: (): Promise<{ data: Array<{ id: string; name: string }> }> =>
-    api.get<unknown>('/crm/industries').then((res: any) => {
-      const list = Array.isArray(res)
-        ? res
-        : Array.isArray(res?.data)
-          ? res.data
-          : Array.isArray(res?.items)
-            ? res.items
-            : [];
-      return { data: list };
-    }),
+    api
+      .get<unknown, ApiResponse<Array<{ id: string; name: string }>>>(
+        '/crm/industries',
+      )
+      .then((res) => ({ data: res.data })),
 };

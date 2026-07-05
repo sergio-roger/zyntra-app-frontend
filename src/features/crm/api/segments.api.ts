@@ -1,4 +1,5 @@
 import api from '@shared/api/axios';
+import { ApiResponse } from '@core/types/api';
 import { Segment } from '@crm/types/segment';
 import { CreateSegmentInput } from '@crm/types/create-segment-input';
 import { UpdateSegmentInput } from '@crm/types/update-segment-input';
@@ -14,22 +15,22 @@ const buildQS = (q: Record<string, unknown>): string => {
 };
 
 export const segmentsApi = {
-  list: () => api.get<unknown, { data: Segment[] }>('/crm/segments'),
+  list: () => api.get<unknown, ApiResponse<Segment[]>>('/crm/segments'),
 
   get: (id: string) =>
-    api.get<unknown, { data: Segment }>(`/crm/segments/${id}`),
+    api.get<unknown, ApiResponse<Segment>>(`/crm/segments/${id}`),
 
   create: (input: CreateSegmentInput) =>
-    api.post<unknown, { data: Segment }>('/crm/segments', input),
+    api.post<unknown, ApiResponse<Segment>>('/crm/segments', input),
 
   update: (id: string, input: UpdateSegmentInput) =>
-    api.patch<unknown, { data: Segment }>(`/crm/segments/${id}`, input),
+    api.patch<unknown, ApiResponse<Segment>>(`/crm/segments/${id}`, input),
 
   remove: (id: string) => api.delete(`/crm/segments/${id}`),
 
   getContacts: (id: string, query: { page?: number; limit?: number } = {}) =>
     api
-      .get<unknown, { data: any }>(
+      .get<unknown, ApiResponse<any>>(
         `/crm/segments/${id}/contacts${buildQS(query)}`,
       )
       .then((r) => ({ data: mapContactsList(r.data) })),
@@ -39,8 +40,9 @@ export const segmentsApi = {
     query: { page?: number; limit?: number } = {},
   ) =>
     api
-      .post<unknown, { data: any }>(`/crm/segments/preview${buildQS(query)}`, {
-        conditions,
-      })
+      .post<unknown, ApiResponse<any>>(
+        `/crm/segments/preview${buildQS(query)}`,
+        { conditions },
+      )
       .then((r) => ({ data: mapContactsList(r.data) })),
 };

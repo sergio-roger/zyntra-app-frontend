@@ -1,4 +1,9 @@
-import { CompaniesListResponse, Company, RawCompany } from '@crm/types/company';
+import {
+  CompaniesListResponse,
+  Company,
+  RawCompany,
+  RawCompanyListResponse,
+} from '@crm/types/company';
 
 export const buildQueryString = (
   q: Record<string, string | number | boolean | undefined>,
@@ -32,21 +37,12 @@ export const mapCompany = (raw: RawCompany): Company => ({
   updatedAt: raw.updatedAt,
 });
 
-export const mapCompanyList = (raw: any): CompaniesListResponse => {
-  const data =
-    raw &&
-    typeof raw === 'object' &&
-    'data' in raw &&
-    raw.data &&
-    typeof raw.data === 'object' &&
-    'items' in raw.data
-      ? raw.data
-      : raw;
-  return {
-    items: (data?.items ?? []).map(mapCompany),
-    total: data?.total ?? 0,
-    page: data?.page ?? 1,
-    limit: data?.limit ?? 20,
-    totalPages: data?.totalPages ?? 1,
-  };
-};
+export const mapCompanyList = (
+  raw: RawCompanyListResponse,
+): CompaniesListResponse => ({
+  items: (raw.items ?? []).map(mapCompany),
+  total: raw.total ?? 0,
+  page: raw.page ?? 1,
+  limit: raw.limit ?? 20,
+  totalPages: raw.totalPages ?? 1,
+});

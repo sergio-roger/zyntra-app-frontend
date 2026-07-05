@@ -1,4 +1,5 @@
 import api from '@shared/api/axios';
+import { ApiResponse } from '@core/types/api';
 import { DealPipeline } from '@crm/types/deal-pipeline';
 import { DealPipelineStage } from '@crm/types/deal-pipeline-stage';
 import { PipelineForecast } from '@crm/types/pipeline-forecast';
@@ -23,40 +24,43 @@ export interface ReorderStagesInput {
 }
 
 export const pipelinesApi = {
-  list: () => api.get<unknown, { data: DealPipeline[] }>('/crm/pipelines'),
+  list: () => api.get<unknown, ApiResponse<DealPipeline[]>>('/crm/pipelines'),
 
   create: (input: CreatePipelineInput) =>
-    api.post<unknown, { data: DealPipeline }>('/crm/pipelines', input),
+    api.post<unknown, ApiResponse<DealPipeline>>('/crm/pipelines', input),
 
   update: (id: string, input: Partial<CreatePipelineInput>) =>
-    api.patch<unknown, { data: DealPipeline }>(`/crm/pipelines/${id}`, input),
+    api.patch<unknown, ApiResponse<DealPipeline>>(
+      `/crm/pipelines/${id}`,
+      input,
+    ),
 
   remove: (id: string) => api.delete(`/crm/pipelines/${id}`),
 
   forecast: (pipelineId: string) =>
-    api.get<unknown, { data: PipelineForecast }>(
+    api.get<unknown, ApiResponse<PipelineForecast>>(
       `/crm/pipelines/${pipelineId}/forecast`,
     ),
 
   listStages: (pipelineId: string) =>
-    api.get<unknown, { data: DealPipelineStage[] }>(
+    api.get<unknown, ApiResponse<DealPipelineStage[]>>(
       `/crm/pipelines/${pipelineId}/stages`,
     ),
 
   createStage: (pipelineId: string, input: CreateStageInput) =>
-    api.post<unknown, { data: DealPipelineStage }>(
+    api.post<unknown, ApiResponse<DealPipelineStage>>(
       `/crm/pipelines/${pipelineId}/stages`,
       input,
     ),
 
   reorderStages: (pipelineId: string, input: ReorderStagesInput) =>
-    api.patch<unknown, { data: DealPipelineStage[] }>(
+    api.patch<unknown, ApiResponse<DealPipelineStage[]>>(
       `/crm/pipelines/${pipelineId}/stages/reorder`,
       input,
     ),
 
   updateStage: (stageId: string, input: Partial<CreateStageInput>) =>
-    api.patch<unknown, { data: DealPipelineStage }>(
+    api.patch<unknown, ApiResponse<DealPipelineStage>>(
       `/crm/pipelines/stages/${stageId}`,
       input,
     ),

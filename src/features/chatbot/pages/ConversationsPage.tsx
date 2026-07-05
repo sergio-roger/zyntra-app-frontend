@@ -1,8 +1,8 @@
+import { aiApi } from '@features/chatbot/api/aiApi';
 import {
-  aiApi,
   Conversation,
   ConversationDetail,
-} from '@features/chatbot/api/aiApi';
+} from '@features/chatbot/types/chatbot.types';
 import { Clock, Loader2, RefreshCw, User } from 'lucide-react';
 import React, { useEffect, useState } from 'react';
 
@@ -112,7 +112,7 @@ export const ConversationsPage: React.FC = () => {
                   <div className="flex items-center justify-between">
                     <span className="font-medium flex items-center gap-2">
                       <User size={14} />
-                      {conv.contact_name}
+                      {conv.contactName}
                     </span>
                     <span
                       className={`badge badge-sm ${getStatusBadge(conv.status)}`}
@@ -122,7 +122,7 @@ export const ConversationsPage: React.FC = () => {
                   </div>
                   <div className="flex items-center gap-1 text-xs text-base-content/60 mt-1">
                     <Clock size={12} />
-                    {formatDate(conv.last_message_at || conv.started_at)}
+                    {formatDate(conv.lastMessageAt || conv.startedAt)}
                   </div>
                 </button>
               ))}
@@ -146,7 +146,7 @@ export const ConversationsPage: React.FC = () => {
               <div className="flex items-center justify-between mb-4 pb-4 border-b border-base-300">
                 <div>
                   <span className="font-medium">
-                    {selectedConv.contact_name}
+                    {selectedConv.contactName}
                   </span>
                   <span
                     className={`badge badge-sm ml-2 ${getStatusBadge(selectedConv.status)}`}
@@ -155,7 +155,7 @@ export const ConversationsPage: React.FC = () => {
                   </span>
                 </div>
                 <span className="text-sm text-base-content/60">
-                  Inicio: {formatDate(selectedConv.started_at)}
+                  Inicio: {formatDate(selectedConv.startedAt)}
                 </span>
               </div>
 
@@ -171,7 +171,7 @@ export const ConversationsPage: React.FC = () => {
                       {msg.content}
                     </div>
                     <div className="chat-footer text-xs opacity-50">
-                      {formatDate(msg.created_at)}
+                      {formatDate(msg.createdAt)}
                     </div>
                   </div>
                 ))}

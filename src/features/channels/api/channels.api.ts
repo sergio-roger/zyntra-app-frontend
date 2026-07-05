@@ -1,4 +1,5 @@
 import api from '@shared/api/axios';
+import { ApiResponse, unwrap } from '@core/types/api';
 import {
   Channel,
   ChannelType,
@@ -7,34 +8,38 @@ import {
   UpdateChannelPayload,
 } from '../types/channels.types';
 
-const unwrap = <T>(res: unknown): T => {
-  if (res && typeof res === 'object' && 'data' in (res as object)) {
-    return (res as { data: T }).data;
-  }
-  return res as T;
-};
-
 export const channelsApi = {
   // ── Channel Store (catálogo de tipos disponibles) ────────────────────────
   getStore: (): Promise<ChannelType[]> =>
-    api.get('/channels/store').then(unwrap<ChannelType[]>),
+    api
+      .get<unknown, ApiResponse<ChannelType[]>>('/channels/store')
+      .then(unwrap),
 
   // ── CRUD de canales del business ─────────────────────────────────────────
   list: (businessId: string): Promise<Channel[]> =>
-    api.get(`/businesses/${businessId}/channels`).then(unwrap<Channel[]>),
+    api
+      .get<unknown, ApiResponse<Channel[]>>(
+        `/businesses/${businessId}/channels`,
+      )
+      .then(unwrap),
 
   get: (businessId: string, channelId: string): Promise<Channel> =>
     api
-      .get(`/businesses/${businessId}/channels/${channelId}`)
-      .then(unwrap<Channel>),
+      .get<unknown, ApiResponse<Channel>>(
+        `/businesses/${businessId}/channels/${channelId}`,
+      )
+      .then(unwrap),
 
   create: (
     businessId: string,
     payload: CreateChannelPayload,
   ): Promise<Channel> =>
     api
-      .post(`/businesses/${businessId}/channels`, payload)
-      .then(unwrap<Channel>),
+      .post<unknown, ApiResponse<Channel>>(
+        `/businesses/${businessId}/channels`,
+        payload,
+      )
+      .then(unwrap),
 
   update: (
     businessId: string,
@@ -42,16 +47,21 @@ export const channelsApi = {
     payload: UpdateChannelPayload,
   ): Promise<Channel> =>
     api
-      .patch(`/businesses/${businessId}/channels/${channelId}`, payload)
-      .then(unwrap<Channel>),
+      .patch<unknown, ApiResponse<Channel>>(
+        `/businesses/${businessId}/channels/${channelId}`,
+        payload,
+      )
+      .then(unwrap),
 
   remove: (
     businessId: string,
     channelId: string,
   ): Promise<{ success: boolean }> =>
     api
-      .delete(`/businesses/${businessId}/channels/${channelId}`)
-      .then(unwrap<{ success: boolean }>),
+      .delete<unknown, ApiResponse<{ success: boolean }>>(
+        `/businesses/${businessId}/channels/${channelId}`,
+      )
+      .then(unwrap),
 
   // ── Agente asignado ──────────────────────────────────────────────────────
   assignAgent: (
@@ -60,19 +70,24 @@ export const channelsApi = {
     agentId: string,
   ): Promise<Channel> =>
     api
-      .post(`/businesses/${businessId}/channels/${channelId}/agent`, {
-        agentId,
-      })
-      .then(unwrap<Channel>),
+      .post<unknown, ApiResponse<Channel>>(
+        `/businesses/${businessId}/channels/${channelId}/agent`,
+        { agentId },
+      )
+      .then(unwrap),
 
   unassignAgent: (businessId: string, channelId: string): Promise<Channel> =>
     api
-      .delete(`/businesses/${businessId}/channels/${channelId}/agent`)
-      .then(unwrap<Channel>),
+      .delete<unknown, ApiResponse<Channel>>(
+        `/businesses/${businessId}/channels/${channelId}/agent`,
+      )
+      .then(unwrap),
 
   // ── Embed snippet (solo canales de tipo web_chat) ────────────────────────
   getEmbedSnippet: (channelId: string): Promise<EmbedSnippetResponse> =>
     api
-      .get(`/channels/${channelId}/embed-snippet`)
-      .then(unwrap<EmbedSnippetResponse>),
+      .get<unknown, ApiResponse<EmbedSnippetResponse>>(
+        `/channels/${channelId}/embed-snippet`,
+      )
+      .then(unwrap),
 };

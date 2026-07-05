@@ -1,4 +1,5 @@
 import api from '@shared/api/axios';
+import { ApiResponse } from '@core/types/api';
 import { Contact } from '@crm/types/contact';
 import { ContactActivity } from '@crm/types/contact-activity';
 import { ContactsListResponse } from '@crm/types/contacts-list-response';
@@ -71,24 +72,24 @@ export const mapContactsList = (raw: any): ContactsListResponse => ({
 export const crmApi = {
   list: (query: ListContactsQuery = {}) =>
     api
-      .get<unknown, { data: any }>(
+      .get<unknown, ApiResponse<any>>(
         `/crm/contacts${buildQS(query as Record<string, unknown>)}`,
       )
       .then((r) => ({ data: mapContactsList(r.data) })),
 
   get: (id: string) =>
     api
-      .get<unknown, { data: any }>(`/crm/contacts/${id}`)
+      .get<unknown, ApiResponse<any>>(`/crm/contacts/${id}`)
       .then((r) => ({ data: mapContact(r.data) })),
 
   create: (input: CreateContactInput) =>
     api
-      .post<unknown, { data: any }>('/crm/contacts', input)
+      .post<unknown, ApiResponse<any>>('/crm/contacts', input)
       .then((r) => ({ data: mapContact(r.data) })),
 
   update: (id: string, input: UpdateContactInput) =>
     api
-      .patch<unknown, { data: any }>(`/crm/contacts/${id}`, input)
+      .patch<unknown, ApiResponse<any>>(`/crm/contacts/${id}`, input)
       .then((r) => ({ data: mapContact(r.data) })),
 
   remove: (id: string) => api.delete(`/crm/contacts/${id}`),
@@ -97,34 +98,37 @@ export const crmApi = {
     contactId: string,
     query: { page?: number; limit?: number } = {},
   ) =>
-    api.get<unknown, { data: { items: ContactActivity[]; total: number } }>(
+    api.get<unknown, ApiResponse<{ items: ContactActivity[]; total: number }>>(
       `/crm/contacts/${contactId}/activities${buildQS(query)}`,
     ),
 
   addActivity: (contactId: string, input: CreateActivityInput) =>
-    api.post<unknown, { data: ContactActivity }>(
+    api.post<unknown, ApiResponse<ContactActivity>>(
       `/crm/contacts/${contactId}/activities`,
       input,
     ),
 
   // Tags
   listTags: (entityType?: string) =>
-    api.get<unknown, { data: Tag[] }>('/crm/tags', {
+    api.get<unknown, ApiResponse<Tag[]>>('/crm/tags', {
       params: entityType ? { entity_type: entityType } : undefined,
     }),
   createTag: (input: CreateTagInput) =>
-    api.post<unknown, { data: Tag }>('/crm/tags', input),
+    api.post<unknown, ApiResponse<Tag>>('/crm/tags', input),
   updateTag: (id: string, input: UpdateTagInput) =>
-    api.patch<unknown, { data: Tag }>(`/crm/tags/${id}`, input),
+    api.patch<unknown, ApiResponse<Tag>>(`/crm/tags/${id}`, input),
   removeTag: (id: string) => api.delete(`/crm/tags/${id}`),
 
-  // User Preferences
+  // User Preferences (preference payload itself has its own `data` field)
   getUserPreference: (key: string) =>
-    api.get<unknown, { data: { data: any } }>(`/auth/user/preferences/${key}`),
+    api.get<unknown, ApiResponse<{ data: any }>>(
+      `/auth/user/preferences/${key}`,
+    ),
   updateUserPreference: (key: string, value: any) =>
-    api.put<unknown, { data: { data: any } }>(`/auth/user/preferences/${key}`, {
-      value,
-    }),
+    api.put<unknown, ApiResponse<{ data: any }>>(
+      `/auth/user/preferences/${key}`,
+      { value },
+    ),
 
   exportCsv: (params: {
     filters: Record<string, unknown>;
@@ -137,16 +141,16 @@ export const crmApi = {
     ),
 
   // Members (for owner assignment)
-  listMembers: () => api.get<unknown, { data: CrmMember[] }>('/crm/members'),
+  listMembers: () => api.get<unknown, ApiResponse<CrmMember[]>>('/crm/members'),
 
   // Custom Fields
   listFields: (entityType?: string) =>
-    api.get<unknown, { data: CustomField[] }>(
+    api.get<unknown, ApiResponse<CustomField[]>>(
       entityType ? `/crm/fields?entity_type=${entityType}` : '/crm/fields',
     ),
   createField: (input: CreateCustomFieldInput) =>
-    api.post<unknown, { data: CustomField }>('/crm/fields', input),
+    api.post<unknown, ApiResponse<CustomField>>('/crm/fields', input),
   updateField: (id: string, input: UpdateCustomFieldInput) =>
-    api.patch<unknown, { data: CustomField }>(`/crm/fields/${id}`, input),
+    api.patch<unknown, ApiResponse<CustomField>>(`/crm/fields/${id}`, input),
   removeField: (id: string) => api.delete(`/crm/fields/${id}`),
 };
