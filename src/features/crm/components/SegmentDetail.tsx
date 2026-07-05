@@ -1,12 +1,11 @@
-import React, { useState, useEffect } from 'react';
-import { Edit2, Filter, Loader2, Pencil, Tag, Users } from 'lucide-react';
-import { EmptyState } from '@shared/components/EmptyState';
-import { useSegmentContacts } from '@crm/hooks/useSegments';
-import { Segment } from '@crm/types/segment';
-import { Contact } from '@crm/types/contact';
-import { Pagination } from '@crm/components/Pagination';
-import { SourceBadge } from '@crm/components/badges';
 import { ContactFormSidebar } from '@crm/components/ContactFormSidebar';
+import { Pagination } from '@crm/components/Pagination';
+import { useSegmentContacts } from '@crm/hooks/useSegments';
+import { Contact } from '@crm/types/contact';
+import { Segment } from '@crm/types/segment';
+import { EmptyState } from '@shared/components/EmptyState';
+import { Edit2, Filter, Loader2, Pencil, Tag, Users } from 'lucide-react';
+import React, { useEffect, useState } from 'react';
 
 interface SegmentDetailProps {
   segment: Segment;
@@ -97,7 +96,7 @@ export const SegmentDetail: React.FC<SegmentDetailProps> = ({
                     <th className="px-4 py-3">Nombre</th>
                     <th className="px-4 py-3">Contacto</th>
                     <th className="px-4 py-3">Ciclo de vida</th>
-                    <th className="px-4 py-3">Origen</th>
+                    <th className="px-4 py-3">Canal</th>
                     <th className="px-4 py-3 text-right">Acciones</th>
                   </tr>
                 </thead>
@@ -146,7 +145,9 @@ export const SegmentDetail: React.FC<SegmentDetailProps> = ({
                         )}
                       </td>
                       <td className="px-4 py-3">
-                        <SourceBadge source={c.source} />
+                        <span className="text-xs font-medium text-slate-300">
+                          {c.channel?.name || 'Manual'}
+                        </span>
                       </td>
                       <td className="px-4 py-3 text-right">
                         <div className="flex justify-end gap-1">

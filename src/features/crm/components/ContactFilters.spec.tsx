@@ -1,8 +1,8 @@
-import { describe, it, expect, vi, beforeEach } from 'vitest';
-import { render, screen, fireEvent } from '@testing-library/react';
-import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
-import React from 'react';
 import { ContactFilters } from '@crm/components/ContactFilters';
+import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
+import { fireEvent, render, screen } from '@testing-library/react';
+import React from 'react';
+import { beforeEach, describe, expect, it, vi } from 'vitest';
 
 // ─── Mocks ────────────────────────────────────────────────────────────────────
 
@@ -15,6 +15,15 @@ vi.mock('@crm/api/crm.api', () => ({
       ],
     }),
   },
+}));
+
+vi.mock('@features/channels/hooks/channels.queries', () => ({
+  useChannelsQuery: vi.fn(() => ({
+    data: [
+      { id: 'c1', name: 'Chat Web' },
+      { id: 'c2', name: 'WhatsApp' },
+    ],
+  })),
 }));
 
 vi.mock('@shared/api/axios', () => ({
@@ -52,7 +61,7 @@ const createWrapper = () => {
 
 const defaultProps = {
   search: '',
-  source: '' as const,
+  channelId: '',
   ownerId: '',
   lifecycleStageId: '',
   createdAtFrom: '',
@@ -62,7 +71,7 @@ const defaultProps = {
   customFieldConditions: [],
   showOwnerFilter: false,
   onSearchChange: vi.fn(),
-  onSourceChange: vi.fn(),
+  onChannelChange: vi.fn(),
   onOwnerChange: vi.fn(),
   onLifecycleStageChange: vi.fn(),
   onDateRangeChange: vi.fn(),
@@ -84,7 +93,7 @@ describe('ContactFilters', () => {
     fireEvent.click(advancedBtn);
   };
 
-  it('renders the search input and source selector', () => {
+  it('renders the search input and channel selector', () => {
     const Wrapper = createWrapper();
     render(
       <Wrapper>
@@ -96,7 +105,7 @@ describe('ContactFilters', () => {
       screen.getByPlaceholderText(/Buscar por nombre/i),
     ).toBeInTheDocument();
     openAdvancedFilters();
-    expect(screen.getByText('Todos los orígenes')).toBeInTheDocument();
+    expect(screen.getByText('Todos los canales')).toBeInTheDocument();
   });
 
   it('does NOT render the owner selector when showOwnerFilter is false', () => {

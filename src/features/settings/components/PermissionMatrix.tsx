@@ -50,12 +50,12 @@ export const PermissionMatrix: React.FC<PermissionMatrixProps> = ({
   }
 
   const activeRoot = roots.find((r) => r.key === activeTabKey) || roots[0];
-  const children = allMenus.filter((m) => m.parent_key === activeRoot.key);
+  const children = allMenus.filter((m) => m.parentKey === activeRoot.key);
   const isRootChecked = activeMenuIds.includes(activeRoot.id);
 
   // Contar cuántos hijos activos tiene cada raíz para mostrar un indicador
   const getActiveChildrenCount = (rootKey: string) => {
-    const rootChildren = allMenus.filter((m) => m.parent_key === rootKey);
+    const rootChildren = allMenus.filter((m) => m.parentKey === rootKey);
     const activeChildren = rootChildren.filter((c) =>
       activeMenuIds.includes(c.id),
     );

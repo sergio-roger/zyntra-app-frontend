@@ -1,15 +1,14 @@
-import { ContactSource } from '@crm/types/crm';
 import { SegmentCondition } from '@crm/types/segment-condition';
 
 export interface TabFilters {
-  search: string;
-  source: ContactSource | '';
-  ownerId: string;
-  lifecycleStageId: string;
+  channelId: string;
   createdAtFrom: string;
   createdAtTo: string;
+  customFieldConditions: SegmentCondition[];
   lastActivityAtFrom: string;
   lastActivityAtTo: string;
-  customFieldConditions: SegmentCondition[];
+  lifecycleStageId: string;
+  ownerId: string;
   page: number;
+  search: string;
 }

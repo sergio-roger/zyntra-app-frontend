@@ -1,13 +1,11 @@
-import { ContactSource } from '@crm/types/crm';
-
 export interface ContactFormData {
-  name: string;
-  email: string;
-  phone: string;
-  lifecycleStageId: string;
-  source: ContactSource;
-  ownerId: string | null;
-  tags: string[];
-  notes: string;
+  channelId?: string;
   customFields: Record<string, any>;
+  email: string;
+  lifecycleStageId: string;
+  name: string;
+  notes: string;
+  ownerId: string | null;
+  phone: string;
+  tags: string[];
 }

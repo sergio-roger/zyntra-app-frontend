@@ -48,7 +48,7 @@ export const TeamFormSidebar: React.FC<TeamFormSidebarProps> = ({
         name: team.name,
         description: team.description || '',
         color: team.color,
-        member_ids: team.members.map((m) => m.id),
+        member_ids: (team.members || []).map((m) => m.id),
       });
     } else {
       setFormData({

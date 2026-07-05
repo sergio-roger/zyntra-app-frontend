@@ -122,7 +122,7 @@ export const TeamsPage: React.FC = () => {
                       {team.name}
                     </h3>
                     <p className="text-xs text-slate-500 font-medium">
-                      {team.members.length} Miembros
+                      {(team.members || []).length} Miembros
                     </p>
                   </div>
                 </div>
@@ -135,7 +135,7 @@ export const TeamsPage: React.FC = () => {
 
                 <div className="pt-4 border-t border-white/5">
                   <div className="flex -space-x-3 overflow-hidden">
-                    {team.members.slice(0, 5).map((m) => (
+                    {(team.members || []).slice(0, 5).map((m) => (
                       <div
                         key={m.id}
                         title={m.name}
@@ -144,12 +144,12 @@ export const TeamsPage: React.FC = () => {
                         {m.name.substring(0, 2).toUpperCase()}
                       </div>
                     ))}
-                    {team.members.length > 5 && (
+                    {(team.members || []).length > 5 && (
                       <div className="flex items-center justify-center h-8 w-8 rounded-full ring-2 ring-slate-900 bg-slate-700 text-[10px] font-bold text-white">
-                        +{team.members.length - 5}
+                        +{(team.members || []).length - 5}
                       </div>
                     )}
-                    {team.members.length === 0 && (
+                    {(team.members || []).length === 0 && (
                       <p className="text-[10px] text-slate-600">
                         Sin miembros asignados
                       </p>

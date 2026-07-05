@@ -1,15 +1,8 @@
 import { Contact } from '@crm/types/contact';
-import { ContactSource, SOURCE_LABELS } from '@crm/types/crm';
 import {
   Archive,
   ArrowRightCircle,
-  FileText,
   Inbox,
-  Mail,
-  MessageCircle,
-  Share2,
-  Upload,
-  User,
 } from 'lucide-react';
 import React from 'react';
 
@@ -18,26 +11,6 @@ interface LeadsTableProps {
   onArchive: (lead: Contact) => void;
   onConvert: (lead: Contact) => void;
 }
-
-const SOURCE_ICONS: Record<ContactSource, React.ReactNode> = {
-  manual: <User size={12} />,
-  web_chat: <MessageCircle size={12} />,
-  whatsapp: <MessageCircle size={12} />,
-  instagram: <Share2 size={12} />,
-  email: <Mail size={12} />,
-  form: <FileText size={12} />,
-  import: <Upload size={12} />,
-};
-
-const SOURCE_COLORS: Record<ContactSource, string> = {
-  manual: 'bg-slate-500/20 text-slate-300 border-slate-500/20',
-  web_chat: 'bg-violet-500/20 text-violet-300 border-violet-500/20',
-  whatsapp: 'bg-emerald-500/20 text-emerald-300 border-emerald-500/20',
-  instagram: 'bg-pink-500/20 text-pink-300 border-pink-500/20',
-  email: 'bg-blue-500/20 text-blue-300 border-blue-500/20',
-  form: 'bg-amber-500/20 text-amber-300 border-amber-500/20',
-  import: 'bg-cyan-500/20 text-cyan-300 border-cyan-500/20',
-};
 
 const AVATAR_COLORS = [
   'bg-violet-500/30 text-violet-300',
@@ -115,7 +88,7 @@ export const LeadsTable: React.FC<LeadsTableProps> = ({
               Contacto
             </th>
             <th className="text-left px-5 py-3 text-[10px] font-bold uppercase tracking-widest text-slate-500 hidden lg:table-cell">
-              Fuente
+              Canal
             </th>
             <th className="text-left px-5 py-3 text-[10px] font-bold uppercase tracking-widest text-slate-500 hidden xl:table-cell">
               Etiqueta
@@ -133,6 +106,7 @@ export const LeadsTable: React.FC<LeadsTableProps> = ({
             const avatarColor = getAvatarColor(lead.name);
             const initials = getInitials(lead.name);
             const firstTag = lead.tags?.[0];
+            const channelName = lead.channel?.name || 'Manual';
 
             return (
               <tr
@@ -172,13 +146,10 @@ export const LeadsTable: React.FC<LeadsTableProps> = ({
                   </div>
                 </td>
 
-                {/* Source */}
+                {/* Channel */}
                 <td className="px-5 py-3.5 hidden lg:table-cell">
-                  <span
-                    className={`inline-flex items-center gap-1.5 px-2 py-1 rounded-lg border text-[11px] font-semibold ${SOURCE_COLORS[lead.source]}`}
-                  >
-                    {SOURCE_ICONS[lead.source]}
-                    {SOURCE_LABELS[lead.source]}
+                  <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-lg text-xs font-semibold bg-indigo-500/10 text-indigo-400 border border-indigo-500/20">
+                    {channelName}
                   </span>
                 </td>
 

@@ -36,7 +36,7 @@ import { useSearchParams } from 'react-router-dom';
 
 const defaultFilters = (): TabFilters => ({
   search: '',
-  source: '',
+  channelId: '',
   ownerId: '',
   lifecycleStageId: '',
   createdAtFrom: '',
@@ -95,7 +95,7 @@ export const ContactListPage: React.FC = () => {
     const f = filters[activeTab];
     const params: Record<string, string> = { tab: activeTab };
     if (f.search) params.search = f.search;
-    if (f.source) params.source = f.source;
+    if (f.channelId) params.channelId = f.channelId;
     if (f.ownerId) params.ownerId = f.ownerId;
     if (f.lifecycleStageId) params.lifecycleStageId = f.lifecycleStageId;
     if (f.createdAtFrom) params.createdAtFrom = f.createdAtFrom;
@@ -112,7 +112,7 @@ export const ContactListPage: React.FC = () => {
 
   const allQuery = useContactsList({
     search: filters.all.search || undefined,
-    source: filters.all.source || undefined,
+    channelId: filters.all.channelId || undefined,
     ownerId: filters.all.ownerId || undefined,
     lifecycleStageId: filters.all.lifecycleStageId || undefined,
     createdAtFrom: filters.all.createdAtFrom || undefined,
@@ -127,7 +127,7 @@ export const ContactListPage: React.FC = () => {
   const mineQuery = useContactsList(
     {
       search: filters.mine.search || undefined,
-      source: filters.mine.source || undefined,
+      channelId: filters.mine.channelId || undefined,
       lifecycleStageId: filters.mine.lifecycleStageId || undefined,
       ownerId: myOwnerId || 'none',
       createdAtFrom: filters.mine.createdAtFrom || undefined,
@@ -145,7 +145,7 @@ export const ContactListPage: React.FC = () => {
 
   const unassignedQuery = useContactsList({
     search: filters.unassigned.search || undefined,
-    source: filters.unassigned.source || undefined,
+    channelId: filters.unassigned.channelId || undefined,
     lifecycleStageId: filters.unassigned.lifecycleStageId || undefined,
     ownerId: 'unassigned',
     createdAtFrom: filters.unassigned.createdAtFrom || undefined,
@@ -320,7 +320,7 @@ export const ContactListPage: React.FC = () => {
 
       <ContactFilters
         search={activeFilters.search}
-        source={activeFilters.source}
+        channelId={activeFilters.channelId}
         ownerId={activeFilters.ownerId}
         lifecycleStageId={activeFilters.lifecycleStageId}
         createdAtFrom={activeFilters.createdAtFrom}
@@ -330,7 +330,7 @@ export const ContactListPage: React.FC = () => {
         customFieldConditions={activeFilters.customFieldConditions}
         showOwnerFilter={isAdminOrManager && activeTab === 'all'}
         onSearchChange={(v) => setTabFilter(activeTab, { search: v })}
-        onSourceChange={(v) => setTabFilter(activeTab, { source: v })}
+        onChannelChange={(v) => setTabFilter(activeTab, { channelId: v })}
         onOwnerChange={(v) => setTabFilter(activeTab, { ownerId: v })}
         onLifecycleStageChange={(v) =>
           setTabFilter(activeTab, { lifecycleStageId: v })
@@ -420,7 +420,7 @@ export const ContactListPage: React.FC = () => {
         total={activeQuery.data?.total ?? 0}
         queryParams={{
           search: activeFilters.search || undefined,
-          source: activeFilters.source || undefined,
+          channelId: activeFilters.channelId || undefined,
           ownerId:
             activeTab === 'mine'
               ? myOwnerId || undefined

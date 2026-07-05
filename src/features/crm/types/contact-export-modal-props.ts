@@ -3,14 +3,14 @@ export interface ContactExportModalProps {
   onClose: () => void;
   total: number;
   queryParams: {
-    search?: string;
-    source?: string;
-    ownerId?: string;
-    lifecycleStageId?: string;
+    channelId?: string;
     createdAtFrom?: string;
     createdAtTo?: string;
+    customFieldFilters?: string;
     lastActivityAtFrom?: string;
     lastActivityAtTo?: string;
-    customFieldFilters?: string;
+    lifecycleStageId?: string;
+    ownerId?: string;
+    search?: string;
   };
 }

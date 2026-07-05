@@ -51,7 +51,7 @@ export const RoleCard: React.FC<RoleCardProps> = ({
   const { data: perms, isLoading } = useRolePermissions(role.name);
 
   const activeCount =
-    role.name === 'admin' ? totalMenus : (perms?.menu_ids.length ?? 0);
+    role.name === 'admin' ? totalMenus : (perms?.menuIds.length ?? 0);
   const isCustomRole = !['admin', 'superAdmin', 'manager', 'agent'].includes(
     role.name,
   );

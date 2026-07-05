@@ -1,5 +1,4 @@
 import { z } from 'zod';
-import { SOURCES } from '@crm/types/crm';
 
 export const contactSchema = z.object({
   name: z.string().min(1, 'El nombre es requerido').max(120),
@@ -12,7 +11,7 @@ export const contactSchema = z.object({
     )
     .optional(),
   phone: z.string().max(40).optional(),
-  source: z.enum(SOURCES as [string, ...string[]]).optional(),
+  channelId: z.string().uuid().nullable().optional(),
   tags: z.array(z.string()).optional(),
   notes: z.string().optional(),
   ownerId: z.string().uuid().nullable().optional(),

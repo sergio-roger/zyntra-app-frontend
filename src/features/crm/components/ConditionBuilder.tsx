@@ -2,7 +2,7 @@ import React from 'react';
 import { Plus, Trash2, Filter } from 'lucide-react';
 import { useTags } from '@crm/hooks/useTags';
 import { useCustomFields } from '@crm/hooks/useCustomFields';
-import { SOURCES, SOURCE_LABELS } from '@crm/types/crm';
+import { useChannelsQuery } from '@features/channels/hooks/channels.queries';
 import { SegmentCondition } from '@crm/types/segment-condition';
 import { useLifecycleStages } from '@crm/hooks/useLifecycleStages';
 
@@ -21,11 +21,12 @@ export const ConditionBuilder: React.FC<ConditionBuilderProps> = ({
   const { data: tags = [] } = useTags('contact');
   const { data: customFields = [] } = useCustomFields();
   const { data: stages = [] } = useLifecycleStages();
+  const { data: channels = [] } = useChannelsQuery();
 
   const handleAddCondition = () => {
     onChange([
       ...conditions,
-      { field: 'source', operator: 'equals', value: '' },
+      { field: 'channelId', operator: 'equals', value: '' },
     ]);
   };
 
@@ -160,7 +161,7 @@ export const ConditionBuilder: React.FC<ConditionBuilderProps> = ({
                       className={selectCls}
                     >
                       <optgroup label="Campos Básicos">
-                        <option value="source">Origen / Fuente</option>
+                        <option value="channelId">Canal</option>
                         <option value="lifecycleStageId">Ciclo de vida</option>
                         <option value="deal_value">Valor del Trato</option>
                       </optgroup>
@@ -218,7 +219,7 @@ export const ConditionBuilder: React.FC<ConditionBuilderProps> = ({
                       </div>
                     ) : (
                       <div>
-                        {cond.field === 'source' ? (
+                        {cond.field === 'channelId' ? (
                           <select
                             value={cond.value}
                             onChange={(e) =>
@@ -226,10 +227,10 @@ export const ConditionBuilder: React.FC<ConditionBuilderProps> = ({
                             }
                             className={selectCls}
                           >
-                            <option value="">Selecciona origen</option>
-                            {SOURCES.map((s) => (
-                              <option key={s} value={s}>
-                                {SOURCE_LABELS[s]}
+                            <option value="">Selecciona canal</option>
+                            {channels.map((c) => (
+                              <option key={c.id} value={c.id}>
+                                {c.name}
                               </option>
                             ))}
                           </select>

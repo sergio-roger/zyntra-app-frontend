@@ -263,8 +263,8 @@ export const ConvertToDealSidebar: React.FC<ConvertToDealSidebarProps> = ({
                     </p>
                   </div>
                   <div>
-                    <span className="text-slate-500">Fuente</span>
-                    <p className="text-white capitalize">{lead.source}</p>
+                    <span className="text-slate-500">Canal</span>
+                    <p className="text-white capitalize">{lead.channel?.name || 'Manual'}</p>
                   </div>
                 </div>
               </div>

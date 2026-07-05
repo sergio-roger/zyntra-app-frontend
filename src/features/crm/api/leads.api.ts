@@ -15,7 +15,7 @@ const buildQS = (q: Record<string, unknown>): string => {
 
 export interface ListLeadsQuery {
   search?: string;
-  source?: string;
+  channelId?: string;
   tag?: string;
   page?: number;
   limit?: number;

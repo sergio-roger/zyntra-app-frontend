@@ -2,7 +2,7 @@ import { Select } from '@core/ui/Select';
 import { DateRange, DateRangePicker } from '@core/ui/DateRangePicker';
 import { useCrmMembers } from '@crm/hooks/useCrmMembers';
 import { useLifecycleStages } from '@crm/hooks/useLifecycleStages';
-import { SOURCES, SOURCE_LABELS, ContactSource } from '@crm/types/crm';
+import { useChannelsQuery } from '@features/channels/hooks/channels.queries';
 import { SegmentCondition } from '@crm/types/segment-condition';
 import {
   Download,
@@ -18,7 +18,7 @@ import React, { useState } from 'react';
 
 interface ContactFiltersProps {
   search: string;
-  source: ContactSource | '';
+  channelId: string;
   ownerId: string;
   lifecycleStageId: string;
   createdAtFrom: string;
@@ -28,7 +28,7 @@ interface ContactFiltersProps {
   customFieldConditions: SegmentCondition[];
   showOwnerFilter: boolean;
   onSearchChange: (v: string) => void;
-  onSourceChange: (v: ContactSource | '') => void;
+  onChannelChange: (v: string) => void;
   onOwnerChange: (v: string) => void;
   onLifecycleStageChange: (v: string) => void;
   onDateRangeChange: (range: DateRange | null) => void;
@@ -39,14 +39,9 @@ interface ContactFiltersProps {
   onReset: () => void;
 }
 
-const sourceOptions = SOURCES.map((s) => ({
-  value: s,
-  label: SOURCE_LABELS[s],
-}));
-
 export const ContactFilters: React.FC<ContactFiltersProps> = ({
   search,
-  source,
+  channelId,
   ownerId,
   lifecycleStageId,
   createdAtFrom,
@@ -56,7 +51,7 @@ export const ContactFilters: React.FC<ContactFiltersProps> = ({
   customFieldConditions,
   showOwnerFilter,
   onSearchChange,
-  onSourceChange,
+  onChannelChange,
   onOwnerChange,
   onLifecycleStageChange,
   onDateRangeChange,
@@ -69,13 +64,17 @@ export const ContactFilters: React.FC<ContactFiltersProps> = ({
   const [showAdvanced, setShowAdvanced] = useState(false);
 
   const { data: members = [] } = useCrmMembers({ enabled: showOwnerFilter });
-
   const { data: stages = [] } = useLifecycleStages();
+  const { data: channels = [] } = useChannelsQuery();
 
   const ownerOptions = members.map((m) => ({ value: m.id, label: m.name }));
   const stageOptions = stages.map((s) => ({
     value: s.id,
     label: `${s.icon ?? ''} ${s.name}`.trim(),
+  }));
+  const channelOptions = channels.map((c) => ({
+    value: c.id,
+    label: c.name,
   }));
 
   const dateRangeValue: DateRange | null =
@@ -90,7 +89,7 @@ export const ContactFilters: React.FC<ContactFiltersProps> = ({
 
   const hasCustomFieldFilters = customFieldConditions.length > 0;
   const hasAdvancedFilters = Boolean(
-    source ||
+    channelId ||
     ownerId ||
     lifecycleStageId ||
     createdAtFrom ||
@@ -166,12 +165,12 @@ export const ContactFilters: React.FC<ContactFiltersProps> = ({
         <div className="mt-3 flex flex-wrap items-center gap-3 border-t border-white/5 pt-3 animate-in fade-in slide-in-from-top-1 duration-150">
           <div className="w-48">
             <Select
-              options={sourceOptions}
-              value={source || null}
-              onChange={(v) => onSourceChange((v as ContactSource) ?? '')}
-              placeholder="Todos los orígenes"
+              options={channelOptions}
+              value={channelId || null}
+              onChange={(v) => onChannelChange(v ?? '')}
+              placeholder="Todos los canales"
               clearable
-              clearLabel="Todos los orígenes"
+              clearLabel="Todos los canales"
               className="py-2 text-sm"
             />
           </div>

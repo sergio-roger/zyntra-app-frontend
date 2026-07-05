@@ -22,18 +22,8 @@ const CRM_FIELDS = [
   { id: 'name', label: 'Nombre Completo', required: true },
   { id: 'email', label: 'Email', required: false },
   { id: 'phone', label: 'Teléfono', required: false },
-  { id: 'source', label: 'Origen', required: false },
+  { id: 'channelId', label: 'ID de Canal', required: false },
   { id: 'notes', label: 'Notas', required: false },
-];
-
-const VALID_SOURCES = [
-  'manual',
-  'web_chat',
-  'whatsapp',
-  'instagram',
-  'email',
-  'form',
-  'import',
 ];
 
 export const ContactImportModal: React.FC<ContactImportModalProps> = ({
@@ -149,16 +139,8 @@ export const ContactImportModal: React.FC<ContactImportModalProps> = ({
           Object.entries(mapping).forEach(([crmField, csvIndex]) => {
             const val = row[parseInt(csvIndex)];
             if (!val) return;
-            if (crmField === 'source') {
-              const normalized = val.toLowerCase().trim();
-              contact[crmField] = VALID_SOURCES.includes(normalized)
-                ? normalized
-                : 'import';
-            } else {
-              contact[crmField] = val;
-            }
+            contact[crmField] = val;
           });
-          if (!contact.source) contact.source = 'import';
           return contact;
         })
         .filter((c) => c.name);

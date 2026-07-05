@@ -100,14 +100,14 @@ describe('Permissions Pages', () => {
             key: 'dashboard',
             label: 'Dashboard',
             path: '/dashboard',
-            parent_key: null,
+            parentKey: null,
           },
         ],
         isLoading: false,
       } as any);
 
       vi.mocked(usePermsHook.useRolePermissions).mockReturnValue({
-        data: { role: 'agent', menu_ids: ['1'] },
+        data: { role: 'agent', menuIds: ['1'] },
         isLoading: false,
       } as any);
 
@@ -150,7 +150,7 @@ describe('Permissions Pages', () => {
       } as any);
 
       vi.mocked(usePermsHook.useRolePermissions).mockReturnValue({
-        data: { role: 'manager', menu_ids: [] },
+        data: { role: 'manager', menuIds: [] },
         isLoading: false,
       } as any);
 

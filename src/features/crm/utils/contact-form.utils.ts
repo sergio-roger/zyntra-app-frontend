@@ -8,7 +8,7 @@ export function formDataFromContact(contact: Contact): ContactFormData {
     email: contact.email ?? '',
     phone: contact.phone ?? '',
     lifecycleStageId: contact.lifecycleStageId ?? '',
-    source: contact.source ?? 'manual',
+    channelId: contact.channelId ?? undefined,
     ownerId: contact.ownerId ?? null,
     tags:
       contact.tags?.map((t: any) => (typeof t === 'string' ? t : t.id)) ?? [],
@@ -27,7 +27,7 @@ export function defaultContactFormData(
     email: '',
     phone: '',
     lifecycleStageId: firstActiveStage?.id ?? '',
-    source: 'manual',
+    channelId: undefined,
     ownerId: ownerId ?? null,
     tags: [],
     notes: '',

@@ -1,7 +1,7 @@
 import { ActivityType } from '@crm/types/crm';
-import { Contact } from '@crm/types/contact';
 
 export interface CreateContactInput {
+  channelId?: string;
   customFields?: Record<string, any>;
   email?: string;
   isLead?: boolean;
@@ -10,16 +10,15 @@ export interface CreateContactInput {
   notes?: string;
   ownerId?: string | null;
   phone?: string;
-  source?: Contact['source'];
   tags?: string[];
 }
 
 export type UpdateContactInput = Partial<CreateContactInput>;
 
 export interface CreateActivityInput {
-  type: ActivityType;
   content: string;
   metadata?: Record<string, unknown>;
+  type: ActivityType;
 }
 
 export interface CreateTagInput {
