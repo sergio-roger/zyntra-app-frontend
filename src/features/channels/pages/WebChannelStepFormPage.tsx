@@ -34,8 +34,8 @@ export const WebChannelStepFormPage: React.FC = () => {
 
   if (mode === 'edit' && (isError || !channel)) {
     return (
-      <div className="alert alert-error max-w-lg mx-auto mt-8">
-        <AlertCircle size={18} />
+      <div className="flex items-center gap-2 max-w-lg mx-auto mt-8 rounded-xl border border-rose-500/30 bg-rose-500/10 px-4 py-3 text-sm text-rose-300">
+        <AlertCircle size={18} className="shrink-0" />
         <span>No se pudo cargar el canal.</span>
       </div>
     );

@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { FormProvider, useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { ArrowLeft, ArrowRight } from 'lucide-react';
+import { ArrowLeft, ArrowRight, Loader2 } from 'lucide-react';
 import { useAuthStore } from '@features/auth/store/authStore';
 import { ConfirmModal } from '@shared/components/ConfirmModal';
 import { toastManager } from '@shared/components/toast/toastManager';
@@ -101,8 +101,7 @@ export const WebChannelStepForm: React.FC<WebChannelStepFormProps> = ({
   useEffect(() => {
     setInitialValues(buildDefaultValues(mode, channel));
     return () => resetForm();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [mode, channel?.id]);
+  }, [mode, channel?.id, resetForm, setInitialValues]);
 
   const handleNext = async () => {
     const valid = await trigger(WEB_CHANNEL_STEP_FIELDS[formStep]);
@@ -190,69 +189,91 @@ export const WebChannelStepForm: React.FC<WebChannelStepFormProps> = ({
   const isSubmitting = isCreating || isUpdating;
   const isFirstStep = formStep === 'identity';
   const isLastStep = formStep === 'summary';
+  const stepMaxWidth = 'max-w-5xl mx-auto';
 
   return (
     <FormProvider {...methods}>
-      <div className="max-w-2xl mx-auto">
-        <button
-          type="button"
-          className="btn btn-ghost btn-sm gap-1 mb-6"
-          onClick={handleCancelClick}
-          data-testid="cancel-web-channel-form"
-        >
-          <ArrowLeft size={14} /> Cancelar
-        </button>
+      <div className="w-full space-y-6 animate-in fade-in duration-500">
+        <div>
+          <button
+            type="button"
+            onClick={handleCancelClick}
+            data-testid="cancel-web-channel-form"
+            className="inline-flex items-center gap-1.5 text-sm font-medium text-slate-400 hover:text-white transition-colors mb-4"
+          >
+            <ArrowLeft size={14} /> Cancelar
+          </button>
 
-        <h1 className="text-xl font-bold mb-2">
-          {mode === 'create' ? 'Crear canal web' : `Editar ${channel?.name ?? 'canal'}`}
-        </h1>
+          <h2 className="text-xl font-bold text-white tracking-tight">
+            {mode === 'create'
+              ? 'Crear canal web'
+              : `Editar ${channel?.name ?? 'canal'}`}
+          </h2>
+        </div>
+
         <StepIndicator current={formStep} />
 
-        <form onSubmit={onSubmit}>
-          {formStep === 'identity' && <StepIdentity />}
-          {formStep === 'appearance' && <StepAppearance />}
-          {formStep === 'security' && <StepSecurity />}
-          {formStep === 'agent' && <StepAgent />}
-          {formStep === 'summary' && (
-            <StepSummary
-              mode={mode}
-              channelId={channel?.id}
-              isSubmitting={isSubmitting}
-              submitError={submitError}
-            />
-          )}
+        <form onSubmit={onSubmit} className={`${stepMaxWidth} bg-slate-900/40 rounded-2xl border border-white/5 p-6 md:p-8 space-y-8`}>
+          <div className="min-h-[360px]">
+            {formStep === 'identity' && <StepIdentity />}
+            {formStep === 'appearance' && <StepAppearance />}
+            {formStep === 'security' && <StepSecurity />}
+            {formStep === 'agent' && <StepAgent />}
+            {formStep === 'summary' && (
+              <StepSummary
+                mode={mode}
+                channelId={channel?.id}
+                submitError={submitError}
+              />
+            )}
+          </div>
 
-          {!isLastStep && (
-            <div className="flex justify-between mt-4">
+          <div className="flex items-center justify-between border-t border-white/5 pt-6 mt-8">
+            <div>
               <button
                 type="button"
-                className="btn btn-ghost gap-1"
+                onClick={handleCancelClick}
+                className="inline-flex items-center gap-1.5 rounded-xl px-4 py-2 text-sm font-semibold text-slate-400 hover:text-white transition-all"
+              >
+                Cancelar
+              </button>
+            </div>
+
+            <div className="flex items-center gap-3">
+              <button
+                type="button"
                 onClick={handleBack}
                 disabled={isFirstStep}
+                className="inline-flex items-center gap-1.5 rounded-xl px-4 py-2 text-sm font-bold text-slate-300 border border-white/10 hover:bg-white/5 transition-all disabled:opacity-30 disabled:pointer-events-none"
               >
                 <ArrowLeft size={14} /> Atrás
               </button>
-              <button
-                type="button"
-                className="btn btn-primary gap-1"
-                onClick={handleNext}
-              >
-                Siguiente <ArrowRight size={14} />
-              </button>
-            </div>
-          )}
 
-          {isLastStep && (
-            <div className="flex justify-start mt-4">
-              <button
-                type="button"
-                className="btn btn-ghost gap-1"
-                onClick={handleBack}
-              >
-                <ArrowLeft size={14} /> Atrás
-              </button>
+              {!isLastStep ? (
+                <button
+                  type="button"
+                  onClick={handleNext}
+                  className="inline-flex items-center gap-1.5 rounded-xl px-5 py-2.5 text-sm font-bold bg-indigo-600 text-white shadow-lg shadow-indigo-500/20 hover:bg-indigo-500 transition-all"
+                >
+                  Siguiente <ArrowRight size={14} />
+                </button>
+              ) : (
+                <button
+                  type="submit"
+                  disabled={isSubmitting}
+                  data-testid="submit-web-channel-form"
+                  className="inline-flex items-center gap-2 rounded-xl px-5 py-2.5 text-sm font-bold bg-indigo-600 text-white shadow-lg shadow-indigo-500/20 hover:bg-indigo-500 transition-all disabled:opacity-50 disabled:cursor-not-allowed"
+                >
+                  {isSubmitting && <Loader2 size={14} className="animate-spin" />}
+                  {isSubmitting
+                    ? 'Guardando...'
+                    : mode === 'create'
+                      ? 'Crear canal'
+                      : 'Guardar cambios'}
+                </button>
+              )}
             </div>
-          )}
+          </div>
         </form>
       </div>
 

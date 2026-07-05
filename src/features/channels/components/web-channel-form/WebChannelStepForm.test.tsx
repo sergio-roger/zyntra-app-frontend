@@ -1,6 +1,6 @@
 import React from 'react';
 import { describe, it, expect, vi, beforeEach } from 'vitest';
-import { render, screen, fireEvent, waitFor } from '@testing-library/react';
+import { render, screen, fireEvent, waitFor, within } from '@testing-library/react';
 import { MemoryRouter } from 'react-router-dom';
 import { WebChannelStepForm } from './WebChannelStepForm';
 import { useChannelsStore } from '@features/channels/store/useChannelsStore';
@@ -73,6 +73,12 @@ const renderForm = (props: Partial<FormProps> = {}) => {
 
 const clickNext = () =>
   fireEvent.click(screen.getByRole('button', { name: /Siguiente/i }));
+
+const chooseOption = (containerTestId: string, optionLabel: string) => {
+  const container = screen.getByTestId(containerTestId);
+  fireEvent.click(within(container).getByRole('button'));
+  fireEvent.click(screen.getByRole('option', { name: optionLabel }));
+};
 
 describe('WebChannelStepForm', () => {
   beforeEach(() => {
@@ -197,9 +203,7 @@ describe('WebChannelStepForm', () => {
       expect(screen.getByTestId('field-agent')).toBeInTheDocument(),
     );
 
-    fireEvent.change(screen.getByTestId('field-agent'), {
-      target: { value: 'agent-1' },
-    });
+    chooseOption('field-agent', 'Bot Ventas');
 
     clickNext();
     await waitFor(() =>
@@ -247,9 +251,7 @@ describe('WebChannelStepForm', () => {
     await waitFor(() =>
       expect(screen.getByTestId('field-agent')).toBeInTheDocument(),
     );
-    fireEvent.change(screen.getByTestId('field-agent'), {
-      target: { value: 'agent-1' },
-    });
+    chooseOption('field-agent', 'Bot Ventas');
     clickNext();
     await waitFor(() =>
       expect(screen.getByTestId('submit-web-channel-form')).toBeInTheDocument(),

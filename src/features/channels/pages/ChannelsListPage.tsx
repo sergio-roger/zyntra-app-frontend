@@ -94,7 +94,7 @@ export const ChannelsListPage: React.FC = () => {
   }
 
   return (
-    <div className="p-6">
+    <div className="px-6">
       <div className="flex items-center justify-between mb-6">
         <div>
           <h1 className="text-2xl font-bold">Mis Canales</h1>

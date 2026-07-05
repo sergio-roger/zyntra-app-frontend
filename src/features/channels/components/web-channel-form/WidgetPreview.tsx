@@ -37,7 +37,7 @@ export const WidgetPreview: React.FC = () => {
   return (
     <div
       data-testid="widget-preview"
-      className="relative h-72 rounded-xl bg-base-200 border border-base-300 overflow-hidden"
+      className="relative h-72 rounded-2xl bg-slate-950/30 border border-white/5 overflow-hidden"
     >
       <div
         className="absolute bottom-4 w-[220px] rounded-2xl shadow-xl overflow-hidden flex flex-col"
