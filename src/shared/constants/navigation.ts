@@ -168,15 +168,6 @@ export const NAV_MODULES: NavModule[] = [
     ],
   },
   {
-    key: 'channels',
-    label: 'Mis Canales',
-    icon: Radio,
-    match: '/channels',
-    to: '/channels',
-    description: 'Administra los canales de comunicación con tus clientes.',
-    color: 'text-primary',
-  },
-  {
     key: 'funnels',
     label: 'Embudos',
     icon: Filter,
@@ -341,6 +332,11 @@ export const NAV_MODULES: NavModule[] = [
         children: [
           { to: '/settings/lifecycle', label: 'Ciclo de vida', icon: Sparkles },
           { to: '/settings/channels', label: 'Canales', icon: Share2 },
+          {
+            to: '/settings/my-channels',
+            label: 'Mis Canales',
+            icon: Radio,
+          },
           { to: '/settings/agents', label: 'Agentes', icon: Bot },
         ],
       },

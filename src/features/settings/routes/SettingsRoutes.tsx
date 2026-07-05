@@ -21,6 +21,11 @@ const ChannelDetailPage = lazy(() =>
     default: m.ChannelDetailPage,
   })),
 );
+const ChannelsListPage = lazy(() =>
+  import('@features/channels/pages/ChannelsListPage').then((m) => ({
+    default: m.ChannelsListPage,
+  })),
+);
 const AiAgentsPage = lazy(() =>
   import('@features/ai-agents/pages/AiAgentsPage').then((m) => ({
     default: m.AiAgentsPage,
@@ -188,6 +193,18 @@ export const settingsRoutes: RouteObject[] = [
             <ModuleGuard menuKey="settings_channels">
               <SuspenseLoader>
                 <ChannelDetailPage />
+              </SuspenseLoader>
+            </ModuleGuard>
+          </PermissionGuard>
+        ),
+      },
+      {
+        path: 'my-channels',
+        element: (
+          <PermissionGuard menuKey="settings_my_channels">
+            <ModuleGuard menuKey="settings_my_channels">
+              <SuspenseLoader>
+                <ChannelsListPage />
               </SuspenseLoader>
             </ModuleGuard>
           </PermissionGuard>

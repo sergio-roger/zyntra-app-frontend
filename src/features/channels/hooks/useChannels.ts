@@ -6,7 +6,7 @@ import {
   UpdateChannelPayload,
 } from '../types/channels.types';
 
-const useBusinessId = () => useAuthStore((s) => s.user?.id ?? '');
+const useBusinessId = () => useAuthStore((s) => s.user?.businessId ?? '');
 
 export const useChannelStore = () =>
   useQuery({ queryKey: ['channel-store'], queryFn: channelsApi.getStore });

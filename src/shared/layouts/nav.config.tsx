@@ -27,7 +27,6 @@ const PATH_TO_KEY_MAP: Record<string, string> = {
   '/inbox/conversations': 'inbox_conversations',
   '/inbox/automations': 'inbox_automations',
   '/inbox/channels': 'inbox_channels',
-  '/channels': 'channels',
   '/funnels': 'funnels',
   '/funnels/dashboard': 'funnels_dashboard',
   '/funnels/builder': 'funnels_builder',
@@ -59,6 +58,7 @@ const PATH_TO_KEY_MAP: Record<string, string> = {
   '/settings/roles': 'settings_roles',
   '/settings/lifecycle': 'settings_lifecycle',
   '/settings/channels': 'settings_channels',
+  '/settings/my-channels': 'settings_my_channels',
   '/settings/agents': 'settings_agents',
   '/settings/permissions': 'settings_roles',
 };

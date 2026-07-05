@@ -6,7 +6,7 @@ import {
   UpdateAgentPayload,
 } from '../types/ai-agents.types';
 
-const useBusinessId = () => useAuthStore((s) => s.user?.id ?? '');
+const useBusinessId = () => useAuthStore((s) => s.user?.businessId ?? '');
 
 export const useAiAgents = () => {
   const businessId = useBusinessId();
