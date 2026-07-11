@@ -1,8 +1,10 @@
-import { useEffect, useRef } from 'react';
+import { useCallback, useEffect, useRef, useState } from 'react';
 import { useQueryClient } from '@tanstack/react-query';
 import { getChatSocket } from '../lib/chatSocket';
 import { playNewMessageSound } from '../lib/notificationSound';
 import { ConversationDetail } from '../types/chatbot.types';
+
+const TYPING_STOP_DELAY_MS = 2000;
 
 interface NewMessagePayload {
   conversation_id: string;
@@ -17,6 +19,12 @@ interface StatusChangedPayload {
   timestamp: string;
 }
 
+interface TypingPayload {
+  conversation_id: string;
+  from: 'visitor' | 'agent';
+  isTyping: boolean;
+}
+
 /** Mantiene la conversación activa al día en vivo vía el gateway /chat. */
 export const useConversationSocket = (
   conversationId: string | null,
@@ -26,6 +34,9 @@ export const useConversationSocket = (
   const joinedRef = useRef<string | null>(null);
   const soundEnabledRef = useRef(soundEnabled);
   soundEnabledRef.current = soundEnabled;
+  const [isVisitorTyping, setIsVisitorTyping] = useState(false);
+  const typingSentRef = useRef(false);
+  const typingTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
 
   useEffect(() => {
     const socket = getChatSocket();
@@ -65,14 +76,26 @@ export const useConversationSocket = (
       qc.invalidateQueries({ queryKey: ['conversations'], exact: false });
     };
 
+    const handleTyping = (payload: TypingPayload) => {
+      if (payload.from !== 'visitor') return;
+      setIsVisitorTyping(payload.isTyping);
+    };
+
     socket.on('conversation:new-message', handleNewMessage);
     socket.on('conversation:status-changed', handleStatusChanged);
+    socket.on('conversation:typing', handleTyping);
 
     return () => {
       socket.off('conversation:new-message', handleNewMessage);
       socket.off('conversation:status-changed', handleStatusChanged);
+      socket.off('conversation:typing', handleTyping);
     };
   }, [qc]);
+
+  // Switching conversations invalidates any typing signal from the previous one.
+  useEffect(() => {
+    setIsVisitorTyping(false);
+  }, [conversationId]);
 
   useEffect(() => {
     if (!conversationId) return;
@@ -88,10 +111,41 @@ export const useConversationSocket = (
 
     return () => {
       socket.off('connect', join);
+      if (typingTimerRef.current) {
+        clearTimeout(typingTimerRef.current);
+        typingTimerRef.current = null;
+      }
+      typingSentRef.current = false;
       if (joinedRef.current === conversationId) {
         socket.emit('conversation:leave', { conversationId });
         joinedRef.current = null;
       }
     };
   }, [conversationId]);
+
+  const stopTyping = useCallback(() => {
+    if (typingTimerRef.current) {
+      clearTimeout(typingTimerRef.current);
+      typingTimerRef.current = null;
+    }
+    if (typingSentRef.current && conversationId) {
+      typingSentRef.current = false;
+      getChatSocket().emit('conversation:typing', { conversationId, isTyping: false });
+    }
+  }, [conversationId]);
+
+  const notifyTyping = useCallback(() => {
+    if (!conversationId) return;
+    const socket = getChatSocket();
+
+    if (!typingSentRef.current) {
+      typingSentRef.current = true;
+      socket.emit('conversation:typing', { conversationId, isTyping: true });
+    }
+
+    if (typingTimerRef.current) clearTimeout(typingTimerRef.current);
+    typingTimerRef.current = setTimeout(stopTyping, TYPING_STOP_DELAY_MS);
+  }, [conversationId, stopTyping]);
+
+  return { isVisitorTyping, notifyTyping, stopTyping };
 };

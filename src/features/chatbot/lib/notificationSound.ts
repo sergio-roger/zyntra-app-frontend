@@ -7,6 +7,15 @@ const getAudioContext = (): AudioContext | null => {
   return audioCtx;
 };
 
+const unlockOnUserGesture = () => {
+  const ctx = getAudioContext();
+  if (ctx && ctx.state === 'suspended') void ctx.resume();
+  document.removeEventListener('pointerdown', unlockOnUserGesture);
+  document.removeEventListener('keydown', unlockOnUserGesture);
+};
+document.addEventListener('pointerdown', unlockOnUserGesture);
+document.addEventListener('keydown', unlockOnUserGesture);
+
 /** Beep corto de dos tonos para notificar un mensaje nuevo en el inbox. */
 export function playNewMessageSound() {
   const ctx = getAudioContext();

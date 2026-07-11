@@ -56,7 +56,10 @@ export const ConversationsPage: React.FC = () => {
   const setInboxSound = useSetInboxSoundSetting();
   const soundEnabled = inboxSound?.enabled ?? true;
 
-  useConversationSocket(selectedConversationId, soundEnabled);
+  const { isVisitorTyping, notifyTyping, stopTyping } = useConversationSocket(
+    selectedConversationId,
+    soundEnabled,
+  );
 
   const messagesEndRef = useRef<HTMLDivElement>(null);
 
@@ -89,6 +92,7 @@ export const ConversationsPage: React.FC = () => {
   const handleSend = () => {
     const content = messageDraft.trim();
     if (!content || !selectedConversationId || sendAgentMessage.isPending) return;
+    stopTyping();
     sendAgentMessage.mutate(
       { conversationId: selectedConversationId, content },
       { onSuccess: () => setMessageDraft('') },
@@ -285,6 +289,13 @@ export const ConversationsPage: React.FC = () => {
                     </div>
                   );
                 })}
+                {isVisitorTyping && (
+                  <div className="chat chat-start">
+                    <div className="chat-bubble text-xs italic opacity-60">
+                      Escribiendo...
+                    </div>
+                  </div>
+                )}
                 <div ref={messagesEndRef} />
               </div>
 
@@ -295,7 +306,10 @@ export const ConversationsPage: React.FC = () => {
                   placeholder="Escribe un mensaje como agente..."
                   value={messageDraft}
                   disabled={sendAgentMessage.isPending}
-                  onChange={(e) => setMessageDraft(e.target.value)}
+                  onChange={(e) => {
+                    setMessageDraft(e.target.value);
+                    notifyTyping();
+                  }}
                   onKeyDown={(e) => {
                     if (e.key === 'Enter' && !e.shiftKey) {
                       e.preventDefault();
