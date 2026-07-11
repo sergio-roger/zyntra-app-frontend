@@ -1,39 +1,11 @@
-import React from 'react';
-import { MessageCircle, Send } from 'lucide-react';
-import { useFormContext, useWatch } from 'react-hook-form';
-import { WebChannelFormValues, WidgetStatus } from '@features/channels/schemas/web-channel.schema';
+import { STATUS_META } from '@features/channels/constants/widget.constants';
+import { useIsDark } from '@features/channels/hooks/useIsDark';
+import { useTick } from '@features/channels/hooks/useTick';
+import { WebChannelFormValues } from '@features/channels/schemas/web-channel.schema';
 import { getEffectiveWidgetStatus } from '@features/channels/utils/availability';
-
-const useIsDark = (theme: WebChannelFormValues['theme']) => {
-  const [prefersDark, setPrefersDark] = React.useState(false);
-
-  React.useEffect(() => {
-    if (typeof window === 'undefined' || !window.matchMedia) return;
-    const mq = window.matchMedia('(prefers-color-scheme: dark)');
-    setPrefersDark(mq.matches);
-    const handler = (e: MediaQueryListEvent) => setPrefersDark(e.matches);
-    mq.addEventListener('change', handler);
-    return () => mq.removeEventListener('change', handler);
-  }, []);
-
-  return theme === 'dark' || (theme === 'auto' && prefersDark);
-};
-
-const useTick = (enabled: boolean, intervalMs = 30_000) => {
-  const [, setTick] = React.useState(0);
-
-  React.useEffect(() => {
-    if (!enabled) return;
-    const id = setInterval(() => setTick((t) => t + 1), intervalMs);
-    return () => clearInterval(id);
-  }, [enabled, intervalMs]);
-};
-
-const STATUS_META: Record<WidgetStatus, { label: string; dot: string }> = {
-  available: { label: 'En línea', dot: '#22c55e' },
-  busy: { label: 'Ocupado', dot: '#f59e0b' },
-  offline: { label: 'Fuera de servicio', dot: '#94a3b8' },
-};
+import { MessageCircle, Send } from 'lucide-react';
+import React from 'react';
+import { useFormContext, useWatch } from 'react-hook-form';
 
 export const WidgetPreview: React.FC = () => {
   const { control } = useFormContext<WebChannelFormValues>();

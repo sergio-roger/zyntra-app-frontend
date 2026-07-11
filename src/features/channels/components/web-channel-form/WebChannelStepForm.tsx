@@ -1,32 +1,31 @@
-import React, { useEffect, useState } from 'react';
-import { FormProvider, useForm } from 'react-hook-form';
-import { zodResolver } from '@hookform/resolvers/zod';
-import { ArrowLeft, ArrowRight, Loader2 } from 'lucide-react';
 import { useAuthStore } from '@features/auth/store/authStore';
-import { ConfirmModal } from '@shared/components/ConfirmModal';
-import { toastManager } from '@shared/components/toast/toastManager';
 import { channelsApi } from '@features/channels/api/channels.api';
-import { Channel } from '@features/channels/types/channels.types';
-import {
-  webChannelSchema,
-  WebChannelFormValues,
-  WEB_CHANNEL_STEP_FIELDS,
-} from '@features/channels/schemas/web-channel.schema';
-import {
-  useChannelsStore,
-  DEFAULT_WEB_CHANNEL_FORM_VALUES,
-  buildDefaultSchedule,
-} from '@features/channels/store/useChannelsStore';
 import {
   useCreateChannelMutation,
   useUpdateChannelMutation,
 } from '@features/channels/hooks/channels.queries';
-import { WebChannelBusinessHours } from '@features/channels/types/channels.types';
-import { StepIndicator } from './StepIndicator';
-import { StepIdentity } from './StepIdentity';
-import { StepAvailability } from './StepAvailability';
-import { StepSecurity } from './StepSecurity';
+import {
+  WEB_CHANNEL_STEP_FIELDS,
+  WebChannelFormValues,
+  webChannelSchema,
+} from '@features/channels/schemas/web-channel.schema';
+import {
+  DEFAULT_WEB_CHANNEL_FORM_VALUES,
+  buildDefaultSchedule,
+  useChannelsStore,
+} from '@features/channels/store/useChannelsStore';
+import { Channel, WebChannelBusinessHours } from '@features/channels/types/channels.types';
+import { zodResolver } from '@hookform/resolvers/zod';
+import { ConfirmModal } from '@shared/components/ConfirmModal';
+import { toastManager } from '@shared/components/toast/toastManager';
+import { ArrowLeft, ArrowRight, Loader2 } from 'lucide-react';
+import React, { useEffect, useState } from 'react';
+import { FormProvider, useForm } from 'react-hook-form';
 import { StepAgent } from './StepAgent';
+import { StepAvailability } from './StepAvailability';
+import { StepIdentity } from './StepIdentity';
+import { StepIndicator } from './StepIndicator';
+import { StepSecurity } from './StepSecurity';
 import { StepSummary } from './StepSummary';
 
 interface WebChannelStepFormProps {
@@ -118,7 +117,8 @@ export const WebChannelStepForm: React.FC<WebChannelStepFormProps> = ({
     return () => resetForm();
   }, [mode, channel?.id, resetForm, setInitialValues]);
 
-  const handleNext = async () => {
+  const handleNext = async (e: React.MouseEvent<HTMLButtonElement>) => {
+    e.preventDefault();
     const valid = await trigger(WEB_CHANNEL_STEP_FIELDS[formStep]);
     if (!valid) return;
     setFormValues(getValues());
@@ -269,6 +269,7 @@ export const WebChannelStepForm: React.FC<WebChannelStepFormProps> = ({
 
               {!isLastStep ? (
                 <button
+                  key="wizard-next-button"
                   type="button"
                   onClick={handleNext}
                   className="inline-flex items-center gap-1.5 rounded-xl px-5 py-2.5 text-sm font-bold bg-indigo-600 text-white shadow-lg shadow-indigo-500/20 hover:bg-indigo-500 transition-all"
@@ -277,6 +278,7 @@ export const WebChannelStepForm: React.FC<WebChannelStepFormProps> = ({
                 </button>
               ) : (
                 <button
+                  key="wizard-submit-button"
                   type="submit"
                   disabled={isSubmitting}
                   data-testid="submit-web-channel-form"
