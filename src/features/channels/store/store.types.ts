@@ -3,7 +3,7 @@ import { WebChannelFormValues } from '@features/channels/schemas/web-channel.sch
 /** Pasos del stepform de creación/edición de un canal web */
 export type WebChannelFormStep =
   | 'identity'
-  | 'appearance'
+  | 'availability'
   | 'security'
   | 'agent'
   | 'summary';

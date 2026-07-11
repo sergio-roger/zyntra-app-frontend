@@ -119,7 +119,7 @@ describe('WebChannelStepForm', () => {
     });
     clickNext();
     await waitFor(() =>
-      expect(screen.getByTestId('field-primary-color')).toBeInTheDocument(),
+      expect(screen.getByTestId('availability-manual-panel')).toBeInTheDocument(),
     );
 
     clickNext();
@@ -169,6 +169,60 @@ describe('WebChannelStepForm', () => {
     await waitFor(() => expect(onCreated).toHaveBeenCalledWith(fakeChannel));
   });
 
+  it('submits the manually selected availability status', async () => {
+    const fakeChannel: Channel = {
+      id: 'chan-availability',
+      business_id: 'biz-1',
+      channel_type_id: 'type-1',
+      channelType: baseChannelType,
+      config: {},
+      created_at: '',
+      updated_at: '',
+      name: 'Chat Principal',
+      status: 'active',
+      agent_id: null,
+    };
+    mockCreateMutateAsync.mockResolvedValue(fakeChannel);
+
+    renderForm();
+
+    fireEvent.change(screen.getByTestId('field-name'), {
+      target: { value: 'Chat Principal' },
+    });
+    clickNext();
+    await waitFor(() =>
+      expect(screen.getByTestId('availability-manual-panel')).toBeInTheDocument(),
+    );
+    fireEvent.click(screen.getByTestId('manual-status-busy'));
+    expect(screen.getByTestId('widget-preview-status')).toHaveTextContent('Ocupado');
+
+    clickNext();
+    await waitFor(() =>
+      expect(screen.getByTestId('field-domain-input')).toBeInTheDocument(),
+    );
+    clickNext();
+    await waitFor(() =>
+      expect(screen.getByTestId('agent-placeholder')).toBeInTheDocument(),
+    );
+    clickNext();
+    await waitFor(() =>
+      expect(screen.getByTestId('submit-web-channel-form')).toBeInTheDocument(),
+    );
+
+    fireEvent.click(screen.getByTestId('submit-web-channel-form'));
+
+    await waitFor(() =>
+      expect(mockCreateMutateAsync).toHaveBeenCalledWith(
+        expect.objectContaining({
+          config: expect.objectContaining({
+            availabilityMode: 'manual',
+            manualStatus: 'busy',
+          }),
+        }),
+      ),
+    );
+  });
+
   it('assigns the selected agent after creating the channel', async () => {
     mockAgents = [{ id: 'agent-1', name: 'Bot Ventas', is_active: true }];
     const fakeChannel: Channel = {
@@ -192,8 +246,9 @@ describe('WebChannelStepForm', () => {
     });
     clickNext();
     await waitFor(() =>
-      expect(screen.getByTestId('field-primary-color')).toBeInTheDocument(),
+      expect(screen.getByTestId('availability-manual-panel')).toBeInTheDocument(),
     );
+
     clickNext();
     await waitFor(() =>
       expect(screen.getByTestId('field-domain-input')).toBeInTheDocument(),
@@ -241,8 +296,9 @@ describe('WebChannelStepForm', () => {
     });
     clickNext();
     await waitFor(() =>
-      expect(screen.getByTestId('field-primary-color')).toBeInTheDocument(),
+      expect(screen.getByTestId('availability-manual-panel')).toBeInTheDocument(),
     );
+
     clickNext();
     await waitFor(() =>
       expect(screen.getByTestId('field-domain-input')).toBeInTheDocument(),
@@ -289,11 +345,13 @@ describe('WebChannelStepForm', () => {
 
     expect(screen.getByTestId('field-name')).toHaveValue('Canal existente');
 
+    await waitFor(() =>
+      expect(screen.getByTestId('field-primary-color')).toHaveValue('#123456'),
+    );
+
     clickNext();
     await waitFor(() =>
-      expect(screen.getByTestId('field-primary-color')).toHaveValue(
-        '#123456',
-      ),
+      expect(screen.getByTestId('availability-manual-panel')).toBeInTheDocument(),
     );
 
     clickNext();
@@ -353,8 +411,9 @@ describe('WebChannelStepForm', () => {
     });
     clickNext();
     await waitFor(() =>
-      expect(screen.getByTestId('field-primary-color')).toBeInTheDocument(),
+      expect(screen.getByTestId('availability-manual-panel')).toBeInTheDocument(),
     );
+
     clickNext();
     await waitFor(() =>
       expect(screen.getByTestId('field-domain-input')).toBeInTheDocument(),

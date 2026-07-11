@@ -5,15 +5,15 @@ import { WebChannelFormStep } from '@features/channels/store/store.types';
 // ─── Orden de pasos del stepform de canal web ─────────────────────────────────
 export const WEB_CHANNEL_FORM_STEPS: WebChannelFormStep[] = [
   'identity',
-  'appearance',
+  'availability',
   'security',
   'agent',
   'summary',
 ];
 
 export const WEB_CHANNEL_FORM_STEP_LABELS: Record<WebChannelFormStep, string> = {
-  identity: 'Identidad',
-  appearance: 'Apariencia',
+  identity: 'Identidad y apariencia',
+  availability: 'Disponibilidad',
   security: 'Seguridad',
   agent: 'Agente',
   summary: 'Resumen',

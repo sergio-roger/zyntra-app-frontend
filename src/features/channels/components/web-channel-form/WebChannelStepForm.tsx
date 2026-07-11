@@ -15,14 +15,16 @@ import {
 import {
   useChannelsStore,
   DEFAULT_WEB_CHANNEL_FORM_VALUES,
+  buildDefaultSchedule,
 } from '@features/channels/store/useChannelsStore';
 import {
   useCreateChannelMutation,
   useUpdateChannelMutation,
 } from '@features/channels/hooks/channels.queries';
+import { WebChannelBusinessHours } from '@features/channels/types/channels.types';
 import { StepIndicator } from './StepIndicator';
 import { StepIdentity } from './StepIdentity';
-import { StepAppearance } from './StepAppearance';
+import { StepAvailability } from './StepAvailability';
 import { StepSecurity } from './StepSecurity';
 import { StepAgent } from './StepAgent';
 import { StepSummary } from './StepSummary';
@@ -58,6 +60,19 @@ const buildDefaultValues = (
         config.theme === 'light' || config.theme === 'dark'
           ? config.theme
           : 'auto',
+      availabilityMode: config.availabilityMode === 'schedule' ? 'schedule' : 'manual',
+      manualStatus:
+        config.manualStatus === 'busy' || config.manualStatus === 'offline'
+          ? config.manualStatus
+          : 'available',
+      businessHours:
+        config.businessHours && typeof config.businessHours === 'object'
+          ? (config.businessHours as WebChannelBusinessHours)
+          : {
+              timezone: DEFAULT_WEB_CHANNEL_FORM_VALUES.businessHours.timezone,
+              is24x7: false,
+              schedule: buildDefaultSchedule(),
+            },
       allowedDomains: Array.isArray(config.allowedDomains)
         ? (config.allowedDomains as string[])
         : [],
@@ -153,6 +168,9 @@ export const WebChannelStepForm: React.FC<WebChannelStepFormProps> = ({
       primaryColor: values.primaryColor,
       position: values.position,
       theme: values.theme,
+      availabilityMode: values.availabilityMode,
+      manualStatus: values.manualStatus,
+      businessHours: values.businessHours,
       allowedDomains: values.allowedDomains,
     };
 
@@ -189,7 +207,7 @@ export const WebChannelStepForm: React.FC<WebChannelStepFormProps> = ({
   const isSubmitting = isCreating || isUpdating;
   const isFirstStep = formStep === 'identity';
   const isLastStep = formStep === 'summary';
-  const stepMaxWidth = 'max-w-5xl mx-auto';
+  const stepMaxWidth = 'max-w-6xl mx-auto';
 
   return (
     <FormProvider {...methods}>
@@ -214,9 +232,9 @@ export const WebChannelStepForm: React.FC<WebChannelStepFormProps> = ({
         <StepIndicator current={formStep} />
 
         <form onSubmit={onSubmit} className={`${stepMaxWidth} bg-slate-900/40 rounded-2xl border border-white/5 p-6 md:p-8 space-y-8`}>
-          <div className="min-h-[360px]">
+          <div className="min-h-[420px]">
             {formStep === 'identity' && <StepIdentity />}
-            {formStep === 'appearance' && <StepAppearance />}
+            {formStep === 'availability' && <StepAvailability />}
             {formStep === 'security' && <StepSecurity />}
             {formStep === 'agent' && <StepAgent />}
             {formStep === 'summary' && (

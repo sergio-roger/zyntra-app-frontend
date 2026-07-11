@@ -4,6 +4,23 @@ import {
   WebChannelFormValues,
 } from '@features/channels/store/store.types';
 import { WEB_CHANNEL_FORM_STEPS } from '@features/channels/constants/channels.constants';
+import { DAY_KEYS, DaySchedule } from '@features/channels/schemas/web-channel.schema';
+
+const detectTimezone = (): string => {
+  try {
+    return Intl.DateTimeFormat().resolvedOptions().timeZone || 'America/Guayaquil';
+  } catch {
+    return 'America/Guayaquil';
+  }
+};
+
+export const buildDefaultSchedule = (): DaySchedule[] =>
+  DAY_KEYS.map((day) => ({
+    day,
+    enabled: day !== 'sat' && day !== 'sun',
+    from: '09:00',
+    to: '18:00',
+  }));
 
 export const DEFAULT_WEB_CHANNEL_FORM_VALUES: WebChannelFormValues = {
   name: '',
@@ -12,6 +29,13 @@ export const DEFAULT_WEB_CHANNEL_FORM_VALUES: WebChannelFormValues = {
   primaryColor: '#6366f1',
   position: 'bottom-right',
   theme: 'auto',
+  availabilityMode: 'manual',
+  manualStatus: 'available',
+  businessHours: {
+    timezone: detectTimezone(),
+    is24x7: false,
+    schedule: buildDefaultSchedule(),
+  },
   allowedDomains: [],
   agentId: null,
 };

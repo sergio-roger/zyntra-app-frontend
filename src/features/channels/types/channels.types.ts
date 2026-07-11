@@ -1,9 +1,25 @@
+export interface WebChannelDaySchedule {
+  day: 'mon' | 'tue' | 'wed' | 'thu' | 'fri' | 'sat' | 'sun';
+  enabled: boolean;
+  from: string;
+  to: string;
+}
+
+export interface WebChannelBusinessHours {
+  timezone: string;
+  is24x7: boolean;
+  schedule: WebChannelDaySchedule[];
+}
+
 export interface WebChannelConfig {
   greeting?: string;
   assistantName?: string;
   primaryColor: string;
   position: 'bottom-left' | 'bottom-right';
   theme: 'light' | 'dark' | 'auto';
+  availabilityMode?: 'manual' | 'schedule';
+  manualStatus?: 'available' | 'busy' | 'offline';
+  businessHours?: WebChannelBusinessHours;
   allowedDomains: string[];
 }
 

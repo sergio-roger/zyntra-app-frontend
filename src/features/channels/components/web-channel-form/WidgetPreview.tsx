@@ -1,7 +1,8 @@
 import React from 'react';
 import { MessageCircle, Send } from 'lucide-react';
 import { useFormContext, useWatch } from 'react-hook-form';
-import { WebChannelFormValues } from '@features/channels/schemas/web-channel.schema';
+import { WebChannelFormValues, WidgetStatus } from '@features/channels/schemas/web-channel.schema';
+import { getEffectiveWidgetStatus } from '@features/channels/utils/availability';
 
 const useIsDark = (theme: WebChannelFormValues['theme']) => {
   const [prefersDark, setPrefersDark] = React.useState(false);
@@ -18,13 +19,43 @@ const useIsDark = (theme: WebChannelFormValues['theme']) => {
   return theme === 'dark' || (theme === 'auto' && prefersDark);
 };
 
-/** Réplica visual estática del widget standalone (frontend/widget/src/index.ts) para previsualizar cambios de apariencia en vivo. */
+const useTick = (enabled: boolean, intervalMs = 30_000) => {
+  const [, setTick] = React.useState(0);
+
+  React.useEffect(() => {
+    if (!enabled) return;
+    const id = setInterval(() => setTick((t) => t + 1), intervalMs);
+    return () => clearInterval(id);
+  }, [enabled, intervalMs]);
+};
+
+const STATUS_META: Record<WidgetStatus, { label: string; dot: string }> = {
+  available: { label: 'En línea', dot: '#22c55e' },
+  busy: { label: 'Ocupado', dot: '#f59e0b' },
+  offline: { label: 'Fuera de servicio', dot: '#94a3b8' },
+};
+
 export const WidgetPreview: React.FC = () => {
   const { control } = useFormContext<WebChannelFormValues>();
-  const [primaryColor, position, theme, greeting, assistantName] = useWatch({
-    control,
-    name: ['primaryColor', 'position', 'theme', 'greeting', 'assistantName'],
-  });
+  const [primaryColor, position, theme, greeting, assistantName, availabilityMode, manualStatus, businessHours] =
+    useWatch({
+      control,
+      name: [
+        'primaryColor',
+        'position',
+        'theme',
+        'greeting',
+        'assistantName',
+        'availabilityMode',
+        'manualStatus',
+        'businessHours',
+      ],
+    });
+
+  useTick(availabilityMode === 'schedule');
+  const status = getEffectiveWidgetStatus({ availabilityMode, manualStatus, businessHours });
+  const statusMeta = STATUS_META[status];
+  const isOffline = status === 'offline';
 
   const isDark = useIsDark(theme);
   const panelBg = isDark ? '#1e293b' : '#fff';
@@ -37,28 +68,38 @@ export const WidgetPreview: React.FC = () => {
   return (
     <div
       data-testid="widget-preview"
-      className="relative h-72 rounded-2xl bg-slate-950/30 border border-white/5 overflow-hidden"
+      className="relative h-[560px] rounded-2xl bg-slate-950/30 border border-white/5 overflow-hidden"
     >
       <div
-        className="absolute bottom-4 w-[220px] rounded-2xl shadow-xl overflow-hidden flex flex-col"
+        className="absolute bottom-5 w-[300px] rounded-2xl shadow-xl overflow-hidden flex flex-col"
         style={{
-          [isLeft ? 'left' : 'right']: '16px',
+          [isLeft ? 'left' : 'right']: '20px',
+          height: '440px',
           backgroundColor: panelBg,
         }}
       >
         <div
-          className="px-3 py-2 text-white"
+          className="px-4 py-3 text-white"
           style={{ backgroundColor: primaryColor || '#6366f1' }}
         >
-          <p className="text-xs font-semibold truncate">
+          <p className="text-sm font-semibold truncate">
             {assistantName || 'Asistente'}
           </p>
-          <p className="text-[10px] opacity-80">En línea</p>
+          <p
+            className="flex items-center gap-1.5 text-xs opacity-90"
+            data-testid="widget-preview-status"
+          >
+            <span
+              className="w-2 h-2 rounded-full shrink-0"
+              style={{ backgroundColor: statusMeta.dot }}
+            />
+            {statusMeta.label}
+          </p>
         </div>
 
-        <div className="p-2 flex-1 space-y-2">
+        <div className="p-3 flex-1 space-y-2">
           <div
-            className="rounded-lg px-2 py-1.5 text-[11px] max-w-[85%]"
+            className="rounded-lg px-3 py-2 text-xs max-w-[85%]"
             style={{ backgroundColor: assistantBubbleBg, color: assistantBubbleText }}
           >
             {greeting || '¡Hola! ¿En qué podemos ayudarte hoy?'}
@@ -66,33 +107,38 @@ export const WidgetPreview: React.FC = () => {
         </div>
 
         <div
-          className="flex items-center gap-1 px-2 py-1.5 border-t"
+          className="flex items-center gap-1.5 px-3 py-2.5 border-t"
           style={{ borderColor: inputBorder, backgroundColor: panelBg }}
         >
           <div
-            className="flex-1 rounded-full px-2 py-1 text-[10px] border"
-            style={{ backgroundColor: inputBg, borderColor: inputBorder, color: assistantBubbleText }}
+            className="flex-1 rounded-full px-3 py-1.5 text-xs border"
+            style={{
+              backgroundColor: inputBg,
+              borderColor: inputBorder,
+              color: assistantBubbleText,
+              opacity: isOffline ? 0.5 : 1,
+            }}
           >
-            Escribe un mensaje...
+            {isOffline ? 'Te responderemos pronto...' : 'Escribe un mensaje...'}
           </div>
           <div
-            className="w-5 h-5 rounded-full flex items-center justify-center shrink-0"
-            style={{ backgroundColor: primaryColor || '#6366f1' }}
+            className="w-7 h-7 rounded-full flex items-center justify-center shrink-0"
+            style={{ backgroundColor: primaryColor || '#6366f1', opacity: isOffline ? 0.5 : 1 }}
           >
-            <Send size={10} color="#fff" />
+            <Send size={13} color="#fff" />
           </div>
         </div>
       </div>
 
       <div
-        className="absolute w-11 h-11 rounded-full shadow-lg flex items-center justify-center"
+        className="absolute w-14 h-14 rounded-full shadow-lg flex items-center justify-center"
         style={{
-          [isLeft ? 'left' : 'right']: '16px',
-          top: '16px',
+          [isLeft ? 'left' : 'right']: '20px',
+          top: '20px',
           backgroundColor: primaryColor || '#6366f1',
         }}
       >
-        <MessageCircle size={20} color="#fff" />
+        <MessageCircle size={24} color="#fff" />
       </div>
     </div>
   );

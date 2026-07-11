@@ -2,8 +2,14 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 import { AlertCircle } from 'lucide-react';
 import { useFormContext } from 'react-hook-form';
-import { WebChannelFormValues } from '@features/channels/schemas/web-channel.schema';
+import {
+  DAY_LABELS,
+  DayKey,
+  WIDGET_STATUS_LABELS,
+  WebChannelFormValues,
+} from '@features/channels/schemas/web-channel.schema';
 import { useAiAgents } from '@features/ai-agents/hooks/useAiAgents';
+import { getEffectiveWidgetStatus } from '@features/channels/utils/availability';
 
 const POSITION_LABELS: Record<WebChannelFormValues['position'], string> = {
   'bottom-right': 'Inferior derecho',
@@ -45,6 +51,8 @@ export const StepSummary: React.FC<StepSummaryProps> = ({
   const values = getValues();
   const { data: agents = [] } = useAiAgents();
   const assignedAgent = agents.find((a) => a.id === values.agentId);
+  const effectiveStatus = getEffectiveWidgetStatus(values);
+  const activeDays = values.businessHours.schedule.filter((d) => d.enabled);
 
   return (
     <div className="max-w-2xl rounded-2xl border border-white/5 bg-slate-950/30 p-6 space-y-5">
@@ -76,6 +84,22 @@ export const StepSummary: React.FC<StepSummaryProps> = ({
           {POSITION_LABELS[values.position]}
         </SummaryRow>
         <SummaryRow label="Tema">{THEME_LABELS[values.theme]}</SummaryRow>
+        <SummaryRow label="Disponibilidad">
+          {values.availabilityMode === 'manual'
+            ? `Manual · ${WIDGET_STATUS_LABELS[values.manualStatus]}`
+            : `Según horario (ahora: ${WIDGET_STATUS_LABELS[effectiveStatus]})`}
+        </SummaryRow>
+        {values.availabilityMode === 'schedule' && (
+          <SummaryRow label="Horario de atención">
+            {values.businessHours.is24x7
+              ? '24/7'
+              : activeDays.length > 0
+                ? activeDays
+                    .map((d) => `${DAY_LABELS[d.day as DayKey]} ${d.from}-${d.to}`)
+                    .join(', ')
+                : 'Sin días configurados'}
+          </SummaryRow>
+        )}
         <SummaryRow label="Dominios permitidos">
           {values.allowedDomains.length > 0
             ? values.allowedDomains.join(', ')

@@ -2,10 +2,20 @@ import { describe, expect, it } from 'vitest';
 import {
   identityStepSchema,
   appearanceStepSchema,
+  availabilityStepSchema,
   securityStepSchema,
   agentStepSchema,
   webChannelSchema,
+  DAY_KEYS,
 } from './web-channel.schema';
+
+const buildSchedule = (overrides: Partial<Record<(typeof DAY_KEYS)[number], boolean>> = {}) =>
+  DAY_KEYS.map((day) => ({
+    day,
+    enabled: overrides[day] ?? (day !== 'sat' && day !== 'sun'),
+    from: '09:00',
+    to: '18:00',
+  }));
 
 describe('identityStepSchema', () => {
   it('accepts a valid name with optional fields blank', () => {
@@ -92,6 +102,50 @@ describe('appearanceStepSchema', () => {
   });
 });
 
+describe('availabilityStepSchema', () => {
+  const base = {
+    availabilityMode: 'manual' as const,
+    manualStatus: 'available' as const,
+    businessHours: {
+      timezone: 'America/Guayaquil',
+      is24x7: false,
+      schedule: buildSchedule(),
+    },
+  };
+
+  it('accepts a valid manual status', () => {
+    const result = availabilityStepSchema.safeParse(base);
+    expect(result.success).toBe(true);
+  });
+
+  it('accepts a valid schedule configuration', () => {
+    const result = availabilityStepSchema.safeParse({
+      ...base,
+      availabilityMode: 'schedule',
+    });
+    expect(result.success).toBe(true);
+  });
+
+  it('rejects an invalid manual status', () => {
+    const result = availabilityStepSchema.safeParse({
+      ...base,
+      manualStatus: 'napping',
+    });
+    expect(result.success).toBe(false);
+  });
+
+  it('rejects an invalid time format', () => {
+    const result = availabilityStepSchema.safeParse({
+      ...base,
+      businessHours: {
+        ...base.businessHours,
+        schedule: buildSchedule().map((d, i) => (i === 0 ? { ...d, from: '9am' } : d)),
+      },
+    });
+    expect(result.success).toBe(false);
+  });
+});
+
 describe('securityStepSchema', () => {
   it('accepts an empty domain list', () => {
     const result = securityStepSchema.safeParse({ allowedDomains: [] });
@@ -133,6 +187,13 @@ describe('webChannelSchema', () => {
     primaryColor: '#6366f1',
     position: 'bottom-right' as const,
     theme: 'auto' as const,
+    availabilityMode: 'manual' as const,
+    manualStatus: 'available' as const,
+    businessHours: {
+      timezone: 'America/Guayaquil',
+      is24x7: false,
+      schedule: buildSchedule(),
+    },
     allowedDomains: ['example.com'],
     agentId: null,
   };
@@ -151,6 +212,45 @@ describe('webChannelSchema', () => {
     const result = webChannelSchema.safeParse({
       ...validValues,
       allowedDomains: ['bad domain'],
+    });
+    expect(result.success).toBe(false);
+  });
+
+  it('accepts schedule mode with 24/7 and no active days', () => {
+    const result = webChannelSchema.safeParse({
+      ...validValues,
+      availabilityMode: 'schedule',
+      businessHours: {
+        timezone: 'America/Guayaquil',
+        is24x7: true,
+        schedule: buildSchedule({ mon: false, tue: false, wed: false, thu: false, fri: false }),
+      },
+    });
+    expect(result.success).toBe(true);
+  });
+
+  it('rejects schedule mode with no active days and no 24/7', () => {
+    const result = webChannelSchema.safeParse({
+      ...validValues,
+      availabilityMode: 'schedule',
+      businessHours: {
+        timezone: 'America/Guayaquil',
+        is24x7: false,
+        schedule: buildSchedule({ mon: false, tue: false, wed: false, thu: false, fri: false }),
+      },
+    });
+    expect(result.success).toBe(false);
+  });
+
+  it('rejects schedule mode when an active day has from >= to', () => {
+    const result = webChannelSchema.safeParse({
+      ...validValues,
+      availabilityMode: 'schedule',
+      businessHours: {
+        timezone: 'America/Guayaquil',
+        is24x7: false,
+        schedule: buildSchedule().map((d, i) => (i === 0 ? { ...d, from: '18:00', to: '09:00' } : d)),
+      },
     });
     expect(result.success).toBe(false);
   });
