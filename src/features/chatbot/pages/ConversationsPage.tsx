@@ -1,20 +1,21 @@
 import { Textarea } from '@core/ui/Textarea';
 import { Tabs, TabItem } from '@core/ui/Tabs';
+import { ContactPanel } from '@features/chatbot/components/ContactPanel';
 import { useChannels } from '@features/chatbot/hooks/useChannels';
 import { useConversations } from '@features/chatbot/hooks/useConversations';
 import { useConversationDetail } from '@features/chatbot/hooks/useConversationDetail';
 import { useConversationSocket } from '@features/chatbot/hooks/useConversationSocket';
 import { useSendAgentMessage } from '@features/chatbot/hooks/useSendAgentMessage';
+import { Avatar } from '@shared/components/Avatar';
 import {
-  Clock,
   Globe,
   Loader2,
   LucideIcon,
   MessageSquare,
+  Search,
   Send,
-  User,
 } from 'lucide-react';
-import React, { useState } from 'react';
+import React, { useMemo, useState } from 'react';
 
 const CHANNEL_ICONS: Record<string, LucideIcon> = {
   web_chat: Globe,
@@ -32,7 +33,15 @@ const STATUS_BADGES: Record<string, string> = {
   human: 'badge-info',
 };
 
+const STATUS_DOTS: Record<string, string> = {
+  open: 'bg-success',
+  closed: 'bg-base-content/30',
+  bot: 'bg-warning',
+  human: 'bg-info',
+};
+
 const getStatusBadge = (status: string) => STATUS_BADGES[status] || 'badge-ghost';
+const getStatusDot = (status: string) => STATUS_DOTS[status] || 'bg-base-content/30';
 
 const formatDate = (dateStr?: string) => {
   if (!dateStr) return '';
@@ -53,6 +62,7 @@ export const ConversationsPage: React.FC = () => {
     string | null
   >(null);
   const [messageDraft, setMessageDraft] = useState('');
+  const [search, setSearch] = useState('');
 
   const { data: channels } = useChannels();
   const { data: conversations = [], isLoading } = useConversations({
@@ -73,6 +83,12 @@ export const ConversationsPage: React.FC = () => {
       icon: iconForChannelType(c.channelType.key),
     })),
   ];
+
+  const filteredConversations = useMemo(() => {
+    const term = search.trim().toLowerCase();
+    if (!term) return conversations;
+    return conversations.filter((c) => c.contactName.toLowerCase().includes(term));
+  }, [conversations, search]);
 
   const selectConversation = (id: string) => {
     setSelectedConversationId(id);
@@ -117,82 +133,102 @@ export const ConversationsPage: React.FC = () => {
         </select>
       </div>
 
-      <div
-        className="grid gap-6 lg:grid-cols-3"
-        style={{ gridTemplateColumns: '1fr 2fr' }}
-      >
-        <div className="card bg-base-200 p-4">
-          <h2 className="font-semibold mb-4">Recientes</h2>
+      <div className="grid gap-4" style={{ gridTemplateColumns: '300px 1fr 300px' }}>
+        {/* Lista de conversaciones */}
+        <div className="card bg-base-200 p-3">
+          <div className="relative mb-3">
+            <Search
+              size={14}
+              className="absolute left-3 top-1/2 -translate-y-1/2 text-base-content/40"
+            />
+            <input
+              type="text"
+              placeholder="Buscar por nombre..."
+              value={search}
+              onChange={(e) => setSearch(e.target.value)}
+              className="input input-sm input-bordered w-full pl-8"
+            />
+          </div>
 
-          {isLoading ? (
-            <div className="flex items-center justify-center py-8">
-              <Loader2 size={24} className="animate-spin text-primary" />
-            </div>
-          ) : conversations.length === 0 ? (
-            <p className="text-sm text-base-content/60">
-              No hay conversaciones aún
-            </p>
-          ) : (
-            <div className="space-y-2">
-              {conversations.map((conv) => (
+          <div className="max-h-[65vh] overflow-y-auto space-y-1">
+            {isLoading ? (
+              <div className="flex items-center justify-center py-8">
+                <Loader2 size={24} className="animate-spin text-primary" />
+              </div>
+            ) : filteredConversations.length === 0 ? (
+              <p className="text-sm text-base-content/60 text-center py-8">
+                No hay conversaciones aún
+              </p>
+            ) : (
+              filteredConversations.map((conv) => (
                 <button
                   key={conv.id}
-                  className={`w-full text-left p-3 rounded-lg hover:bg-base-300 transition ${
+                  className={`w-full text-left p-2.5 rounded-lg hover:bg-base-300 transition flex items-start gap-2.5 ${
                     selectedConversationId === conv.id
                       ? 'bg-primary/20 border border-primary'
                       : ''
                   }`}
                   onClick={() => selectConversation(conv.id)}
                 >
-                  <div className="flex items-center justify-between">
-                    <span className="font-medium flex items-center gap-2">
-                      <User size={14} />
-                      {conv.contactName}
-                    </span>
+                  <div className="relative shrink-0">
+                    <Avatar name={conv.contactName} size={36} />
                     <span
-                      className={`badge badge-sm ${getStatusBadge(conv.status)}`}
+                      className={`absolute -bottom-0.5 -right-0.5 w-2.5 h-2.5 rounded-full border-2 border-base-200 ${getStatusDot(conv.status)}`}
+                    />
+                  </div>
+                  <div className="min-w-0 flex-1">
+                    <div className="flex items-center justify-between gap-2">
+                      <span className="font-medium truncate text-sm">
+                        {conv.contactName}
+                      </span>
+                      <span className="text-[10px] text-base-content/50 shrink-0">
+                        {formatDate(conv.lastMessageAt || conv.startedAt)}
+                      </span>
+                    </div>
+                    <span
+                      className={`badge badge-xs mt-1 ${getStatusBadge(conv.status)}`}
                     >
                       {conv.status}
                     </span>
                   </div>
-                  <div className="flex items-center gap-1 text-xs text-base-content/60 mt-1">
-                    <Clock size={12} />
-                    {formatDate(conv.lastMessageAt || conv.startedAt)}
-                  </div>
                 </button>
-              ))}
-            </div>
-          )}
+              ))
+            )}
+          </div>
         </div>
 
-        <div className="card bg-base-200 p-4 lg:col-span-2 flex flex-col">
-          <h2 className="font-semibold mb-4">Detalle</h2>
-
+        {/* Hilo de mensajes */}
+        <div className="card bg-base-200 p-4 flex flex-col">
           {!selectedConversationId ? (
-            <p className="text-sm text-base-content/60">
-              Selecciona una conversación para ver los mensajes
-            </p>
+            <div className="flex items-center justify-center py-16">
+              <p className="text-sm text-base-content/60">
+                Selecciona una conversación para ver los mensajes
+              </p>
+            </div>
           ) : loadingDetail || !selectedConv ? (
-            <div className="flex items-center justify-center py-8">
+            <div className="flex items-center justify-center py-16">
               <Loader2 size={24} className="animate-spin text-primary" />
             </div>
           ) : (
             <>
-              <div className="flex items-center justify-between mb-4 pb-4 border-b border-base-300">
-                <div>
-                  <span className="font-medium">{selectedConv.contactName}</span>
-                  <span
-                    className={`badge badge-sm ml-2 ${getStatusBadge(selectedConv.status)}`}
-                  >
-                    {selectedConv.status}
+              <div className="flex items-center gap-3 mb-4 pb-4 border-b border-base-300">
+                <Avatar name={selectedConv.contactName} size={40} />
+                <div className="flex-1 min-w-0">
+                  <span className="font-medium block truncate">
+                    {selectedConv.contactName}
+                  </span>
+                  <span className="text-xs text-base-content/50">
+                    Inicio: {formatDate(selectedConv.startedAt)}
                   </span>
                 </div>
-                <span className="text-sm text-base-content/60">
-                  Inicio: {formatDate(selectedConv.startedAt)}
+                <span
+                  className={`badge badge-sm ${getStatusBadge(selectedConv.status)}`}
+                >
+                  {selectedConv.status}
                 </span>
               </div>
 
-              <div className="space-y-4 max-h-96 overflow-y-auto flex-1">
+              <div className="space-y-4 max-h-[50vh] overflow-y-auto">
                 {selectedConv.messages.map((msg) => {
                   const isVisitor = msg.role === 'user';
                   const isAgent = msg.role === 'agent';
@@ -203,7 +239,11 @@ export const ConversationsPage: React.FC = () => {
                     >
                       <div
                         className={`chat-bubble ${
-                          isAgent ? 'chat-bubble-secondary' : isVisitor ? '' : 'chat-bubble-primary'
+                          isAgent
+                            ? 'chat-bubble-secondary'
+                            : isVisitor
+                              ? ''
+                              : 'chat-bubble-primary'
                         }`}
                       >
                         {msg.content}
@@ -247,6 +287,23 @@ export const ConversationsPage: React.FC = () => {
             </>
           )}
         </div>
+
+        {/* Panel de contacto (CRM) */}
+        {selectedConversationId && selectedConv ? (
+          <ContactPanel
+            contactId={selectedConv.contactId}
+            fallbackName={selectedConv.contactName}
+            channel={selectedConv.channel}
+            startedAt={selectedConv.startedAt}
+            visitor={selectedConv.visitor}
+          />
+        ) : (
+          <div className="card bg-base-200 p-4 flex items-center justify-center">
+            <p className="text-sm text-base-content/40 text-center">
+              Selecciona una conversación para ver el contacto
+            </p>
+          </div>
+        )}
       </div>
     </div>
   );

@@ -3,6 +3,7 @@ export interface Conversation {
   status: string;
   channel: string;
   channelId?: string;
+  contactId?: string | null;
   startedAt: string;
   lastMessageAt?: string;
   contactName: string;
