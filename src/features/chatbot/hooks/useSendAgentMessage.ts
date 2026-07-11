@@ -37,7 +37,7 @@ export const useSendAgentMessage = () => {
             ...previous.messages,
             {
               id: optimisticId,
-              role: 'assistant',
+              role: 'agent',
               content,
               createdAt: new Date().toISOString(),
             },

@@ -1,20 +1,13 @@
-export interface ConversationChannel {
-  id: string;
-  channel_type: string;
-  name: string;
-  iconUrl?: string;
-}
-
 export interface Conversation {
   id: string;
   status: string;
-  channel: ConversationChannel;
+  channel: string;
   channelId?: string;
   startedAt: string;
   lastMessageAt?: string;
   contactName: string;
   assignedTo?: { id: string; name: string } | null;
-  unreadCount: number;
+  unreadCount?: number;
 }
 
 export interface ConversationDetail extends Conversation {
@@ -24,6 +17,5 @@ export interface ConversationDetail extends Conversation {
     role: string;
     content: string;
     createdAt: string;
-    channel_type?: string;
   }>;
 }

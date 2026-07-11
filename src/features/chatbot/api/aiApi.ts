@@ -36,7 +36,13 @@ export const aiApi = {
       )
       .then(unwrap),
 
-  // Backend endpoint pendiente (próximo prompt): POST /chat/conversations/:id/messages
+  // Token corto para autenticar la conexión WebSocket del agente (el panel
+  // usa cookie httpOnly, ilegible por JS; ChatGateway solo acepta bearer).
+  getSocketToken: (): Promise<{ token: string }> =>
+    api
+      .post<unknown, ApiResponse<{ token: string }>>('/chat/socket-token')
+      .then(unwrap),
+
   sendAgentMessage: (
     conversationId: string,
     content: string,
