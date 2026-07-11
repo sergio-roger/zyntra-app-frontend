@@ -1,16 +1,31 @@
 import { Accordion } from '@core/ui/Accordion';
+import { useAssignConversation } from '@features/chatbot/hooks/useAssignConversation';
+import { useAuth } from '@features/auth/hooks/useAuth';
 import { useContact } from '@crm/hooks/useContacts';
 import { useCustomFields } from '@crm/hooks/useCustomFields';
 import { Avatar } from '@shared/components/Avatar';
-import { Globe, ListChecks, Loader2, Mail, Phone, Tag as TagIcon } from 'lucide-react';
+import {
+  Globe,
+  ListChecks,
+  Loader2,
+  Mail,
+  Phone,
+  Tag as TagIcon,
+  UserCheck,
+  UserPlus,
+  X,
+} from 'lucide-react';
 import React from 'react';
 
 interface ContactPanelProps {
+  conversationId: string;
   contactId: string | null | undefined;
   fallbackName: string;
   channel: string;
   startedAt: string;
   visitor?: Record<string, unknown>;
+  assignedTo?: { id: string; name: string } | null;
+  onClose?: () => void;
 }
 
 const formatDate = (dateStr?: string) => {
@@ -24,19 +39,35 @@ const formatDate = (dateStr?: string) => {
 };
 
 export const ContactPanel: React.FC<ContactPanelProps> = ({
+  conversationId,
   contactId,
   fallbackName,
   channel,
   startedAt,
   visitor,
+  assignedTo,
+  onClose,
 }) => {
   const { data: contact, isLoading } = useContact(contactId ?? null);
   const { data: customFieldDefs = [] } = useCustomFields('contact');
+  const { user } = useAuth();
+  const { assign, unassign } = useAssignConversation();
 
   const pageUrl = typeof visitor?.page_url === 'string' ? visitor.page_url : undefined;
+  const isMine = !!user && assignedTo?.id === user.id;
 
   return (
-    <div className="card bg-base-200 p-4 flex flex-col gap-4 overflow-y-auto">
+    <div className="card bg-base-200 p-4 flex flex-col gap-4 overflow-y-auto h-full relative">
+      {onClose && (
+        <button
+          type="button"
+          className="btn btn-ghost btn-xs btn-square absolute top-3 right-3"
+          onClick={onClose}
+        >
+          <X size={16} />
+        </button>
+      )}
+
       <div className="flex flex-col items-center text-center gap-2 pb-4 border-b border-base-300">
         <Avatar name={contact?.name ?? fallbackName} email={contact?.email} size={64} />
         <div>
@@ -45,6 +76,31 @@ export const ContactPanel: React.FC<ContactPanelProps> = ({
             <p className="text-xs text-base-content/60">{contact.email}</p>
           )}
         </div>
+      </div>
+
+      <div className="flex items-center justify-between gap-2 text-sm">
+        <span className="text-base-content/50">
+          {assignedTo ? `Asignada a ${isMine ? 'ti' : assignedTo.name}` : 'Sin asignar'}
+        </span>
+        {isMine ? (
+          <button
+            type="button"
+            className="btn btn-ghost btn-xs gap-1"
+            disabled={unassign.isPending}
+            onClick={() => unassign.mutate(conversationId)}
+          >
+            <UserCheck size={13} /> Liberar
+          </button>
+        ) : !assignedTo ? (
+          <button
+            type="button"
+            className="btn btn-primary btn-xs gap-1"
+            disabled={assign.isPending}
+            onClick={() => assign.mutate(conversationId)}
+          >
+            <UserPlus size={13} /> Asignarme
+          </button>
+        ) : null}
       </div>
 
       {isLoading && contactId ? (

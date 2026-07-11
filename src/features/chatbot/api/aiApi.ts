@@ -8,6 +8,8 @@ import {
 export interface ConversationFilters {
   channelId?: string;
   status?: string;
+  assignedToMe?: boolean;
+  unread?: boolean;
 }
 
 export interface SendAgentMessageResponse {
@@ -60,6 +62,23 @@ export const aiApi = {
     api
       .get<unknown, ApiResponse<ChatbotChannel[]>>(
         `/businesses/${businessId}/channels`,
+      )
+      .then(unwrap),
+
+  assignConversation: (
+    conversationId: string,
+  ): Promise<{ success: boolean; assignedTo: { id: string; name: string } }> =>
+    api
+      .post<
+        unknown,
+        ApiResponse<{ success: boolean; assignedTo: { id: string; name: string } }>
+      >(`/chat/conversations/${conversationId}/assign`)
+      .then(unwrap),
+
+  unassignConversation: (conversationId: string): Promise<{ success: boolean }> =>
+    api
+      .delete<unknown, ApiResponse<{ success: boolean }>>(
+        `/chat/conversations/${conversationId}/assign`,
       )
       .then(unwrap),
 };

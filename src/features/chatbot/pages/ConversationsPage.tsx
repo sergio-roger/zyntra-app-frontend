@@ -1,5 +1,4 @@
 import { Textarea } from '@core/ui/Textarea';
-import { Tabs, TabItem } from '@core/ui/Tabs';
 import { ContactPanel } from '@features/chatbot/components/ContactPanel';
 import { useChannels } from '@features/chatbot/hooks/useChannels';
 import { useConversations } from '@features/chatbot/hooks/useConversations';
@@ -7,24 +6,8 @@ import { useConversationDetail } from '@features/chatbot/hooks/useConversationDe
 import { useConversationSocket } from '@features/chatbot/hooks/useConversationSocket';
 import { useSendAgentMessage } from '@features/chatbot/hooks/useSendAgentMessage';
 import { Avatar } from '@shared/components/Avatar';
-import {
-  Globe,
-  Loader2,
-  LucideIcon,
-  MessageSquare,
-  Search,
-  Send,
-} from 'lucide-react';
+import { Filter, Loader2, PanelRightOpen, Search, Send } from 'lucide-react';
 import React, { useMemo, useState } from 'react';
-
-const CHANNEL_ICONS: Record<string, LucideIcon> = {
-  web_chat: Globe,
-};
-
-const iconForChannelType = (key: string): LucideIcon =>
-  CHANNEL_ICONS[key] ?? MessageSquare;
-
-const ALL_TAB = 'all';
 
 const STATUS_BADGES: Record<string, string> = {
   open: 'badge-success',
@@ -43,6 +26,12 @@ const STATUS_DOTS: Record<string, string> = {
 const getStatusBadge = (status: string) => STATUS_BADGES[status] || 'badge-ghost';
 const getStatusDot = (status: string) => STATUS_DOTS[status] || 'bg-base-content/30';
 
+const VIEW_TABS: { key: 'all' | 'mine' | 'unread'; label: string }[] = [
+  { key: 'all', label: 'Todos' },
+  { key: 'mine', label: 'Míos' },
+  { key: 'unread', label: 'No Leídos' },
+];
+
 const formatDate = (dateStr?: string) => {
   if (!dateStr) return '';
   return new Date(dateStr).toLocaleDateString('es', {
@@ -58,31 +47,28 @@ export const ConversationsPage: React.FC = () => {
     undefined,
   );
   const [statusFilter, setStatusFilter] = useState<string | undefined>(undefined);
+  const [viewFilter, setViewFilter] = useState<'all' | 'mine' | 'unread'>('all');
   const [selectedConversationId, setSelectedConversationId] = useState<
     string | null
   >(null);
   const [messageDraft, setMessageDraft] = useState('');
   const [search, setSearch] = useState('');
+  const [contactPanelOpen, setContactPanelOpen] = useState(false);
+  const [filtersOpen, setFiltersOpen] = useState(false);
+  const hasActiveFilters = !!selectedChannelId || !!statusFilter;
 
   const { data: channels } = useChannels();
   const { data: conversations = [], isLoading } = useConversations({
     channelId: selectedChannelId,
     status: statusFilter,
+    assignedToMe: viewFilter === 'mine',
+    unread: viewFilter === 'unread',
   });
   const { data: selectedConv, isLoading: loadingDetail } =
     useConversationDetail(selectedConversationId);
   const sendAgentMessage = useSendAgentMessage();
 
   useConversationSocket(selectedConversationId);
-
-  const channelTabs: TabItem[] = [
-    { key: ALL_TAB, label: 'Todos', icon: MessageSquare },
-    ...(channels ?? []).map((c) => ({
-      key: c.id,
-      label: c.name,
-      icon: iconForChannelType(c.channelType.key),
-    })),
-  ];
 
   const filteredConversations = useMemo(() => {
     const term = search.trim().toLowerCase();
@@ -93,6 +79,7 @@ export const ConversationsPage: React.FC = () => {
   const selectConversation = (id: string) => {
     setSelectedConversationId(id);
     setMessageDraft('');
+    setContactPanelOpen(false);
   };
 
   const handleSend = () => {
@@ -105,37 +92,44 @@ export const ConversationsPage: React.FC = () => {
   };
 
   return (
-    <div className="flex flex-col gap-6">
-      <div>
-        <h1 className="text-2xl font-bold">Conversaciones</h1>
-        <p className="text-base-content/60">Historial de chats y conversaciones</p>
-      </div>
-
-      <div className="flex items-center justify-between gap-4">
-        <Tabs
-          tabs={channelTabs}
-          active={selectedChannelId ?? ALL_TAB}
-          onChange={(key) =>
-            setSelectedChannelId(key === ALL_TAB ? undefined : key)
-          }
-          className="flex-1"
-        />
-        <select
-          className="select select-sm select-bordered"
-          value={statusFilter ?? ''}
-          onChange={(e) => setStatusFilter(e.target.value || undefined)}
-        >
-          <option value="">Todos los estados</option>
-          <option value="open">Abierta</option>
-          <option value="bot">Bot</option>
-          <option value="human">Humano</option>
-          <option value="closed">Cerrada</option>
-        </select>
-      </div>
-
-      <div className="grid gap-4" style={{ gridTemplateColumns: '300px 1fr 300px' }}>
+    <div className="flex flex-col gap-4 h-full">
+      <div
+        className="grid gap-4 flex-1 min-h-0"
+        style={{ gridTemplateColumns: '320px 1fr' }}
+      >
         {/* Lista de conversaciones */}
-        <div className="card bg-base-200 p-3">
+        <div className="card bg-base-200 p-3 flex flex-col min-h-0">
+          <div className="flex items-center justify-between gap-2 mb-3">
+            <button
+              type="button"
+              className="btn btn-ghost btn-sm btn-square relative"
+              title="Filtros"
+              onClick={() => setFiltersOpen(true)}
+            >
+              <Filter size={16} />
+              {hasActiveFilters && (
+                <span className="absolute top-1 right-1 w-1.5 h-1.5 rounded-full bg-primary" />
+              )}
+            </button>
+
+            <div className="inline-flex gap-1 rounded-lg bg-base-300 p-1">
+              {VIEW_TABS.map((tab) => (
+                <button
+                  key={tab.key}
+                  type="button"
+                  onClick={() => setViewFilter(tab.key)}
+                  className={`px-2.5 py-1 rounded-md text-xs font-medium transition ${
+                    viewFilter === tab.key
+                      ? 'bg-primary text-primary-content'
+                      : 'text-base-content/60 hover:text-base-content'
+                  }`}
+                >
+                  {tab.label}
+                </button>
+              ))}
+            </div>
+          </div>
+
           <div className="relative mb-3">
             <Search
               size={14}
@@ -150,7 +144,7 @@ export const ConversationsPage: React.FC = () => {
             />
           </div>
 
-          <div className="max-h-[65vh] overflow-y-auto space-y-1">
+          <div className="flex-1 min-h-0 overflow-y-auto space-y-1">
             {isLoading ? (
               <div className="flex items-center justify-center py-8">
                 <Loader2 size={24} className="animate-spin text-primary" />
@@ -178,18 +172,28 @@ export const ConversationsPage: React.FC = () => {
                   </div>
                   <div className="min-w-0 flex-1">
                     <div className="flex items-center justify-between gap-2">
-                      <span className="font-medium truncate text-sm">
+                      <span
+                        className={`truncate text-sm ${conv.unread ? 'font-bold' : 'font-medium'}`}
+                      >
                         {conv.contactName}
                       </span>
                       <span className="text-[10px] text-base-content/50 shrink-0">
                         {formatDate(conv.lastMessageAt || conv.startedAt)}
                       </span>
                     </div>
-                    <span
-                      className={`badge badge-xs mt-1 ${getStatusBadge(conv.status)}`}
-                    >
-                      {conv.status}
-                    </span>
+                    <div className="flex items-center gap-1.5 mt-1">
+                      <span className={`badge badge-xs ${getStatusBadge(conv.status)}`}>
+                        {conv.status}
+                      </span>
+                      {conv.assignedTo && (
+                        <span className="text-[10px] text-base-content/50 truncate">
+                          {conv.assignedTo.name}
+                        </span>
+                      )}
+                      {conv.unread && (
+                        <span className="w-1.5 h-1.5 rounded-full bg-primary shrink-0" />
+                      )}
+                    </div>
                   </div>
                 </button>
               ))
@@ -198,15 +202,15 @@ export const ConversationsPage: React.FC = () => {
         </div>
 
         {/* Hilo de mensajes */}
-        <div className="card bg-base-200 p-4 flex flex-col">
+        <div className="card bg-base-200 p-4 flex flex-col relative overflow-hidden min-h-0">
           {!selectedConversationId ? (
-            <div className="flex items-center justify-center py-16">
+            <div className="flex-1 flex items-center justify-center">
               <p className="text-sm text-base-content/60">
                 Selecciona una conversación para ver los mensajes
               </p>
             </div>
           ) : loadingDetail || !selectedConv ? (
-            <div className="flex items-center justify-center py-16">
+            <div className="flex-1 flex items-center justify-center">
               <Loader2 size={24} className="animate-spin text-primary" />
             </div>
           ) : (
@@ -226,9 +230,17 @@ export const ConversationsPage: React.FC = () => {
                 >
                   {selectedConv.status}
                 </span>
+                <button
+                  type="button"
+                  className="btn btn-ghost btn-sm btn-square"
+                  title="Detalles del contacto"
+                  onClick={() => setContactPanelOpen(true)}
+                >
+                  <PanelRightOpen size={18} />
+                </button>
               </div>
 
-              <div className="space-y-4 max-h-[50vh] overflow-y-auto">
+              <div className="space-y-4 flex-1 min-h-0 overflow-y-auto">
                 {selectedConv.messages.map((msg) => {
                   const isVisitor = msg.role === 'user';
                   const isAgent = msg.role === 'agent';
@@ -287,24 +299,105 @@ export const ConversationsPage: React.FC = () => {
             </>
           )}
         </div>
-
-        {/* Panel de contacto (CRM) */}
-        {selectedConversationId && selectedConv ? (
-          <ContactPanel
-            contactId={selectedConv.contactId}
-            fallbackName={selectedConv.contactName}
-            channel={selectedConv.channel}
-            startedAt={selectedConv.startedAt}
-            visitor={selectedConv.visitor}
-          />
-        ) : (
-          <div className="card bg-base-200 p-4 flex items-center justify-center">
-            <p className="text-sm text-base-content/40 text-center">
-              Selecciona una conversación para ver el contacto
-            </p>
-          </div>
-        )}
       </div>
+
+      {/* Modal de filtros (canal + estado) */}
+      {filtersOpen && (
+        <div
+          className="modal modal-open"
+          onClick={(e) => {
+            if (e.target === e.currentTarget) setFiltersOpen(false);
+          }}
+        >
+          <div className="modal-box max-w-sm">
+            <h3 className="font-bold text-lg mb-4">Filtros</h3>
+            <div className="space-y-4">
+              <div className="form-control">
+                <label className="label">
+                  <span className="label-text">Canal</span>
+                </label>
+                <select
+                  className="select select-bordered w-full"
+                  value={selectedChannelId ?? ''}
+                  onChange={(e) => setSelectedChannelId(e.target.value || undefined)}
+                >
+                  <option value="">Todos los canales</option>
+                  {(channels ?? []).map((c) => (
+                    <option key={c.id} value={c.id}>
+                      {c.name}
+                    </option>
+                  ))}
+                </select>
+              </div>
+              <div className="form-control">
+                <label className="label">
+                  <span className="label-text">Estado</span>
+                </label>
+                <select
+                  className="select select-bordered w-full"
+                  value={statusFilter ?? ''}
+                  onChange={(e) => setStatusFilter(e.target.value || undefined)}
+                >
+                  <option value="">Todos los estados</option>
+                  <option value="open">Abierta</option>
+                  <option value="bot">Bot</option>
+                  <option value="human">Humano</option>
+                  <option value="closed">Cerrada</option>
+                </select>
+              </div>
+            </div>
+            <div className="modal-action">
+              {hasActiveFilters && (
+                <button
+                  type="button"
+                  className="btn btn-ghost"
+                  onClick={() => {
+                    setSelectedChannelId(undefined);
+                    setStatusFilter(undefined);
+                  }}
+                >
+                  Limpiar
+                </button>
+              )}
+              <button
+                type="button"
+                className="btn btn-primary"
+                onClick={() => setFiltersOpen(false)}
+              >
+                Cerrar
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Panel de contacto deslizable */}
+      {selectedConv && (
+        <>
+          <div
+            className={`fixed inset-0 bg-black/40 z-40 transition-opacity ${
+              contactPanelOpen ? 'opacity-100 pointer-events-auto' : 'opacity-0 pointer-events-none'
+            }`}
+            onClick={() => setContactPanelOpen(false)}
+          />
+          <div
+            className={`fixed inset-y-0 right-0 w-80 z-50 p-4 transform transition-transform duration-300 ${
+              contactPanelOpen ? 'translate-x-0' : 'translate-x-full'
+            }`}
+          >
+            <ContactPanel
+              conversationId={selectedConv.id}
+              contactId={selectedConv.contactId}
+              fallbackName={selectedConv.contactName}
+              channel={selectedConv.channel}
+              startedAt={selectedConv.startedAt}
+              visitor={selectedConv.visitor}
+              assignedTo={selectedConv.assignedTo}
+              onClose={() => setContactPanelOpen(false)}
+            />
+          </div>
+        </>
+      )}
     </div>
   );
 };

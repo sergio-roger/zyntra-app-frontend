@@ -8,7 +8,7 @@ export interface Conversation {
   lastMessageAt?: string;
   contactName: string;
   assignedTo?: { id: string; name: string } | null;
-  unreadCount?: number;
+  unread?: boolean;
 }
 
 export interface ConversationDetail extends Conversation {
