@@ -112,7 +112,7 @@ export const ChannelDetailPage: React.FC = () => {
     }
   };
 
-  const assignedAgent = agents.find((a) => a.id === channel.agent_id);
+  const assignedAgent = agents.find((a) => a.id === channel.agentId);
 
   return (
     <div className="p-6">

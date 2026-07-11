@@ -170,7 +170,7 @@ export const ChannelStorePage: React.FC = () => {
           <ChannelTypeCard
             key={ct.id}
             channelType={ct}
-            existingChannel={channels.find((c) => c.channel_type_id === ct.id)}
+            existingChannel={channels.find((c) => c.channelTypeId === ct.id)}
             onActivate={handleActivate}
           />
         ))}

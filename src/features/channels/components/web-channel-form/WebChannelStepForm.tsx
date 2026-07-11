@@ -79,7 +79,7 @@ const buildDefaultValues = (
         ? (config.blockedDomains as string[])
         : [],
       allowInsecureDomains: config.allowInsecureDomains === true,
-      agentId: channel.agent_id,
+      agentId: channel.agentId,
     };
   }
   return DEFAULT_WEB_CHANNEL_FORM_VALUES;
@@ -194,7 +194,7 @@ export const WebChannelStepForm: React.FC<WebChannelStepFormProps> = ({
         await applyAgentAssignment(
           channel.id,
           values.agentId,
-          channel.agent_id,
+          channel.agentId,
         );
         toastManager.add({
           title: 'Canal actualizado',

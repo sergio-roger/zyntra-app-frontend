@@ -9,6 +9,7 @@ export interface Conversation {
   id: string;
   status: string;
   channel: ConversationChannel;
+  channelId?: string;
   startedAt: string;
   lastMessageAt?: string;
   contactName: string;

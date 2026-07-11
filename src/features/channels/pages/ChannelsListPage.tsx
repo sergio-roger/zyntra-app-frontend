@@ -147,7 +147,7 @@ export const ChannelsListPage: React.FC = () => {
                   <p className="text-sm text-base-content/60">
                     {channel.channelType?.label ?? 'Canal'}
                   </p>
-                  {channel.agent_id && (
+                  {channel.agentId && (
                     <p className="text-xs text-base-content/50 flex items-center gap-1 mt-1">
                       <Bot size={12} /> Agente asignado
                     </p>

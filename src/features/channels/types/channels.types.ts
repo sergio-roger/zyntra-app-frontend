@@ -37,17 +37,17 @@ export interface ChannelType {
 }
 
 export interface Channel {
-  agent_id: string | null;
-  business_id: string;
-  channel_type_id: string;
+  agentId: string | null;
+  businessId: string;
+  channelTypeId: string;
   channelType: ChannelType;
   config: Record<string, unknown>;
-  created_at: string;
+  createdAt: string;
   embedCode?: string;
   id: string;
   name: string;
   status: 'active' | 'inactive';
-  updated_at: string;
+  updatedAt: string;
 }
 
 export interface CreateChannelPayload {
