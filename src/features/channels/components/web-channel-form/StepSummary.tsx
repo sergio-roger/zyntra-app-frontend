@@ -100,11 +100,23 @@ export const StepSummary: React.FC<StepSummaryProps> = ({
                 : 'Sin días configurados'}
           </SummaryRow>
         )}
-        <SummaryRow label="Dominios permitidos">
-          {values.allowedDomains.length > 0
-            ? values.allowedDomains.join(', ')
-            : 'Sin restricción'}
+        <SummaryRow label="Dominios inseguros permitidos">
+          {values.allowInsecureDomains ? 'Sí (sin restricción de dominio)' : 'No'}
         </SummaryRow>
+        {!values.allowInsecureDomains && (
+          <>
+            <SummaryRow label="Dominios permitidos">
+              {values.allowedDomains.length > 0
+                ? values.allowedDomains.join(', ')
+                : 'Sin restricción'}
+            </SummaryRow>
+            <SummaryRow label="Dominios no permitidos">
+              {values.blockedDomains.length > 0
+                ? values.blockedDomains.join(', ')
+                : 'Ninguno'}
+            </SummaryRow>
+          </>
+        )}
         <SummaryRow label="Agente asignado">
           {assignedAgent?.name ?? 'Ninguno'}
         </SummaryRow>

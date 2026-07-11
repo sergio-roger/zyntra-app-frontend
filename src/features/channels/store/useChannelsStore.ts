@@ -37,6 +37,8 @@ export const DEFAULT_WEB_CHANNEL_FORM_VALUES: WebChannelFormValues = {
     schedule: buildDefaultSchedule(),
   },
   allowedDomains: [],
+  blockedDomains: [],
+  allowInsecureDomains: false,
   agentId: null,
 };
 

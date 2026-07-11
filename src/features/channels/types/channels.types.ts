@@ -21,6 +21,8 @@ export interface WebChannelConfig {
   manualStatus?: 'available' | 'busy' | 'offline';
   businessHours?: WebChannelBusinessHours;
   allowedDomains: string[];
+  blockedDomains: string[];
+  allowInsecureDomains: boolean;
 }
 
 export interface ChannelType {

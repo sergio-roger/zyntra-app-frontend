@@ -43,6 +43,8 @@ export const availabilityStepSchema = z.object({
 
 export const securityStepSchema = z.object({
   allowedDomains: z.array(z.string().refine(isValidDomain, 'Dominio inválido.')),
+  blockedDomains: z.array(z.string().refine(isValidDomain, 'Dominio inválido.')),
+  allowInsecureDomains: z.boolean(),
 });
 
 export const agentStepSchema = z.object({

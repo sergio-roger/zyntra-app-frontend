@@ -75,6 +75,10 @@ const buildDefaultValues = (
       allowedDomains: Array.isArray(config.allowedDomains)
         ? (config.allowedDomains as string[])
         : [],
+      blockedDomains: Array.isArray(config.blockedDomains)
+        ? (config.blockedDomains as string[])
+        : [],
+      allowInsecureDomains: config.allowInsecureDomains === true,
       agentId: channel.agent_id,
     };
   }
@@ -172,6 +176,8 @@ export const WebChannelStepForm: React.FC<WebChannelStepFormProps> = ({
       manualStatus: values.manualStatus,
       businessHours: values.businessHours,
       allowedDomains: values.allowedDomains,
+      blockedDomains: values.blockedDomains,
+      allowInsecureDomains: values.allowInsecureDomains,
     };
 
     try {

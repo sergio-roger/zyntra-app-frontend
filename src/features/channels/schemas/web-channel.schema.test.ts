@@ -147,21 +147,57 @@ describe('availabilityStepSchema', () => {
 });
 
 describe('securityStepSchema', () => {
-  it('accepts an empty domain list', () => {
-    const result = securityStepSchema.safeParse({ allowedDomains: [] });
+  const base = { allowedDomains: [], blockedDomains: [], allowInsecureDomains: false };
+
+  it('accepts empty domain lists', () => {
+    const result = securityStepSchema.safeParse(base);
     expect(result.success).toBe(true);
   });
 
-  it('accepts a list of valid domains', () => {
+  it('accepts a list of valid allowed domains', () => {
     const result = securityStepSchema.safeParse({
+      ...base,
       allowedDomains: ['example.com', 'app.example.com'],
     });
     expect(result.success).toBe(true);
   });
 
-  it('rejects a list containing an invalid domain', () => {
+  it('rejects an allowed domain list containing an invalid domain', () => {
     const result = securityStepSchema.safeParse({
+      ...base,
       allowedDomains: ['example.com', 'not a domain'],
+    });
+    expect(result.success).toBe(false);
+  });
+
+  it('accepts a list of valid blocked domains', () => {
+    const result = securityStepSchema.safeParse({
+      ...base,
+      blockedDomains: ['evil.com'],
+    });
+    expect(result.success).toBe(true);
+  });
+
+  it('rejects a blocked domain list containing an invalid domain', () => {
+    const result = securityStepSchema.safeParse({
+      ...base,
+      blockedDomains: ['not a domain'],
+    });
+    expect(result.success).toBe(false);
+  });
+
+  it('accepts allowInsecureDomains set to true', () => {
+    const result = securityStepSchema.safeParse({
+      ...base,
+      allowInsecureDomains: true,
+    });
+    expect(result.success).toBe(true);
+  });
+
+  it('rejects a non-boolean allowInsecureDomains', () => {
+    const result = securityStepSchema.safeParse({
+      ...base,
+      allowInsecureDomains: 'yes',
     });
     expect(result.success).toBe(false);
   });
@@ -195,6 +231,8 @@ describe('webChannelSchema', () => {
       schedule: buildSchedule(),
     },
     allowedDomains: ['example.com'],
+    blockedDomains: [],
+    allowInsecureDomains: false,
     agentId: null,
   };
 
