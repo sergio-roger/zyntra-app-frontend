@@ -80,7 +80,9 @@ export const ContactPanel: React.FC<ContactPanelProps> = ({
 
       <div className="flex items-center justify-between gap-2 text-sm">
         <span className="text-base-content/50">
-          {assignedTo ? `Asignada a ${isMine ? 'ti' : assignedTo.name}` : 'Sin asignar'}
+          {assignedTo && assignedTo.id !== 'system'
+            ? `Asignada a ${isMine ? 'ti' : assignedTo.name}`
+            : 'Sin asignar'}
         </span>
         {isMine ? (
           <button
@@ -91,7 +93,7 @@ export const ContactPanel: React.FC<ContactPanelProps> = ({
           >
             <UserCheck size={13} /> Liberar
           </button>
-        ) : !assignedTo ? (
+        ) : (!assignedTo || assignedTo.id === 'system') ? (
           <button
             type="button"
             className="btn btn-primary btn-xs gap-1"

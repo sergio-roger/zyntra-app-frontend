@@ -5,42 +5,15 @@ import { useConversations } from '@features/chatbot/hooks/useConversations';
 import { useConversationDetail } from '@features/chatbot/hooks/useConversationDetail';
 import { useConversationSocket } from '@features/chatbot/hooks/useConversationSocket';
 import { useSendAgentMessage } from '@features/chatbot/hooks/useSendAgentMessage';
+import {
+  getStatusBadge,
+  getStatusDot,
+  VIEW_TABS,
+  formatDate,
+} from '@features/chatbot/constants/chatbot.constants';
 import { Avatar } from '@shared/components/Avatar';
 import { Filter, Loader2, PanelRightOpen, Search, Send } from 'lucide-react';
-import React, { useMemo, useState } from 'react';
-
-const STATUS_BADGES: Record<string, string> = {
-  open: 'badge-success',
-  closed: 'badge-ghost',
-  bot: 'badge-warning',
-  human: 'badge-info',
-};
-
-const STATUS_DOTS: Record<string, string> = {
-  open: 'bg-success',
-  closed: 'bg-base-content/30',
-  bot: 'bg-warning',
-  human: 'bg-info',
-};
-
-const getStatusBadge = (status: string) => STATUS_BADGES[status] || 'badge-ghost';
-const getStatusDot = (status: string) => STATUS_DOTS[status] || 'bg-base-content/30';
-
-const VIEW_TABS: { key: 'all' | 'mine' | 'unread'; label: string }[] = [
-  { key: 'all', label: 'Todos' },
-  { key: 'mine', label: 'Míos' },
-  { key: 'unread', label: 'No Leídos' },
-];
-
-const formatDate = (dateStr?: string) => {
-  if (!dateStr) return '';
-  return new Date(dateStr).toLocaleDateString('es', {
-    day: 'numeric',
-    month: 'short',
-    hour: '2-digit',
-    minute: '2-digit',
-  });
-};
+import React, { useMemo, useState, useRef, useEffect } from 'react';
 
 export const ConversationsPage: React.FC = () => {
   const [selectedChannelId, setSelectedChannelId] = useState<string | undefined>(
@@ -69,6 +42,12 @@ export const ConversationsPage: React.FC = () => {
   const sendAgentMessage = useSendAgentMessage();
 
   useConversationSocket(selectedConversationId);
+
+  const messagesEndRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    messagesEndRef.current?.scrollIntoView({ behavior: 'auto' });
+  }, [selectedConv?.messages?.length]);
 
   const filteredConversations = useMemo(() => {
     const term = search.trim().toLowerCase();
@@ -185,7 +164,7 @@ export const ConversationsPage: React.FC = () => {
                       <span className={`badge badge-xs ${getStatusBadge(conv.status)}`}>
                         {conv.status}
                       </span>
-                      {conv.assignedTo && (
+                      {conv.assignedTo && conv.assignedTo.id !== 'system' && (
                         <span className="text-[10px] text-base-content/50 truncate">
                           {conv.assignedTo.name}
                         </span>
@@ -266,6 +245,7 @@ export const ConversationsPage: React.FC = () => {
                     </div>
                   );
                 })}
+                <div ref={messagesEndRef} />
               </div>
 
               <div className="flex items-end gap-2 pt-4 mt-4 border-t border-base-300">

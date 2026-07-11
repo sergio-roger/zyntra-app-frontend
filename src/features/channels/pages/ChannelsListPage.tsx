@@ -5,12 +5,14 @@ import {
   useChannelStoreQuery,
   useDeleteChannelMutation,
 } from '@features/channels/hooks/channels.queries';
+import { useDeleteChannel } from '@features/channels/hooks/useChannels';
 import { Channel } from '@features/channels/types/channels.types';
 import { ConfirmModal } from '@shared/components/ConfirmModal';
 import { EmptyState } from '@shared/components/EmptyState';
 import { toastManager } from '@shared/components/toast/toastManager';
 import {
   AlertCircle,
+  Ban,
   Bot,
   Code2,
   Globe,
@@ -35,10 +37,13 @@ export const ChannelsListPage: React.FC = () => {
 
   const { mutateAsync: deleteChannel, isPending: deactivating } =
     useDeleteChannelMutation();
+  const { mutateAsync: removeChannel, isPending: deleting } =
+    useDeleteChannel();
 
   const [snippetChannel, setSnippetChannel] = useState<Channel | null>(null);
   const [deactivatingChannel, setDeactivatingChannel] =
     useState<Channel | null>(null);
+  const [deletingChannel, setDeletingChannel] = useState<Channel | null>(null);
 
   const webChatType = store.find((ct) => ct.key === 'web_chat');
 
@@ -61,6 +66,25 @@ export const ChannelsListPage: React.FC = () => {
     } catch {
       toastManager.add({
         title: 'Error al desactivar el canal',
+        description: 'Inténtalo de nuevo en unos segundos.',
+        type: 'error',
+      });
+    }
+  };
+
+  const handleConfirmDelete = async () => {
+    if (!deletingChannel) return;
+    try {
+      await removeChannel(deletingChannel.id);
+      toastManager.add({
+        title: 'Canal eliminado',
+        description: `${deletingChannel.name} ha sido eliminado con éxito.`,
+        type: 'success',
+      });
+      setDeletingChannel(null);
+    } catch {
+      toastManager.add({
+        title: 'Error al eliminar el canal',
         description: 'Inténtalo de nuevo en unos segundos.',
         type: 'error',
       });
@@ -170,10 +194,16 @@ export const ChannelsListPage: React.FC = () => {
                     <Code2 size={14} /> Snippet
                   </button>
                   <button
-                    className="btn btn-ghost btn-sm gap-1 text-error"
+                    className="btn btn-ghost btn-sm gap-1 text-warning"
                     onClick={() => setDeactivatingChannel(channel)}
                   >
-                    <Trash2 size={14} /> Desactivar
+                    <Ban size={14} /> Desactivar
+                  </button>
+                  <button
+                    className="btn btn-ghost btn-sm gap-1 text-error"
+                    onClick={() => setDeletingChannel(channel)}
+                  >
+                    <Trash2 size={14} /> Eliminar
                   </button>
                 </div>
               </div>
@@ -198,6 +228,16 @@ export const ChannelsListPage: React.FC = () => {
         title="Desactivar canal"
         description={`¿Confirmas desactivar "${deactivatingChannel?.name}"? El widget dejará de responder en los sitios donde esté embebido.`}
         confirmText={deactivating ? 'Desactivando...' : 'Desactivar'}
+        variant="danger"
+      />
+
+      <ConfirmModal
+        isOpen={!!deletingChannel}
+        onClose={() => setDeletingChannel(null)}
+        onConfirm={handleConfirmDelete}
+        title="Eliminar canal"
+        description={`¿Confirmas eliminar el canal "${deletingChannel?.name}"? Esta acción no se puede deshacer y el canal se ocultará permanentemente.`}
+        confirmText={deleting ? 'Eliminando...' : 'Eliminar'}
         variant="danger"
       />
     </div>
