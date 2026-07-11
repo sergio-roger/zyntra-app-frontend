@@ -4,6 +4,10 @@ import { useChannels } from '@features/chatbot/hooks/useChannels';
 import { useConversations } from '@features/chatbot/hooks/useConversations';
 import { useConversationDetail } from '@features/chatbot/hooks/useConversationDetail';
 import { useConversationSocket } from '@features/chatbot/hooks/useConversationSocket';
+import {
+  useInboxSoundSetting,
+  useSetInboxSoundSetting,
+} from '@features/chatbot/hooks/useInboxSoundSetting';
 import { useSendAgentMessage } from '@features/chatbot/hooks/useSendAgentMessage';
 import {
   getStatusBadge,
@@ -12,7 +16,15 @@ import {
   formatDate,
 } from '@features/chatbot/constants/chatbot.constants';
 import { Avatar } from '@shared/components/Avatar';
-import { Filter, Loader2, PanelRightOpen, Search, Send } from 'lucide-react';
+import {
+  Filter,
+  Loader2,
+  PanelRightOpen,
+  Search,
+  Send,
+  Volume2,
+  VolumeX,
+} from 'lucide-react';
 import React, { useMemo, useState, useRef, useEffect } from 'react';
 
 export const ConversationsPage: React.FC = () => {
@@ -40,14 +52,27 @@ export const ConversationsPage: React.FC = () => {
   const { data: selectedConv, isLoading: loadingDetail } =
     useConversationDetail(selectedConversationId);
   const sendAgentMessage = useSendAgentMessage();
+  const { data: inboxSound } = useInboxSoundSetting();
+  const setInboxSound = useSetInboxSoundSetting();
+  const soundEnabled = inboxSound?.enabled ?? true;
 
-  useConversationSocket(selectedConversationId);
+  useConversationSocket(selectedConversationId, soundEnabled);
 
   const messagesEndRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     messagesEndRef.current?.scrollIntoView({ behavior: 'auto' });
   }, [selectedConv?.messages?.length]);
+
+  useEffect(() => {
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (e.key === 'Escape' || e.key === 'Esc') {
+        setSelectedConversationId(null);
+      }
+    };
+    window.addEventListener('keydown', handleKeyDown);
+    return () => window.removeEventListener('keydown', handleKeyDown);
+  }, []);
 
   const filteredConversations = useMemo(() => {
     const term = search.trim().toLowerCase();
@@ -79,17 +104,32 @@ export const ConversationsPage: React.FC = () => {
         {/* Lista de conversaciones */}
         <div className="card bg-base-200 p-3 flex flex-col min-h-0">
           <div className="flex items-center justify-between gap-2 mb-3">
-            <button
-              type="button"
-              className="btn btn-ghost btn-sm btn-square relative"
-              title="Filtros"
-              onClick={() => setFiltersOpen(true)}
-            >
-              <Filter size={16} />
-              {hasActiveFilters && (
-                <span className="absolute top-1 right-1 w-1.5 h-1.5 rounded-full bg-primary" />
-              )}
-            </button>
+            <div className="flex items-center gap-1">
+              <button
+                type="button"
+                className="btn btn-ghost btn-sm btn-square relative"
+                title="Filtros"
+                onClick={() => setFiltersOpen(true)}
+              >
+                <Filter size={16} />
+                {hasActiveFilters && (
+                  <span className="absolute top-1 right-1 w-1.5 h-1.5 rounded-full bg-primary" />
+                )}
+              </button>
+              <button
+                type="button"
+                className="btn btn-ghost btn-sm btn-square"
+                title={
+                  soundEnabled
+                    ? 'Silenciar notificaciones'
+                    : 'Activar sonido de notificaciones'
+                }
+                disabled={setInboxSound.isPending}
+                onClick={() => setInboxSound.mutate(!soundEnabled)}
+              >
+                {soundEnabled ? <Volume2 size={16} /> : <VolumeX size={16} />}
+              </button>
+            </div>
 
             <div className="inline-flex gap-1 rounded-lg bg-base-300 p-1">
               {VIEW_TABS.map((tab) => (

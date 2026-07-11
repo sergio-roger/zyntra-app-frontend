@@ -1,6 +1,7 @@
 import { useEffect, useRef } from 'react';
 import { useQueryClient } from '@tanstack/react-query';
 import { getChatSocket } from '../lib/chatSocket';
+import { playNewMessageSound } from '../lib/notificationSound';
 import { ConversationDetail } from '../types/chatbot.types';
 
 interface NewMessagePayload {
@@ -17,14 +18,22 @@ interface StatusChangedPayload {
 }
 
 /** Mantiene la conversación activa al día en vivo vía el gateway /chat. */
-export const useConversationSocket = (conversationId: string | null) => {
+export const useConversationSocket = (
+  conversationId: string | null,
+  soundEnabled = true,
+) => {
   const qc = useQueryClient();
   const joinedRef = useRef<string | null>(null);
+  const soundEnabledRef = useRef(soundEnabled);
+  soundEnabledRef.current = soundEnabled;
 
   useEffect(() => {
     const socket = getChatSocket();
 
     const handleNewMessage = (payload: NewMessagePayload) => {
+      if (payload.role !== 'agent' && soundEnabledRef.current) {
+        playNewMessageSound();
+      }
       const key = ['conversations', 'detail', payload.conversation_id];
       qc.setQueryData<ConversationDetail>(key, (current) => {
         if (!current) return current;
