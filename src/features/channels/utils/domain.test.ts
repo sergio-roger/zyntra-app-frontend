@@ -57,4 +57,8 @@ describe('isValidDomain', () => {
   it('rejects a domain with an invalid port', () => {
     expect(isValidDomain('example.com:abc')).toBe(false);
   });
+
+  it('rejects a domain with a port of more than 5 digits', () => {
+    expect(isValidDomain('example.com:100000')).toBe(false);
+  });
 });
