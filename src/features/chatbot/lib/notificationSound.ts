@@ -1,25 +1,11 @@
-let audioCtx: AudioContext | null = null;
+import { getAudioContext } from '@features/chatbot/lib/audioContext';
 
-const getAudioContext = (): AudioContext | null => {
-  const Ctor = window.AudioContext || (window as any).webkitAudioContext;
-  if (!Ctor) return null;
-  if (!audioCtx) audioCtx = new Ctor();
-  return audioCtx;
-};
-
-const unlockOnUserGesture = () => {
-  const ctx = getAudioContext();
-  if (ctx && ctx.state === 'suspended') void ctx.resume();
-  document.removeEventListener('pointerdown', unlockOnUserGesture);
-  document.removeEventListener('keydown', unlockOnUserGesture);
-};
-document.addEventListener('pointerdown', unlockOnUserGesture);
-document.addEventListener('keydown', unlockOnUserGesture);
-
-/** Beep corto de dos tonos para notificar un mensaje nuevo en el inbox. */
 export function playNewMessageSound() {
   const ctx = getAudioContext();
-  if (!ctx) return;
+  if (!ctx) {
+    return;
+  }
+
   if (ctx.state === 'suspended') void ctx.resume();
 
   const now = ctx.currentTime;

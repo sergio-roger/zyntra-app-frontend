@@ -1,7 +1,7 @@
 import { useCallback, useEffect, useRef, useState } from 'react';
 import { useQueryClient } from '@tanstack/react-query';
 import { getChatSocket } from '../lib/chatSocket';
-import { playNewMessageSound } from '../lib/notificationSound';
+import { playNewMessageSound } from '@features/chatbot/lib/notificationSound';
 import { ConversationDetail } from '../types/chatbot.types';
 
 const TYPING_STOP_DELAY_MS = 2000;
