@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { useFormContext } from 'react-hook-form';
-import { AlertTriangle, Ban, Globe2, Plus, ShieldAlert, X } from 'lucide-react';
+import { AlertTriangle, Ban, Globe2, Plus, ShieldAlert, X, LucideIcon } from 'lucide-react';
 import { Input } from '@core/ui/Input';
 import { WebChannelFormValues } from '@features/channels/schemas/web-channel.schema';
 import { isValidDomain } from '@features/channels/utils/domain';
@@ -11,7 +11,7 @@ interface DomainListSectionProps {
   field: DomainField;
   label: string;
   placeholder: string;
-  icon: React.ElementType;
+  icon: LucideIcon;
   emptyLabel: string;
   otherFieldLabel: string;
   disabled: boolean;

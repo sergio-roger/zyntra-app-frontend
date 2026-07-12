@@ -100,15 +100,15 @@ describe('WebChannelStepForm', () => {
   it('advances through every step with valid data and submits on create', async () => {
     const fakeChannel: Channel = {
       id: 'chan-1',
-      business_id: 'biz-1',
-      channel_type_id: 'type-1',
+      businessId: 'biz-1',
+      channelTypeId: 'type-1',
       channelType: baseChannelType,
       config: {},
-      created_at: '',
-      updated_at: '',
+      createdAt: '',
+      updatedAt: '',
       name: 'Chat Principal',
       status: 'active',
-      agent_id: null,
+      agentId: null,
     };
     mockCreateMutateAsync.mockResolvedValue(fakeChannel);
 
@@ -172,15 +172,15 @@ describe('WebChannelStepForm', () => {
   it('submits the manually selected availability status', async () => {
     const fakeChannel: Channel = {
       id: 'chan-availability',
-      business_id: 'biz-1',
-      channel_type_id: 'type-1',
+      businessId: 'biz-1',
+      channelTypeId: 'type-1',
       channelType: baseChannelType,
       config: {},
-      created_at: '',
-      updated_at: '',
+      createdAt: '',
+      updatedAt: '',
       name: 'Chat Principal',
       status: 'active',
-      agent_id: null,
+      agentId: null,
     };
     mockCreateMutateAsync.mockResolvedValue(fakeChannel);
 
@@ -227,15 +227,15 @@ describe('WebChannelStepForm', () => {
     mockAgents = [{ id: 'agent-1', name: 'Bot Ventas', is_active: true }];
     const fakeChannel: Channel = {
       id: 'chan-3',
-      business_id: 'biz-1',
-      channel_type_id: 'type-1',
+      businessId: 'biz-1',
+      channelTypeId: 'type-1',
       channelType: baseChannelType,
       config: {},
-      created_at: '',
-      updated_at: '',
+      createdAt: '',
+      updatedAt: '',
       name: 'Chat Principal',
       status: 'active',
-      agent_id: null,
+      agentId: null,
     };
     mockCreateMutateAsync.mockResolvedValue(fakeChannel);
 
@@ -276,15 +276,15 @@ describe('WebChannelStepForm', () => {
     mockAgents = [{ id: 'agent-1', name: 'Bot Ventas', is_active: true }];
     const fakeChannel: Channel = {
       id: 'chan-4',
-      business_id: 'biz-1',
-      channel_type_id: 'type-1',
+      businessId: 'biz-1',
+      channelTypeId: 'type-1',
       channelType: baseChannelType,
       config: {},
-      created_at: '',
-      updated_at: '',
+      createdAt: '',
+      updatedAt: '',
       name: 'Chat Principal',
       status: 'active',
-      agent_id: null,
+      agentId: null,
     };
     mockCreateMutateAsync.mockResolvedValue(fakeChannel);
     mockAssignAgent.mockRejectedValueOnce(new Error('boom'));
@@ -322,8 +322,8 @@ describe('WebChannelStepForm', () => {
   it('prefills values in edit mode and submits an update', async () => {
     const channel: Channel = {
       id: 'chan-2',
-      business_id: 'biz-1',
-      channel_type_id: 'type-1',
+      businessId: 'biz-1',
+      channelTypeId: 'type-1',
       channelType: baseChannelType,
       config: {
         greeting: 'Hola',
@@ -333,11 +333,11 @@ describe('WebChannelStepForm', () => {
         theme: 'dark',
         allowedDomains: ['acme.com'],
       },
-      created_at: '',
-      updated_at: '',
+      createdAt: '',
+      updatedAt: '',
       name: 'Canal existente',
       status: 'active',
-      agent_id: null,
+      agentId: null,
     };
     mockUpdateMutateAsync.mockResolvedValue(channel);
 

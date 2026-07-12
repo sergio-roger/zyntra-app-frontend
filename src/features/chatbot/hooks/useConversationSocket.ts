@@ -33,7 +33,9 @@ export const useConversationSocket = (
   const qc = useQueryClient();
   const joinedRef = useRef<string | null>(null);
   const soundEnabledRef = useRef(soundEnabled);
-  soundEnabledRef.current = soundEnabled;
+  useEffect(() => {
+    soundEnabledRef.current = soundEnabled;
+  }, [soundEnabled]);
   const [isVisitorTyping, setIsVisitorTyping] = useState(false);
   const typingSentRef = useRef(false);
   const typingTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
