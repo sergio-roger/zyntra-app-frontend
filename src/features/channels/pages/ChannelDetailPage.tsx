@@ -11,13 +11,15 @@ import {
   X,
 } from 'lucide-react';
 import {
-  useChannel,
-  useUpdateChannel,
-  useDeleteChannel,
-  useAssignAgent,
-  useUnassignAgent,
-} from '../hooks/useChannels';
+  useChannelQuery,
+  useUpdateChannelMutation,
+  useDeactivateChannelMutation,
+  useRemoveChannelMutation,
+  useAssignAgentMutation,
+  useUnassignAgentMutation,
+} from '../hooks/channels.queries';
 import { useAiAgents } from '@features/ai-agents/hooks/useAiAgents';
+import { ConfirmModal } from '@shared/components/ConfirmModal';
 
 function CopyButton({ text }: { text: string }) {
   const [copied, setCopied] = useState(false);
@@ -41,17 +43,18 @@ function CopyButton({ text }: { text: string }) {
 export const ChannelDetailPage: React.FC = () => {
   const navigate = useNavigate();
   const { channelId = '' } = useParams<{ channelId: string }>();
-  const { data: channel, isLoading, isError } = useChannel(channelId);
+  const { data: channel, isLoading, isError } = useChannelQuery(channelId);
   const { data: agents = [] } = useAiAgents();
 
-  const { mutateAsync: updateChannel, isPending: saving } =
-    useUpdateChannel(channelId);
-  const { mutateAsync: deleteChannel, isPending: deleting } =
-    useDeleteChannel();
+  const { mutateAsync: deactivateChannel, isPending: saving } =
+    useDeactivateChannelMutation();
+  const { mutateAsync: updateChannel } = useUpdateChannelMutation(channelId);
+  const { mutateAsync: removeChannel, isPending: deleting } =
+    useRemoveChannelMutation();
   const { mutateAsync: assignAgent, isPending: assigning } =
-    useAssignAgent(channelId);
+    useAssignAgentMutation(channelId);
   const { mutateAsync: unassignAgent, isPending: unassigning } =
-    useUnassignAgent(channelId);
+    useUnassignAgentMutation(channelId);
 
   const [selectedAgent, setSelectedAgent] = useState<string>('');
   const [confirmDelete, setConfirmDelete] = useState(false);
@@ -76,9 +79,11 @@ export const ChannelDetailPage: React.FC = () => {
 
   const handleToggleStatus = async () => {
     try {
-      await updateChannel({
-        status: channel.status === 'active' ? 'inactive' : 'active',
-      });
+      if (channel.status === 'active') {
+        await deactivateChannel(channelId);
+      } else {
+        await updateChannel({ status: 'active' });
+      }
     } catch {
       setError('Error al actualizar el estado.');
     }
@@ -104,10 +109,11 @@ export const ChannelDetailPage: React.FC = () => {
 
   const handleDelete = async () => {
     try {
-      await deleteChannel(channelId);
+      await removeChannel(channelId);
       navigate('/settings/channels');
     } catch {
       setError('No se puede eliminar el canal.');
+    } finally {
       setConfirmDelete(false);
     }
   };
@@ -250,41 +256,24 @@ export const ChannelDetailPage: React.FC = () => {
       <div className="card bg-base-100 border border-error/30 shadow-sm">
         <div className="card-body gap-3">
           <h2 className="font-semibold text-error">Zona de peligro</h2>
-          {confirmDelete ? (
-            <div className="flex items-center gap-2">
-              <p className="text-sm flex-1">
-                ¿Confirmas eliminar este canal? Esta acción no se puede
-                deshacer.
-              </p>
-              <button
-                className="btn btn-ghost btn-sm"
-                onClick={() => setConfirmDelete(false)}
-              >
-                Cancelar
-              </button>
-              <button
-                className="btn btn-error btn-sm"
-                onClick={handleDelete}
-                disabled={deleting}
-              >
-                {deleting ? (
-                  <Loader2 size={14} className="animate-spin" />
-                ) : (
-                  <Trash2 size={14} />
-                )}
-                Eliminar
-              </button>
-            </div>
-          ) : (
-            <button
-              className="btn btn-outline btn-error btn-sm w-fit gap-1"
-              onClick={() => setConfirmDelete(true)}
-            >
-              <Trash2 size={14} /> Eliminar canal
-            </button>
-          )}
+          <button
+            className="btn btn-outline btn-error btn-sm w-fit gap-1"
+            onClick={() => setConfirmDelete(true)}
+          >
+            <Trash2 size={14} /> Eliminar canal
+          </button>
         </div>
       </div>
+
+      <ConfirmModal
+        isOpen={confirmDelete}
+        onClose={() => setConfirmDelete(false)}
+        onConfirm={handleDelete}
+        title="Eliminar canal"
+        description={`¿Confirmas eliminar "${channel.name}"? Dejará de estar disponible y no aparecerá en tus listados. Se conserva por auditoría; contacta a soporte si necesitas recuperarlo.`}
+        confirmText={deleting ? 'Eliminando...' : 'Eliminar'}
+        variant="danger"
+      />
     </div>
   );
 };

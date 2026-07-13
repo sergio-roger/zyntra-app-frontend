@@ -10,7 +10,10 @@ import {
   Loader2,
   AlertCircle,
 } from 'lucide-react';
-import { useChannelStore, useChannels } from '../hooks/useChannels';
+import {
+  useChannelStoreQuery,
+  useChannelsQuery,
+} from '../hooks/channels.queries';
 import { ChannelType, Channel } from '../types/channels.types';
 
 const CHANNEL_ICONS: Record<string, React.ReactNode> = {
@@ -115,8 +118,9 @@ export const ChannelStorePage: React.FC = () => {
     data: store = [],
     isLoading: loadingStore,
     isError: errorStore,
-  } = useChannelStore();
-  const { data: channels = [], isLoading: loadingChannels } = useChannels();
+  } = useChannelStoreQuery();
+  const { data: channels = [], isLoading: loadingChannels } =
+    useChannelsQuery();
 
   const isLoading = loadingStore || loadingChannels;
 

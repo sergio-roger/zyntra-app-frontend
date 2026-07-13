@@ -105,14 +105,34 @@ export const useUpdateChannelMutation = (channelId: string) => {
 };
 
 /**
- * Soft-delete: desactiva el canal (status → inactive).
+ * Desactiva el canal (status → inactive). El canal sigue existiendo
+ * y sigue siendo visible en las listas, solo deja de responder.
  */
-export const useDeleteChannelMutation = () => {
+export const useDeactivateChannelMutation = () => {
   const qc = useQueryClient();
   const businessId = useBusinessId();
   return useMutation({
     mutationFn: (channelId: string) =>
       channelsApi.update(businessId, channelId, { status: 'inactive' }),
+    onSuccess: (_, channelId) => {
+      invalidateAll(qc, businessId);
+      qc.invalidateQueries({
+        queryKey: channelsKeys.detail(businessId, channelId),
+      });
+    },
+  });
+};
+
+/**
+ * Elimina el canal (DELETE). El backend hace soft-delete real
+ * (`deleted_at`), por lo que el canal deja de aparecer en cualquier
+ * listado pero se conserva en la base de datos.
+ */
+export const useRemoveChannelMutation = () => {
+  const qc = useQueryClient();
+  const businessId = useBusinessId();
+  return useMutation({
+    mutationFn: (channelId: string) => channelsApi.remove(businessId, channelId),
     onSuccess: (_, channelId) => {
       invalidateAll(qc, businessId);
       qc.invalidateQueries({

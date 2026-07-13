@@ -3,9 +3,9 @@ import { CHANNEL_ICONS } from '@features/channels/constants/channels.constants';
 import {
   useChannelsQuery,
   useChannelStoreQuery,
-  useDeleteChannelMutation,
+  useDeactivateChannelMutation,
+  useRemoveChannelMutation,
 } from '@features/channels/hooks/channels.queries';
-import { useDeleteChannel } from '@features/channels/hooks/useChannels';
 import { Channel } from '@features/channels/types/channels.types';
 import { ConfirmModal } from '@shared/components/ConfirmModal';
 import { EmptyState } from '@shared/components/EmptyState';
@@ -35,10 +35,10 @@ export const ChannelsListPage: React.FC = () => {
   } = useChannelsQuery();
   const { data: store = [] } = useChannelStoreQuery();
 
-  const { mutateAsync: deleteChannel, isPending: deactivating } =
-    useDeleteChannelMutation();
+  const { mutateAsync: deactivateChannel, isPending: deactivating } =
+    useDeactivateChannelMutation();
   const { mutateAsync: removeChannel, isPending: deleting } =
-    useDeleteChannel();
+    useRemoveChannelMutation();
 
   const [snippetChannel, setSnippetChannel] = useState<Channel | null>(null);
   const [deactivatingChannel, setDeactivatingChannel] =
@@ -57,7 +57,7 @@ export const ChannelsListPage: React.FC = () => {
   const handleDeactivate = async () => {
     if (!deactivatingChannel) return;
     try {
-      await deleteChannel(deactivatingChannel.id);
+      await deactivateChannel(deactivatingChannel.id);
       toastManager.add({
         title: 'Canal desactivado',
         description: `${deactivatingChannel.name} ya no responderá en los sitios donde esté embebido.`,
@@ -236,7 +236,7 @@ export const ChannelsListPage: React.FC = () => {
         onClose={() => setDeletingChannel(null)}
         onConfirm={handleConfirmDelete}
         title="Eliminar canal"
-        description={`¿Confirmas eliminar el canal "${deletingChannel?.name}"? Esta acción no se puede deshacer y el canal se ocultará permanentemente.`}
+        description={`¿Confirmas eliminar el canal "${deletingChannel?.name}"? Esta acción es permanente y no se puede deshacer.`}
         confirmText={deleting ? 'Eliminando...' : 'Eliminar'}
         variant="danger"
       />
