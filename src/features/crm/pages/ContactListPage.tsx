@@ -162,8 +162,8 @@ export const ContactListPage: React.FC = () => {
   const deleteMutation = useDeleteContact();
 
   const contactLimit =
-    currentUser?.plan?.contact_limit ??
-    (currentUser as any)?.plan_object?.contact_limit ??
+    currentUser?.plan?.contactLimit ??
+    (currentUser as any)?.plan_object?.contactLimit ??
     999999;
   const isLimitReached = allQuery.data
     ? allQuery.data.total >= contactLimit && contactLimit !== 999999

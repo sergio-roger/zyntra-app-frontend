@@ -51,7 +51,7 @@ export const MyCompanyPage: React.FC = () => {
       email: company?.email ?? '',
       phone: company?.phone ?? '',
       address: company?.address ?? '',
-      tax_id: company?.tax_id ?? '',
+      tax_id: company?.taxId ?? '',
       website: company?.website ?? '',
     },
   });
@@ -125,9 +125,9 @@ export const MyCompanyPage: React.FC = () => {
           <div className="flex items-start justify-between gap-3">
             <div className="flex items-center gap-3">
               <div className="flex h-14 w-14 shrink-0 items-center justify-center overflow-hidden rounded-2xl bg-slate-800 ring-1 ring-white/10">
-                {company?.logo_url ? (
+                {company?.logoUrl ? (
                   <img
-                    src={company.logo_url}
+                    src={company.logoUrl}
                     alt={company.name}
                     className="h-full w-full object-cover"
                   />
@@ -180,7 +180,7 @@ export const MyCompanyPage: React.FC = () => {
                   )}
                   Cambiar logo
                 </button>
-                {company?.logo_url && (
+                {company?.logoUrl && (
                   <button
                     type="button"
                     onClick={() => removeLogo.mutate()}
@@ -250,7 +250,7 @@ export const MyCompanyPage: React.FC = () => {
               <InfoRow icon={Mail} value={company?.email || 'Sin correo registrado'} />
               <InfoRow icon={Phone} value={company?.phone || 'Sin teléfono registrado'} />
               <InfoRow icon={MapPin} value={company?.address || 'Sin dirección registrada'} />
-              <InfoRow icon={FileText} value={company?.tax_id || 'Sin RUC registrado'} />
+              <InfoRow icon={FileText} value={company?.taxId || 'Sin RUC registrado'} />
               <InfoRow icon={Globe} value={company?.website || 'Sin sitio web registrado'} />
             </div>
           )}

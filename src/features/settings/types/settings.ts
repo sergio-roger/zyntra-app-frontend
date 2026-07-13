@@ -56,9 +56,9 @@ export interface Company {
   email: string | null;
   phone: string | null;
   address: string | null;
-  tax_id: string | null;
+  taxId: string | null;
   website: string | null;
-  logo_url: string | null;
+  logoUrl: string | null;
 }
 
 export interface UpdateCompanyInput {

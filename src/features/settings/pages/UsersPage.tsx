@@ -43,8 +43,8 @@ export const UsersPage: React.FC = () => {
   };
 
   const limit =
-    currentUser?.plan?.user_limit ??
-    (currentUser as any)?.plan_object?.user_limit ??
+    currentUser?.plan?.userLimit ??
+    (currentUser as any)?.plan_object?.userLimit ??
     999999;
   const activeUsersCount = users.filter((u) =>
     u.status ? u.status === 'active' : u.isActive,

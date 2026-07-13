@@ -70,7 +70,7 @@ describe('UsersPage - User Limits', () => {
   it('should allow adding/activating users when count is less than the limit', () => {
     // Mock user with a limit of 3
     vi.mocked(useAuthStore).mockImplementation((selector: any) => {
-      const state = { user: { plan: { name: 'Impulse Pro', user_limit: 3 } } };
+      const state = { user: { plan: { name: 'Impulse Pro', userLimit: 3 } } };
       return selector ? selector(state) : state;
     });
 
@@ -153,7 +153,7 @@ describe('UsersPage - User Limits', () => {
   it('should block adding/activating users when count equals the limit', () => {
     // Mock user with a limit of 2
     vi.mocked(useAuthStore).mockImplementation((selector: any) => {
-      const state = { user: { plan: { name: 'Impulse Pro', user_limit: 2 } } };
+      const state = { user: { plan: { name: 'Impulse Pro', userLimit: 2 } } };
       return selector ? selector(state) : state;
     });
 
@@ -235,7 +235,7 @@ describe('UsersPage - User Limits', () => {
   it('should display "1 / 10" when plan is Core Digital with a limit of 10', () => {
     vi.mocked(useAuthStore).mockImplementation((selector: any) => {
       const state = {
-        user: { plan: { name: 'Core Digital', user_limit: 10 } },
+        user: { plan: { name: 'Core Digital', userLimit: 10 } },
       };
       return selector ? selector(state) : state;
     });

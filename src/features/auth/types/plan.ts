@@ -13,18 +13,18 @@ export interface PlanDescription {
 }
 
 export interface Plan {
-  ai_agent_limit: number;
-  billing_cycle: BillingCycle;
-  channel_limit: number;
-  chatbot_limit: number;
-  contact_limit: number;
+  aiAgentLimit: number;
+  billingCycle: BillingCycle;
+  channelLimit: number;
+  chatbotLimit: number;
+  contactLimit: number;
   descriptions?: PlanDescription[];
-  funnel_limit: number;
+  funnelLimit: number;
   id: string;
-  is_popular: boolean;
+  isPopular: boolean;
   name: string;
   price: string | number;
-  stripe_price_id?: string;
-  task_limit: number;
-  user_limit: number;
+  stripePriceId?: string;
+  taskLimit: number;
+  userLimit: number;
 }
