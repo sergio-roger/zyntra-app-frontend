@@ -29,6 +29,7 @@ import {
   Briefcase,
   ShieldCheck,
   Building2,
+  Workflow,
 } from 'lucide-react';
 import { NavModule } from '@shared/types/nav';
 
@@ -281,6 +282,29 @@ export const NAV_MODULES: NavModule[] = [
         label: 'Rendimiento',
         icon: LineChart,
         description: 'Eficiencia de agentes.',
+      },
+    ],
+  },
+  {
+    key: 'automations',
+    label: 'Automatizaciones',
+    icon: Workflow,
+    match: '/automations',
+    to: '/automations/workflows',
+    description: 'Crea y gestiona flujos de trabajo y agentes automatizados.',
+    color: 'text-secondary',
+    children: [
+      {
+        to: '/automations/workflows',
+        label: 'Workflows',
+        icon: Workflow,
+        description: 'Diseña flujos de automatización visual.',
+      },
+      {
+        to: '/automations/agents',
+        label: 'Agentes',
+        icon: Bot,
+        description: 'Configura agentes automatizados.',
       },
     ],
   },

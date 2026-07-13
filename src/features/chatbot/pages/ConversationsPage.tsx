@@ -9,6 +9,7 @@ import {
   useSetInboxSoundSetting,
 } from '@features/chatbot/hooks/useInboxSoundSetting';
 import { useSendAgentMessage } from '@features/chatbot/hooks/useSendAgentMessage';
+import { useMarkConversationAsRead } from '@features/chatbot/hooks/useMarkConversationAsRead';
 import {
   getStatusBadge,
   getStatusDot,
@@ -52,6 +53,7 @@ export const ConversationsPage: React.FC = () => {
   const { data: selectedConv, isLoading: loadingDetail } =
     useConversationDetail(selectedConversationId);
   const sendAgentMessage = useSendAgentMessage();
+  const markAsRead = useMarkConversationAsRead();
   const { data: inboxSound } = useInboxSoundSetting();
   const setInboxSound = useSetInboxSoundSetting();
   const soundEnabled = inboxSound?.enabled ?? true;
@@ -87,6 +89,10 @@ export const ConversationsPage: React.FC = () => {
     setSelectedConversationId(id);
     setMessageDraft('');
     setContactPanelOpen(false);
+    const conv = conversations.find((c) => c.id === id);
+    if (conv?.unreadCount) {
+      markAsRead.mutate(id);
+    }
   };
 
   const handleSend = () => {
@@ -205,18 +211,20 @@ export const ConversationsPage: React.FC = () => {
                       </span>
                     </div>
                     <div className="flex items-center gap-1.5 mt-1">
-                      <span className={`badge badge-xs ${getStatusBadge(conv.status)}`}>
-                        {conv.status}
+                      <span className="text-[11px] text-base-content/50 truncate flex-1 min-w-0">
+                        {conv.lastMessage || 'Sin mensajes'}
                       </span>
-                      {conv.assignedTo && conv.assignedTo.id !== 'system' && (
-                        <span className="text-[10px] text-base-content/50 truncate">
-                          {conv.assignedTo.name}
+                      {!!conv.unreadCount && (
+                        <span className="badge badge-sm badge-error text-white font-bold shrink-0">
+                          {conv.unreadCount}
                         </span>
                       )}
-                      {conv.unread && (
-                        <span className="w-1.5 h-1.5 rounded-full bg-primary shrink-0" />
-                      )}
                     </div>
+                    {conv.assignedTo && conv.assignedTo.id !== 'system' && (
+                      <span className="text-[10px] text-base-content/40 truncate block mt-0.5">
+                        {conv.assignedTo.name}
+                      </span>
+                    )}
                   </div>
                 </button>
               ))

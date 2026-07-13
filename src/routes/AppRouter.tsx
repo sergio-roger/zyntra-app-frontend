@@ -50,6 +50,22 @@ const AppRoutes = () => {
           ),
         },
         {
+          path: '/automations/workflows/*',
+          element: (
+            <ModuleGuard menuKey="automations_workflows">
+              <ConstructionPage />
+            </ModuleGuard>
+          ),
+        },
+        {
+          path: '/automations/agents/*',
+          element: (
+            <ModuleGuard menuKey="automations_agents">
+              <ConstructionPage />
+            </ModuleGuard>
+          ),
+        },
+        {
           path: '/billing',
           element: (
             <ConstructionPage

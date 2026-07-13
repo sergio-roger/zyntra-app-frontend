@@ -9,6 +9,8 @@ export interface Conversation {
   contactName: string;
   assignedTo?: { id: string; name: string } | null;
   unread?: boolean;
+  unreadCount?: number;
+  lastMessage?: string | null;
 }
 
 export interface ConversationDetail extends Conversation {
@@ -18,5 +20,6 @@ export interface ConversationDetail extends Conversation {
     role: string;
     content: string;
     createdAt: string;
+    isRead?: boolean;
   }>;
 }

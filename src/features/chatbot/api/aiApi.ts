@@ -81,4 +81,13 @@ export const aiApi = {
         `/chat/conversations/${conversationId}/assign`,
       )
       .then(unwrap),
+
+  markConversationAsRead: (
+    conversationId: string,
+  ): Promise<{ success: boolean }> =>
+    api
+      .patch<unknown, ApiResponse<{ success: boolean }>>(
+        `/chat/conversations/${conversationId}/read`,
+      )
+      .then(unwrap),
 };
