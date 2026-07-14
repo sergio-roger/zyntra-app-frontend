@@ -15,7 +15,7 @@ export enum AgentTaskType {
 
 export interface AgentTask {
   _id: string;
-  business_id: string;
+  businessId: string;
   type: AgentTaskType;
   status: AgentTaskStatus;
   input: Record<string, unknown>;
@@ -23,8 +23,8 @@ export interface AgentTask {
   error?: string;
   createdAt: string;
   updatedAt: string;
-  completed_at?: string;
-  duration_ms?: number;
+  completedAt?: string;
+  durationMs?: number;
 }
 
 export interface CreateTaskDto {

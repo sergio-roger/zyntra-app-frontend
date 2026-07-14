@@ -141,10 +141,10 @@ function AgentFormSidebar({
       ? {
           name: editing.name,
           model: editing.model,
-          system_prompt: editing.system_prompt,
+          system_prompt: editing.systemPrompt,
           temperature: editing.temperature,
           tools: editing.tools,
-          is_active: editing.is_active,
+          is_active: editing.isActive,
         }
       : { ...EMPTY_FORM },
   );
@@ -449,16 +449,16 @@ export const AiAgentsPage: React.FC = () => {
                     <div className="flex items-center gap-2">
                       <p className="font-medium truncate">{agent.name}</p>
                       <span
-                        className={`badge badge-xs ${agent.is_active ? 'badge-success' : 'badge-ghost'}`}
+                        className={`badge badge-xs ${agent.isActive ? 'badge-success' : 'badge-ghost'}`}
                       >
-                        {agent.is_active ? 'Activo' : 'Inactivo'}
+                        {agent.isActive ? 'Activo' : 'Inactivo'}
                       </span>
                     </div>
                     <p className="text-xs text-base-content/50 truncate">
                       {agent.model}
                     </p>
                     <p className="text-xs text-base-content/40 mt-0.5 line-clamp-1">
-                      {agent.system_prompt.slice(0, 80)}…
+                      {agent.systemPrompt.slice(0, 80)}…
                     </p>
                   </div>
                   <div className="flex items-center gap-1 shrink-0">

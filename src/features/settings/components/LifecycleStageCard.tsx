@@ -14,9 +14,9 @@ interface LifecycleStage {
   description: string;
   icon: string;
   type: 'active' | 'lost';
-  is_default: boolean;
-  is_won: boolean;
-  is_system: boolean;
+  isDefault: boolean;
+  isWon: boolean;
+  isSystem: boolean;
   position: number;
 }
 
@@ -75,10 +75,10 @@ export const LifecycleStageCard: React.FC<LifecycleStageCardProps> = ({
               {labelPrefix} {index + 1}
             </span>
             <div className="flex gap-1">
-              {stage.is_default && (
+              {stage.isDefault && (
                 <Badge className="badge-primary">Etapa predeterminada</Badge>
               )}
-              {stage.is_won && (
+              {stage.isWon && (
                 <Badge className="badge-success">Etapa ganada</Badge>
               )}
             </div>
@@ -121,26 +121,26 @@ export const LifecycleStageCard: React.FC<LifecycleStageCardProps> = ({
             tabIndex={0}
             className="dropdown-content z-[1] menu p-2 shadow-xl bg-base-200 rounded-xl w-56 border border-base-content/5"
           >
-            <li className={stage.is_default ? 'disabled' : ''}>
+            <li className={stage.isDefault ? 'disabled' : ''}>
               <a
-                className={`text-xs font-medium flex items-center gap-2 py-2 ${stage.is_default ? 'pointer-events-none opacity-50' : ''}`}
-                onClick={() => !stage.is_default && onSetDefault()}
+                className={`text-xs font-medium flex items-center gap-2 py-2 ${stage.isDefault ? 'pointer-events-none opacity-50' : ''}`}
+                onClick={() => !stage.isDefault && onSetDefault()}
               >
                 <Settings2 size={14} />
                 Establecer como predeterminado
               </a>
             </li>
             <div className="divider my-0 opacity-10"></div>
-            <li className={stage.is_system ? 'disabled' : ''}>
+            <li className={stage.isSystem ? 'disabled' : ''}>
               <a
-                className={`text-xs font-medium text-error flex items-center justify-between gap-2 py-2 ${stage.is_system ? 'pointer-events-none opacity-50' : 'hover:bg-error/10'}`}
-                onClick={() => !stage.is_system && onDelete()}
+                className={`text-xs font-medium text-error flex items-center justify-between gap-2 py-2 ${stage.isSystem ? 'pointer-events-none opacity-50' : 'hover:bg-error/10'}`}
+                onClick={() => !stage.isSystem && onDelete()}
               >
                 <div className="flex items-center gap-2">
                   <Trash2 size={14} />
                   Eliminar
                 </div>
-                {stage.is_system && (
+                {stage.isSystem && (
                   <Lock size={12} className="text-base-content/40" />
                 )}
               </a>

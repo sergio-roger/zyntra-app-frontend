@@ -2,31 +2,31 @@ export type AgentTool =
   'web_search' | 'knowledge_base' | 'lead_capture' | 'calendar';
 
 export interface AiAgent {
+  businessId: string;
+  createdAt: string;
   id: string;
-  business_id: string;
-  name: string;
+  isActive: boolean;
   model: string;
-  system_prompt: string;
+  name: string;
+  systemPrompt: string;
   temperature: number;
   tools: AgentTool[];
-  is_active: boolean;
-  created_at: string;
-  updated_at: string;
+  updatedAt: string;
 }
 
 export interface CreateAgentPayload {
-  name: string;
+  is_active?: boolean;
   model?: string;
+  name: string;
   system_prompt: string;
   temperature?: number;
   tools?: AgentTool[];
-  is_active?: boolean;
 }
 
 export type UpdateAgentPayload = Partial<CreateAgentPayload>;
 
 export interface AgentTestResult {
-  reply: string;
   model: string;
+  reply: string;
   tokens?: number;
 }

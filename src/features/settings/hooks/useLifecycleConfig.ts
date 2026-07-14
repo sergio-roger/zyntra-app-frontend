@@ -7,9 +7,9 @@ export interface LifecycleStage {
   description: string;
   icon: string;
   type: 'active' | 'lost';
-  is_default: boolean;
-  is_won: boolean;
-  is_system: boolean;
+  isDefault: boolean;
+  isWon: boolean;
+  isSystem: boolean;
   position: number;
 }
 
@@ -61,9 +61,9 @@ export function useLifecycleConfig() {
       description: newStageDesc,
       icon: addingTo === 'active' ? '⚡' : '👋',
       type: addingTo!,
-      is_default: false,
-      is_won: false,
-      is_system: false,
+      isDefault: false,
+      isWon: false,
+      isSystem: false,
       position: stages.length,
     };
 
@@ -78,7 +78,7 @@ export function useLifecycleConfig() {
   };
 
   const handleDeleteStage = (stageToDelete: LifecycleStage) => {
-    if (stageToDelete.is_system) return;
+    if (stageToDelete.isSystem) return;
     setStages(stages.filter((s) => s !== stageToDelete));
   };
 
@@ -95,7 +95,7 @@ export function useLifecycleConfig() {
   const setDefaultStage = (stage: LifecycleStage) => {
     const newStages = stages.map((s) => ({
       ...s,
-      is_default: s === stage,
+      isDefault: s === stage,
     }));
     setStages(newStages);
   };

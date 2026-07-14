@@ -33,7 +33,7 @@ const ChannelTypeCard: React.FC<ChannelTypeCardProps> = ({
   existingChannel,
   onActivate,
 }) => {
-  const disabled = !channelType.is_available;
+  const disabled = !channelType.isAvailable;
   const isWebChat = channelType.key === 'web_chat';
   
   // Si es web_chat, siempre permitimos crear múltiples, por lo que no se muestra como "Activo" permanente.

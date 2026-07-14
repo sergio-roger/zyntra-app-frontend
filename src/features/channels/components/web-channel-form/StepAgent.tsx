@@ -10,7 +10,7 @@ export const StepAgent: React.FC = () => {
   const { watch, setValue } = useFormContext<WebChannelFormValues>();
   const agentId = watch('agentId');
   const { data: agents = [] } = useAiAgents();
-  const activeAgents = agents.filter((a) => a.is_active);
+  const activeAgents = agents.filter((a) => a.isActive);
 
   return (
     <div className="max-w-2xl rounded-2xl border border-white/5 bg-slate-950/30 p-6 space-y-4">

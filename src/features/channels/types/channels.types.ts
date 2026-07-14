@@ -6,41 +6,41 @@ export interface WebChannelDaySchedule {
 }
 
 export interface WebChannelBusinessHours {
-  timezone: string;
   is24x7: boolean;
   schedule: WebChannelDaySchedule[];
+  timezone: string;
 }
 
 export interface WebChannelConfig {
-  greeting?: string;
-  assistantName?: string;
-  primaryColor: string;
-  position: 'bottom-left' | 'bottom-right';
-  theme: 'light' | 'dark' | 'auto';
-  availabilityMode?: 'manual' | 'schedule';
-  manualStatus?: 'available' | 'busy' | 'offline';
-  businessHours?: WebChannelBusinessHours;
   allowedDomains: string[];
-  blockedDomains: string[];
   allowInsecureDomains: boolean;
+  assistantName?: string;
+  availabilityMode?: 'manual' | 'schedule';
+  blockedDomains: string[];
+  businessHours?: WebChannelBusinessHours;
+  greeting?: string;
+  manualStatus?: 'available' | 'busy' | 'offline';
+  position: 'bottom-left' | 'bottom-right';
+  primaryColor: string;
+  theme: 'light' | 'dark' | 'auto';
 }
 
 export interface ChannelType {
-  config_schema: Record<string, unknown>;
+  configSchema: Record<string, unknown>;
   description: string | null;
-  icon_url: string | null;
+  iconUrl: string | null;
   id: string;
-  is_available: boolean;
+  isAvailable: boolean;
   key: string;
   label: string;
-  sort_order: number;
+  sortOrder: number;
 }
 
 export interface Channel {
   agentId: string | null;
   businessId: string;
-  channelTypeId: string;
   channelType: ChannelType;
+  channelTypeId: string;
   config: Record<string, unknown>;
   createdAt: string;
   embedCode?: string;

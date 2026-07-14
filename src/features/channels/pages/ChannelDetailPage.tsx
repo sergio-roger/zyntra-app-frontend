@@ -217,7 +217,7 @@ export const ChannelDetailPage: React.FC = () => {
               >
                 <option value="">Seleccionar agente...</option>
                 {agents
-                  .filter((a) => a.is_active)
+                  .filter((a) => a.isActive)
                   .map((a) => (
                     <option key={a.id} value={a.id}>
                       {a.name}

@@ -20,7 +20,7 @@ vi.mock('@features/channels/hooks/channels.queries', () => ({
   }),
 }));
 
-let mockAgents: { id: string; name: string; is_active: boolean }[] = [];
+let mockAgents: { id: string; name: string; isActive: boolean }[] = [];
 vi.mock('@features/ai-agents/hooks/useAiAgents', () => ({
   useAiAgents: () => ({ data: mockAgents }),
 }));
@@ -44,10 +44,10 @@ const baseChannelType = {
   key: 'web_chat',
   label: 'Web Chat',
   description: null,
-  icon_url: null,
-  is_available: true,
-  sort_order: 0,
-  config_schema: {},
+  iconUrl: null,
+  isAvailable: true,
+  sortOrder: 0,
+  configSchema: {},
 };
 
 type FormProps = React.ComponentProps<typeof WebChannelStepForm>;
@@ -224,7 +224,7 @@ describe('WebChannelStepForm', () => {
   });
 
   it('assigns the selected agent after creating the channel', async () => {
-    mockAgents = [{ id: 'agent-1', name: 'Bot Ventas', is_active: true }];
+    mockAgents = [{ id: 'agent-1', name: 'Bot Ventas', isActive: true }];
     const fakeChannel: Channel = {
       id: 'chan-3',
       businessId: 'biz-1',
@@ -273,7 +273,7 @@ describe('WebChannelStepForm', () => {
   });
 
   it('warns via toast but still finishes when agent assignment fails', async () => {
-    mockAgents = [{ id: 'agent-1', name: 'Bot Ventas', is_active: true }];
+    mockAgents = [{ id: 'agent-1', name: 'Bot Ventas', isActive: true }];
     const fakeChannel: Channel = {
       id: 'chan-4',
       businessId: 'biz-1',
