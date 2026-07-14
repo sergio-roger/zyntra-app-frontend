@@ -24,7 +24,7 @@ export const ContactCustomFieldsSidebar: React.FC<
     setValues(contact?.customFields ?? {});
   }, [contact, open]);
 
-  const activeFields = fields.filter((f) => f.is_active);
+  const activeFields = fields.filter((f) => f.isActive);
 
   const handleSave = async () => {
     if (!contact) return;

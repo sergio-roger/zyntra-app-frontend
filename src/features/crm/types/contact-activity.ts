@@ -4,10 +4,10 @@ export type ActivityType =
 export type ActivityCreatedBy = 'system' | 'user' | 'ai';
 
 export interface ContactActivity {
-  contact_id: string;
+  contactId: string;
   content: string;
   createdAt: string;
-  created_by: ActivityCreatedBy;
+  createdBy: ActivityCreatedBy;
   id: string;
   metadata: Record<string, unknown>;
   type: ActivityType;

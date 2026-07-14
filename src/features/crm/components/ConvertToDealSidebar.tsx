@@ -26,9 +26,9 @@ interface ConvertToDealSidebarProps {
 const emptyForm = (): ConvertToDealInput => ({
   title: '',
   value: 0,
-  pipeline_id: '',
-  stage_id: '',
-  expected_close_date: '',
+  pipelineId: '',
+  stageId: '',
+  expectedCloseDate: '',
   description: '',
 });
 
@@ -48,16 +48,16 @@ export const ConvertToDealSidebar: React.FC<ConvertToDealSidebarProps> = ({
     if (!open) return;
 
     const defaultPipeline =
-      pipelines.find((p) => p.is_default) ?? pipelines[0] ?? null;
+      pipelines.find((p) => p.isDefault) ?? pipelines[0] ?? null;
     const firstStage = defaultPipeline?.stages?.[0];
     setStages(defaultPipeline?.stages ?? []);
 
     setFormData({
       title: lead ? `Negocio con ${lead.name}` : '',
       value: lead?.dealValue ? Number(lead.dealValue) : 0,
-      pipeline_id: defaultPipeline?.id ?? '',
-      stage_id: firstStage?.id ?? '',
-      expected_close_date: '',
+      pipelineId: defaultPipeline?.id ?? '',
+      stageId: firstStage?.id ?? '',
+      expectedCloseDate: '',
       description: '',
     });
   }, [lead, open, pipelines]);
@@ -69,8 +69,8 @@ export const ConvertToDealSidebar: React.FC<ConvertToDealSidebarProps> = ({
     const firstStage = newStages[0];
     setFormData((f) => ({
       ...f,
-      pipeline_id: pipelineId,
-      stage_id: firstStage?.id ?? '',
+      pipelineId,
+      stageId: firstStage?.id ?? '',
     }));
   };
 
@@ -84,7 +84,7 @@ export const ConvertToDealSidebar: React.FC<ConvertToDealSidebarProps> = ({
         id: lead.id,
         input: {
           ...formData,
-          expected_close_date: formData.expected_close_date || undefined,
+          expectedCloseDate: formData.expectedCloseDate || undefined,
           description: formData.description || undefined,
         },
       });
@@ -163,11 +163,11 @@ export const ConvertToDealSidebar: React.FC<ConvertToDealSidebarProps> = ({
                 label="Fecha de cierre"
                 icon={Calendar}
                 type="date"
-                value={formData.expected_close_date ?? ''}
+                value={formData.expectedCloseDate ?? ''}
                 onChange={(e) =>
                   setFormData({
                     ...formData,
-                    expected_close_date: e.target.value,
+                    expectedCloseDate: e.target.value,
                   })
                 }
               />
@@ -181,7 +181,7 @@ export const ConvertToDealSidebar: React.FC<ConvertToDealSidebarProps> = ({
               <div className="relative">
                 <select
                   required
-                  value={formData.pipeline_id}
+                  value={formData.pipelineId}
                   onChange={(e) => handlePipelineChange(e.target.value)}
                   className="w-full bg-slate-950/50 border border-white/10 rounded-xl py-2.5 px-4 pr-9 text-sm text-white focus:outline-none focus:border-primary/50 transition-all appearance-none"
                 >
@@ -189,7 +189,7 @@ export const ConvertToDealSidebar: React.FC<ConvertToDealSidebarProps> = ({
                   {pipelines.map((p) => (
                     <option key={p.id} value={p.id}>
                       {p.name}
-                      {p.is_default ? ' (principal)' : ''}
+                      {p.isDefault ? ' (principal)' : ''}
                     </option>
                   ))}
                 </select>
@@ -208,9 +208,9 @@ export const ConvertToDealSidebar: React.FC<ConvertToDealSidebarProps> = ({
               <div className="relative">
                 <select
                   required
-                  value={formData.stage_id}
+                  value={formData.stageId}
                   onChange={(e) =>
-                    setFormData({ ...formData, stage_id: e.target.value })
+                    setFormData({ ...formData, stageId: e.target.value })
                   }
                   disabled={stages.length === 0}
                   className="w-full bg-slate-950/50 border border-white/10 rounded-xl py-2.5 px-4 pr-9 text-sm text-white focus:outline-none focus:border-primary/50 transition-all appearance-none disabled:opacity-40"
@@ -220,7 +220,7 @@ export const ConvertToDealSidebar: React.FC<ConvertToDealSidebarProps> = ({
                     .filter((s) => s.type === 'active')
                     .map((s) => (
                       <option key={s.id} value={s.id}>
-                        {s.name} ({s.probability_percent}%)
+                        {s.name} ({s.probabilityPercent}%)
                       </option>
                     ))}
                 </select>
@@ -286,8 +286,8 @@ export const ConvertToDealSidebar: React.FC<ConvertToDealSidebarProps> = ({
               disabled={
                 convertMutation.isPending ||
                 !formData.title ||
-                !formData.pipeline_id ||
-                !formData.stage_id
+                !formData.pipelineId ||
+                !formData.stageId
               }
               className="flex-[2] px-4 py-2.5 rounded-xl bg-primary text-white text-sm font-semibold shadow-lg shadow-primary/20 hover:opacity-90 disabled:opacity-50 transition-all flex items-center justify-center gap-2"
             >

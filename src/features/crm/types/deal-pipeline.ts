@@ -3,13 +3,13 @@ import { DealPipelineStage } from './deal-pipeline-stage';
 export interface DealPipeline {
   businessId: string;
   createdAt: string;
-  deleted_at: string | null;
+  deletedAt: string | null;
   id: string;
-  is_default: boolean;
+  isDefault: boolean;
   name: string;
   position: number;
   stages: DealPipelineStage[];
-  team_id: string | null;
+  teamId: string | null;
   team?: { id: string; name: string; color: string } | null;
   updatedAt: string;
 }

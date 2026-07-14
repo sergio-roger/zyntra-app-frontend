@@ -62,7 +62,7 @@ export const DealCard: React.FC<DealCardProps> = ({
         <div className="flex items-center gap-1 shrink-0">
           <div className="flex items-center gap-1 rounded-md bg-slate-900/50 px-1.5 py-0.5 text-[10px] font-bold text-indigo-400 border border-indigo-500/20">
             <TrendingUp size={10} />
-            {deal.stage?.probability_percent ?? deal.probability}%
+            {deal.stage?.probabilityPercent ?? deal.probability}%
           </div>
           {/* Drag handle */}
           <div
@@ -111,13 +111,11 @@ export const DealCard: React.FC<DealCardProps> = ({
           {formattedValue}
         </span>
 
-        {(deal.expectedCloseDate || (deal as any).expected_close_date) && (
+        {deal.expectedCloseDate && (
           <div className="flex items-center gap-1 text-[10px] text-slate-500">
             <Calendar size={12} />
             <span>
-              {new Date(
-                deal.expectedCloseDate || (deal as any).expected_close_date,
-              ).toLocaleDateString('es-CO')}
+              {new Date(deal.expectedCloseDate).toLocaleDateString('es-CO')}
             </span>
           </div>
         )}

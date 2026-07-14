@@ -1,10 +1,10 @@
 import { DealPipelineStage } from './deal-pipeline-stage';
 
 export interface DealStageHistoryRecord {
-  deal_id: string;
-  entered_at: string;
+  dealId: string;
+  enteredAt: string;
   id: string;
-  left_at: string | null;
-  stage_id: string;
+  leftAt: string | null;
+  stageId: string;
   stage?: DealPipelineStage;
 }

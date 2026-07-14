@@ -118,12 +118,12 @@ export const DealFormFields: React.FC<DealFormFieldsProps> = ({
 
   const pipelineOptions = pipelines.map((p) => ({
     value: p.id,
-    label: p.is_default ? `${p.name} ★` : p.name,
+    label: p.isDefault ? `${p.name} ★` : p.name,
   }));
 
   const stageOptions = stages.map((s) => ({
     value: s.id,
-    label: `${s.name} (${s.probability_percent}%)`,
+    label: `${s.name} (${s.probabilityPercent}%)`,
   }));
 
   return (

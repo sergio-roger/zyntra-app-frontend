@@ -66,8 +66,8 @@ export const PipelineSettingsDrawer: React.FC<PipelineSettingsDrawerProps> = ({
     if (!pipeline) return;
     setActiveTab('configuracion');
     setPipelineName(pipeline.name);
-    setIsDefault(pipeline.is_default);
-    setTeamId(pipeline.team_id);
+    setIsDefault(pipeline.isDefault);
+    setTeamId(pipeline.teamId);
     setStages([...pipeline.stages].sort((a, b) => a.position - b.position));
   }, [pipeline?.id]);
 
@@ -122,7 +122,7 @@ export const PipelineSettingsDrawer: React.FC<PipelineSettingsDrawerProps> = ({
         input: {
           name: stage.name,
           color: stage.color,
-          probability_percent: stage.probability_percent,
+          probability_percent: stage.probabilityPercent,
           type: stage.type as StageType,
         },
       });
@@ -392,11 +392,11 @@ export const PipelineSettingsDrawer: React.FC<PipelineSettingsDrawerProps> = ({
                         type="number"
                         min={0}
                         max={100}
-                        value={stage.probability_percent}
+                        value={stage.probabilityPercent}
                         onChange={(e) =>
                           handleFieldChange(
                             stage.id,
-                            'probability_percent',
+                            'probabilityPercent',
                             Number(e.target.value),
                           )
                         }

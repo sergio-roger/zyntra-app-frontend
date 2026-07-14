@@ -24,7 +24,7 @@ export const CompanyCustomFieldsSidebar: React.FC<
     setValues(company?.customFields ?? {});
   }, [company, open]);
 
-  const activeFields = fields.filter((f) => f.is_active);
+  const activeFields = fields.filter((f) => f.isActive);
 
   const handleSave = async () => {
     if (!company) return;

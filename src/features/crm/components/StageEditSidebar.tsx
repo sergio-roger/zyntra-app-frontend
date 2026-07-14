@@ -32,7 +32,7 @@ export const StageEditSidebar: React.FC<StageEditSidebarProps> = ({
     setName(stage.name);
     setColor(stage.color);
     setType(stage.type as StageType);
-    setProbability(stage.probability_percent);
+    setProbability(stage.probabilityPercent);
   }, [stage?.id]);
 
   if (!stage) return null;

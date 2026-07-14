@@ -76,7 +76,7 @@ export const DealsKanban: React.FC<DealsKanbanProps> = ({
       //    de verdad, sin Zustand intermedio que genere renders extra.
       qc.setQueryData<KanbanResponse>(queryKey, (old) => {
         if (!old) return old;
-        const optimistic = { ...dealToMove, stage_id: newStageId };
+        const optimistic = { ...dealToMove, stageId: newStageId };
         return {
           ...old,
           columns: old.columns.map((col) => {

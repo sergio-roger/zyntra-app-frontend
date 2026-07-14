@@ -71,7 +71,7 @@ export const DealsPage: React.FC = () => {
   useEffect(() => {
     if (pipelines.length > 0 && !activePipelineId) {
       const defaultPipeline =
-        pipelines.find((p) => p.is_default) ?? pipelines[0];
+        pipelines.find((p) => p.isDefault) ?? pipelines[0];
       setActivePipelineId(defaultPipeline.id);
     }
   }, [pipelines, activePipelineId]);
@@ -184,7 +184,7 @@ export const DealsPage: React.FC = () => {
                       {p.team.name}
                     </span>
                   )}
-                  {p.is_default && isAdmin && (
+                  {p.isDefault && isAdmin && (
                     <span className="text-[8px] font-black uppercase tracking-widest opacity-50 bg-indigo-500/20 px-1 rounded">
                       principal
                     </span>

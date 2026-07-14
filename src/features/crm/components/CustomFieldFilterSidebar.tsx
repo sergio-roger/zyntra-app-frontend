@@ -17,7 +17,7 @@ export const CustomFieldFilterSidebar: React.FC<
   CustomFieldFilterSidebarProps
 > = ({ open, conditions, onChange, onClose, entityType }) => {
   const { data: fields = [] } = useCustomFields(entityType);
-  const activeFields = fields.filter((f) => f.is_active);
+  const activeFields = fields.filter((f) => f.isActive);
   const navigate = useNavigate();
 
   const hasNoFields = activeFields.length === 0;

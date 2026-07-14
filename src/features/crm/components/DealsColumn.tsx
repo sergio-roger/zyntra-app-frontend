@@ -64,7 +64,7 @@ export const DealsColumn: React.FC<DealsColumnProps> = ({
             )}
             <button
               onClick={() =>
-                onDealClick?.({ id: 'new', stage_id: stage.id } as any)
+                onDealClick?.({ id: 'new', stageId: stage.id } as any)
               }
               className="p-1 rounded-lg bg-white/5 hover:bg-indigo-600/20 text-slate-400 hover:text-indigo-400 border border-white/5 transition-all active:scale-95"
               title="Añadir negocio a esta etapa"
@@ -91,7 +91,7 @@ export const DealsColumn: React.FC<DealsColumnProps> = ({
                 backgroundColor: `${stage.color}15`,
               }}
             >
-              {stage.probability_percent}%
+              {stage.probabilityPercent}%
             </span>
           </div>
         </div>

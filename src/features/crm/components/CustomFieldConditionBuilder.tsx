@@ -14,7 +14,7 @@ export const CustomFieldConditionBuilder: React.FC<
   CustomFieldConditionBuilderProps
 > = ({ conditions, onChange, entityType }) => {
   const { data: fields = [] } = useCustomFields(entityType);
-  const activeFields = fields.filter((f) => f.is_active);
+  const activeFields = fields.filter((f) => f.isActive);
 
   if (!activeFields.length) return null;
 

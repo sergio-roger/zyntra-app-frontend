@@ -4,8 +4,8 @@ export interface DealPipelineStage {
   color: string;
   id: string;
   name: string;
-  pipeline_id: string;
+  pipelineId: string;
   position: number;
-  probability_percent: number;
+  probabilityPercent: number;
   type: DealStageType;
 }

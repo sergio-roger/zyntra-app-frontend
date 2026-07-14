@@ -59,8 +59,8 @@ const makeStage = (
   color: '#4f46e5',
   position: 0,
   type: 'active',
-  probability_percent: 10,
-  pipeline_id: 'pipe-1',
+  probabilityPercent: 10,
+  pipelineId: 'pipe-1',
   ...overrides,
 });
 
@@ -98,12 +98,12 @@ const stageB = makeStage({
 const makePipeline = (): DealPipeline => ({
   id: 'pipe-1',
   name: 'Pipeline Principal',
-  is_default: true,
+  isDefault: true,
   position: 0,
   stages: [stageA, stageB],
   businessId: 'biz-1',
-  team_id: null,
-  deleted_at: null,
+  teamId: null,
+  deletedAt: null,
   createdAt: new Date().toISOString(),
   updatedAt: new Date().toISOString(),
 });

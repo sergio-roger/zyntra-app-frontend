@@ -62,9 +62,7 @@ export const DealFormSidebar: React.FC<DealFormSidebarProps> = ({
     if (deal) {
       const pipeline =
         deal.pipeline ??
-        pipelines.find(
-          (p) => p.id === (deal.pipelineId || (deal as any).pipeline_id),
-        ) ??
+        pipelines.find((p) => p.id === deal.pipelineId) ??
         null;
       setSelectedPipeline(pipeline);
       setSelectedContacts(deal.contacts || []);
@@ -74,20 +72,16 @@ export const DealFormSidebar: React.FC<DealFormSidebarProps> = ({
         description: deal.description || '',
         value: Number(deal.value),
         currency: deal.currency || 'USD',
-        pipelineId: deal.pipelineId || (deal as any).pipeline_id,
-        stageId: deal.stageId || (deal as any).stage_id,
+        pipelineId: deal.pipelineId,
+        stageId: deal.stageId,
         contactIds: deal.contacts?.map((c) => c.id) || [],
-        companyId: deal.companyId ?? (deal as any).company_id ?? undefined,
-        assignedToId:
-          deal.assignedToId ?? (deal as any).assigned_to_id ?? undefined,
-        teamId: deal.teamId ?? (deal as any).team_id ?? undefined,
+        companyId: deal.companyId ?? undefined,
+        assignedToId: deal.assignedToId ?? undefined,
+        teamId: deal.teamId ?? undefined,
         probability: deal.probability,
-        expectedCloseDate:
-          deal.expectedCloseDate || (deal as any).expected_close_date
-            ? (
-                deal.expectedCloseDate || (deal as any).expected_close_date
-              ).split('T')[0]
-            : '',
+        expectedCloseDate: deal.expectedCloseDate
+          ? deal.expectedCloseDate.split('T')[0]
+          : '',
       });
     } else {
       let targetPipeline = pipelines.find((p) => p.id === defaultPipelineId);
@@ -107,7 +101,7 @@ export const DealFormSidebar: React.FC<DealFormSidebarProps> = ({
 
       if (!targetPipeline) {
         targetPipeline =
-          pipelines.find((p) => p.is_default) ?? pipelines[0] ?? null;
+          pipelines.find((p) => p.isDefault) ?? pipelines[0] ?? null;
       }
 
       setSelectedPipeline(targetPipeline);
@@ -117,7 +111,7 @@ export const DealFormSidebar: React.FC<DealFormSidebarProps> = ({
         ...emptyForm(),
         pipelineId: targetPipeline?.id ?? '',
         stageId: activeStage?.id ?? '',
-        probability: activeStage?.probability_percent ?? 10,
+        probability: activeStage?.probabilityPercent ?? 10,
       });
       setSelectedContacts([]);
       setSelectedCompany(null);
@@ -133,7 +127,7 @@ export const DealFormSidebar: React.FC<DealFormSidebarProps> = ({
       ...f,
       pipelineId: pipelineId,
       stageId: firstStage?.id ?? '',
-      probability: firstStage?.probability_percent ?? f.probability,
+      probability: firstStage?.probabilityPercent ?? f.probability,
     }));
   };
 
@@ -143,7 +137,7 @@ export const DealFormSidebar: React.FC<DealFormSidebarProps> = ({
     setFormData((f) => ({
       ...f,
       stageId: stageId,
-      probability: stage?.probability_percent ?? f.probability,
+      probability: stage?.probabilityPercent ?? f.probability,
     }));
   };
 

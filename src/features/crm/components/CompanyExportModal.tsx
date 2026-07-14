@@ -34,7 +34,7 @@ export const CompanyExportModal: React.FC<CompanyExportModalProps> = ({
   const customColumns = useMemo<ExportColumn[]>(
     () =>
       customFieldDefs
-        .filter((f) => f.is_active)
+        .filter((f) => f.isActive)
         .map((f) => ({ key: `cf_${f.name}`, label: f.label })),
     [customFieldDefs],
   );

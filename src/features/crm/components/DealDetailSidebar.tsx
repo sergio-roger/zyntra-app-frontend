@@ -71,7 +71,7 @@ const HistoryTimeline: React.FC<{
   return (
     <ol className="relative flex flex-col gap-0">
       {sorted.map((rec, idx) => {
-        const isCurrent = rec.left_at === null;
+        const isCurrent = rec.leftAt === null;
         const color = rec.stage?.color ?? '#6366f1';
         const isLast = idx === records.length - 1;
 
@@ -100,17 +100,17 @@ const HistoryTimeline: React.FC<{
                 )}
               </div>
               <p className="text-xs text-slate-400 mt-0.5">
-                Entró el {fmtDate(rec.entered_at)}
+                Entró el {fmtDate(rec.enteredAt)}
                 {' · '}
                 <span
                   className={isCurrent ? 'text-emerald-400' : 'text-slate-500'}
                 >
-                  {stageDuration(rec.entered_at, rec.left_at)}
+                  {stageDuration(rec.enteredAt, rec.leftAt)}
                 </span>
               </p>
-              {rec.left_at && (
+              {rec.leftAt && (
                 <p className="text-[11px] text-slate-600 mt-0.5">
-                  Salió el {fmtDate(rec.left_at)}
+                  Salió el {fmtDate(rec.leftAt)}
                 </p>
               )}
             </div>
@@ -165,9 +165,7 @@ export const DealDetailSidebar: React.FC<DealDetailSidebarProps> = ({
     setActiveTab('detalle');
     const pipeline =
       deal.pipeline ??
-      pipelines.find(
-        (p) => p.id === (deal.pipelineId || (deal as any).pipeline_id),
-      ) ??
+      pipelines.find((p) => p.id === deal.pipelineId) ??
       null;
     setSelectedPipeline(pipeline);
     setSelectedContacts(deal.contacts || []);
@@ -177,20 +175,16 @@ export const DealDetailSidebar: React.FC<DealDetailSidebarProps> = ({
       description: deal.description ?? '',
       value: Number(deal.value),
       currency: deal.currency ?? 'USD',
-      pipelineId: deal.pipelineId || (deal as any).pipeline_id,
-      stageId: deal.stageId || (deal as any).stage_id,
+      pipelineId: deal.pipelineId,
+      stageId: deal.stageId,
       contactIds: deal.contacts?.map((c) => c.id) || [],
-      companyId: deal.companyId ?? (deal as any).company_id ?? undefined,
-      assignedToId:
-        deal.assignedToId ?? (deal as any).assigned_to_id ?? undefined,
-      teamId: deal.teamId ?? (deal as any).team_id ?? undefined,
+      companyId: deal.companyId ?? undefined,
+      assignedToId: deal.assignedToId ?? undefined,
+      teamId: deal.teamId ?? undefined,
       probability: deal.probability,
-      expectedCloseDate:
-        deal.expectedCloseDate || (deal as any).expected_close_date
-          ? (deal.expectedCloseDate || (deal as any).expected_close_date).split(
-              'T',
-            )[0]
-          : '',
+      expectedCloseDate: deal.expectedCloseDate
+        ? deal.expectedCloseDate.split('T')[0]
+        : '',
     });
   }, [open, deal?.id, pipelines]);
 
@@ -202,7 +196,7 @@ export const DealDetailSidebar: React.FC<DealDetailSidebarProps> = ({
       ...f,
       pipelineId: pipelineId,
       stageId: firstStage?.id ?? '',
-      probability: firstStage?.probability_percent ?? f.probability,
+      probability: firstStage?.probabilityPercent ?? f.probability,
     }));
   };
 
@@ -211,7 +205,7 @@ export const DealDetailSidebar: React.FC<DealDetailSidebarProps> = ({
     setFormData((f) => ({
       ...f,
       stageId: stageId,
-      probability: stage?.probability_percent ?? f.probability,
+      probability: stage?.probabilityPercent ?? f.probability,
     }));
   };
 

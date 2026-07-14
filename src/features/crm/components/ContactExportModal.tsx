@@ -26,7 +26,7 @@ export const ContactExportModal: React.FC<ContactExportModalProps> = ({
   const customColumns = useMemo<ExportColumn[]>(
     () =>
       fields
-        .filter((f) => f.is_active)
+        .filter((f) => f.isActive)
         .map((f) => ({ key: `cf_${f.name}`, label: f.label })),
     [fields],
   );
