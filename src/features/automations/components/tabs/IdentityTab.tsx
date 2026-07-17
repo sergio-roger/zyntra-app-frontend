@@ -32,7 +32,7 @@ interface IdentityTabProps {
 const defaultValues = (agent: Agent | undefined): AgentIdentityFormValues => ({
   name: agent?.name ?? '',
   systemPrompt: agent?.systemPrompt ?? '',
-  model: agent?.model ?? 'openai/gpt-4o-mini',
+  model: agent?.model ?? 'openai/gpt-oss-20b:free',
   temperature: agent?.temperature ?? 0.7,
   maxTokens: agent?.maxTokens ?? 1024,
   tone: agent?.tone ?? null,
@@ -114,7 +114,7 @@ export const IdentityTab: React.FC<IdentityTabProps> = ({ agent, onCreated }) =>
       <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
         <Input
           label="Modelo"
-          placeholder="openai/gpt-4o-mini"
+          placeholder="openai/gpt-oss-20b:free"
           error={errors.model?.message}
           {...register('model')}
         />
