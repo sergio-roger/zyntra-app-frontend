@@ -119,7 +119,7 @@ export const ColumnCustomizerModal: React.FC<ColumnCustomizerModalProps> = ({
     const allAvailable = [
       ...defaultColumns,
       ...customFields
-        .filter((cf) => cf.is_active)
+        .filter((cf) => cf.isActive)
         .map((cf) => ({
           key: cf.name,
           label: `${cf.label} (Campo Personalizado)`,
@@ -185,7 +185,7 @@ export const ColumnCustomizerModal: React.FC<ColumnCustomizerModalProps> = ({
     const defaultFields = [
       ...defaultColumns,
       ...customFields
-        .filter((cf) => cf.is_active)
+        .filter((cf) => cf.isActive)
         .map((cf) => ({
           key: cf.name,
           label: `${cf.label} (Campo Personalizado)`,

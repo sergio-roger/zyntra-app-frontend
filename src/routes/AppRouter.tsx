@@ -2,6 +2,7 @@ import { ModuleGuard } from '@core/components/ModuleGuard';
 import { ProtectedRoute } from '@core/routes/ProtectedRoute';
 import { crmRoutes } from '@crm/routes/CrmRoutes';
 import { agentRoutes } from '@features/agents/routes/AgentRoutes';
+import { automationRoutes } from '@features/automations/routes/AutomationRoutes';
 import { authRoutes } from '@features/auth/routes/AuthRoutes';
 import { chatbotRoutes } from '@features/chatbot/routes/ChatbotRoutes';
 import { dashboardRoutes } from '@features/dashboard/routes/DashboardRoutes';
@@ -24,19 +25,12 @@ const AppRoutes = () => {
         ...crmRoutes,
         ...chatbotRoutes,
         ...agentRoutes,
+        ...automationRoutes,
         ...settingsRoutes,
         {
           path: '/funnels/*',
           element: (
             <ModuleGuard menuKey="funnels">
-              <ConstructionPage />
-            </ModuleGuard>
-          ),
-        },
-        {
-          path: '/avatar/*',
-          element: (
-            <ModuleGuard menuKey="avatar">
               <ConstructionPage />
             </ModuleGuard>
           ),
@@ -53,14 +47,6 @@ const AppRoutes = () => {
           path: '/automations/workflows/*',
           element: (
             <ModuleGuard menuKey="automations_workflows">
-              <ConstructionPage />
-            </ModuleGuard>
-          ),
-        },
-        {
-          path: '/automations/agents/*',
-          element: (
-            <ModuleGuard menuKey="automations_agents">
               <ConstructionPage />
             </ModuleGuard>
           ),
