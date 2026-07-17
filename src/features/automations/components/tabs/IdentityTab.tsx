@@ -5,6 +5,7 @@ import { Loader2, Save, Sparkles, Tags, Thermometer } from 'lucide-react';
 import { Input } from '@core/ui/Input';
 import { Textarea } from '@core/ui/Textarea';
 import { Select } from '@core/ui/Select';
+import { Slider } from '@core/ui/Slider';
 import { agentIdentitySchema, AgentIdentityFormValues } from '../../schemas/agent-identity.schema';
 import { useCreateAgent, useUpdateAgent } from '../../hooks/use-agents';
 import { useChannelsList, useSetAgentChannel } from '../../hooks/use-agent-channel';
@@ -59,6 +60,7 @@ export const IdentityTab: React.FC<IdentityTabProps> = ({ agent, onCreated }) =>
     control,
     register,
     handleSubmit,
+    watch,
     formState: { errors, isSubmitting },
   } = useForm<AgentIdentityFormValues>({
     resolver: zodResolver(agentIdentitySchema),
@@ -118,11 +120,12 @@ export const IdentityTab: React.FC<IdentityTabProps> = ({ agent, onCreated }) =>
           error={errors.model?.message}
           {...register('model')}
         />
-        <Input
+        <Slider
           label="Máx. tokens de respuesta"
-          type="number"
           min={1}
-          max={32000}
+          max={1024}
+          step={1}
+          value={watch('maxTokens')}
           error={errors.maxTokens?.message}
           {...register('maxTokens', { valueAsNumber: true })}
         />

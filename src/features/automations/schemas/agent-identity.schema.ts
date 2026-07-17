@@ -9,7 +9,7 @@ export const agentIdentitySchema = z.object({
     .max(8000, 'Máximo 8000 caracteres'),
   model: z.string().min(1, 'Elegí un modelo').max(100),
   temperature: z.number().min(0).max(1),
-  maxTokens: z.number().int().min(1).max(32000),
+  maxTokens: z.number().int().min(1).max(1024),
   tone: z.nativeEnum(ChatbotTone).nullable(),
   locale: z.nativeEnum(ChatbotLocale).nullable(),
   isActive: z.boolean(),

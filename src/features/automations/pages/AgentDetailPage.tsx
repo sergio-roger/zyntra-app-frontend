@@ -7,7 +7,6 @@ import {
   Brain,
   Loader2,
   MessageCircle,
-  Mic,
   UserRound,
   Wrench,
 } from 'lucide-react';
@@ -20,7 +19,7 @@ import { KnowledgeTab } from '../components/tabs/KnowledgeTab';
 import { TestAgentTab } from '../components/tabs/TestAgentTab';
 import { ComingSoonTab } from '../components/tabs/ComingSoonTab';
 
-type TabKey = 'identity' | 'tools' | 'knowledge' | 'voice' | 'memory' | 'test';
+type TabKey = 'identity' | 'tools' | 'knowledge' | 'memory' | 'test';
 
 export const AgentDetailPage: React.FC = () => {
   const navigate = useNavigate();
@@ -34,7 +33,6 @@ export const AgentDetailPage: React.FC = () => {
     { key: 'identity', label: 'Identidad', icon: UserRound },
     { key: 'tools', label: 'Herramientas', icon: Wrench, disabled: isCreate },
     { key: 'knowledge', label: 'Conocimiento', icon: BookOpen, disabled: isCreate },
-    { key: 'voice', label: 'Voz', icon: Mic, disabled: isCreate },
     { key: 'memory', label: 'Memoria', icon: Brain, disabled: isCreate },
     { key: 'test', label: 'Probar agente', icon: MessageCircle, disabled: isCreate },
   ];
@@ -115,16 +113,6 @@ export const AgentDetailPage: React.FC = () => {
           {activeTab === 'knowledge' && agent && (
             <ModuleGuard menuKey="automations_agents_knowledge">
               <KnowledgeTab agent={agent} />
-            </ModuleGuard>
-          )}
-
-          {activeTab === 'voice' && (
-            <ModuleGuard menuKey="automations_agents_voice">
-              <ComingSoonTab
-                icon={Mic}
-                title="Voz"
-                description="La configuración de voz para agentes va a estar disponible próximamente."
-              />
             </ModuleGuard>
           )}
 
