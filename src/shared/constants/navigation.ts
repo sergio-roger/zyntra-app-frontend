@@ -249,7 +249,7 @@ export const NAV_MODULES: NavModule[] = [
   },
   {
     key: 'automations',
-    label: 'Automatizaciones',
+    label: 'Workflows',
     icon: Workflow,
     match: '/automations',
     to: '/automations/workflows',
