@@ -1,22 +1,95 @@
-import React, { useCallback } from 'react';
+import React, { useCallback, useState } from 'react';
 import { useDropzone } from 'react-dropzone';
 import {
   AlertCircle,
   CheckCircle2,
+  Eye,
+  ExternalLink,
   FileText,
   Loader2,
   RefreshCw,
   Trash2,
   UploadCloud,
+  X,
 } from 'lucide-react';
 import {
   useAgentKnowledgeDocuments,
+  useKnowledgeDocumentPreview,
   useKnowledgeUsage,
   useRemoveKnowledgeDocument,
   useReprocessKnowledgeDocument,
   useUploadKnowledgeDocument,
 } from '../../hooks/use-agent-knowledge';
 import { Agent, KnowledgeDocument, KnowledgeDocumentStatus } from '../../types/automations';
+
+interface PreviewState {
+  fileName: string;
+  fileType: string;
+  url: string;
+  content: string | null;
+}
+
+const DocumentPreviewModal: React.FC<{ preview: PreviewState; onClose: () => void }> = ({
+  preview,
+  onClose,
+}) => {
+  const canEmbed = preview.fileType === 'application/pdf';
+  const hasTextContent = preview.content !== null;
+
+  return (
+    <div className="fixed inset-0 z-[100] flex items-center justify-center p-4 !mt-0">
+      <div className="absolute inset-0 bg-black/60 backdrop-blur-sm" onClick={onClose} />
+      <div className="relative flex h-[85vh] w-full max-w-3xl flex-col overflow-hidden rounded-2xl border border-white/10 bg-slate-900 shadow-2xl">
+        <div className="flex items-center justify-between gap-3 border-b border-white/5 px-5 py-3.5">
+          <p className="truncate text-sm font-semibold text-slate-100">{preview.fileName}</p>
+          <div className="flex items-center gap-1 shrink-0">
+            <a
+              href={preview.url}
+              target="_blank"
+              rel="noreferrer"
+              className="inline-flex h-8 w-8 items-center justify-center rounded-lg text-slate-500 hover:bg-white/5 hover:text-slate-200 transition-colors"
+              aria-label="Abrir en una pestaña nueva"
+            >
+              <ExternalLink size={15} />
+            </a>
+            <button
+              type="button"
+              onClick={onClose}
+              className="inline-flex h-8 w-8 items-center justify-center rounded-lg text-slate-500 hover:bg-white/5 hover:text-slate-200 transition-colors"
+              aria-label="Cerrar"
+            >
+              <X size={16} />
+            </button>
+          </div>
+        </div>
+        <div className="min-h-0 flex-1 bg-slate-950">
+          {canEmbed ? (
+            <iframe src={preview.url} title={preview.fileName} className="h-full w-full" />
+          ) : hasTextContent ? (
+            <pre className="h-full w-full overflow-auto whitespace-pre-wrap break-words p-5 font-mono text-xs leading-relaxed text-slate-300">
+              {preview.content}
+            </pre>
+          ) : (
+            <div className="flex h-full flex-col items-center justify-center gap-3 p-8 text-center">
+              <FileText size={28} className="text-slate-600" />
+              <p className="text-sm text-slate-400">
+                Este tipo de archivo no se puede previsualizar acá.
+              </p>
+              <a
+                href={preview.url}
+                target="_blank"
+                rel="noreferrer"
+                className="inline-flex items-center gap-2 rounded-xl bg-primary px-4 py-2 text-sm font-bold text-white hover:opacity-90 transition-all"
+              >
+                <ExternalLink size={14} /> Abrir en una pestaña nueva
+              </a>
+            </div>
+          )}
+        </div>
+      </div>
+    </div>
+  );
+};
 
 const ACCEPTED_MIME_TYPES = {
   'application/pdf': ['.pdf'],
@@ -84,10 +157,12 @@ const QuotaBar: React.FC<{ label: string; used: number; max: number; unit?: stri
   );
 };
 
-const DocumentRow: React.FC<{ agentId: string; document: KnowledgeDocument }> = ({
-  agentId,
-  document,
-}) => {
+const DocumentRow: React.FC<{
+  agentId: string;
+  document: KnowledgeDocument;
+  onPreview: (document: KnowledgeDocument) => void;
+  isPreviewing: boolean;
+}> = ({ agentId, document, onPreview, isPreviewing }) => {
   const removeDoc = useRemoveKnowledgeDocument(agentId);
   const reprocessDoc = useReprocessKnowledgeDocument(agentId);
 
@@ -108,6 +183,15 @@ const DocumentRow: React.FC<{ agentId: string; document: KnowledgeDocument }> = 
         </p>
       </div>
       <StatusBadge status={document.status} />
+      <button
+        type="button"
+        onClick={() => onPreview(document)}
+        disabled={document.status === KnowledgeDocumentStatus.PENDING || isPreviewing}
+        className="inline-flex h-8 w-8 items-center justify-center rounded-lg text-slate-500 hover:bg-white/5 hover:text-slate-200 transition-colors disabled:opacity-50"
+        aria-label="Previsualizar documento"
+      >
+        {isPreviewing ? <Loader2 size={14} className="animate-spin" /> : <Eye size={14} />}
+      </button>
       {document.status === KnowledgeDocumentStatus.FAILED && (
         <button
           type="button"
@@ -144,6 +228,20 @@ export const KnowledgeTab: React.FC<KnowledgeTabProps> = ({ agent }) => {
   const { data: documents = [], isLoading } = useAgentKnowledgeDocuments(agent.id);
   const { data: usage } = useKnowledgeUsage();
   const uploadDoc = useUploadKnowledgeDocument(agent.id);
+  const previewDoc = useKnowledgeDocumentPreview(agent.id);
+  const [preview, setPreview] = useState<PreviewState | null>(null);
+  const [previewingId, setPreviewingId] = useState<string | null>(null);
+
+  const handlePreview = useCallback(
+    (document: KnowledgeDocument) => {
+      setPreviewingId(document.id);
+      previewDoc.mutate(document.id, {
+        onSuccess: (data) => setPreview(data),
+        onSettled: () => setPreviewingId(null),
+      });
+    },
+    [previewDoc],
+  );
 
   const onDrop = useCallback(
     (accepted: File[]) => {
@@ -215,10 +313,18 @@ export const KnowledgeTab: React.FC<KnowledgeTabProps> = ({ agent }) => {
           </p>
         ) : (
           documents.map((doc) => (
-            <DocumentRow key={doc.id} agentId={agent.id} document={doc} />
+            <DocumentRow
+              key={doc.id}
+              agentId={agent.id}
+              document={doc}
+              onPreview={handlePreview}
+              isPreviewing={previewingId === doc.id}
+            />
           ))
         )}
       </div>
+
+      {preview && <DocumentPreviewModal preview={preview} onClose={() => setPreview(null)} />}
     </div>
   );
 };

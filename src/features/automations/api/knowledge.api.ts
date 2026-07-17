@@ -54,4 +54,16 @@ export const knowledgeApi = {
         `/businesses/${businessId}/knowledge/usage`,
       )
       .then(unwrap),
+
+  getPreviewUrl: (
+    businessId: string,
+    agentId: string,
+    documentId: string,
+  ): Promise<{ url: string; fileName: string; fileType: string; content: string | null }> =>
+    api
+      .get<
+        unknown,
+        ApiResponse<{ url: string; fileName: string; fileType: string; content: string | null }>
+      >(`/businesses/${businessId}/agents/${agentId}/knowledge/documents/${documentId}/preview-url`)
+      .then(unwrap),
 };

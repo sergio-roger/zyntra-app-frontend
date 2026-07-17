@@ -1,14 +1,13 @@
-import React, { useEffect } from 'react';
+import React from 'react';
 import { useForm, Controller } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { Loader2, Save, Sparkles, Tags, Thermometer } from 'lucide-react';
+import { Loader2, Save, Sparkles, Tags } from 'lucide-react';
 import { Input } from '@core/ui/Input';
 import { Textarea } from '@core/ui/Textarea';
 import { Select } from '@core/ui/Select';
 import { Slider } from '@core/ui/Slider';
 import { agentIdentitySchema, AgentIdentityFormValues } from '../../schemas/agent-identity.schema';
 import { useCreateAgent, useUpdateAgent } from '../../hooks/use-agents';
-import { useChannelsList, useSetAgentChannel } from '../../hooks/use-agent-channel';
 import { Agent, ChatbotLocale, ChatbotTone } from '../../types/automations';
 
 const TONE_OPTIONS = [
@@ -44,17 +43,6 @@ const defaultValues = (agent: Agent | undefined): AgentIdentityFormValues => ({
 export const IdentityTab: React.FC<IdentityTabProps> = ({ agent, onCreated }) => {
   const createAgent = useCreateAgent();
   const updateAgent = useUpdateAgent(agent?.id ?? '');
-  const { data: channels = [] } = useChannelsList();
-  const setChannel = useSetAgentChannel(agent?.id ?? '');
-
-  const assignedChannel = agent ? channels.find((c) => c.agentId === agent.id) : undefined;
-  const [channelId, setChannelId] = React.useState<string | null>(
-    assignedChannel?.id ?? null,
-  );
-
-  useEffect(() => {
-    setChannelId(assignedChannel?.id ?? null);
-  }, [assignedChannel?.id]);
 
   const {
     control,
@@ -81,15 +69,8 @@ export const IdentityTab: React.FC<IdentityTabProps> = ({ agent, onCreated }) =>
 
     if (agent) {
       await updateAgent.mutateAsync(payload);
-      await setChannel.mutateAsync({
-        previousChannelId: assignedChannel?.id ?? null,
-        nextChannelId: channelId,
-      });
     } else {
       const created = await createAgent.mutateAsync(payload);
-      if (channelId) {
-        await setChannel.mutateAsync({ previousChannelId: null, nextChannelId: channelId });
-      }
       onCreated(created);
     }
   };
@@ -98,12 +79,20 @@ export const IdentityTab: React.FC<IdentityTabProps> = ({ agent, onCreated }) =>
 
   return (
     <form onSubmit={handleSubmit(onSubmit)} className="space-y-5 max-w-2xl">
-      <Input
-        label="Nombre del agente"
-        icon={Sparkles}
-        error={errors.name?.message}
-        {...register('name')}
-      />
+      <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+        <Input
+          label="Nombre del agente"
+          icon={Sparkles}
+          error={errors.name?.message}
+          {...register('name')}
+        />
+        <Input
+          label="Modelo"
+          placeholder="openai/gpt-oss-20b:free"
+          error={errors.model?.message}
+          {...register('model')}
+        />
+      </div>
 
       <Textarea
         label="Prompt del sistema"
@@ -114,12 +103,6 @@ export const IdentityTab: React.FC<IdentityTabProps> = ({ agent, onCreated }) =>
       />
 
       <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-        <Input
-          label="Modelo"
-          placeholder="openai/gpt-oss-20b:free"
-          error={errors.model?.message}
-          {...register('model')}
-        />
         <Slider
           label="Máx. tokens de respuesta"
           min={1}
@@ -129,18 +112,17 @@ export const IdentityTab: React.FC<IdentityTabProps> = ({ agent, onCreated }) =>
           error={errors.maxTokens?.message}
           {...register('maxTokens', { valueAsNumber: true })}
         />
+        <Slider
+          label="Temperatura"
+          min={0}
+          max={1}
+          step={0.1}
+          value={watch('temperature')}
+          formatValue={(v) => v.toFixed(1)}
+          error={errors.temperature?.message}
+          {...register('temperature', { valueAsNumber: true })}
+        />
       </div>
-
-      <Input
-        label="Temperatura"
-        icon={Thermometer}
-        type="number"
-        step={0.1}
-        min={0}
-        max={1}
-        error={errors.temperature?.message}
-        {...register('temperature', { valueAsNumber: true })}
-      />
 
       <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
         <Controller
@@ -173,16 +155,6 @@ export const IdentityTab: React.FC<IdentityTabProps> = ({ agent, onCreated }) =>
           )}
         />
       </div>
-
-      <Select
-        label="Canal asignado"
-        options={channels.map((c) => ({ value: c.id, label: c.name }))}
-        value={channelId}
-        onChange={setChannelId}
-        clearable
-        clearLabel="Sin asignar"
-        placeholder="Elegí un canal..."
-      />
 
       <label className="flex items-center gap-3 cursor-pointer">
         <input type="checkbox" className="toggle toggle-primary" {...register('isActive')} />

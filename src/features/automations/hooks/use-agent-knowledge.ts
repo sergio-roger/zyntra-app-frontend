@@ -98,6 +98,22 @@ export function useRemoveKnowledgeDocument(agentId: string) {
   });
 }
 
+export function useKnowledgeDocumentPreview(agentId: string) {
+  const businessId = useAuthStore((s) => s.user?.businessId);
+
+  return useMutation({
+    mutationFn: (documentId: string) =>
+      knowledgeApi.getPreviewUrl(businessId!, agentId, documentId),
+    onError: (error) => {
+      toastManager.add({
+        title: 'No se pudo abrir la previsualización',
+        description: getApiErrorMessage(error),
+        type: 'error',
+      });
+    },
+  });
+}
+
 export function useReprocessKnowledgeDocument(agentId: string) {
   const businessId = useAuthStore((s) => s.user?.businessId);
   const queryClient = useQueryClient();
