@@ -1,7 +1,8 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Bot, Loader2, Plus, Share2, Trash2, Zap } from 'lucide-react';
 import { useAuthStore } from '@features/auth/store/authStore';
+import { ConfirmModal } from '@shared/components/ConfirmModal';
 import { EmptyState } from '@shared/components/EmptyState';
 import { useAgentsList, useDeleteAgent } from '../hooks/use-agents';
 import { useAgentKnowledgeDocuments } from '../hooks/use-agent-knowledge';
@@ -51,13 +52,17 @@ export const AgentsListPage: React.FC = () => {
   const { data: agents = [], isLoading } = useAgentsList();
   const deleteAgent = useDeleteAgent();
 
+  const [agentToDelete, setAgentToDelete] = useState<Agent | null>(null);
+
   const limit = user?.plan?.aiAgentLimit ?? 0;
   const isUnlimited = limit >= 999999;
   const isLimitReached = !isUnlimited && agents.length >= limit;
 
-  const handleDelete = async (agent: Agent) => {
-    if (!window.confirm(`¿Eliminar el agente "${agent.name}"?`)) return;
-    await deleteAgent.mutateAsync(agent.id);
+  const handleConfirmDelete = async () => {
+    if (agentToDelete) {
+      await deleteAgent.mutateAsync(agentToDelete.id);
+      setAgentToDelete(null);
+    }
   };
 
   if (isLoading) {
@@ -167,7 +172,7 @@ export const AgentsListPage: React.FC = () => {
                     <button
                       onClick={(e) => {
                         e.stopPropagation();
-                        handleDelete(agent);
+                        setAgentToDelete(agent);
                       }}
                       className="inline-flex h-7 w-7 items-center justify-center rounded-lg text-slate-500 hover:bg-rose-500/10 hover:text-rose-400 transition-colors"
                       aria-label={`Eliminar ${agent.name}`}
@@ -181,6 +186,16 @@ export const AgentsListPage: React.FC = () => {
           </table>
         </div>
       )}
+
+      <ConfirmModal
+        isOpen={agentToDelete !== null}
+        onClose={() => setAgentToDelete(null)}
+        onConfirm={handleConfirmDelete}
+        title="Eliminar agente"
+        description={`¿Estás seguro de eliminar el agente "${agentToDelete?.name}"? Esta acción no se puede deshacer.`}
+        confirmText="Eliminar"
+        variant="danger"
+      />
     </div>
   );
 };

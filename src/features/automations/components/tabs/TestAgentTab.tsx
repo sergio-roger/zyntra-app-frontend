@@ -26,12 +26,12 @@ export const TestAgentTab: React.FC<TestAgentTabProps> = ({ agent }) => {
   };
 
   return (
-    <div className="max-w-2xl flex flex-col h-full min-h-[420px]">
+    <div className="max-w-2xl flex flex-col h-[560px]">
       <p className="text-xs text-slate-500 mb-4">
         Probá al agente en un sandbox — no se guarda como conversación real.
       </p>
 
-      <div className="flex-1 space-y-4 overflow-y-auto pr-1">
+      <div className="flex-1 space-y-4 overflow-y-auto pr-1 [scrollbar-gutter:stable]">
         {history.length === 0 && (
           <p className="text-sm text-slate-500 py-8 text-center">
             Escribí un mensaje para empezar a probar el agente.
