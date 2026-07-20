@@ -23,6 +23,11 @@ export interface ChatbotChannel {
   channelType: { key: string; label: string };
 }
 
+export interface AssignableUser {
+  id: string;
+  name: string;
+}
+
 export const aiApi = {
   getConversations: (filters: ConversationFilters = {}): Promise<Conversation[]> =>
     api
@@ -67,12 +72,21 @@ export const aiApi = {
 
   assignConversation: (
     conversationId: string,
+    userId?: string,
   ): Promise<{ success: boolean; assignedTo: { id: string; name: string } }> =>
     api
       .post<
         unknown,
         ApiResponse<{ success: boolean; assignedTo: { id: string; name: string } }>
-      >(`/chat/conversations/${conversationId}/assign`)
+      >(
+        `/chat/conversations/${conversationId}/assign`,
+        userId ? { userId } : undefined,
+      )
+      .then(unwrap),
+
+  getAssignableUsers: (): Promise<AssignableUser[]> =>
+    api
+      .get<unknown, ApiResponse<AssignableUser[]>>('/chat/assignable-users')
       .then(unwrap),
 
   unassignConversation: (conversationId: string): Promise<{ success: boolean }> =>
@@ -88,6 +102,17 @@ export const aiApi = {
     api
       .patch<unknown, ApiResponse<{ success: boolean }>>(
         `/chat/conversations/${conversationId}/read`,
+      )
+      .then(unwrap),
+
+  updateConversationStatus: (
+    conversationId: string,
+    status: string,
+  ): Promise<{ success: boolean; status: string }> =>
+    api
+      .patch<unknown, ApiResponse<{ success: boolean; status: string }>>(
+        `/chat/conversations/${conversationId}/status`,
+        { status },
       )
       .then(unwrap),
 };

@@ -19,6 +19,12 @@ interface StatusChangedPayload {
   timestamp: string;
 }
 
+interface AssignedPayload {
+  conversation_id: string;
+  assignedTo: { id: string; name: string } | null;
+  timestamp: string;
+}
+
 interface TypingPayload {
   conversation_id: string;
   from: 'visitor' | 'agent';
@@ -83,14 +89,24 @@ export const useConversationSocket = (
       setIsVisitorTyping(payload.isTyping);
     };
 
+    const handleAssigned = (payload: AssignedPayload) => {
+      const key = ['conversations', 'detail', payload.conversation_id];
+      qc.setQueryData<ConversationDetail>(key, (current) =>
+        current ? { ...current, assignedTo: payload.assignedTo } : current,
+      );
+      qc.invalidateQueries({ queryKey: ['conversations'], exact: false });
+    };
+
     socket.on('conversation:new-message', handleNewMessage);
     socket.on('conversation:status-changed', handleStatusChanged);
     socket.on('conversation:typing', handleTyping);
+    socket.on('conversation:assigned', handleAssigned);
 
     return () => {
       socket.off('conversation:new-message', handleNewMessage);
       socket.off('conversation:status-changed', handleStatusChanged);
       socket.off('conversation:typing', handleTyping);
+      socket.off('conversation:assigned', handleAssigned);
     };
   }, [qc]);
 

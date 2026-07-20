@@ -1,10 +1,14 @@
 import { Accordion } from '@core/ui/Accordion';
+import { AssignUserCombobox } from '@features/chatbot/components/AssignUserCombobox';
+import { getAttendedByInfo } from '@features/chatbot/constants/chatbot.constants';
 import { useAssignConversation } from '@features/chatbot/hooks/useAssignConversation';
+import { useAssignableUsers } from '@features/chatbot/hooks/useAssignableUsers';
 import { useAuth } from '@features/auth/hooks/useAuth';
 import { useContact } from '@crm/hooks/useContacts';
 import { useCustomFields } from '@crm/hooks/useCustomFields';
 import { Avatar } from '@shared/components/Avatar';
 import {
+  Bot,
   Globe,
   ListChecks,
   Loader2,
@@ -25,6 +29,7 @@ interface ContactPanelProps {
   startedAt: string;
   visitor?: Record<string, unknown>;
   assignedTo?: { id: string; name: string } | null;
+  assistantAgent?: { id: string; name: string } | null;
   onClose?: () => void;
 }
 
@@ -46,18 +51,24 @@ export const ContactPanel: React.FC<ContactPanelProps> = ({
   startedAt,
   visitor,
   assignedTo,
+  assistantAgent,
   onClose,
 }) => {
   const { data: contact, isLoading } = useContact(contactId ?? null);
   const { data: customFieldDefs = [] } = useCustomFields('contact');
   const { user } = useAuth();
   const { assign, unassign } = useAssignConversation();
+  const canReassign = user?.role === 'admin' || user?.role === 'manager';
+  const { data: assignableUsers = [], isLoading: loadingAssignableUsers } =
+    useAssignableUsers(canReassign);
 
   const pageUrl = typeof visitor?.page_url === 'string' ? visitor.page_url : undefined;
   const isMine = !!user && assignedTo?.id === user.id;
+  const hasHuman = !!assignedTo && assignedTo.id !== 'system';
+  const attendedBy = getAttendedByInfo(assignedTo, assistantAgent, isMine);
 
   return (
-    <div className="card bg-base-200 p-4 flex flex-col gap-4 overflow-y-auto h-full relative">
+    <div className="card bg-base-200 p-4 flex flex-col gap-4 overflow-y-auto overflow-x-hidden h-full relative">
       {onClose && (
         <button
           type="button"
@@ -78,31 +89,70 @@ export const ContactPanel: React.FC<ContactPanelProps> = ({
         </div>
       </div>
 
-      <div className="flex items-center justify-between gap-2 text-sm">
-        <span className="text-base-content/50">
-          {assignedTo && assignedTo.id !== 'system'
-            ? `Asignada a ${isMine ? 'ti' : assignedTo.name}`
-            : 'Sin asignar'}
-        </span>
-        {isMine ? (
-          <button
-            type="button"
-            className="btn btn-ghost btn-xs gap-1"
-            disabled={unassign.isPending}
-            onClick={() => unassign.mutate(conversationId)}
-          >
-            <UserCheck size={13} /> Liberar
-          </button>
-        ) : (!assignedTo || assignedTo.id === 'system') ? (
-          <button
-            type="button"
-            className="btn btn-primary btn-xs gap-1"
-            disabled={assign.isPending}
-            onClick={() => assign.mutate(conversationId)}
-          >
-            <UserPlus size={13} /> Asignarme
-          </button>
-        ) : null}
+      <div className="rounded-lg border border-base-300 bg-base-100/40 p-3 space-y-2.5">
+        <div
+          className="flex items-center gap-1.5 text-sm text-base-content/70 min-w-0"
+          title={attendedBy.label}
+        >
+          {hasHuman ? (
+            <>
+              <UserCheck size={14} className="shrink-0 text-primary" />
+              <span className="truncate">
+                Asignada a{' '}
+                <span className="font-medium text-base-content">
+                  {isMine ? 'ti' : assignedTo!.name}
+                </span>
+              </span>
+            </>
+          ) : (
+            <>
+              <Bot size={14} className="shrink-0" />
+              <span className="truncate">
+                Atendida por IA
+                {assistantAgent && (
+                  <span className="font-medium text-base-content">
+                    {': '}
+                    {assistantAgent.name}
+                  </span>
+                )}
+              </span>
+            </>
+          )}
+        </div>
+
+        <div className="flex flex-wrap items-center gap-1.5">
+          {isMine && (
+            <button
+              type="button"
+              className="btn btn-ghost btn-xs gap-1 whitespace-nowrap"
+              disabled={unassign.isPending}
+              onClick={() => unassign.mutate(conversationId)}
+            >
+              <UserCheck size={13} /> Liberar
+            </button>
+          )}
+          {!hasHuman && (
+            <button
+              type="button"
+              className="btn btn-primary btn-xs gap-1 whitespace-nowrap"
+              disabled={assign.isPending}
+              onClick={() => assign.mutate({ conversationId })}
+            >
+              <UserPlus size={13} /> Asignarme
+            </button>
+          )}
+          {canReassign && (
+            <AssignUserCombobox
+              users={assignableUsers}
+              loading={loadingAssignableUsers}
+              disabled={assign.isPending}
+              triggerLabel={hasHuman ? 'Reasignar' : 'Asignar a otro'}
+              onSelect={(target) =>
+                assign.mutate({ conversationId, userId: target.id })
+              }
+            />
+          )}
+        </div>
       </div>
 
       {isLoading && contactId ? (

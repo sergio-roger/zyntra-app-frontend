@@ -8,8 +8,13 @@ export const useAssignConversation = () => {
     qc.invalidateQueries({ queryKey: ['conversations'] });
 
   const assign = useMutation({
-    mutationFn: (conversationId: string) =>
-      aiApi.assignConversation(conversationId),
+    mutationFn: ({
+      conversationId,
+      userId,
+    }: {
+      conversationId: string;
+      userId?: string;
+    }) => aiApi.assignConversation(conversationId, userId),
     onSuccess: invalidate,
   });
 

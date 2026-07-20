@@ -10,19 +10,26 @@ import {
 } from '@features/chatbot/hooks/useInboxSoundSetting';
 import { useSendAgentMessage } from '@features/chatbot/hooks/useSendAgentMessage';
 import { useMarkConversationAsRead } from '@features/chatbot/hooks/useMarkConversationAsRead';
+import { useAssignConversation } from '@features/chatbot/hooks/useAssignConversation';
+import { useUpdateConversationStatus } from '@features/chatbot/hooks/useUpdateConversationStatus';
 import {
-  getStatusBadge,
+  getAttendedByInfo,
   getStatusDot,
+  STATUS_OPTIONS,
   VIEW_TABS,
   formatDate,
 } from '@features/chatbot/constants/chatbot.constants';
+import { useAuth } from '@features/auth/hooks/useAuth';
 import { Avatar } from '@shared/components/Avatar';
 import {
+  Bot,
   Filter,
   Loader2,
   PanelRightOpen,
   Search,
   Send,
+  UserCheck,
+  UserPlus,
   Volume2,
   VolumeX,
 } from 'lucide-react';
@@ -54,6 +61,14 @@ export const ConversationsPage: React.FC = () => {
     useConversationDetail(selectedConversationId);
   const sendAgentMessage = useSendAgentMessage();
   const markAsRead = useMarkConversationAsRead();
+  const updateStatus = useUpdateConversationStatus();
+  const { assign } = useAssignConversation();
+  const { user } = useAuth();
+  // Mientras la conversación no esté asignada a este usuario (IA u otro
+  // agente la está atendiendo), el textarea queda bloqueado — hay que
+  // reclamarla ("Asignarme") antes de poder responder manualmente.
+  const isSelectedConvMine =
+    !!user && !!selectedConv && selectedConv.assignedTo?.id === user.id;
   const { data: inboxSound } = useInboxSoundSetting();
   const setInboxSound = useSetInboxSoundSetting();
   const soundEnabled = inboxSound?.enabled ?? true;
@@ -97,7 +112,13 @@ export const ConversationsPage: React.FC = () => {
 
   const handleSend = () => {
     const content = messageDraft.trim();
-    if (!content || !selectedConversationId || sendAgentMessage.isPending) return;
+    if (
+      !content ||
+      !selectedConversationId ||
+      sendAgentMessage.isPending ||
+      !isSelectedConvMine
+    )
+      return;
     stopTyping();
     sendAgentMessage.mutate(
       { conversationId: selectedConversationId, content },
@@ -252,15 +273,60 @@ export const ConversationsPage: React.FC = () => {
                   <span className="font-medium block truncate">
                     {selectedConv.contactName}
                   </span>
-                  <span className="text-xs text-base-content/50">
-                    Inicio: {formatDate(selectedConv.startedAt)}
-                  </span>
+                  <div className="flex items-center gap-1.5 text-xs text-base-content/50 min-w-0">
+                    <span className="shrink-0">
+                      Inicio: {formatDate(selectedConv.startedAt)}
+                    </span>
+                    <span className="shrink-0 text-base-content/30">·</span>
+                    {(() => {
+                      const attendedBy = getAttendedByInfo(
+                        selectedConv.assignedTo,
+                        selectedConv.assistantAgent,
+                        isSelectedConvMine,
+                      );
+                      const Icon =
+                        attendedBy.kind === 'human' ? UserCheck : Bot;
+                      return (
+                        <span
+                          className="flex items-center gap-1 min-w-0"
+                          title={attendedBy.label}
+                        >
+                          <Icon
+                            size={11}
+                            className={`shrink-0 ${
+                              attendedBy.kind === 'human'
+                                ? 'text-primary'
+                                : ''
+                            }`}
+                          />
+                          <span className="truncate">{attendedBy.label}</span>
+                        </span>
+                      );
+                    })()}
+                  </div>
                 </div>
-                <span
-                  className={`badge badge-sm ${getStatusBadge(selectedConv.status)}`}
-                >
-                  {selectedConv.status}
-                </span>
+                <div className="flex items-center gap-1.5 shrink-0">
+                  <span
+                    className={`w-2 h-2 rounded-full ${getStatusDot(selectedConv.status)}`}
+                  />
+                  <select
+                    className="select select-bordered select-xs font-medium"
+                    value={selectedConv.status}
+                    disabled={updateStatus.isPending}
+                    onChange={(e) =>
+                      updateStatus.mutate({
+                        conversationId: selectedConv.id,
+                        status: e.target.value,
+                      })
+                    }
+                  >
+                    {STATUS_OPTIONS.map((opt) => (
+                      <option key={opt.value} value={opt.value}>
+                        {opt.label}
+                      </option>
+                    ))}
+                  </select>
+                </div>
                 <button
                   type="button"
                   className="btn btn-ghost btn-sm btn-square"
@@ -308,35 +374,56 @@ export const ConversationsPage: React.FC = () => {
               </div>
 
               <div className="flex items-end gap-2 pt-4 mt-4 border-t border-base-300">
-                <Textarea
-                  containerClassName="flex-1"
-                  rows={2}
-                  placeholder="Escribe un mensaje como agente..."
-                  value={messageDraft}
-                  disabled={sendAgentMessage.isPending}
-                  onChange={(e) => {
-                    setMessageDraft(e.target.value);
-                    notifyTyping();
-                  }}
-                  onKeyDown={(e) => {
-                    if (e.key === 'Enter' && !e.shiftKey) {
-                      e.preventDefault();
-                      handleSend();
-                    }
-                  }}
-                />
-                <button
-                  type="button"
-                  className="btn btn-primary btn-sm"
-                  disabled={!messageDraft.trim() || sendAgentMessage.isPending}
-                  onClick={handleSend}
-                >
-                  {sendAgentMessage.isPending ? (
-                    <Loader2 size={16} className="animate-spin" />
-                  ) : (
-                    <Send size={16} />
-                  )}
-                </button>
+                {!isSelectedConvMine && (
+                  <div className="flex-1 flex items-center justify-between gap-2 text-xs text-base-content/60 bg-base-200/60 rounded-lg px-3 py-2.5">
+                    <span>
+                      Asígnate esta conversación para responder manualmente.
+                    </span>
+                    <button
+                      type="button"
+                      className="btn btn-primary btn-xs gap-1 shrink-0"
+                      disabled={assign.isPending}
+                      onClick={() =>
+                        assign.mutate({ conversationId: selectedConv.id })
+                      }
+                    >
+                      <UserPlus size={12} /> Asignarme
+                    </button>
+                  </div>
+                )}
+                {isSelectedConvMine && (
+                  <>
+                    <Textarea
+                      containerClassName="flex-1"
+                      rows={2}
+                      placeholder="Escribe un mensaje como agente..."
+                      value={messageDraft}
+                      disabled={sendAgentMessage.isPending}
+                      onChange={(e) => {
+                        setMessageDraft(e.target.value);
+                        notifyTyping();
+                      }}
+                      onKeyDown={(e) => {
+                        if (e.key === 'Enter' && !e.shiftKey) {
+                          e.preventDefault();
+                          handleSend();
+                        }
+                      }}
+                    />
+                    <button
+                      type="button"
+                      className="btn btn-primary btn-sm"
+                      disabled={!messageDraft.trim() || sendAgentMessage.isPending}
+                      onClick={handleSend}
+                    >
+                      {sendAgentMessage.isPending ? (
+                        <Loader2 size={16} className="animate-spin" />
+                      ) : (
+                        <Send size={16} />
+                      )}
+                    </button>
+                  </>
+                )}
               </div>
             </>
           )}
@@ -381,10 +468,11 @@ export const ConversationsPage: React.FC = () => {
                   onChange={(e) => setStatusFilter(e.target.value || undefined)}
                 >
                   <option value="">Todos los estados</option>
-                  <option value="open">Abierta</option>
-                  <option value="bot">Bot</option>
-                  <option value="human">Humano</option>
-                  <option value="closed">Cerrada</option>
+                  {STATUS_OPTIONS.map((opt) => (
+                    <option key={opt.value} value={opt.value}>
+                      {opt.label}
+                    </option>
+                  ))}
                 </select>
               </div>
             </div>
@@ -435,6 +523,7 @@ export const ConversationsPage: React.FC = () => {
               startedAt={selectedConv.startedAt}
               visitor={selectedConv.visitor}
               assignedTo={selectedConv.assignedTo}
+              assistantAgent={selectedConv.assistantAgent}
               onClose={() => setContactPanelOpen(false)}
             />
           </div>

@@ -8,6 +8,7 @@ export interface Conversation {
   lastMessageAt?: string;
   contactName: string;
   assignedTo?: { id: string; name: string } | null;
+  assistantAgent?: { id: string; name: string } | null;
   unread?: boolean;
   unreadCount?: number;
   lastMessage?: string | null;
