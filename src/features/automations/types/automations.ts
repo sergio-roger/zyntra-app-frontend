@@ -99,7 +99,5 @@ export interface KnowledgeUsage {
   limits: {
     kbMaxDocumentsPerAgent: number;
     kbMaxFileSizeMb: number;
-    kbMaxStorageMbPerBusiness: number;
-    kbMonthlyUploadLimit: number;
   };
 }

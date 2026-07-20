@@ -1,6 +1,13 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import { AlertCircle } from 'lucide-react';
+import {
+  AlertCircle,
+  Bot,
+  Clock,
+  MessageSquare,
+  Palette,
+  ShieldAlert,
+} from 'lucide-react';
 import { useFormContext } from 'react-hook-form';
 import {
   DAY_LABELS,
@@ -36,6 +43,21 @@ const SummaryRow: React.FC<SummaryRowProps> = ({ label, children }) => (
   </div>
 );
 
+interface SummaryCardProps {
+  icon: React.ElementType;
+  title: string;
+  children: React.ReactNode;
+}
+
+const SummaryCard: React.FC<SummaryCardProps> = ({ icon: Icon, title, children }) => (
+  <div className="rounded-xl border border-white/5 bg-slate-900/40 p-5">
+    <h3 className="flex items-center gap-2 text-xs font-bold text-slate-400 uppercase tracking-wider mb-1">
+      <Icon size={14} className="text-slate-500" /> {title}
+    </h3>
+    <div>{children}</div>
+  </div>
+);
+
 interface StepSummaryProps {
   mode: 'create' | 'edit';
   channelId?: string;
@@ -55,7 +77,7 @@ export const StepSummary: React.FC<StepSummaryProps> = ({
   const activeDays = values.businessHours.schedule.filter((d) => d.enabled);
 
   return (
-    <div className="max-w-2xl rounded-2xl border border-white/5 bg-slate-950/30 p-6 space-y-5">
+    <div className="w-full space-y-6">
       {submitError && (
         <div className="flex items-center gap-2 rounded-xl border border-rose-500/30 bg-rose-500/10 px-4 py-3 text-sm text-rose-300">
           <AlertCircle size={16} className="shrink-0" />
@@ -63,63 +85,77 @@ export const StepSummary: React.FC<StepSummaryProps> = ({
         </div>
       )}
 
-      <div>
-        <SummaryRow label="Nombre">{values.name}</SummaryRow>
-        <SummaryRow label="Mensaje de bienvenida">
-          {values.greeting || '—'}
-        </SummaryRow>
-        <SummaryRow label="Nombre del asistente">
-          {values.assistantName || '—'}
-        </SummaryRow>
-        <SummaryRow label="Color principal">
-          <span className="inline-flex items-center gap-2">
-            <span
-              className="w-4 h-4 rounded-full border border-white/10"
-              style={{ backgroundColor: values.primaryColor }}
-            />
-            {values.primaryColor}
-          </span>
-        </SummaryRow>
-        <SummaryRow label="Posición">
-          {POSITION_LABELS[values.position]}
-        </SummaryRow>
-        <SummaryRow label="Tema">{THEME_LABELS[values.theme]}</SummaryRow>
-        <SummaryRow label="Disponibilidad">
-          {values.availabilityMode === 'manual'
-            ? `Manual · ${WIDGET_STATUS_LABELS[values.manualStatus]}`
-            : `Según horario (ahora: ${WIDGET_STATUS_LABELS[effectiveStatus]})`}
-        </SummaryRow>
-        {values.availabilityMode === 'schedule' && (
-          <SummaryRow label="Horario de atención">
-            {values.businessHours.is24x7
-              ? '24/7'
-              : activeDays.length > 0
-                ? activeDays
-                    .map((d) => `${DAY_LABELS[d.day as DayKey]} ${d.from}-${d.to}`)
-                    .join(', ')
-                : 'Sin días configurados'}
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
+        <SummaryCard icon={MessageSquare} title="Identidad">
+          <SummaryRow label="Nombre">{values.name}</SummaryRow>
+          <SummaryRow label="Mensaje de bienvenida">
+            {values.greeting || '—'}
           </SummaryRow>
-        )}
-        <SummaryRow label="Dominios inseguros permitidos">
-          {values.allowInsecureDomains ? 'Sí (sin restricción de dominio)' : 'No'}
-        </SummaryRow>
-        {!values.allowInsecureDomains && (
-          <>
-            <SummaryRow label="Dominios permitidos">
-              {values.allowedDomains.length > 0
-                ? values.allowedDomains.join(', ')
-                : 'Sin restricción'}
+          <SummaryRow label="Nombre del asistente">
+            {values.assistantName || '—'}
+          </SummaryRow>
+        </SummaryCard>
+
+        <SummaryCard icon={Palette} title="Apariencia">
+          <SummaryRow label="Color principal">
+            <span className="inline-flex items-center gap-2">
+              <span
+                className="w-4 h-4 rounded-full border border-white/10"
+                style={{ backgroundColor: values.primaryColor }}
+              />
+              {values.primaryColor}
+            </span>
+          </SummaryRow>
+          <SummaryRow label="Posición">
+            {POSITION_LABELS[values.position]}
+          </SummaryRow>
+          <SummaryRow label="Tema">{THEME_LABELS[values.theme]}</SummaryRow>
+        </SummaryCard>
+
+        <SummaryCard icon={Clock} title="Disponibilidad">
+          <SummaryRow label="Modo">
+            {values.availabilityMode === 'manual'
+              ? `Manual · ${WIDGET_STATUS_LABELS[values.manualStatus]}`
+              : `Según horario (ahora: ${WIDGET_STATUS_LABELS[effectiveStatus]})`}
+          </SummaryRow>
+          {values.availabilityMode === 'schedule' && (
+            <SummaryRow label="Horario de atención">
+              {values.businessHours.is24x7
+                ? '24/7'
+                : activeDays.length > 0
+                  ? activeDays
+                      .map((d) => `${DAY_LABELS[d.day as DayKey]} ${d.from}-${d.to}`)
+                      .join(', ')
+                  : 'Sin días configurados'}
             </SummaryRow>
-            <SummaryRow label="Dominios no permitidos">
-              {values.blockedDomains.length > 0
-                ? values.blockedDomains.join(', ')
-                : 'Ninguno'}
-            </SummaryRow>
-          </>
-        )}
-        <SummaryRow label="Agente asignado">
-          {assignedAgent?.name ?? 'Ninguno'}
-        </SummaryRow>
+          )}
+        </SummaryCard>
+
+        <SummaryCard icon={ShieldAlert} title="Seguridad">
+          <SummaryRow label="Dominios inseguros permitidos">
+            {values.allowInsecureDomains ? 'Sí (sin restricción de dominio)' : 'No'}
+          </SummaryRow>
+          {!values.allowInsecureDomains && (
+            <>
+              <SummaryRow label="Dominios permitidos">
+                {values.allowedDomains.length > 0
+                  ? values.allowedDomains.join(', ')
+                  : 'Sin restricción'}
+              </SummaryRow>
+              <SummaryRow label="Dominios no permitidos">
+                {values.blockedDomains.length > 0
+                  ? values.blockedDomains.join(', ')
+                  : 'Ninguno'}
+              </SummaryRow>
+            </>
+          )}
+        </SummaryCard>
+
+        <SummaryCard icon={Bot} title="Agente de IA">
+          <SummaryRow label="Agente asignado">
+            {assignedAgent?.name ?? 'Ninguno'}
+          </SummaryRow>
+        </SummaryCard>
       </div>
 
       {mode === 'edit' && channelId && (

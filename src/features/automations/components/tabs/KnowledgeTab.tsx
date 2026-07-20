@@ -261,22 +261,11 @@ export const KnowledgeTab: React.FC<KnowledgeTabProps> = ({ agent }) => {
   return (
     <div className="max-w-2xl space-y-6">
       {usage && (
-        <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 rounded-2xl border border-white/5 bg-slate-900/50 p-4">
+        <div className="grid grid-cols-1 gap-4 rounded-2xl border border-white/5 bg-slate-900/50 p-4">
           <QuotaBar
             label="Documentos de este agente"
             used={documents.length}
             max={usage.limits.kbMaxDocumentsPerAgent}
-          />
-          <QuotaBar
-            label="Almacenamiento del negocio"
-            used={Math.round(usage.storageUsedMb)}
-            max={usage.limits.kbMaxStorageMbPerBusiness}
-            unit="MB"
-          />
-          <QuotaBar
-            label="Subidas este mes"
-            used={usage.uploadsThisMonth}
-            max={usage.limits.kbMonthlyUploadLimit}
           />
         </div>
       )}

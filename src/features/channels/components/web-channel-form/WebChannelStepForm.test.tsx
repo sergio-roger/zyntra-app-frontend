@@ -1,6 +1,6 @@
 import React from 'react';
 import { describe, it, expect, vi, beforeEach } from 'vitest';
-import { render, screen, fireEvent, waitFor, within } from '@testing-library/react';
+import { render, screen, fireEvent, waitFor } from '@testing-library/react';
 import { MemoryRouter } from 'react-router-dom';
 import { WebChannelStepForm } from './WebChannelStepForm';
 import { useChannelsStore } from '@features/channels/store/useChannelsStore';
@@ -20,7 +20,13 @@ vi.mock('@features/channels/hooks/channels.queries', () => ({
   }),
 }));
 
-let mockAgents: { id: string; name: string; isActive: boolean }[] = [];
+let mockAgents: {
+  id: string;
+  name: string;
+  isActive: boolean;
+  model?: string;
+  tools?: string[];
+}[] = [];
 vi.mock('@features/ai-agents/hooks/useAiAgents', () => ({
   useAiAgents: () => ({ data: mockAgents }),
 }));
@@ -74,11 +80,8 @@ const renderForm = (props: Partial<FormProps> = {}) => {
 const clickNext = () =>
   fireEvent.click(screen.getByRole('button', { name: /Siguiente/i }));
 
-const chooseOption = (containerTestId: string, optionLabel: string) => {
-  const container = screen.getByTestId(containerTestId);
-  fireEvent.click(within(container).getByRole('button'));
-  fireEvent.click(screen.getByRole('option', { name: optionLabel }));
-};
+const chooseAgent = (agentId: string) =>
+  fireEvent.click(screen.getByTestId(`agent-option-${agentId}`));
 
 describe('WebChannelStepForm', () => {
   beforeEach(() => {
@@ -224,7 +227,9 @@ describe('WebChannelStepForm', () => {
   });
 
   it('assigns the selected agent after creating the channel', async () => {
-    mockAgents = [{ id: 'agent-1', name: 'Bot Ventas', isActive: true }];
+    mockAgents = [
+      { id: 'agent-1', name: 'Bot Ventas', isActive: true, model: 'claude-haiku-4-5-20251001', tools: [] },
+    ];
     const fakeChannel: Channel = {
       id: 'chan-3',
       businessId: 'biz-1',
@@ -258,7 +263,7 @@ describe('WebChannelStepForm', () => {
       expect(screen.getByTestId('field-agent')).toBeInTheDocument(),
     );
 
-    chooseOption('field-agent', 'Bot Ventas');
+    chooseAgent('agent-1');
 
     clickNext();
     await waitFor(() =>
@@ -273,7 +278,9 @@ describe('WebChannelStepForm', () => {
   });
 
   it('warns via toast but still finishes when agent assignment fails', async () => {
-    mockAgents = [{ id: 'agent-1', name: 'Bot Ventas', isActive: true }];
+    mockAgents = [
+      { id: 'agent-1', name: 'Bot Ventas', isActive: true, model: 'claude-haiku-4-5-20251001', tools: [] },
+    ];
     const fakeChannel: Channel = {
       id: 'chan-4',
       businessId: 'biz-1',
@@ -307,7 +314,7 @@ describe('WebChannelStepForm', () => {
     await waitFor(() =>
       expect(screen.getByTestId('field-agent')).toBeInTheDocument(),
     );
-    chooseOption('field-agent', 'Bot Ventas');
+    chooseAgent('agent-1');
     clickNext();
     await waitFor(() =>
       expect(screen.getByTestId('submit-web-channel-form')).toBeInTheDocument(),
