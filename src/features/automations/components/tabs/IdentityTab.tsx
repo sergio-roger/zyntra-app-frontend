@@ -78,7 +78,7 @@ export const IdentityTab: React.FC<IdentityTabProps> = ({ agent, onCreated }) =>
   const isSaving = isSubmitting || createAgent.isPending || updateAgent.isPending;
 
   return (
-    <form onSubmit={handleSubmit(onSubmit)} className="space-y-5 max-w-2xl">
+    <form onSubmit={handleSubmit(onSubmit)} className="space-y-5 w-full">
       <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
         <Input
           label="Nombre del agente"

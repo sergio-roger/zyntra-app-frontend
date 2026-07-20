@@ -26,7 +26,7 @@ export const TestAgentTab: React.FC<TestAgentTabProps> = ({ agent }) => {
   };
 
   return (
-    <div className="max-w-2xl flex flex-col h-[560px]">
+    <div className="w-full flex flex-col h-[560px]">
       <p className="text-xs text-slate-500 mb-4">
         Probá al agente en un sandbox — no se guarda como conversación real.
       </p>

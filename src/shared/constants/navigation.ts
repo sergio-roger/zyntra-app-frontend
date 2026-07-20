@@ -27,6 +27,7 @@ import {
   ShieldCheck,
   Building2,
   Workflow,
+  FileText,
 } from 'lucide-react';
 import { NavModule } from '@shared/types/nav';
 
@@ -267,6 +268,12 @@ export const NAV_MODULES: NavModule[] = [
         label: 'Agentes',
         icon: Bot,
         description: 'Configura agentes automatizados.',
+      },
+      {
+        to: '/automations/forms',
+        label: 'Formularios',
+        icon: FileText,
+        description: 'Crea formularios reutilizables para capturar leads.',
       },
     ],
   },

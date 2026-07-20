@@ -259,7 +259,7 @@ export const KnowledgeTab: React.FC<KnowledgeTabProps> = ({ agent }) => {
   });
 
   return (
-    <div className="max-w-2xl space-y-6">
+    <div className="w-full space-y-6">
       {usage && (
         <div className="grid grid-cols-1 gap-4 rounded-2xl border border-white/5 bg-slate-900/50 p-4">
           <QuotaBar

@@ -56,7 +56,7 @@ export const ToolsTab: React.FC<ToolsTabProps> = ({ agent }) => {
   const handleSave = () => updateAgent.mutateAsync({ tools });
 
   return (
-    <div className="max-w-2xl space-y-4">
+    <div className="w-full space-y-4">
       {TOOL_DEFINITIONS.map(({ tool, label, description, icon: Icon }) => {
         const enabled = tools.includes(tool);
         return (
