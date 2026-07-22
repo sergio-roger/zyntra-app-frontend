@@ -1,33 +1,35 @@
-export enum AgentTaskStatus {
-  PENDING = 'pending',
-  RUNNING = 'running',
-  COMPLETED = 'completed',
-  FAILED = 'failed',
+export type SystemAgentStatus = 'active' | 'coming_soon';
+
+export interface SystemAgentCatalogItem {
+  id: string;
+  slug: string;
+  name: string;
+  role: string;
+  description: string;
+  status: SystemAgentStatus;
+  model: string;
+  createdAt: string;
 }
 
-export enum AgentTaskType {
-  CONTENT = 'content',
-  SOCIAL = 'social',
-  CHATBOT = 'chatbot',
-  CRM_ANALYSIS = 'crm_analysis',
-  REPORT = 'report',
+export type WorkflowRunStatus = 'pending' | 'running' | 'completed' | 'failed';
+
+export interface WorkflowRunStep {
+  step: string;
+  status?: string;
+  output?: unknown;
+  error?: { message: string; name: string };
+  [key: string]: unknown;
 }
 
-export interface AgentTask {
-  _id: string;
+export interface WorkflowRun {
+  id: string;
   businessId: string;
-  type: AgentTaskType;
-  status: AgentTaskStatus;
-  input: Record<string, unknown>;
-  output: Record<string, unknown>;
-  error?: string;
+  goal: string;
+  status: WorkflowRunStatus;
+  steps: WorkflowRunStep[];
+  errorMessage: string | null;
+  startedAt: string | null;
+  finishedAt: string | null;
   createdAt: string;
   updatedAt: string;
-  completedAt?: string;
-  durationMs?: number;
-}
-
-export interface CreateTaskDto {
-  type: AgentTaskType;
-  input: Record<string, unknown>;
 }
