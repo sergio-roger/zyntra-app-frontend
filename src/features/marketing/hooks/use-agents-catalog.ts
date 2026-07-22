@@ -11,6 +11,26 @@ export const useSystemAgentsCatalog = () =>
     queryFn: agentsApi.getCatalog,
   });
 
+export const useImportedAgents = () => {
+  const businessId = useBusinessId();
+  return useQuery({
+    queryKey: ['imported-system-agents', businessId],
+    queryFn: () => agentsApi.getImportedAgents(businessId),
+    enabled: !!businessId,
+  });
+};
+
+export const useImportAgent = () => {
+  const businessId = useBusinessId();
+  const qc = useQueryClient();
+  return useMutation({
+    mutationFn: (systemAgentId: string) =>
+      agentsApi.importAgent(businessId, systemAgentId),
+    onSuccess: () =>
+      qc.invalidateQueries({ queryKey: ['imported-system-agents', businessId] }),
+  });
+};
+
 export const useTriggerOrchestratorRun = () => {
   const businessId = useBusinessId();
   const qc = useQueryClient();

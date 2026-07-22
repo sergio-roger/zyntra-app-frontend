@@ -1,5 +1,12 @@
 export type SystemAgentStatus = 'active' | 'coming_soon';
 
+export interface AgentCategory {
+  id: string;
+  slug: string;
+  name: string;
+  color: string;
+}
+
 export interface SystemAgentCatalogItem {
   id: string;
   slug: string;
@@ -8,7 +15,15 @@ export interface SystemAgentCatalogItem {
   description: string;
   status: SystemAgentStatus;
   model: string;
+  category: AgentCategory | null;
+  tasksDoneToday: number;
+  tasksTotalToday: number;
+  efficiency: number;
   createdAt: string;
+}
+
+export interface ImportedSystemAgent extends SystemAgentCatalogItem {
+  importedAt: string;
 }
 
 export type WorkflowRunStatus = 'pending' | 'running' | 'completed' | 'failed';

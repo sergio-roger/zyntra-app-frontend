@@ -4,11 +4,13 @@ import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import React from 'react';
 import { AiAgentsCatalogPage } from './AiAgentsCatalogPage';
 import { agentsApi } from '../api/agents.api';
-import { SystemAgentCatalogItem, WorkflowRun } from '../types/agents';
+import { AgentCategory, SystemAgentCatalogItem } from '../types/agents';
 
 vi.mock('../api/agents.api', () => ({
   agentsApi: {
     getCatalog: vi.fn(),
+    getImportedAgents: vi.fn(),
+    importAgent: vi.fn(),
     triggerRun: vi.fn(),
     getRun: vi.fn(),
   },
@@ -21,6 +23,19 @@ vi.mock('@features/auth/store/authStore', () => {
   return { useAuthStore };
 });
 
+const ESTRATEGIA: AgentCategory = {
+  id: 'cat-estrategia',
+  slug: 'estrategia',
+  name: 'Estrategia',
+  color: '#7c3aed',
+};
+const CONTENIDO: AgentCategory = {
+  id: 'cat-contenido',
+  slug: 'contenido',
+  name: 'Contenido',
+  color: '#16a34a',
+};
+
 const makeAgent = (
   overrides: Partial<SystemAgentCatalogItem>,
 ): SystemAgentCatalogItem => ({
@@ -31,12 +46,22 @@ const makeAgent = (
   description: 'desc',
   status: 'coming_soon',
   model: 'gemini-flash-lite-latest',
+  category: CONTENIDO,
+  tasksDoneToday: 0,
+  tasksTotalToday: 0,
+  efficiency: 0,
   createdAt: new Date().toISOString(),
   ...overrides,
 });
 
 const CATALOG: SystemAgentCatalogItem[] = [
-  makeAgent({ id: '1', slug: 'marketing-strategist', name: 'Estratega', status: 'active' }),
+  makeAgent({
+    id: '1',
+    slug: 'marketing-strategist',
+    name: 'Estratega',
+    status: 'active',
+    category: ESTRATEGIA,
+  }),
   makeAgent({ id: '2', slug: 'content-creator', name: 'Creador de Contenido' }),
   makeAgent({ id: '3', slug: 'seo-specialist', name: 'Especialista SEO' }),
   makeAgent({ id: '4', slug: 'multimedia-designer', name: 'Diseñador Multimedia' }),
@@ -63,6 +88,7 @@ describe('AiAgentsCatalogPage', () => {
   beforeEach(() => {
     vi.clearAllMocks();
     (agentsApi.getCatalog as ReturnType<typeof vi.fn>).mockResolvedValue(CATALOG);
+    (agentsApi.getImportedAgents as ReturnType<typeof vi.fn>).mockResolvedValue([]);
   });
 
   it('renderiza las 8 tarjetas del catálogo con el badge correcto por status', async () => {
@@ -72,15 +98,22 @@ describe('AiAgentsCatalogPage', () => {
       expect(await screen.findByText(agent.name)).toBeInTheDocument();
     }
 
-    expect(screen.getAllByText('Activo')).toHaveLength(1);
-    expect(screen.getAllByText('Próximamente')).toHaveLength(7);
+    const badges = screen.getAllByText((_, element) =>
+      element?.tagName === 'SPAN' && element.classList.contains('badge'),
+    );
+    const activeBadges = badges.filter((b) => b.textContent?.includes('Activo'));
+    const comingSoonBadges = badges.filter((b) =>
+      b.textContent?.includes('Próximamente'),
+    );
+    expect(activeBadges).toHaveLength(1);
+    expect(comingSoonBadges).toHaveLength(7);
   });
 
-  it('deshabilita "Ver Detalles" para los agentes coming_soon y lo habilita para el activo', async () => {
+  it('deshabilita "Importar" para los agentes coming_soon y lo habilita para el activo', async () => {
     renderPage();
     await screen.findByText('Estratega');
 
-    const buttons = screen.getAllByRole('button', { name: 'Ver Detalles' });
+    const buttons = screen.getAllByRole('button', { name: 'Importar' });
     expect(buttons).toHaveLength(8);
 
     const activeIndex = CATALOG.findIndex((a) => a.status === 'active');
@@ -90,42 +123,41 @@ describe('AiAgentsCatalogPage', () => {
     });
   });
 
-  it('dispara una corrida real al enviar el goal desde el modal del agente activo', async () => {
-    const pendingRun: WorkflowRun = {
-      id: 'run-1',
-      businessId: 'biz-1',
-      goal: 'mi objetivo',
-      status: 'completed',
-      steps: [
-        {
-          step: 'execute-plan',
-          output: { results: [{ output: 'Estrategia generada de prueba' }] },
-        },
-      ],
-      errorMessage: null,
-      startedAt: null,
-      finishedAt: null,
-      createdAt: '',
-      updatedAt: '',
-    };
-    (agentsApi.triggerRun as ReturnType<typeof vi.fn>).mockResolvedValue(pendingRun);
-    (agentsApi.getRun as ReturnType<typeof vi.fn>).mockResolvedValue(pendingRun);
+  it('importa el agente activo y refleja el estado "Importado"', async () => {
+    (agentsApi.importAgent as ReturnType<typeof vi.fn>).mockResolvedValue({
+      ...CATALOG[0],
+      importedAt: new Date().toISOString(),
+    });
 
     renderPage();
     await screen.findByText('Estratega');
 
-    const buttons = screen.getAllByRole('button', { name: 'Ver Detalles' });
-    fireEvent.click(buttons[CATALOG.findIndex((a) => a.status === 'active')]);
-
-    const textarea = await screen.findByPlaceholderText(
-      /Lanzar una campaña de captación de leads B2B/,
-    );
-    fireEvent.change(textarea, { target: { value: 'mi objetivo' } });
-    fireEvent.click(screen.getByRole('button', { name: /Generar estrategia/ }));
+    const activeIndex = CATALOG.findIndex((a) => a.status === 'active');
+    fireEvent.click(screen.getAllByRole('button', { name: 'Importar' })[activeIndex]);
 
     await waitFor(() =>
-      expect(agentsApi.triggerRun).toHaveBeenCalledWith('biz-1', 'mi objetivo'),
+      expect(agentsApi.importAgent).toHaveBeenCalledWith('biz-1', CATALOG[0].id),
     );
-    expect(await screen.findByText('Estrategia generada de prueba')).toBeInTheDocument();
+  });
+
+  it('filtra por tab de categoría', async () => {
+    renderPage();
+    await screen.findByText('Estratega');
+
+    fireEvent.click(screen.getByRole('tab', { name: 'Estrategia' }));
+
+    expect(screen.getByText('Estratega')).toBeInTheDocument();
+    expect(screen.queryByText('Creador de Contenido')).not.toBeInTheDocument();
+  });
+
+  it('filtra por Estado', async () => {
+    renderPage();
+    await screen.findByText('Estratega');
+
+    fireEvent.click(screen.getByText('Estado: Todos'));
+    fireEvent.click(screen.getByRole('button', { name: 'Activo' }));
+
+    expect(screen.getByText('Estratega')).toBeInTheDocument();
+    expect(screen.queryByText('Creador de Contenido')).not.toBeInTheDocument();
   });
 });

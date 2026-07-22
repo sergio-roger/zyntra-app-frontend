@@ -6,6 +6,7 @@ import { ModuleGuard } from '@core/components/ModuleGuard';
 import { ConstructionPage } from '@shared/components/ConstructionPage';
 
 const AiAgentsCatalogPage = lazy(() => import('../pages/AiAgentsCatalogPage'));
+const AiAgentsTeamPage = lazy(() => import('../pages/AiAgentsTeamPage'));
 
 export const marketingRoutes: RouteObject[] = [
   {
@@ -35,7 +36,9 @@ export const marketingRoutes: RouteObject[] = [
     element: (
       <PermissionGuard menuKey="agents_team">
         <ModuleGuard menuKey="agents_team">
-          <ConstructionPage />
+          <SuspenseLoader>
+            <AiAgentsTeamPage />
+          </SuspenseLoader>
         </ModuleGuard>
       </PermissionGuard>
     ),
