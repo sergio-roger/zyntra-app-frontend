@@ -1,10 +1,10 @@
 import { ModuleGuard } from '@core/components/ModuleGuard';
 import { ProtectedRoute } from '@core/routes/ProtectedRoute';
 import { crmRoutes } from '@crm/routes/CrmRoutes';
-import { agentRoutes } from '@features/agents/routes/AgentRoutes';
-import { automationRoutes } from '@features/automations/routes/AutomationRoutes';
+import { marketingRoutes } from '@features/marketing/routes/MarketingRoutes';
+import { workflowRoutes } from '@features/workflows/routes/WorkflowRoutes';
 import { authRoutes } from '@features/auth/routes/AuthRoutes';
-import { chatbotRoutes } from '@features/chatbot/routes/ChatbotRoutes';
+import { inboxRoutes } from '@features/inbox/routes/InboxRoutes';
 import { dashboardRoutes } from '@features/dashboard/routes/DashboardRoutes';
 import { settingsRoutes } from '@features/settings/routes/SettingsRoutes';
 import { ConstructionPage } from '@shared/components/ConstructionPage';
@@ -23,9 +23,9 @@ const AppRoutes = () => {
       children: [
         ...dashboardRoutes,
         ...crmRoutes,
-        ...chatbotRoutes,
-        ...agentRoutes,
-        ...automationRoutes,
+        ...inboxRoutes,
+        ...marketingRoutes,
+        ...workflowRoutes,
         ...settingsRoutes,
         {
           path: '/drive/*',

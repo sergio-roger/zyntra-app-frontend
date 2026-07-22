@@ -204,7 +204,7 @@ export const NAV_MODULES: NavModule[] = [
   },
   {
     key: 'analytics',
-    label: 'Analítica',
+    label: 'Analytics',
     icon: BarChart3,
     match: '/analytics',
     to: '/analytics/general',
@@ -239,7 +239,7 @@ export const NAV_MODULES: NavModule[] = [
   },
   {
     key: 'settings',
-    label: 'Configuración',
+    label: 'Settings',
     icon: Settings,
     match: '/settings',
     to: '/settings/configuracion',
