@@ -1,6 +1,7 @@
 import { AxiosError } from 'axios';
 import { ApiErrorResponse, ApiError } from '@features/auth/types/auth.types';
 import { getFriendlyErrorMessage } from '@shared/utils/errorMapper';
+import { ConnectivityAxiosError } from '@shared/api/axios';
 
 /**
  * Extracts structured errors from the API error response.
@@ -9,6 +10,16 @@ import { getFriendlyErrorMessage } from '@shared/utils/errorMapper';
  */
 export const extractApiErrors = (error: unknown): ApiError[] => {
   if (error instanceof AxiosError) {
+    const connectivityCode = (error as ConnectivityAxiosError).connectivityCode;
+    if (connectivityCode) {
+      return [
+        {
+          code: connectivityCode,
+          description: getFriendlyErrorMessage(connectivityCode),
+        },
+      ];
+    }
+
     const data = error.response?.data as ApiErrorResponse | undefined;
 
     if (data?.errors?.length) {

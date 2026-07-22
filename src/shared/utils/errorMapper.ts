@@ -10,6 +10,8 @@ export const ERROR_CODE_MAP: Record<string, string> = {
   E5000: 'Error interno del servidor. Inténtalo de nuevo más tarde.',
   E5001: 'Error en la conexión con el servidor (Bad Gateway).',
   E5002: 'El servicio no está disponible temporalmente.',
+  E_NETWORK: 'No se pudo conectar con el servidor. Revisa tu conexión a internet.',
+  E_TIMEOUT: 'El servidor tardó demasiado en responder. Inténtalo de nuevo.',
   E9999: 'Ha ocurrido un error inesperado. Por favor, inténtalo de nuevo.',
 };
 

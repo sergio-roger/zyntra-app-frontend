@@ -25,6 +25,7 @@ import {
   Workflow,
   Store,
   FolderKanban,
+  Megaphone,
 } from 'lucide-react';
 import { NavModule } from '@shared/types/nav';
 
@@ -108,7 +109,7 @@ export const NAV_MODULES: NavModule[] = [
   {
     key: 'agents',
     label: 'Marketing',
-    icon: Sparkles,
+    icon: Megaphone,
     match: '/agents',
     to: '/agents/store',
     description: 'Tus agentes de IA trabajando para alcanzar tus objetivos.',

@@ -43,6 +43,9 @@ export const LoginForm: React.FC<LoginFormProps> = ({ onSuccess }) => {
       const apiErrors = extractApiErrors(err);
 
       for (const error of apiErrors) {
+        // Errores de conectividad ya los notifica el interceptor global de axios.
+        if (error.code === 'E_NETWORK' || error.code === 'E_TIMEOUT') continue;
+
         toastManager.add({
           title: 'Error de autenticación',
           description: error.description,
