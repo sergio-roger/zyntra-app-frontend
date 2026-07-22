@@ -5,6 +5,8 @@ export interface SubNavItem {
   label: string;
   icon: LucideIcon;
   description?: string;
+  /** Override del menu key de RBAC cuando el mismo path se expone bajo más de un módulo. */
+  menuKey?: string;
 }
 
 export interface SubNavGroup {

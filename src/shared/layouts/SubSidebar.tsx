@@ -79,7 +79,8 @@ export const SubSidebar: React.FC<SubSidebarProps> = ({
   const visibleEntries = (module.children ?? []).filter((entry) => {
     if (!allowedMenus) return false;
     if (isGroup(entry)) return level1Keys.has(entry.key);
-    return level1Keys.has(getMenuKeyFromPath((entry as SubNavItem).to));
+    const item = entry as SubNavItem;
+    return level1Keys.has(item.menuKey ?? getMenuKeyFromPath(item.to));
   });
 
   const hasChildren = visibleEntries.length > 0;
