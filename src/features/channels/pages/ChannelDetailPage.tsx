@@ -243,7 +243,7 @@ export const ChannelDetailPage: React.FC = () => {
               No tienes agentes configurados.{' '}
               <button
                 className="link link-primary"
-                onClick={() => navigate('/settings/agents')}
+                onClick={() => navigate('/automations/agents')}
               >
                 Crear un agente
               </button>

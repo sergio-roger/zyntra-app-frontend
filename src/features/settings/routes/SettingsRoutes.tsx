@@ -26,12 +26,6 @@ const ChannelsListPage = lazy(() =>
     default: m.ChannelsListPage,
   })),
 );
-const AiAgentsPage = lazy(() =>
-  import('@features/ai-agents/pages/AiAgentsPage').then((m) => ({
-    default: m.AiAgentsPage,
-  })),
-);
-
 const LifecycleConfig = lazy(() =>
   import('@features/settings/components/LifecycleConfig').then((m) => ({
     default: m.LifecycleConfig,
@@ -217,18 +211,6 @@ export const settingsRoutes: RouteObject[] = [
             <ModuleGuard menuKey="settings_my_channels">
               <SuspenseLoader>
                 <ChannelsListPage />
-              </SuspenseLoader>
-            </ModuleGuard>
-          </PermissionGuard>
-        ),
-      },
-      {
-        path: 'agents',
-        element: (
-          <PermissionGuard menuKey="settings_agents">
-            <ModuleGuard menuKey="settings_agents">
-              <SuspenseLoader>
-                <AiAgentsPage />
               </SuspenseLoader>
             </ModuleGuard>
           </PermissionGuard>

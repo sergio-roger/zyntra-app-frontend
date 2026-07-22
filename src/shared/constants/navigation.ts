@@ -123,7 +123,7 @@ export const NAV_MODULES: NavModule[] = [
       },
       {
         to: '/agents/team',
-        label: 'Agentes',
+        label: 'Equipo de Agentes',
         icon: Bot,
         description: 'Gestiona tu equipo de agentes.',
       },
@@ -152,7 +152,7 @@ export const NAV_MODULES: NavModule[] = [
       },
       {
         to: '/automations/agents',
-        label: 'Agentes',
+        label: 'Agentes de Flujo',
         icon: Bot,
         description: 'Configura agentes automatizados.',
       },
@@ -253,11 +253,6 @@ export const NAV_MODULES: NavModule[] = [
         icon: Settings,
         description: 'Ajustes generales de la cuenta y plataforma.',
         children: [
-          {
-            to: '/settings/configuracion',
-            label: 'Configuración',
-            icon: Settings,
-          },
           { to: '/settings/my-account', label: 'Mi cuenta', icon: UserRound },
           { to: '/settings/my-company', label: 'Mi empresa', icon: Building2 },
           { to: '/settings/plans', label: 'Planes', icon: Zap },
@@ -280,10 +275,14 @@ export const NAV_MODULES: NavModule[] = [
         key: 'settings_business',
         label: 'Configuración del negocio',
         icon: Building2,
-        description: 'Configuraciones específicas del negocio: ciclo de vida y agentes.',
+        description: 'Configuraciones específicas del negocio: ciclo de vida.',
         children: [
+          {
+            to: '/settings/configuracion',
+            label: 'Configuración',
+            icon: Settings,
+          },
           { to: '/settings/lifecycle', label: 'Ciclo de vida', icon: Sparkles },
-          { to: '/settings/agents', label: 'Agentes', icon: Bot },
         ],
       },
     ],
