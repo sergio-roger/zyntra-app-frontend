@@ -15,6 +15,7 @@ import {
   useChannelsQuery,
 } from '../hooks/channels.queries';
 import { ChannelType, Channel } from '../types/channels.types';
+import { PageHeader } from '@shared/components/PageHeader';
 
 const CHANNEL_ICONS: Record<string, React.ReactNode> = {
   web_chat: <Globe size={28} />,
@@ -161,13 +162,11 @@ export const ChannelStorePage: React.FC = () => {
   }
 
   return (
-    <div className="p-6">
-      <div className="mb-6">
-        <h1 className="text-2xl font-bold">Canal Store</h1>
-        <p className="text-base-content/60 mt-1">
-          Activa los canales de comunicación con tus clientes.
-        </p>
-      </div>
+    <div className="space-y-6 animate-in fade-in duration-500">
+      <PageHeader
+        title="Canal Store"
+        subtitle="Activa los canales de comunicación con tus clientes."
+      />
 
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
         {store.map((ct) => (

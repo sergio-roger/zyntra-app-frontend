@@ -5,6 +5,7 @@ import { CustomFieldType } from '@crm/types/crm';
 import { CustomField } from '@crm/types/custom-field';
 import { ConfirmModal } from '@shared/components/ConfirmModal';
 import { EmptyState } from '@shared/components/EmptyState';
+import { PageHeader } from '@shared/components/PageHeader';
 import { toastManager } from '@shared/components/toast/toastManager';
 import { AxiosError } from 'axios';
 import {
@@ -111,25 +112,20 @@ export const CustomFieldsPage: React.FC = () => {
   ];
 
   return (
-    <div className="flex flex-col gap-6 p-1">
-      <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
-        <div>
-          <h2 className="text-2xl font-bold text-white tracking-tight">
-            Campos Personalizados
-          </h2>
-          <p className="text-sm text-slate-400">
-            Extiende la información que guardas de tus contactos y empresas.
-          </p>
-        </div>
-
-        <button
-          onClick={() => handleOpenSidebar()}
-          className="flex items-center gap-2 px-4 py-2 rounded-xl bg-indigo-600 hover:bg-indigo-500 text-white text-sm font-semibold transition-all shadow-lg shadow-indigo-500/20"
-        >
-          <Plus size={18} />
-          <span>Nuevo Campo</span>
-        </button>
-      </div>
+    <div className="flex flex-col gap-6 animate-in fade-in duration-500">
+      <PageHeader
+        title="Campos Personalizados"
+        subtitle="Extiende la información que guardas de tus contactos y empresas."
+        actions={
+          <button
+            onClick={() => handleOpenSidebar()}
+            className="flex items-center gap-2 px-4 py-2 rounded-xl bg-indigo-600 hover:bg-indigo-500 text-white text-sm font-semibold transition-all shadow-lg shadow-indigo-500/20"
+          >
+            <Plus size={18} />
+            <span>Nuevo Campo</span>
+          </button>
+        }
+      />
 
       {/* Tabs */}
       <div className="flex flex-col sm:flex-row sm:items-center justify-end gap-4 border-b border-white/5 pb-2">

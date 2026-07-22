@@ -22,6 +22,7 @@ import { TabFilters } from '@crm/types/tab-filters';
 import { useAuthStore } from '@features/auth/store/authStore';
 import { ColumnCustomizerModal } from '@shared/components/ColumnCustomizerModal';
 import { ConfirmModal } from '@shared/components/ConfirmModal';
+import { PageHeader } from '@shared/components/PageHeader';
 import {
   AlertCircle,
   FileSpreadsheet,
@@ -232,51 +233,48 @@ export const ContactListPage: React.FC = () => {
 
   return (
     <div className="space-y-5 animate-in fade-in duration-500">
-      <div className="flex flex-wrap items-center justify-between gap-3">
-        <div className="space-y-1">
-          <h2 className="text-xl font-bold text-white tracking-tight">
-            Gestión de Contactos
-          </h2>
-          <p className="text-sm text-slate-400">
-            Gestiona tu base de clientes, leads y prospectos comerciales.
-          </p>
-          <div className="text-xs font-semibold text-slate-500">
-            <span
-              className={
-                isLimitReached ? 'text-rose-400 font-bold' : 'text-slate-300'
-              }
+      <PageHeader
+        title="Gestión de Contactos"
+        subtitle="Gestiona tu base de clientes, leads y prospectos comerciales."
+        actions={
+          <>
+            <button
+              onClick={() => setIsImportOpen(true)}
+              disabled={isLimitReached}
+              className={`inline-flex items-center gap-2 rounded-xl border px-5 py-2.5 text-sm font-bold transition-all ${
+                isLimitReached
+                  ? 'bg-slate-800 border-white/5 text-slate-500 cursor-not-allowed shadow-none'
+                  : 'border-white/10 bg-slate-800 text-slate-300 hover:bg-slate-700 hover:-translate-y-px active:scale-95'
+              }`}
             >
-              {allQuery.data?.total || 0}
-            </span>
-            {' / '}
-            {contactLimit === 999999 ? '∞' : contactLimit} registrados
-          </div>
-        </div>
-        <div className="flex items-center gap-3">
-          <button
-            onClick={() => setIsImportOpen(true)}
-            disabled={isLimitReached}
-            className={`inline-flex items-center gap-2 rounded-xl border px-5 py-2.5 text-sm font-bold transition-all ${
-              isLimitReached
-                ? 'bg-slate-800 border-white/5 text-slate-500 cursor-not-allowed shadow-none'
-                : 'border-white/10 bg-slate-800 text-slate-300 hover:bg-slate-700 hover:-translate-y-px active:scale-95'
-            }`}
+              <FileSpreadsheet size={18} /> Importar
+            </button>
+            <button
+              onClick={openCreate}
+              disabled={isLimitReached}
+              className={`inline-flex items-center gap-2 rounded-xl px-5 py-2.5 text-sm font-bold shadow-lg transition-all ${
+                isLimitReached
+                  ? 'bg-slate-800 text-slate-500 cursor-not-allowed shadow-none'
+                  : 'bg-primary text-white shadow-primary/20 hover:-translate-y-px hover:shadow-xl active:scale-95'
+              }`}
+            >
+              <Plus size={18} /> Nuevo contacto
+            </button>
+          </>
+        }
+      >
+        <div className="text-xs font-semibold text-slate-500">
+          <span
+            className={
+              isLimitReached ? 'text-rose-400 font-bold' : 'text-slate-300'
+            }
           >
-            <FileSpreadsheet size={18} /> Importar
-          </button>
-          <button
-            onClick={openCreate}
-            disabled={isLimitReached}
-            className={`inline-flex items-center gap-2 rounded-xl px-5 py-2.5 text-sm font-bold shadow-lg transition-all ${
-              isLimitReached
-                ? 'bg-slate-800 text-slate-500 cursor-not-allowed shadow-none'
-                : 'bg-primary text-white shadow-primary/20 hover:-translate-y-px hover:shadow-xl active:scale-95'
-            }`}
-          >
-            <Plus size={18} /> Nuevo contacto
-          </button>
+            {allQuery.data?.total || 0}
+          </span>
+          {' / '}
+          {contactLimit === 999999 ? '∞' : contactLimit} registrados
         </div>
-      </div>
+      </PageHeader>
 
       {isLimitReached && (
         <div className="flex items-center gap-3 rounded-2xl border border-warning/20 bg-warning/10 p-4 text-sm text-warning-content">

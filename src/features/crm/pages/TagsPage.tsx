@@ -3,6 +3,7 @@ import { useRemoveTag, useTags } from '@crm/hooks/useTags';
 import { Tag } from '@crm/types/tag';
 import { ConfirmModal } from '@shared/components/ConfirmModal';
 import { EmptyState } from '@shared/components/EmptyState';
+import { PageHeader } from '@shared/components/PageHeader';
 import { Tabs } from '@core/ui/Tabs';
 import {
   AlertCircle,
@@ -56,25 +57,20 @@ export const TagsPage: React.FC = () => {
   };
 
   return (
-    <div className="flex flex-col gap-6 p-1">
-      <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
-        <div>
-          <h2 className="text-2xl font-bold text-white tracking-tight">
-            Etiquetas
-          </h2>
-          <p className="text-sm text-slate-400">
-            Organiza y segmenta tus contactos eficazmente.
-          </p>
-        </div>
-
-        <button
-          onClick={() => handleOpenSidebar()}
-          className="flex items-center gap-2 px-4 py-2 rounded-xl bg-indigo-600 hover:bg-indigo-500 text-white text-sm font-semibold transition-all shadow-lg shadow-indigo-500/20"
-        >
-          <Plus size={18} />
-          <span>Nueva Etiqueta</span>
-        </button>
-      </div>
+    <div className="flex flex-col gap-6 animate-in fade-in duration-500">
+      <PageHeader
+        title="Etiquetas"
+        subtitle="Organiza y segmenta tus contactos eficazmente."
+        actions={
+          <button
+            onClick={() => handleOpenSidebar()}
+            className="flex items-center gap-2 px-4 py-2 rounded-xl bg-indigo-600 hover:bg-indigo-500 text-white text-sm font-semibold transition-all shadow-lg shadow-indigo-500/20"
+          >
+            <Plus size={18} />
+            <span>Nueva Etiqueta</span>
+          </button>
+        }
+      />
 
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-white/5 pb-2">
         <div className="relative max-w-md flex-1">

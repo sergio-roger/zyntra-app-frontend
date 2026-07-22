@@ -4,6 +4,7 @@ import { Bot, Loader2, Plus, Share2, Trash2, Zap } from 'lucide-react';
 import { useAuthStore } from '@features/auth/store/authStore';
 import { ConfirmModal } from '@shared/components/ConfirmModal';
 import { EmptyState } from '@shared/components/EmptyState';
+import { PageHeader } from '@shared/components/PageHeader';
 import { useAgentsList, useDeleteAgent } from '../hooks/use-agents';
 import { useAgentKnowledgeDocuments } from '../hooks/use-agent-knowledge';
 import { useChannelsList } from '../hooks/use-agent-channel';
@@ -75,33 +76,32 @@ export const AgentsListPage: React.FC = () => {
 
   return (
     <div className="space-y-6 animate-in fade-in duration-500">
-      <div className="flex flex-wrap items-center justify-between gap-3">
-        <div className="space-y-1">
-          <h2 className="text-xl font-bold text-white tracking-tight">Agentes</h2>
-          <p className="text-sm text-slate-400">
-            Configura agentes de IA para responder conversaciones automáticamente.
-          </p>
-          <div className="text-xs font-semibold text-slate-500">
-            <span
-              className={isLimitReached ? 'text-rose-400 font-bold' : 'text-slate-300'}
-            >
-              {agents.length}
-            </span>{' '}
-            / {isUnlimited ? '∞' : limit} agentes
-          </div>
+      <PageHeader
+        title="Agentes"
+        subtitle="Configura agentes de IA para responder conversaciones automáticamente."
+        actions={
+          <button
+            onClick={() => navigate('/automations/agents/new')}
+            disabled={isLimitReached}
+            className={`inline-flex items-center gap-2 rounded-xl px-5 py-2.5 text-sm font-bold shadow-lg transition-all ${
+              isLimitReached
+                ? 'bg-slate-800 text-slate-500 cursor-not-allowed shadow-none'
+                : 'bg-primary text-white shadow-primary/20 hover:-translate-y-px hover:shadow-xl active:scale-95'
+            }`}
+          >
+            <Plus size={18} /> Crear agente
+          </button>
+        }
+      >
+        <div className="text-xs font-semibold text-slate-500">
+          <span
+            className={isLimitReached ? 'text-rose-400 font-bold' : 'text-slate-300'}
+          >
+            {agents.length}
+          </span>{' '}
+          / {isUnlimited ? '∞' : limit} agentes
         </div>
-        <button
-          onClick={() => navigate('/automations/agents/new')}
-          disabled={isLimitReached}
-          className={`inline-flex items-center gap-2 rounded-xl px-5 py-2.5 text-sm font-bold shadow-lg transition-all ${
-            isLimitReached
-              ? 'bg-slate-800 text-slate-500 cursor-not-allowed shadow-none'
-              : 'bg-primary text-white shadow-primary/20 hover:-translate-y-px hover:shadow-xl active:scale-95'
-          }`}
-        >
-          <Plus size={18} /> Crear agente
-        </button>
-      </div>
+      </PageHeader>
 
       {isLimitReached && (
         <div className="flex items-center gap-3 rounded-2xl border border-warning/20 bg-warning/10 p-4 text-sm">

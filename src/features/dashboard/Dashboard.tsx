@@ -1,14 +1,14 @@
 import { Link } from 'react-router-dom';
 import { NAV_MODULES } from '@shared/layouts/nav.config';
+import { PageHeader } from '@shared/components/PageHeader';
 
 const cards = NAV_MODULES.filter((m) => m.key !== 'dashboard');
 
 export const Dashboard = () => (
-  <div className="p-6">
-    <h1 className="text-3xl font-bold">Dashboard</h1>
-    <p className="mt-1 text-base-content/60">Bienvenido a Zyntra</p>
+  <div className="space-y-8 animate-in fade-in duration-500">
+    <PageHeader title="Dashboard" subtitle="Bienvenido a Zyntra" />
 
-    <div className="mt-8 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+    <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
       {cards.map((card) => (
         <Link
           key={card.to}

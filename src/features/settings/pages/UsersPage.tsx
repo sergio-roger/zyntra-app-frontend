@@ -7,6 +7,7 @@ import {
 import { User } from '@features/settings/types/settings';
 import { Avatar } from '@shared/components/Avatar';
 import { EmptyState } from '@shared/components/EmptyState';
+import { PageHeader } from '@shared/components/PageHeader';
 import { toastManager } from '@shared/components/toast/toastManager';
 import {
   AlertCircle,
@@ -114,37 +115,34 @@ export const UsersPage: React.FC = () => {
 
   return (
     <div className="space-y-6 animate-in fade-in duration-500">
-      <div className="flex flex-wrap items-center justify-between gap-3">
-        <div className="space-y-1">
-          <h2 className="text-xl font-bold text-white tracking-tight">
-            Usuarios y Colaboradores
-          </h2>
-          <p className="text-sm text-slate-400">
-            Gestiona quién tiene acceso a tu plataforma y sus permisos.
-          </p>
-          <div className="text-xs font-semibold text-slate-500">
-            <span
-              className={
-                isLimitReached ? 'text-rose-400 font-bold' : 'text-slate-300'
-              }
-            >
-              {activeUsersCount}
-            </span>{' '}
-            / {limit === 999999 ? '∞' : limit} activos
-          </div>
+      <PageHeader
+        title="Usuarios y Colaboradores"
+        subtitle="Gestiona quién tiene acceso a tu plataforma y sus permisos."
+        actions={
+          <button
+            onClick={openCreate}
+            disabled={isLimitReached}
+            className={`inline-flex items-center gap-2 rounded-xl px-5 py-2.5 text-sm font-bold shadow-lg transition-all ${
+              isLimitReached
+                ? 'bg-slate-800 text-slate-500 cursor-not-allowed shadow-none'
+                : 'bg-primary text-white shadow-primary/20 hover:-translate-y-px hover:shadow-xl active:scale-95'
+            }`}
+          >
+            <Plus size={18} /> Añadir usuario
+          </button>
+        }
+      >
+        <div className="text-xs font-semibold text-slate-500">
+          <span
+            className={
+              isLimitReached ? 'text-rose-400 font-bold' : 'text-slate-300'
+            }
+          >
+            {activeUsersCount}
+          </span>{' '}
+          / {limit === 999999 ? '∞' : limit} activos
         </div>
-        <button
-          onClick={openCreate}
-          disabled={isLimitReached}
-          className={`inline-flex items-center gap-2 rounded-xl px-5 py-2.5 text-sm font-bold shadow-lg transition-all ${
-            isLimitReached
-              ? 'bg-slate-800 text-slate-500 cursor-not-allowed shadow-none'
-              : 'bg-primary text-white shadow-primary/20 hover:-translate-y-px hover:shadow-xl active:scale-95'
-          }`}
-        >
-          <Plus size={18} /> Añadir usuario
-        </button>
-      </div>
+      </PageHeader>
 
       {isLimitReached && (
         <div className="flex items-center gap-3 rounded-2xl border border-warning/20 bg-warning/10 p-4 text-sm text-warning-content">

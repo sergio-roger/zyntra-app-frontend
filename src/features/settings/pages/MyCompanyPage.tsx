@@ -10,6 +10,7 @@ import {
   updateCompanySchema,
 } from '@features/settings/schemas/company.schema';
 import { toastManager } from '@shared/components/toast/toastManager';
+import { PageHeader } from '@shared/components/PageHeader';
 import { zodResolver } from '@hookform/resolvers/zod';
 import {
   Building2,
@@ -111,14 +112,10 @@ export const MyCompanyPage: React.FC = () => {
 
   return (
     <div className="w-full space-y-6 animate-in fade-in duration-500">
-      <div className="space-y-1">
-        <h2 className="text-xl font-bold text-white tracking-tight">
-          Mi Empresa
-        </h2>
-        <p className="text-sm text-slate-400">
-          Gestiona los datos de contacto y facturación de tu empresa.
-        </p>
-      </div>
+      <PageHeader
+        title="Mi Empresa"
+        subtitle="Gestiona los datos de contacto y facturación de tu empresa."
+      />
 
       <div className="w-full max-w-2xl bg-slate-900/50 border border-white/5 rounded-3xl overflow-hidden shadow-xl">
         <div className="p-6">

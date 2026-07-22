@@ -18,6 +18,7 @@ import {
 } from '@crm/hooks/useCrmTasks';
 import { TaskFormSidebar } from '@crm/components/TaskFormSidebar';
 import { ConfirmModal } from '@shared/components/ConfirmModal';
+import { PageHeader } from '@shared/components/PageHeader';
 import { TaskStatus } from '@crm/types/crm';
 import { CrmTask } from '@crm/types/crm-task';
 import { useSearchParams, useNavigate } from 'react-router-dom';
@@ -101,22 +102,18 @@ export const TasksPage: React.FC = () => {
 
   return (
     <div className="space-y-6 animate-in fade-in duration-500">
-      <div className="flex flex-wrap items-center justify-between gap-3">
-        <div>
-          <h2 className="text-xl font-bold text-white tracking-tight">
-            Gestión de Tareas
-          </h2>
-          <p className="text-sm text-slate-400">
-            Organiza tus seguimientos y actividades diarias
-          </p>
-        </div>
-        <button
-          onClick={openCreate}
-          className="inline-flex items-center gap-2 rounded-xl bg-primary px-5 py-2.5 text-sm font-bold text-white shadow-lg shadow-primary/20 transition-all hover:-translate-y-px hover:shadow-xl active:scale-95"
-        >
-          <Plus size={18} /> Nueva Tarea
-        </button>
-      </div>
+      <PageHeader
+        title="Gestión de Tareas"
+        subtitle="Organiza tus seguimientos y actividades diarias"
+        actions={
+          <button
+            onClick={openCreate}
+            className="inline-flex items-center gap-2 rounded-xl bg-primary px-5 py-2.5 text-sm font-bold text-white shadow-lg shadow-primary/20 transition-all hover:-translate-y-px hover:shadow-xl active:scale-95"
+          >
+            <Plus size={18} /> Nueva Tarea
+          </button>
+        }
+      />
 
       {(dealIdFilter || contactIdFilter) && (
         <div className="flex items-center justify-between p-4 bg-indigo-500/10 border border-indigo-500/20 rounded-xl">

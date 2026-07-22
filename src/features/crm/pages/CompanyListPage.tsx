@@ -22,6 +22,7 @@ import { SegmentCondition } from '@crm/types/segment-condition';
 import { useAuthStore } from '@features/auth/store/authStore';
 import { ColumnCustomizerModal } from '@shared/components/ColumnCustomizerModal';
 import { ConfirmModal } from '@shared/components/ConfirmModal';
+import { PageHeader } from '@shared/components/PageHeader';
 import {
   AlertCircle,
   Building,
@@ -208,39 +209,34 @@ export const CompanyListPage: React.FC = () => {
 
   return (
     <div className="space-y-5 animate-in fade-in duration-500">
-      {/* Header */}
-      <div className="flex flex-wrap items-center justify-between gap-3">
-        <div className="space-y-1">
-          <h2 className="text-xl font-bold text-white tracking-tight">
-            Gestión de Empresas
-          </h2>
-          <p className="text-sm text-slate-400">
-            Organiza y gestiona las empresas y organizaciones de tu cartera.
-          </p>
-          <div className="text-xs font-semibold text-slate-500">
-            <span className="text-slate-300">{allQuery.data?.total ?? 0}</span>{' '}
-            empresa{(allQuery.data?.total ?? 0) !== 1 ? 's' : ''} registrada
-            {(allQuery.data?.total ?? 0) !== 1 ? 's' : ''}
-          </div>
-        </div>
-
-        <div className="flex items-center gap-3">
-          {isAdminOrManager && (
+      <PageHeader
+        title="Gestión de Empresas"
+        subtitle="Organiza y gestiona las empresas y organizaciones de tu cartera."
+        actions={
+          <>
+            {isAdminOrManager && (
+              <button
+                onClick={() => setIsImportOpen(true)}
+                className="inline-flex items-center gap-2 rounded-xl border border-white/10 bg-slate-800 px-5 py-2.5 text-sm font-bold text-slate-300 transition-all hover:bg-slate-700 hover:-translate-y-px active:scale-95"
+              >
+                <FileSpreadsheet size={18} /> Importar
+              </button>
+            )}
             <button
-              onClick={() => setIsImportOpen(true)}
-              className="inline-flex items-center gap-2 rounded-xl border border-white/10 bg-slate-800 px-5 py-2.5 text-sm font-bold text-slate-300 transition-all hover:bg-slate-700 hover:-translate-y-px active:scale-95"
+              onClick={openCreate}
+              className="inline-flex items-center gap-2 rounded-xl bg-primary px-5 py-2.5 text-sm font-bold text-white shadow-lg shadow-primary/20 transition-all hover:-translate-y-px hover:shadow-xl active:scale-95"
             >
-              <FileSpreadsheet size={18} /> Importar
+              <Plus size={18} /> Nueva empresa
             </button>
-          )}
-          <button
-            onClick={openCreate}
-            className="inline-flex items-center gap-2 rounded-xl bg-primary px-5 py-2.5 text-sm font-bold text-white shadow-lg shadow-primary/20 transition-all hover:-translate-y-px hover:shadow-xl active:scale-95"
-          >
-            <Plus size={18} /> Nueva empresa
-          </button>
+          </>
+        }
+      >
+        <div className="text-xs font-semibold text-slate-500">
+          <span className="text-slate-300">{allQuery.data?.total ?? 0}</span>{' '}
+          empresa{(allQuery.data?.total ?? 0) !== 1 ? 's' : ''} registrada
+          {(allQuery.data?.total ?? 0) !== 1 ? 's' : ''}
         </div>
-      </div>
+      </PageHeader>
 
       {/* Tabs */}
       <Tabs

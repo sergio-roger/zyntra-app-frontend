@@ -9,12 +9,12 @@ import {
   Plus,
   Search,
   Share2,
-  Sparkles,
   TrendingUp,
   Users,
   XCircle,
 } from 'lucide-react';
 import React, { useState } from 'react';
+import { PageHeader } from '@shared/components/PageHeader';
 import {
   useOrchestratorRun,
   useSystemAgentsCatalog,
@@ -39,20 +39,11 @@ export const AiAgentsCatalogPage: React.FC = () => {
     useState<SystemAgentCatalogItem | null>(null);
 
   return (
-    <div className="p-6 max-w-7xl mx-auto">
-      <div className="flex justify-between items-start mb-8">
-        <div className="flex items-center gap-4">
-          <div className="p-3 bg-secondary/10 rounded-2xl text-secondary">
-            <Sparkles size={32} />
-          </div>
-          <div>
-            <h1 className="text-3xl font-bold">AI Agents</h1>
-            <p className="text-base-content/60 mt-1">
-              Tus agentes de IA trabajando para alcanzar tus objetivos.
-            </p>
-          </div>
-        </div>
-      </div>
+    <div className="space-y-6 animate-in fade-in duration-500">
+      <PageHeader
+        title="AI Agents"
+        subtitle="Tus agentes de IA trabajando para alcanzar tus objetivos."
+      />
 
       {isLoading ? (
         <div className="flex justify-center p-20">

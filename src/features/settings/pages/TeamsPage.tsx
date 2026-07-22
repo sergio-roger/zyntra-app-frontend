@@ -5,6 +5,7 @@ import {
 import { Team } from '@features/settings/types/settings';
 import { ConfirmModal } from '@shared/components/ConfirmModal';
 import { EmptyState } from '@shared/components/EmptyState';
+import { PageHeader } from '@shared/components/PageHeader';
 import {
   AlertCircle,
   Loader2,
@@ -44,22 +45,18 @@ export const TeamsPage: React.FC = () => {
 
   return (
     <div className="space-y-6 animate-in fade-in duration-500">
-      <div className="flex flex-wrap items-center justify-between gap-3">
-        <div>
-          <h2 className="text-xl font-bold text-white tracking-tight">
-            Equipos de Trabajo
-          </h2>
-          <p className="text-sm text-slate-400">
-            Organiza a tus agentes para una mejor distribución de tareas
-          </p>
-        </div>
-        <button
-          onClick={openCreate}
-          className="inline-flex items-center gap-2 rounded-xl bg-primary px-5 py-2.5 text-sm font-bold text-white shadow-lg shadow-primary/20 transition-all hover:-translate-y-px hover:shadow-xl active:scale-95"
-        >
-          <Plus size={18} /> Crear Equipo
-        </button>
-      </div>
+      <PageHeader
+        title="Equipos de Trabajo"
+        subtitle="Organiza a tus agentes para una mejor distribución de tareas"
+        actions={
+          <button
+            onClick={openCreate}
+            className="inline-flex items-center gap-2 rounded-xl bg-primary px-5 py-2.5 text-sm font-bold text-white shadow-lg shadow-primary/20 transition-all hover:-translate-y-px hover:shadow-xl active:scale-95"
+          >
+            <Plus size={18} /> Crear Equipo
+          </button>
+        }
+      />
 
       {isLoading && (
         <div className="flex flex-col items-center justify-center py-32 space-y-4">

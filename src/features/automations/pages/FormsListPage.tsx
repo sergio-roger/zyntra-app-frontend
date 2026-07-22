@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import { FileText, Loader2, Plus, Trash2 } from 'lucide-react';
 import { ConfirmModal } from '@shared/components/ConfirmModal';
 import { EmptyState } from '@shared/components/EmptyState';
+import { PageHeader } from '@shared/components/PageHeader';
 import { useDeleteFormTemplate, useFormTemplatesList } from '../hooks/use-forms';
 import { FormStatus, FormTemplate } from '../types/forms';
 
@@ -54,23 +55,18 @@ export const FormsListPage: React.FC = () => {
 
   return (
     <div className="space-y-6 animate-in fade-in duration-500">
-      <div className="flex flex-wrap items-center justify-between gap-3">
-        <div className="space-y-1">
-          <h2 className="text-xl font-bold text-white tracking-tight">
-            Formularios
-          </h2>
-          <p className="text-sm text-slate-400">
-            Creá plantillas de formulario reutilizables para el widget de chat,
-            agentes de IA o landings de Funnels.
-          </p>
-        </div>
-        <button
-          onClick={() => navigate('/automations/forms/new')}
-          className="inline-flex items-center gap-2 rounded-xl px-5 py-2.5 text-sm font-bold shadow-lg bg-primary text-white shadow-primary/20 hover:-translate-y-px hover:shadow-xl active:scale-95 transition-all"
-        >
-          <Plus size={18} /> Crear formulario
-        </button>
-      </div>
+      <PageHeader
+        title="Formularios"
+        subtitle="Creá plantillas de formulario reutilizables para el widget de chat, agentes de IA o landings de Funnels."
+        actions={
+          <button
+            onClick={() => navigate('/automations/forms/new')}
+            className="inline-flex items-center gap-2 rounded-xl px-5 py-2.5 text-sm font-bold shadow-lg bg-primary text-white shadow-primary/20 hover:-translate-y-px hover:shadow-xl active:scale-95 transition-all"
+          >
+            <Plus size={18} /> Crear formulario
+          </button>
+        }
+      />
 
       {templates.length === 0 ? (
         <EmptyState

@@ -19,6 +19,7 @@ import {
 } from '@features/settings/schemas/my-account.schema';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { Avatar } from '@shared/components/Avatar';
+import { PageHeader } from '@shared/components/PageHeader';
 import { getApiErrorMessage } from '@shared/constants/apiErrors';
 import {
   Activity,
@@ -191,14 +192,10 @@ export const MyAccountPage: React.FC = () => {
 
   return (
     <div className="w-full space-y-6 animate-in fade-in duration-500">
-      <div className="space-y-1">
-        <h2 className="text-xl font-bold text-white tracking-tight">
-          Mi Cuenta
-        </h2>
-        <p className="text-sm text-slate-400">
-          Gestiona los datos de tu cuenta de usuario, contraseña y perfil.
-        </p>
-      </div>
+      <PageHeader
+        title="Mi Cuenta"
+        subtitle="Gestiona los datos de tu cuenta de usuario, contraseña y perfil."
+      />
 
       <div className="w-full bg-slate-900/50 border border-white/5 rounded-3xl overflow-hidden shadow-xl">
         <Tabs

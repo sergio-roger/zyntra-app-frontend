@@ -1,9 +1,10 @@
 import { PermissionMatrix } from '@features/settings/components/PermissionMatrix';
 import { useRolesList } from '@features/settings/hooks/usePermissions';
 import { useAuthStore } from '@features/auth/store/authStore';
-import { ArrowLeft, Shield, Loader2 } from 'lucide-react';
+import { ArrowLeft, Loader2 } from 'lucide-react';
 import React from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
+import { PageHeader } from '@shared/components/PageHeader';
 
 export const RolePermissionsPage: React.FC = () => {
   const { role } = useParams<{ role: string }>();
@@ -63,20 +64,17 @@ export const RolePermissionsPage: React.FC = () => {
 
   return (
     <div className="space-y-6 animate-in fade-in duration-500">
-      <div className="flex flex-wrap items-center gap-4 justify-between">
-        <div className="space-y-1">
-          <button
-            onClick={() => navigate('/settings/permissions')}
-            className="inline-flex items-center gap-2 text-xs font-bold text-slate-400 hover:text-white transition-colors uppercase tracking-wider mb-2"
-          >
-            <ArrowLeft size={14} /> Volver a permisos
-          </button>
-          <h2 className="text-xl font-bold text-white tracking-tight flex items-center gap-2">
-            <Shield size={20} className="text-indigo-400" />
-            Configurar Permisos: {roleInfo.label}
-          </h2>
-          <p className="text-sm text-slate-400">{roleInfo.description}</p>
-        </div>
+      <div>
+        <button
+          onClick={() => navigate('/settings/permissions')}
+          className="inline-flex items-center gap-2 text-xs font-bold text-slate-400 hover:text-white transition-colors uppercase tracking-wider mb-2"
+        >
+          <ArrowLeft size={14} /> Volver a permisos
+        </button>
+        <PageHeader
+          title={`Configurar Permisos: ${roleInfo.label}`}
+          subtitle={roleInfo.description}
+        />
       </div>
 
       <div className="bg-slate-950/20 border border-white/5 rounded-3xl p-6 md:p-8">

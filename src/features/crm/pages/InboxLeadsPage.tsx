@@ -5,6 +5,7 @@ import { useArchiveLead, useLeadsList } from '@crm/hooks/useLeads';
 import { Contact } from '@crm/types/contact';
 import { AlertCircle, Inbox, Loader2, RefreshCw, Search } from 'lucide-react';
 import React, { useState } from 'react';
+import { PageHeader } from '@shared/components/PageHeader';
 
 export const InboxLeadsPage: React.FC = () => {
   const [search, setSearch] = useState('');
@@ -39,48 +40,42 @@ export const InboxLeadsPage: React.FC = () => {
   };
 
   return (
-    <div className="flex flex-col gap-6 p-1">
-      {/* Header */}
-      <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
-        <div className="flex flex-col gap-1">
-          <div className="flex items-center gap-3">
-            <h2 className="text-2xl font-black text-white tracking-tight">
-              Inbox Leads
-            </h2>
-            {!isLoading && (
-              <div className="flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-primary/10 text-primary border border-primary/20 text-[10px] font-black uppercase tracking-widest">
-                {total} leads
-              </div>
-            )}
-          </div>
-          <p className="text-xs text-slate-500 font-medium">
-            Todos los leads entrantes. Archívalos o conviértelos en negocios.
-          </p>
-        </div>
-
-        <div className="flex items-center gap-3">
-          <div className="relative">
-            <Search
-              className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-500"
-              size={15}
-            />
-            <input
-              type="text"
-              placeholder="Buscar lead..."
-              value={search}
-              onChange={(e) => setSearch(e.target.value)}
-              className="pl-9 pr-4 py-2 rounded-xl bg-slate-900/50 border border-white/5 text-sm text-slate-300 placeholder-slate-600 focus:outline-none focus:ring-2 focus:ring-primary/30 w-52 transition-all"
-            />
-          </div>
-          <button
-            onClick={() => refetch()}
-            className="p-2 rounded-xl bg-slate-900/50 border border-white/5 text-slate-400 hover:text-white hover:bg-white/5 transition-all"
-            title="Actualizar"
-          >
-            <RefreshCw size={16} />
-          </button>
-        </div>
-      </div>
+    <div className="flex flex-col gap-6 animate-in fade-in duration-500">
+      <PageHeader
+        title="Inbox Leads"
+        subtitle="Todos los leads entrantes. Archívalos o conviértelos en negocios."
+        badge={
+          !isLoading && (
+            <div className="flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-primary/10 text-primary border border-primary/20 text-[10px] font-black uppercase tracking-widest">
+              {total} leads
+            </div>
+          )
+        }
+        actions={
+          <>
+            <div className="relative">
+              <Search
+                className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-500"
+                size={15}
+              />
+              <input
+                type="text"
+                placeholder="Buscar lead..."
+                value={search}
+                onChange={(e) => setSearch(e.target.value)}
+                className="pl-9 pr-4 py-2 rounded-xl bg-slate-900/50 border border-white/5 text-sm text-slate-300 placeholder-slate-600 focus:outline-none focus:ring-2 focus:ring-primary/30 w-52 transition-all"
+              />
+            </div>
+            <button
+              onClick={() => refetch()}
+              className="p-2 rounded-xl bg-slate-900/50 border border-white/5 text-slate-400 hover:text-white hover:bg-white/5 transition-all"
+              title="Actualizar"
+            >
+              <RefreshCw size={16} />
+            </button>
+          </>
+        }
+      />
 
       {/* Stats bar */}
       {!isLoading && data && (

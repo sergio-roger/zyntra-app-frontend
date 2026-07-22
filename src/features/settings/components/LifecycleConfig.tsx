@@ -1,6 +1,7 @@
 import { LifecycleStageCard } from '@features/settings/components/LifecycleStageCard';
 import { useLifecycleConfig } from '@features/settings/hooks/useLifecycleConfig';
 import { CardWrapper } from '@shared/components/CardWrapper';
+import { PageHeader } from '@shared/components/PageHeader';
 import { Loader2, Plus, Save } from 'lucide-react';
 import React from 'react';
 
@@ -35,37 +36,33 @@ export const LifecycleConfig: React.FC = () => {
 
   return (
     <div className="space-y-6 animate-in fade-in duration-500">
-      <div className="flex flex-wrap items-center justify-between gap-3">
-        <div className="space-y-1">
-          <h2 className="text-xl font-bold text-white tracking-tight">
-            Configurar etapas de ciclo de vida
-          </h2>
-          <p className="text-sm text-slate-400">
-            Gestiona cómo evolucionan tus contactos en el sistema.
-          </p>
-        </div>
-        <div className="flex items-center gap-2">
-          <button
-            className="btn btn-ghost btn-sm px-6"
-            onClick={() => fetchStages()}
-            disabled={saving}
-          >
-            Cancelar
-          </button>
-          <button
-            className="btn btn-primary btn-sm px-6 shadow-lg shadow-primary/20"
-            onClick={handleSave}
-            disabled={saving}
-          >
-            {saving ? (
-              <Loader2 className="h-4 w-4 animate-spin mr-2" />
-            ) : (
-              <Save className="h-4 w-4 mr-2" />
-            )}
-            Guardar
-          </button>
-        </div>
-      </div>
+      <PageHeader
+        title="Configurar etapas de ciclo de vida"
+        subtitle="Gestiona cómo evolucionan tus contactos en el sistema."
+        actions={
+          <>
+            <button
+              className="btn btn-ghost btn-sm px-6"
+              onClick={() => fetchStages()}
+              disabled={saving}
+            >
+              Cancelar
+            </button>
+            <button
+              className="btn btn-primary btn-sm px-6 shadow-lg shadow-primary/20"
+              onClick={handleSave}
+              disabled={saving}
+            >
+              {saving ? (
+                <Loader2 className="h-4 w-4 animate-spin mr-2" />
+              ) : (
+                <Save className="h-4 w-4 mr-2" />
+              )}
+              Guardar
+            </button>
+          </>
+        }
+      />
 
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
         {/* Active Stages Section */}

@@ -15,6 +15,7 @@ import { DealPipeline } from '@crm/types/deal-pipeline';
 import { DealPipelineStage } from '@crm/types/deal-pipeline-stage';
 import { useAuthStore } from '@features/auth/store/authStore';
 import { EmptyState } from '@shared/components/EmptyState';
+import { PageHeader } from '@shared/components/PageHeader';
 import {
   AlertCircle,
   BarChart3,
@@ -100,46 +101,40 @@ export const DealsPage: React.FC = () => {
     kanbanData?.columns.reduce((s, c) => s + c.total_value, 0) ?? 0;
 
   return (
-    <div className="flex flex-col gap-6 p-1">
-      {/* Header */}
-      <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
-        <div className="flex flex-col gap-1">
-          <div className="flex items-center gap-3">
-            <h2 className="text-2xl font-black text-white tracking-tight">
-              Negocios y Oportunidades
-            </h2>
-            <div className="hidden sm:flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-indigo-500/10 text-indigo-400 border border-indigo-500/20 text-[10px] font-black uppercase tracking-widest">
-              Live Pipeline
+    <div className="flex flex-col gap-6 animate-in fade-in duration-500">
+      <PageHeader
+        title="Negocios y Oportunidades"
+        subtitle="Gestiona y cierra tratos con tu equipo de ventas."
+        badge={
+          <div className="hidden sm:flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-indigo-500/10 text-indigo-400 border border-indigo-500/20 text-[10px] font-black uppercase tracking-widest">
+            Live Pipeline
+          </div>
+        }
+        actions={
+          <>
+            <div className="relative hidden lg:block">
+              <Search
+                className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-500"
+                size={16}
+              />
+              <input
+                type="text"
+                placeholder="Buscar por título o contacto..."
+                className="pl-10 pr-4 py-2 rounded-xl bg-slate-900/50 border border-white/5 text-sm text-slate-300 focus:outline-none focus:ring-2 focus:ring-indigo-500/40 w-64 transition-all"
+              />
             </div>
-          </div>
-          <p className="text-xs text-slate-500 font-medium">
-            Gestiona y cierra tratos con tu equipo de ventas.
-          </p>
-        </div>
-
-        <div className="flex items-center gap-3">
-          <div className="relative hidden lg:block">
-            <Search
-              className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-500"
-              size={16}
-            />
-            <input
-              type="text"
-              placeholder="Buscar por título o contacto..."
-              className="pl-10 pr-4 py-2 rounded-xl bg-slate-900/50 border border-white/5 text-sm text-slate-300 focus:outline-none focus:ring-2 focus:ring-indigo-500/40 w-64 transition-all"
-            />
-          </div>
-          {isAdmin && (
-            <button
-              onClick={handleCreatePipeline}
-              className="flex items-center gap-2 px-4 py-2.5 rounded-xl bg-indigo-600 hover:bg-indigo-500 text-white text-sm font-bold transition-all shadow-lg shadow-indigo-600/30 active:scale-95"
-            >
-              <FolderPlus size={18} />
-              <span>Nuevo Pipeline</span>
-            </button>
-          )}
-        </div>
-      </div>
+            {isAdmin && (
+              <button
+                onClick={handleCreatePipeline}
+                className="flex items-center gap-2 px-4 py-2.5 rounded-xl bg-indigo-600 hover:bg-indigo-500 text-white text-sm font-bold transition-all shadow-lg shadow-indigo-600/30 active:scale-95"
+              >
+                <FolderPlus size={18} />
+                <span>Nuevo Pipeline</span>
+              </button>
+            )}
+          </>
+        }
+      />
 
       {/* Pipeline Selector / Selector de Pipelines */}
       {pipelines.length > 0 && (
