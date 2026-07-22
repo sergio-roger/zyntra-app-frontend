@@ -9,6 +9,12 @@ export default {
       backgroundImage: {
         'gradient-radial': 'radial-gradient(var(--tw-gradient-stops))',
       },
+      colors: {
+        // Variante más oscura de `secondary` (#7c3aed) — no existía en la
+        // paleta Zyntra, se agrega para botones/superficies moradas sin
+        // recurrir a un border.
+        'secondary-deep': '#2e0d3f',
+      },
     },
   },
   plugins: [require('daisyui')],

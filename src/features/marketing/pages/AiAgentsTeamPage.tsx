@@ -44,6 +44,7 @@ export const AiAgentsTeamPage: React.FC = () => {
               primaryLabel="Ver Detalles"
               primaryDisabled={false}
               onPrimaryAction={() => setSelectedAgent(agent)}
+              showStats
             />
           ))}
         </div>

@@ -1,7 +1,5 @@
 import {
   Bot,
-  CheckCircle2,
-  Clock,
   Megaphone,
   Palette,
   PenSquare,
@@ -29,24 +27,24 @@ const IconBadge: React.FC<{ agent: SystemAgentCatalogItem }> = ({ agent }) => {
   const color = agent.category?.color ?? '#6366f1';
   return (
     <div
-      className="w-12 h-12 rounded-xl flex items-center justify-center"
-      style={{ backgroundColor: `${color}1a`, color }}
+      className="w-12 h-12 rounded-xl flex items-center justify-center transition-all duration-200 group-hover:scale-110 group-hover:brightness-125"
+      style={{ backgroundColor: `${color}33`, color }}
     >
       <Icon size={24} />
     </div>
   );
 };
 
-const StatusBadge: React.FC<{ isActive: boolean }> = ({ isActive }) =>
-  isActive ? (
-    <span className="badge badge-success gap-1">
-      <CheckCircle2 size={12} /> Activo
+const StatusBadge: React.FC<{ isActive: boolean }> = ({ isActive }) => (
+  <div className="flex items-center gap-1.5">
+    <span
+      className={`w-2 h-2 rounded-full ${isActive ? 'bg-success' : 'bg-base-content/30'}`}
+    />
+    <span className="text-xs text-base-content/60">
+      {isActive ? 'Activo' : 'Próximamente'}
     </span>
-  ) : (
-    <span className="badge badge-ghost gap-1">
-      <Clock size={12} /> Próximamente
-    </span>
-  );
+  </div>
+);
 
 const StatsRow: React.FC<{ agent: SystemAgentCatalogItem }> = ({ agent }) => (
   <div className="grid grid-cols-2 gap-2 text-sm">
@@ -68,6 +66,7 @@ interface AgentCardProps {
   primaryLabel: string;
   primaryDisabled: boolean;
   onPrimaryAction: () => void;
+  showStats?: boolean;
 }
 
 export const AgentCard: React.FC<AgentCardProps> = ({
@@ -75,10 +74,11 @@ export const AgentCard: React.FC<AgentCardProps> = ({
   primaryLabel,
   primaryDisabled,
   onPrimaryAction,
+  showStats = false,
 }) => {
   const isActive = agent.status === 'active';
   return (
-    <div className="card bg-base-100 shadow-sm border border-base-200 hover:shadow-md transition-shadow">
+    <div className="group card bg-base-100 shadow-sm border border-base-200 hover:shadow-md transition-shadow">
       <div className="card-body gap-3">
         <IconBadge agent={agent} />
         <h3 className="font-bold text-lg leading-tight">{agent.name}</h3>
@@ -86,11 +86,11 @@ export const AgentCard: React.FC<AgentCardProps> = ({
           {agent.description}
         </p>
         <StatusBadge isActive={isActive} />
-        {isActive && <StatsRow agent={agent} />}
+        {showStats && isActive && <StatsRow agent={agent} />}
         <button
           onClick={onPrimaryAction}
           disabled={primaryDisabled}
-          className="btn btn-primary btn-sm mt-2"
+          className="btn btn-sm w-full rounded-lg mt-2 border-none bg-secondary-deep/50 text-purple-400 hover:bg-secondary-deep/70 hover:text-purple-300 disabled:opacity-50"
         >
           {primaryLabel}
         </button>

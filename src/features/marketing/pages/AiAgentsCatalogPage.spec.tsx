@@ -98,15 +98,17 @@ describe('AiAgentsCatalogPage', () => {
       expect(await screen.findByText(agent.name)).toBeInTheDocument();
     }
 
-    const badges = screen.getAllByText((_, element) =>
-      element?.tagName === 'SPAN' && element.classList.contains('badge'),
+    const statusLabels = screen.getAllByText(
+      (_, element) =>
+        element?.tagName === 'SPAN' &&
+        (element.textContent === 'Activo' || element.textContent === 'Próximamente'),
     );
-    const activeBadges = badges.filter((b) => b.textContent?.includes('Activo'));
-    const comingSoonBadges = badges.filter((b) =>
-      b.textContent?.includes('Próximamente'),
+    const activeLabels = statusLabels.filter((el) => el.textContent === 'Activo');
+    const comingSoonLabels = statusLabels.filter(
+      (el) => el.textContent === 'Próximamente',
     );
-    expect(activeBadges).toHaveLength(1);
-    expect(comingSoonBadges).toHaveLength(7);
+    expect(activeLabels).toHaveLength(1);
+    expect(comingSoonLabels).toHaveLength(7);
   });
 
   it('deshabilita "Importar" para los agentes coming_soon y lo habilita para el activo', async () => {
