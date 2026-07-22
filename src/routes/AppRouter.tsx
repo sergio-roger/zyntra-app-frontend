@@ -28,9 +28,9 @@ const AppRoutes = () => {
         ...automationRoutes,
         ...settingsRoutes,
         {
-          path: '/funnels/*',
+          path: '/drive/*',
           element: (
-            <ModuleGuard menuKey="funnels">
+            <ModuleGuard menuKey="drive">
               <ConstructionPage />
             </ModuleGuard>
           ),

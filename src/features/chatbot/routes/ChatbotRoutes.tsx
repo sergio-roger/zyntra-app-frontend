@@ -39,16 +39,4 @@ export const chatbotRoutes: RouteObject[] = [
       </ProtectedRoute>
     ),
   },
-  {
-    path: '/inbox/channels',
-    element: (
-      <ProtectedRoute>
-        <PermissionGuard menuKey="inbox_channels">
-          <ModuleGuard menuKey="inbox_channels">
-            <ConstructionPage />
-          </ModuleGuard>
-        </PermissionGuard>
-      </ProtectedRoute>
-    ),
-  },
 ];
