@@ -1,4 +1,5 @@
 import { ROLE_COLOR_OPTIONS } from '@core/constants/colors';
+import { Button } from '@core/ui/Button';
 import { Input } from '@core/ui/Input';
 import { Textarea } from '@core/ui/Textarea';
 import {
@@ -171,14 +172,15 @@ export const RoleFormSidebar: React.FC<RoleFormSidebarProps> = ({
           {/* Footer */}
           <div className="p-6 border-t border-white/5 bg-slate-900/50 backdrop-blur-md">
             <div className="flex gap-3">
-              <button
+              <Button
                 type="button"
+                variant="secondary"
                 onClick={onClose}
                 disabled={isMutationPending}
-                className="flex-1 px-4 py-3 rounded-xl bg-slate-800 text-slate-300 text-sm font-bold hover:bg-slate-700 transition-all disabled:opacity-50"
+                className="flex-1"
               >
                 Cancelar
-              </button>
+              </Button>
               <button
                 form="role-form"
                 type="submit"

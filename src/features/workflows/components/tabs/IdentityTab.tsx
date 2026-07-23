@@ -1,7 +1,8 @@
 import React from 'react';
 import { useForm, useWatch, Controller } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { Loader2, Save, Sparkles, Tags } from 'lucide-react';
+import { Save, Sparkles, Tags } from 'lucide-react';
+import { Button } from '@core/ui/Button';
 import { Input } from '@core/ui/Input';
 import { Textarea } from '@core/ui/Textarea';
 import { Select } from '@core/ui/Select';
@@ -164,14 +165,9 @@ export const IdentityTab: React.FC<IdentityTabProps> = ({ agent, onCreated }) =>
       </label>
 
       <div className="flex justify-end pt-2">
-        <button
-          type="submit"
-          disabled={isSaving}
-          className="inline-flex items-center gap-2 rounded-xl px-5 py-2.5 text-sm font-bold bg-primary text-white shadow-lg shadow-primary/20 hover:opacity-90 transition-all disabled:opacity-50"
-        >
-          {isSaving ? <Loader2 size={16} className="animate-spin" /> : <Save size={16} />}
+        <Button type="submit" loading={isSaving} icon={Save}>
           {agent ? 'Guardar cambios' : 'Crear agente'}
-        </button>
+        </Button>
       </div>
     </form>
   );

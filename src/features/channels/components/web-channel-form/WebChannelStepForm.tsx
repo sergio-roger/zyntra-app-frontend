@@ -15,10 +15,11 @@ import {
   useChannelsStore,
 } from '@features/channels/store/useChannelsStore';
 import { Channel, WebChannelBusinessHours } from '@features/channels/types/channels.types';
+import { Button } from '@core/ui/Button';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { ConfirmModal } from '@shared/components/ConfirmModal';
 import { toastManager } from '@shared/components/toast/toastManager';
-import { ArrowLeft, ArrowRight, Loader2 } from 'lucide-react';
+import { ArrowLeft, ArrowRight } from 'lucide-react';
 import React, { useEffect, useState } from 'react';
 import { FormProvider, useForm } from 'react-hook-form';
 import { StepAgent } from './StepAgent';
@@ -283,20 +284,19 @@ export const WebChannelStepForm: React.FC<WebChannelStepFormProps> = ({
                   Siguiente <ArrowRight size={14} />
                 </button>
               ) : (
-                <button
+                <Button
                   key="wizard-submit-button"
                   type="submit"
                   disabled={isSubmitting}
+                  loading={isSubmitting}
                   data-testid="submit-web-channel-form"
-                  className="inline-flex items-center gap-2 rounded-xl px-5 py-2.5 text-sm font-bold bg-indigo-600 text-white shadow-lg shadow-indigo-500/20 hover:bg-indigo-500 transition-all disabled:opacity-50 disabled:cursor-not-allowed"
                 >
-                  {isSubmitting && <Loader2 size={14} className="animate-spin" />}
                   {isSubmitting
                     ? 'Guardando...'
                     : mode === 'create'
                       ? 'Crear canal'
                       : 'Guardar cambios'}
-                </button>
+                </Button>
               )}
             </div>
           </div>

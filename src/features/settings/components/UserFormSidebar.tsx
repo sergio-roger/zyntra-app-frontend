@@ -1,3 +1,4 @@
+import { Button } from '@core/ui/Button';
 import { Input } from '@core/ui/Input';
 import { Select } from '@core/ui/Select';
 import { useAuthStore } from '@features/auth/store/authStore';
@@ -19,7 +20,6 @@ import {
   Check,
   CheckCircle2,
   Image as ImageIcon,
-  Loader2,
   Mail,
   Shield,
   User,
@@ -312,30 +312,27 @@ export const UserFormSidebar: React.FC<UserFormSidebarProps> = ({
 
           <div className="p-6 border-t border-white/5 bg-slate-900/50 backdrop-blur-md">
             <div className="flex gap-3">
-              <button
+              <Button
                 type="button"
+                variant="secondary"
                 onClick={onClose}
-                className="flex-1 px-4 py-3 rounded-xl bg-slate-800 text-slate-300 text-sm font-bold hover:bg-slate-700 transition-all"
+                className="flex-1"
               >
                 Cancelar
-              </button>
-              <button
+              </Button>
+              <Button
                 form="user-form"
                 type="submit"
                 disabled={
-                  isSaving ||
                   (!formData.firstName && !formData.lastName) ||
                   !formData.email
                 }
-                className="flex-[2] px-4 py-3 rounded-xl bg-indigo-600 text-white text-sm font-bold hover:bg-indigo-500 transition-all shadow-lg shadow-indigo-500/20 flex items-center justify-center gap-2 disabled:opacity-50"
+                loading={isSaving}
+                icon={Check}
+                className="flex-[2]"
               >
-                {isSaving ? (
-                  <Loader2 size={18} className="animate-spin" />
-                ) : (
-                  <Check size={18} />
-                )}
                 {user ? 'Guardar Cambios' : 'Crear Usuario'}
-              </button>
+              </Button>
             </div>
           </div>
         </div>

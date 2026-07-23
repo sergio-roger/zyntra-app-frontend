@@ -1,8 +1,9 @@
+import { Button } from '@core/ui/Button';
 import { Input } from '@core/ui/Input';
 import { useCreateField, useUpdateField } from '@crm/hooks/useCustomFields';
 import { CustomFieldType } from '@crm/types/crm';
 import { CustomField } from '@crm/types/custom-field';
-import { Check, Loader2, Settings2, X } from 'lucide-react';
+import { Check, Settings2, X } from 'lucide-react';
 import React, { useEffect, useState } from 'react';
 
 interface CustomFieldFormSidebarProps {
@@ -259,26 +260,23 @@ export const CustomFieldFormSidebar: React.FC<CustomFieldFormSidebarProps> = ({
 
           <div className="p-6 border-t border-white/5 bg-slate-900/50 backdrop-blur-md">
             <div className="flex gap-3">
-              <button
+              <Button
                 type="button"
+                variant="secondary"
                 onClick={onClose}
-                className="flex-1 px-4 py-3 rounded-xl bg-slate-800 text-slate-300 text-sm font-bold hover:bg-slate-700 transition-all"
+                className="flex-1"
               >
                 Cancelar
-              </button>
-              <button
+              </Button>
+              <Button
                 form="custom-field-form"
                 type="submit"
-                disabled={isSaving}
-                className="flex-[2] px-4 py-3 rounded-xl bg-indigo-600 text-white text-sm font-bold hover:bg-indigo-500 transition-all shadow-lg shadow-indigo-500/20 flex items-center justify-center gap-2"
+                loading={isSaving}
+                icon={Check}
+                className="flex-[2]"
               >
-                {isSaving ? (
-                  <Loader2 size={18} className="animate-spin" />
-                ) : (
-                  <Check size={18} />
-                )}
                 {field ? 'Guardar Cambios' : 'Crear Campo'}
-              </button>
+              </Button>
             </div>
           </div>
         </div>

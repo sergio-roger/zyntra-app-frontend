@@ -17,13 +17,13 @@ import {
 import { CSS } from '@dnd-kit/utilities';
 import {
   GripVertical,
-  Loader2,
   Plus,
   Save,
   Settings2,
   Trash2,
 } from 'lucide-react';
 import React, { useEffect, useState } from 'react';
+import { Button } from '@core/ui/Button';
 import { FormFieldSidebar } from '../FormFieldSidebar';
 import { useReplaceFormFields } from '../../hooks/use-forms';
 import { FormField, FormTemplateWithFields } from '../../types/forms';
@@ -210,19 +210,14 @@ export const FormFieldsTab: React.FC<FormFieldsTabProps> = ({ template }) => {
       )}
 
       <div className="flex justify-end pt-2">
-        <button
-          type="button"
+        <Button
           onClick={handleSaveChanges}
-          disabled={!isDirty || replaceFields.isPending}
-          className="inline-flex items-center gap-2 rounded-xl px-5 py-2.5 text-sm font-bold bg-primary text-white shadow-lg shadow-primary/20 hover:opacity-90 transition-all disabled:opacity-50"
+          disabled={!isDirty}
+          loading={replaceFields.isPending}
+          icon={Save}
         >
-          {replaceFields.isPending ? (
-            <Loader2 size={16} className="animate-spin" />
-          ) : (
-            <Save size={16} />
-          )}
           Guardar cambios
-        </button>
+        </Button>
       </div>
 
       <FormFieldSidebar

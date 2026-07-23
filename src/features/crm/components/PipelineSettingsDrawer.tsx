@@ -1,3 +1,4 @@
+import { Button } from '@core/ui/Button';
 import { Select } from '@core/ui/Select';
 import {
   PIPELINE_STAGE_COLORS,
@@ -408,18 +409,14 @@ export const PipelineSettingsDrawer: React.FC<PipelineSettingsDrawerProps> = ({
 
                   {stage._dirty && (
                     <div className="flex justify-end gap-2 pl-5">
-                      <button
+                      <Button
+                        size="sm"
                         onClick={() => handleSaveStage(stage)}
-                        disabled={savingId === stage.id}
-                        className="flex items-center gap-1 px-3 py-1 rounded-lg bg-indigo-600 text-white text-xs font-bold hover:bg-indigo-500 disabled:opacity-50 transition-all"
+                        loading={savingId === stage.id}
+                        icon={Check}
                       >
-                        {savingId === stage.id ? (
-                          <Loader2 size={11} className="animate-spin" />
-                        ) : (
-                          <Check size={11} />
-                        )}
                         Guardar
-                      </button>
+                      </Button>
                     </div>
                   )}
 
@@ -460,26 +457,25 @@ export const PipelineSettingsDrawer: React.FC<PipelineSettingsDrawerProps> = ({
         {/* Footer — only for Configuración tab */}
         {activeTab === 'configuracion' && (
           <div className="p-6 border-t border-white/5 bg-slate-950/30 flex gap-3 shrink-0">
-            <button
+            <Button
               type="button"
+              variant="secondary"
+              outline
               onClick={onClose}
-              className="flex-1 px-4 py-2.5 rounded-xl border border-white/10 text-sm font-semibold text-slate-300 hover:bg-white/5 transition-colors"
+              className="flex-1"
             >
               Cancelar
-            </button>
-            <button
+            </Button>
+            <Button
               form="pipeline-config-form"
               type="submit"
-              disabled={updatePipeline.isPending || !pipelineName.trim()}
-              className="flex-[2] px-4 py-2.5 rounded-xl bg-primary text-white text-sm font-semibold shadow-lg shadow-primary/20 hover:opacity-90 disabled:opacity-50 transition-all flex items-center justify-center gap-2"
+              disabled={!pipelineName.trim()}
+              loading={updatePipeline.isPending}
+              icon={Save}
+              className="flex-[2]"
             >
-              {updatePipeline.isPending ? (
-                <Loader2 className="animate-spin" size={18} />
-              ) : (
-                <Save size={18} />
-              )}
               Guardar Cambios
-            </button>
+            </Button>
           </div>
         )}
       </div>

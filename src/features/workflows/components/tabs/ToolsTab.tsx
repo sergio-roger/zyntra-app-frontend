@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
-import { Loader2, Save, Search, BookOpen, UserPlus, CalendarClock } from 'lucide-react';
+import { Save, Search, BookOpen, UserPlus, CalendarClock } from 'lucide-react';
+import { Button } from '@core/ui/Button';
 import { useUpdateAgent } from '../../hooks/use-agents';
 import { Agent, AgentTool } from '../../types/automations';
 
@@ -82,19 +83,14 @@ export const ToolsTab: React.FC<ToolsTabProps> = ({ agent }) => {
       })}
 
       <div className="flex justify-end pt-2">
-        <button
-          type="button"
+        <Button
           onClick={handleSave}
-          disabled={!hasChanges || updateAgent.isPending}
-          className="inline-flex items-center gap-2 rounded-xl px-5 py-2.5 text-sm font-bold bg-primary text-white shadow-lg shadow-primary/20 hover:opacity-90 transition-all disabled:opacity-50"
+          disabled={!hasChanges}
+          loading={updateAgent.isPending}
+          icon={Save}
         >
-          {updateAgent.isPending ? (
-            <Loader2 size={16} className="animate-spin" />
-          ) : (
-            <Save size={16} />
-          )}
           Guardar cambios
-        </button>
+        </Button>
       </div>
     </div>
   );

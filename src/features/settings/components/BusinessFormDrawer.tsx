@@ -1,3 +1,4 @@
+import { Button } from '@core/ui/Button';
 import { Input } from '@core/ui/Input';
 import { useUpdateBusiness } from '@features/settings/hooks/useBusiness';
 import {
@@ -10,7 +11,6 @@ import {
   Building2,
   FileText,
   Globe,
-  Loader2,
   Mail,
   MapPin,
   Phone,
@@ -168,26 +168,24 @@ export const BusinessFormDrawer: React.FC<BusinessFormDrawerProps> = ({
 
           <div className="p-6 border-t border-white/5 bg-slate-900/50 backdrop-blur-md">
             <div className="flex gap-3">
-              <button
+              <Button
                 type="button"
+                variant="secondary"
                 onClick={onClose}
-                className="flex-1 px-4 py-3 rounded-xl bg-slate-800 text-slate-300 text-sm font-bold hover:bg-slate-700 transition-all"
+                className="flex-1"
               >
                 Cancelar
-              </button>
-              <button
+              </Button>
+              <Button
                 form="business-form"
                 type="submit"
-                disabled={isSubmitting || updateBusiness.isPending}
-                className="flex-[2] px-4 py-3 rounded-xl bg-indigo-600 text-white text-sm font-bold hover:bg-indigo-500 transition-all shadow-lg shadow-indigo-500/20 flex items-center justify-center gap-2 disabled:opacity-50"
+                disabled={isSubmitting}
+                loading={updateBusiness.isPending}
+                icon={Save}
+                className="flex-[2]"
               >
-                {updateBusiness.isPending ? (
-                  <Loader2 size={18} className="animate-spin" />
-                ) : (
-                  <Save size={18} />
-                )}
                 Guardar cambios
-              </button>
+              </Button>
             </div>
           </div>
         </div>

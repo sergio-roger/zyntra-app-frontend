@@ -1,3 +1,4 @@
+import { Button } from '@core/ui/Button';
 import { Input } from '@core/ui/Input';
 import { MultiSelectChips } from '@core/ui/MultiSelectChips';
 import { Select } from '@core/ui/Select';
@@ -168,18 +169,14 @@ export const BusinessProfilePage: React.FC = () => {
         </div>
 
         <div className="flex justify-end p-6 border-t border-white/5">
-          <button
+          <Button
             type="submit"
-            disabled={isSubmitting || updateProfile.isPending}
-            className="inline-flex items-center gap-2 rounded-xl px-4 py-2.5 text-sm font-bold bg-indigo-600 text-white shadow-lg shadow-indigo-500/20 hover:bg-indigo-500 transition-all disabled:opacity-50"
+            disabled={isSubmitting}
+            loading={updateProfile.isPending}
+            icon={Save}
           >
-            {updateProfile.isPending ? (
-              <Loader2 size={16} className="animate-spin" />
-            ) : (
-              <Save size={16} />
-            )}
             Guardar cambios
-          </button>
+          </Button>
         </div>
       </form>
     </div>

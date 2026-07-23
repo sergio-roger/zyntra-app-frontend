@@ -1,3 +1,4 @@
+import { Button } from '@core/ui/Button';
 import { Input } from '@core/ui/Input';
 import { Textarea } from '@core/ui/Textarea';
 import { Accordion } from '@core/ui/Accordion';
@@ -379,19 +380,16 @@ export const MyAccountPage: React.FC = () => {
               </div>
 
               <div className="pt-4">
-                <button
+                <Button
                   type="submit"
                   form="profile-edit-form"
-                  disabled={isProfileSubmitting || updateProfile.isPending}
-                  className="w-full inline-flex items-center justify-center gap-2 rounded-xl px-4 py-2.5 text-sm font-bold bg-indigo-600 text-white shadow-lg shadow-indigo-500/20 hover:bg-indigo-500 transition-all disabled:opacity-50"
+                  disabled={isProfileSubmitting}
+                  loading={updateProfile.isPending}
+                  icon={Save}
+                  fullWidth
                 >
-                  {updateProfile.isPending ? (
-                    <Loader2 size={16} className="animate-spin" />
-                  ) : (
-                    <Save size={16} />
-                  )}
                   Guardar cambios
-                </button>
+                </Button>
               </div>
             </div>
 
