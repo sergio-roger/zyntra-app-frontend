@@ -52,7 +52,9 @@ describe('BusinessProfileHeader', () => {
   });
 
   it('muestra el nombre y correo de la business', () => {
-    render(<BusinessProfileHeader business={business} onEdit={vi.fn()} />);
+    render(
+      <BusinessProfileHeader business={business} isAdmin onEdit={vi.fn()} />,
+    );
 
     expect(screen.getByText('Acme')).toBeInTheDocument();
     expect(screen.getByText('contact@acme.com')).toBeInTheDocument();
@@ -60,7 +62,9 @@ describe('BusinessProfileHeader', () => {
 
   it('llama a onEdit al hacer click en "Editar empresa"', () => {
     const onEdit = vi.fn();
-    render(<BusinessProfileHeader business={business} onEdit={onEdit} />);
+    render(
+      <BusinessProfileHeader business={business} isAdmin onEdit={onEdit} />,
+    );
 
     fireEvent.click(screen.getByRole('button', { name: /editar empresa/i }));
 
@@ -68,7 +72,9 @@ describe('BusinessProfileHeader', () => {
   });
 
   it('sube un nuevo logo al seleccionar un archivo válido', () => {
-    render(<BusinessProfileHeader business={business} onEdit={vi.fn()} />);
+    render(
+      <BusinessProfileHeader business={business} isAdmin onEdit={vi.fn()} />,
+    );
 
     fireEvent.change(screen.getByLabelText('Subir logo'), {
       target: { files: [validFile] },
@@ -78,7 +84,9 @@ describe('BusinessProfileHeader', () => {
   });
 
   it('sube una nueva portada al seleccionar un archivo válido', () => {
-    render(<BusinessProfileHeader business={business} onEdit={vi.fn()} />);
+    render(
+      <BusinessProfileHeader business={business} isAdmin onEdit={vi.fn()} />,
+    );
 
     fireEvent.change(screen.getByLabelText('Subir portada'), {
       target: { files: [validFile] },
@@ -88,7 +96,9 @@ describe('BusinessProfileHeader', () => {
   });
 
   it('rechaza un archivo con formato no permitido', () => {
-    render(<BusinessProfileHeader business={business} onEdit={vi.fn()} />);
+    render(
+      <BusinessProfileHeader business={business} isAdmin onEdit={vi.fn()} />,
+    );
     const invalidFile = new File(['fake'], 'doc.pdf', {
       type: 'application/pdf',
     });
@@ -101,7 +111,9 @@ describe('BusinessProfileHeader', () => {
   });
 
   it('quita el logo al hacer click en "Quitar logo"', () => {
-    render(<BusinessProfileHeader business={business} onEdit={vi.fn()} />);
+    render(
+      <BusinessProfileHeader business={business} isAdmin onEdit={vi.fn()} />,
+    );
 
     fireEvent.click(screen.getByLabelText('Quitar logo'));
 
@@ -109,10 +121,58 @@ describe('BusinessProfileHeader', () => {
   });
 
   it('quita la portada al hacer click en "Quitar portada"', () => {
-    render(<BusinessProfileHeader business={business} onEdit={vi.fn()} />);
+    render(
+      <BusinessProfileHeader business={business} isAdmin onEdit={vi.fn()} />,
+    );
 
     fireEvent.click(screen.getByLabelText('Quitar portada'));
 
     expect(removeCoverMutate).toHaveBeenCalled();
+  });
+
+  describe('usuario no admin (modo lectura)', () => {
+    it('no muestra el botón "Editar empresa"', () => {
+      render(
+        <BusinessProfileHeader
+          business={business}
+          isAdmin={false}
+          onEdit={vi.fn()}
+        />,
+      );
+
+      expect(
+        screen.queryByRole('button', { name: /editar empresa/i }),
+      ).not.toBeInTheDocument();
+    });
+
+    it('no muestra los controles de logo ni de portada', () => {
+      render(
+        <BusinessProfileHeader
+          business={business}
+          isAdmin={false}
+          onEdit={vi.fn()}
+        />,
+      );
+
+      expect(screen.queryByLabelText('Subir logo')).not.toBeInTheDocument();
+      expect(screen.queryByLabelText('Subir portada')).not.toBeInTheDocument();
+      expect(screen.queryByLabelText('Quitar logo')).not.toBeInTheDocument();
+      expect(
+        screen.queryByLabelText('Quitar portada'),
+      ).not.toBeInTheDocument();
+    });
+
+    it('igual muestra el nombre y correo de la business', () => {
+      render(
+        <BusinessProfileHeader
+          business={business}
+          isAdmin={false}
+          onEdit={vi.fn()}
+        />,
+      );
+
+      expect(screen.getByText('Acme')).toBeInTheDocument();
+      expect(screen.getByText('contact@acme.com')).toBeInTheDocument();
+    });
   });
 });

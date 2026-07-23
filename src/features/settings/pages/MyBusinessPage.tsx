@@ -2,6 +2,7 @@ import { BusinessFormDrawer } from '@features/settings/components/BusinessFormDr
 import { BusinessProfileHeader } from '@features/settings/components/BusinessProfileHeader';
 import { useBusinessQuery } from '@features/settings/hooks/useBusiness';
 import { Business } from '@features/settings/types/settings';
+import { useAuthStore } from '@features/auth/store/authStore';
 import {
   Calendar,
   CreditCard,
@@ -40,6 +41,7 @@ const formatBusinessDate = (value: string) =>
 export const MyBusinessPage: React.FC = () => {
   const { data: business, isLoading } = useBusinessQuery();
   const [isDrawerOpen, setIsDrawerOpen] = useState(false);
+  const isAdmin = useAuthStore((s) => s.user?.role) === 'admin';
 
   if (isLoading) {
     return (
@@ -53,6 +55,7 @@ export const MyBusinessPage: React.FC = () => {
     <div className="w-full space-y-6 animate-in fade-in duration-500">
       <BusinessProfileHeader
         business={business}
+        isAdmin={isAdmin}
         onEdit={() => setIsDrawerOpen(true)}
       />
 
@@ -62,11 +65,13 @@ export const MyBusinessPage: React.FC = () => {
         </div>
       </div>
 
-      <BusinessFormDrawer
-        open={isDrawerOpen}
-        business={business}
-        onClose={() => setIsDrawerOpen(false)}
-      />
+      {isAdmin && (
+        <BusinessFormDrawer
+          open={isDrawerOpen}
+          business={business}
+          onClose={() => setIsDrawerOpen(false)}
+        />
+      )}
     </div>
   );
 };

@@ -1,4 +1,4 @@
-import { describe, it, expect, vi } from 'vitest';
+import { describe, it, expect, vi, beforeEach } from 'vitest';
 import { render, screen, fireEvent } from '@testing-library/react';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import React from 'react';
@@ -32,6 +32,15 @@ vi.mock('@features/settings/components/BusinessFormDrawer', () => ({
   ),
 }));
 
+const authState = vi.hoisted(() => ({
+  user: { role: 'admin' } as { role: string } | null,
+}));
+
+vi.mock('@features/auth/store/authStore', () => ({
+  useAuthStore: (selector?: (state: typeof authState) => unknown) =>
+    selector ? selector(authState) : authState,
+}));
+
 const createWrapper = () => {
   const qc = new QueryClient({ defaultOptions: { queries: { retry: false } } });
   const Wrapper: React.FC<{ children: React.ReactNode }> = ({ children }) => (
@@ -41,6 +50,10 @@ const createWrapper = () => {
 };
 
 describe('MyBusinessPage', () => {
+  beforeEach(() => {
+    authState.user = { role: 'admin' };
+  });
+
   it('muestra los datos de la business en modo lectura', () => {
     render(<MyBusinessPage />, { wrapper: createWrapper() });
 
@@ -57,7 +70,7 @@ describe('MyBusinessPage', () => {
     expect(screen.getByText('Prueba')).toBeInTheDocument();
   });
 
-  it('el drawer inicia cerrado y se abre al hacer click en "Editar empresa"', () => {
+  it('el admin ve el botón "Editar empresa" y el drawer se abre al hacer click', () => {
     render(<MyBusinessPage />, { wrapper: createWrapper() });
 
     expect(screen.getByTestId('business-drawer')).toHaveTextContent('closed');
@@ -65,5 +78,15 @@ describe('MyBusinessPage', () => {
     fireEvent.click(screen.getByRole('button', { name: /editar empresa/i }));
 
     expect(screen.getByTestId('business-drawer')).toHaveTextContent('open');
+  });
+
+  it('un usuario no admin no ve el botón "Editar empresa" ni el drawer', () => {
+    authState.user = { role: 'agent' };
+    render(<MyBusinessPage />, { wrapper: createWrapper() });
+
+    expect(
+      screen.queryByRole('button', { name: /editar empresa/i }),
+    ).not.toBeInTheDocument();
+    expect(screen.queryByTestId('business-drawer')).not.toBeInTheDocument();
   });
 });
