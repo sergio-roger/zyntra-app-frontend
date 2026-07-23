@@ -45,6 +45,17 @@ vi.mock('@crm/hooks/useCompanies', () => ({
   })),
 }));
 
+vi.mock('@features/channels/hooks/channels.queries', () => ({
+  useChannelsQuery: vi.fn(() => ({
+    data: [
+      {
+        id: 'channel-1',
+        channelType: { key: 'web_chat', label: 'Chat web' },
+      },
+    ],
+  })),
+}));
+
 const createWrapper = () => {
   const qc = new QueryClient({ defaultOptions: { queries: { retry: false } } });
   const Wrapper: React.FC<{ children: React.ReactNode }> = ({ children }) => (

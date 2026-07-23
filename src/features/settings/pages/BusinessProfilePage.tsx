@@ -5,8 +5,8 @@ import { TagInput } from '@core/ui/TagInput';
 import { Tabs, TabItem } from '@core/ui/Tabs';
 import { Textarea } from '@core/ui/Textarea';
 import { useIndustrys } from '@crm/hooks/useCompanies';
+import { useChannelsQuery } from '@features/channels/hooks/channels.queries';
 import {
-  ACTIVE_CHANNEL_OPTIONS,
   BRAND_TONE_OPTIONS,
   BUDGET_RANGE_OPTIONS,
   BUSINESS_MODEL_OPTIONS,
@@ -87,6 +87,7 @@ const buildDefaultValues = (
 export const BusinessProfilePage: React.FC = () => {
   const { data: profile, isLoading } = useBusinessProfileQuery();
   const { data: industries } = useIndustrys();
+  const { data: channels } = useChannelsQuery();
   const updateProfile = useUpdateBusinessProfile();
   const [activeTab, setActiveTab] = useState<ProfileTab>('general');
 
@@ -126,6 +127,7 @@ export const BusinessProfilePage: React.FC = () => {
     value: i.id,
     label: i.name,
   }));
+  const channelOptions = buildChannelOptions(channels);
 
   return (
     <div className="w-full space-y-6 animate-in fade-in duration-500">
@@ -156,7 +158,12 @@ export const BusinessProfilePage: React.FC = () => {
             <BrandFields control={control} register={register} errors={errors} />
           )}
           {activeTab === 'goals' && (
-            <GoalsFields control={control} register={register} errors={errors} />
+            <GoalsFields
+              control={control}
+              register={register}
+              errors={errors}
+              channelOptions={channelOptions}
+            />
           )}
         </div>
 
@@ -177,6 +184,16 @@ export const BusinessProfilePage: React.FC = () => {
       </form>
     </div>
   );
+};
+
+const buildChannelOptions = (
+  channels: ReturnType<typeof useChannelsQuery>['data'],
+): { value: string; label: string }[] => {
+  const seen = new Map<string, string>();
+  (channels ?? []).forEach((channel) => {
+    seen.set(channel.channelType.key, channel.channelType.label);
+  });
+  return Array.from(seen, ([value, label]) => ({ value, label }));
 };
 
 interface SectionProps {
@@ -351,7 +368,9 @@ const BrandFields: React.FC<SectionProps> = ({ control, register, errors }) => (
   </div>
 );
 
-const GoalsFields: React.FC<SectionProps> = ({ control }) => (
+const GoalsFields: React.FC<
+  SectionProps & { channelOptions: { value: string; label: string }[] }
+> = ({ control, channelOptions }) => (
   <div className="space-y-6">
     <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
       <Controller
@@ -386,15 +405,27 @@ const GoalsFields: React.FC<SectionProps> = ({ control }) => (
     <Controller
       control={control}
       name="activeChannels"
-      render={({ field }) => (
-        <MultiSelectChips
-          label="Canales activos"
-          options={[...ACTIVE_CHANNEL_OPTIONS]}
-          value={field.value}
-          onChange={field.onChange}
-          maxItems={MAX_ACTIVE_CHANNELS}
-        />
-      )}
+      render={({ field }) =>
+        channelOptions.length === 0 ? (
+          <div className="space-y-1.5">
+            <label className="flex items-center gap-2 text-xs font-bold text-slate-400 uppercase tracking-wider ml-1">
+              Canales activos
+            </label>
+            <p className="text-xs text-slate-500 ml-1">
+              Aún no configuraste ningún canal. Creá uno desde Canales para
+              poder marcarlo acá.
+            </p>
+          </div>
+        ) : (
+          <MultiSelectChips
+            label="Canales activos"
+            options={channelOptions}
+            value={field.value}
+            onChange={field.onChange}
+            maxItems={MAX_ACTIVE_CHANNELS}
+          />
+        )
+      }
     />
     <Controller
       control={control}

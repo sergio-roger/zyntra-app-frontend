@@ -58,10 +58,3 @@ export const BUDGET_RANGE_OPTIONS = [
   { value: 'from_5000_to_10000', label: '$5,000 - $10,000' },
   { value: 'over_10000', label: 'Más de $10,000' },
 ] as const;
-
-// Mirrors CHANNEL_TYPES_SEED keys (backend channels/seeds/seed-channel-types.ts).
-export const ACTIVE_CHANNEL_OPTIONS = [
-  { value: 'web_chat', label: 'Chat web' },
-  { value: 'facebook', label: 'Facebook' },
-  { value: 'telegram', label: 'Telegram' },
-] as const;
