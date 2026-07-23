@@ -1,8 +1,8 @@
 import { SelectOption } from '@core/ui/select.types';
 import { useSelect } from '@core/ui/useSelect';
 import { findSelectedOption, getTriggerLabel } from '@core/ui/utils/select.utils';
-import { Check, ChevronDown, LucideIcon } from 'lucide-react';
-import React, { forwardRef } from 'react';
+import { Check, ChevronDown, LucideIcon, Search } from 'lucide-react';
+import React, { forwardRef, useEffect, useRef, useState } from 'react';
 
 interface SelectProps<TValue = string> {
   // Data
@@ -23,6 +23,9 @@ interface SelectProps<TValue = string> {
   clearable?: boolean;
   clearLabel?: string;
   inline?: boolean;
+
+  searchable?: boolean;
+  searchPlaceholder?: string;
 
   displayValue?: (
     value: TValue | null,
@@ -51,11 +54,23 @@ function SelectInner<TValue = string>(
     clearable = false,
     clearLabel = '— Sin selección',
     inline = false,
+    searchable = false,
+    searchPlaceholder = 'Buscar...',
     displayValue,
     renderOption,
   }: SelectProps<TValue>,
   ref: React.ForwardedRef<HTMLButtonElement>,
 ) {
+  const [search, setSearch] = useState('');
+  const searchInputRef = useRef<HTMLInputElement>(null);
+
+  const filteredOptions =
+    searchable && search.trim()
+      ? options.filter((o) =>
+          o.label.toLowerCase().includes(search.trim().toLowerCase()),
+        )
+      : options;
+
   const {
     open,
     focusedIndex,
@@ -64,7 +79,18 @@ function SelectInner<TValue = string>(
     listRef,
     handleKeyDown,
     selectAtIndex,
-  } = useSelect(id, options, clearable, onChange);
+  } = useSelect(id, filteredOptions, clearable, onChange);
+
+  useEffect(() => {
+    if (!open) {
+      setSearch('');
+      return;
+    }
+    if (searchable) {
+      const t = setTimeout(() => searchInputRef.current?.focus(), 50);
+      return () => clearTimeout(t);
+    }
+  }, [open, searchable]);
 
   const selectedOption = findSelectedOption(options, value);
   const hasValue = !!value;
@@ -121,6 +147,30 @@ function SelectInner<TValue = string>(
             role="listbox"
             className={`w-full mt-1 bg-slate-800 border border-white/10 rounded-xl shadow-xl overflow-hidden animate-in fade-in slide-in-from-top-2 duration-150 ${inline ? '' : 'absolute z-20'}`}
           >
+            {searchable && (
+              <div className="p-2 border-b border-white/5">
+                <div className="relative">
+                  <Search
+                    size={13}
+                    className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-500 pointer-events-none"
+                  />
+                  <input
+                    ref={searchInputRef}
+                    type="text"
+                    value={search}
+                    onChange={(e) => setSearch(e.target.value)}
+                    onKeyDown={(e) =>
+                      handleKeyDown(
+                        e as unknown as React.KeyboardEvent<HTMLButtonElement>,
+                      )
+                    }
+                    placeholder={searchPlaceholder}
+                    className="w-full bg-slate-900/60 border border-white/10 rounded-lg py-2 pl-8 pr-3 text-sm text-white placeholder-slate-500 focus:outline-none focus:border-primary/30 transition-all"
+                  />
+                </div>
+              </div>
+            )}
+
             {clearable && (
               <button
                 type="button"
@@ -142,7 +192,13 @@ function SelectInner<TValue = string>(
               </button>
             )}
 
-            {options.map((option, i) => {
+            {searchable && filteredOptions.length === 0 && (
+              <div className="px-4 py-6 text-center text-xs text-slate-500">
+                Sin resultados para esa búsqueda
+              </div>
+            )}
+
+            {filteredOptions.map((option, i) => {
               const itemIdx = clearable ? i + 1 : i;
               const isSelected = option.value === value;
               const isFocused = focusedIndex === itemIdx;

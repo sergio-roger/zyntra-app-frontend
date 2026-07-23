@@ -199,6 +199,8 @@ const GeneralFields: React.FC<
           options={industryOptions}
           value={field.value}
           onChange={field.onChange}
+          searchable
+          searchPlaceholder="Buscar industria..."
           clearable
           clearLabel="Sin industria"
         />
