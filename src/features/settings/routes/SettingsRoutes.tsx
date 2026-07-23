@@ -1,6 +1,5 @@
 import { lazy } from 'react';
 import { Navigate, RouteObject } from 'react-router-dom';
-import { ConstructionPage } from '@shared/components/ConstructionPage';
 import { SuspenseLoader } from '@shared/components/SuspenseLoader';
 import { AdminGuard } from '@core/routes/AdminGuard';
 import { PermissionGuard } from '@core/routes/PermissionGuard';
@@ -46,6 +45,11 @@ const MyBusinessPage = lazy(() =>
     default: m.MyBusinessPage,
   })),
 );
+const BusinessProfilePage = lazy(() =>
+  import('@features/settings/pages/BusinessProfilePage').then((m) => ({
+    default: m.BusinessProfilePage,
+  })),
+);
 const TeamsPage = lazy(() =>
   import('@features/settings/pages/TeamsPage').then((m) => ({
     default: m.TeamsPage,
@@ -78,14 +82,11 @@ export const settingsRoutes: RouteObject[] = [
       {
         path: 'configuracion',
         element: (
-          <PermissionGuard menuKey="settings_config">
+          <AdminGuard>
             <SuspenseLoader>
-              <ConstructionPage
-                title="Configuración General"
-                description="Ajustes y preferencias de la plataforma."
-              />
+              <BusinessProfilePage />
             </SuspenseLoader>
-          </PermissionGuard>
+          </AdminGuard>
         ),
       },
       {
