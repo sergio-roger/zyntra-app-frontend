@@ -24,7 +24,7 @@ const SLUG_ICONS: Record<string, React.ElementType> = {
 
 const IconBadge: React.FC<{ agent: SystemAgentCatalogItem }> = ({ agent }) => {
   const Icon = SLUG_ICONS[agent.slug] ?? Bot;
-  const color = agent.category?.color ?? '#6366f1';
+  const color = agent.category?.color ?? '#7c3aed';
   return (
     <div
       className="w-12 h-12 rounded-xl flex items-center justify-center transition-all duration-200 group-hover:scale-110 group-hover:brightness-125"
@@ -90,7 +90,7 @@ export const AgentCard: React.FC<AgentCardProps> = ({
         <button
           onClick={onPrimaryAction}
           disabled={primaryDisabled}
-          className="btn btn-sm w-full rounded-lg mt-2 border-none bg-secondary-deep/50 text-purple-400 hover:bg-secondary-deep/70 hover:text-purple-300 disabled:opacity-50"
+          className="btn btn-sm w-full rounded-lg mt-2 border-none bg-gradient-to-r from-secondary/20 to-secondary-deep/60 text-white hover:from-secondary/35 hover:to-secondary-deep/80 disabled:opacity-50"
         >
           {primaryLabel}
         </button>

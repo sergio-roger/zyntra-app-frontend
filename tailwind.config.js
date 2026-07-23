@@ -22,7 +22,7 @@ export default {
     themes: [
       {
         'zyntra-dark': {
-          'primary': '#6366f1',
+          'primary': '#7c3aed',
           'primary-content': '#ffffff',
           'secondary': '#7c3aed',
           'secondary-content': '#ffffff',
