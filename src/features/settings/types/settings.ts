@@ -50,7 +50,7 @@ export interface RolePermissions {
   role: string;
 }
 
-export interface Company {
+export interface Business {
   id: string;
   name: string;
   email: string | null;
@@ -59,13 +59,16 @@ export interface Company {
   taxId: string | null;
   website: string | null;
   logoUrl: string | null;
+  coverUrl: string | null;
+  planStatus: 'trial' | 'active' | 'past_due' | 'cancelled';
+  createdAt: string;
 }
 
-export interface UpdateCompanyInput {
+export interface UpdateBusinessInput {
   name?: string;
   email?: string;
   phone?: string;
   address?: string;
-  tax_id?: string;
+  taxId?: string;
   website?: string;
 }

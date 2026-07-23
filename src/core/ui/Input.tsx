@@ -5,6 +5,7 @@ interface InputProps extends React.InputHTMLAttributes<HTMLInputElement> {
   label?: string;
   icon?: LucideIcon;
   error?: string;
+  hint?: string;
   containerClassName?: string;
 }
 
@@ -14,6 +15,7 @@ export const Input = forwardRef<HTMLInputElement, InputProps>(
       label,
       icon: Icon,
       error,
+      hint,
       containerClassName = '',
       className = '',
       ...props
@@ -52,10 +54,14 @@ export const Input = forwardRef<HTMLInputElement, InputProps>(
             {...props}
           />
         </div>
-        {error && (
+        {error ? (
           <p className="text-[10px] font-medium text-rose-400 ml-1 animate-in fade-in slide-in-from-top-1">
             {error}
           </p>
+        ) : (
+          hint && (
+            <p className="text-[10px] text-slate-500 ml-1">{hint}</p>
+          )
         )}
       </div>
     );

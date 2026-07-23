@@ -1,6 +1,6 @@
 import { z } from 'zod';
 
-export const updateCompanySchema = z.object({
+export const updateBusinessSchema = z.object({
   name: z.string().max(150, 'Máximo 150 caracteres').optional().or(z.literal('')),
   email: z
     .string()
@@ -13,7 +13,7 @@ export const updateCompanySchema = z.object({
     .max(255, 'Máximo 255 caracteres')
     .optional()
     .or(z.literal('')),
-  tax_id: z.string().max(50, 'Máximo 50 caracteres').optional().or(z.literal('')),
+  taxId: z.string().max(50, 'Máximo 50 caracteres').optional().or(z.literal('')),
   website: z
     .string()
     .url('URL inválida')
@@ -21,4 +21,4 @@ export const updateCompanySchema = z.object({
     .or(z.literal('')),
 });
 
-export type UpdateCompanyFormValues = z.infer<typeof updateCompanySchema>;
+export type UpdateBusinessFormValues = z.infer<typeof updateBusinessSchema>;

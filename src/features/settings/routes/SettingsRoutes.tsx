@@ -41,9 +41,9 @@ const MyAccountPage = lazy(() =>
     default: m.MyAccountPage,
   })),
 );
-const MyCompanyPage = lazy(() =>
-  import('@features/settings/pages/MyCompanyPage').then((m) => ({
-    default: m.MyCompanyPage,
+const MyBusinessPage = lazy(() =>
+  import('@features/settings/pages/MyBusinessPage').then((m) => ({
+    default: m.MyBusinessPage,
   })),
 );
 const TeamsPage = lazy(() =>
@@ -103,7 +103,7 @@ export const settingsRoutes: RouteObject[] = [
         element: (
           <PermissionGuard menuKey="settings_my_company">
             <SuspenseLoader>
-              <MyCompanyPage />
+              <MyBusinessPage />
             </SuspenseLoader>
           </PermissionGuard>
         ),
