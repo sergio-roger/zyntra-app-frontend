@@ -1,5 +1,5 @@
 import React from 'react';
-import { useForm, Controller } from 'react-hook-form';
+import { useForm, useWatch, Controller } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { Loader2, Save, Sparkles, Tags } from 'lucide-react';
 import { Input } from '@core/ui/Input';
@@ -48,12 +48,14 @@ export const IdentityTab: React.FC<IdentityTabProps> = ({ agent, onCreated }) =>
     control,
     register,
     handleSubmit,
-    watch,
     formState: { errors, isSubmitting },
   } = useForm<AgentIdentityFormValues>({
     resolver: zodResolver(agentIdentitySchema),
     values: defaultValues(agent),
   });
+
+  const maxTokens = useWatch({ control, name: 'maxTokens' });
+  const temperature = useWatch({ control, name: 'temperature' });
 
   const onSubmit = async (data: AgentIdentityFormValues) => {
     const payload = {
@@ -108,7 +110,7 @@ export const IdentityTab: React.FC<IdentityTabProps> = ({ agent, onCreated }) =>
           min={1}
           max={1024}
           step={1}
-          value={watch('maxTokens')}
+          value={maxTokens}
           error={errors.maxTokens?.message}
           {...register('maxTokens', { valueAsNumber: true })}
         />
@@ -117,7 +119,7 @@ export const IdentityTab: React.FC<IdentityTabProps> = ({ agent, onCreated }) =>
           min={0}
           max={1}
           step={0.1}
-          value={watch('temperature')}
+          value={temperature}
           formatValue={(v) => v.toFixed(1)}
           error={errors.temperature?.message}
           {...register('temperature', { valueAsNumber: true })}
