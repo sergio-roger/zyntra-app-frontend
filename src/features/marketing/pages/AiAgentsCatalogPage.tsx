@@ -1,14 +1,14 @@
 import { Loader2 } from 'lucide-react';
 import React, { useMemo, useState } from 'react';
 import { PageHeader } from '@shared/components/PageHeader';
-import { AgentCard } from '../components/AgentCard';
-import { CategoryTabs, StatusFilter } from '../components/CategoryTabs';
+import { AgentCard } from '@features/marketing/components/AgentCard';
+import { CategoryTabs, StatusFilter } from '@features/marketing/components/CategoryTabs';
 import {
   useImportAgent,
   useImportedAgents,
   useSystemAgentsCatalog,
-} from '../hooks/use-agents-catalog';
-import { AgentCategory, SystemAgentCatalogItem } from '../types/agents';
+} from '@features/marketing/hooks/use-agents-catalog';
+import { AgentCategory, SystemAgentCatalogItem } from '@features/marketing/types/agents';
 
 const uniqueCategories = (agents: SystemAgentCatalogItem[]): AgentCategory[] => {
   const byId = new Map<string, AgentCategory>();

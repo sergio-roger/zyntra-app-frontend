@@ -1,7 +1,7 @@
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { useAuthStore } from '@features/auth/store/authStore';
-import { agentsApi } from '../api/agents.api';
-import { WorkflowRunStatus } from '../types/agents';
+import { agentsApi } from '@features/marketing/api/agents.api';
+import { WorkflowRunStatus } from '@features/marketing/types/agents';
 
 const useBusinessId = () => useAuthStore((s) => s.user?.businessId ?? '');
 

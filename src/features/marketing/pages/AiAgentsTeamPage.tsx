@@ -2,10 +2,10 @@ import { Loader2, Users } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import React, { useState } from 'react';
 import { PageHeader } from '@shared/components/PageHeader';
-import { AgentCard } from '../components/AgentCard';
-import { AgentRunModal } from '../components/AgentRunModal';
-import { useImportedAgents } from '../hooks/use-agents-catalog';
-import { SystemAgentCatalogItem } from '../types/agents';
+import { AgentCard } from '@features/marketing/components/AgentCard';
+import { AgentRunModal } from '@features/marketing/components/AgentRunModal';
+import { useImportedAgents } from '@features/marketing/hooks/use-agents-catalog';
+import { SystemAgentCatalogItem } from '@features/marketing/types/agents';
 
 const EmptyTeamState: React.FC = () => (
   <div className="flex flex-col items-center gap-3 p-20 text-center text-base-content/60">

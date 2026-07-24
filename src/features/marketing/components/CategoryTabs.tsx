@@ -1,6 +1,6 @@
 import { ChevronDown } from 'lucide-react';
 import React from 'react';
-import { AgentCategory, SystemAgentStatus } from '../types/agents';
+import { AgentCategory, SystemAgentStatus } from '@features/marketing/types/agents';
 
 export type StatusFilter = 'all' | SystemAgentStatus;
 

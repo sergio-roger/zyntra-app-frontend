@@ -4,7 +4,7 @@ import {
   ImportedSystemAgent,
   SystemAgentCatalogItem,
   WorkflowRun,
-} from '../types/agents';
+} from '@features/marketing/types/agents';
 
 interface BusinessSystemAgentResponse {
   importedAt: string;

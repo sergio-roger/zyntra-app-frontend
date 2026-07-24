@@ -9,7 +9,7 @@ import {
   Users,
 } from 'lucide-react';
 import React from 'react';
-import { SystemAgentCatalogItem } from '../types/agents';
+import { SystemAgentCatalogItem } from '@features/marketing/types/agents';
 
 const SLUG_ICONS: Record<string, React.ElementType> = {
   'marketing-strategist': TrendingUp,
