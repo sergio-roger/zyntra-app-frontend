@@ -28,6 +28,7 @@ import {
   Megaphone,
   Clock,
   Trash2,
+  MessageCircle,
 } from 'lucide-react';
 import { NavModule } from '@shared/types/nav';
 
@@ -130,8 +131,14 @@ export const NAV_MODULES: NavModule[] = [
         description: 'Gestiona tu equipo de agentes.',
       },
       {
+        to: '/agents/chat',
+        label: 'Chat con el Equipo',
+        icon: MessageCircle,
+        description: 'Habla con tu equipo de agentes y definí tus objetivos.',
+      },
+      {
         to: '/agents/store',
-        label: 'Tienda Agentes',
+        label: 'Catálogo de Agentes',
         icon: Store,
         description: 'Catálogo de agentes de IA disponibles.',
       },

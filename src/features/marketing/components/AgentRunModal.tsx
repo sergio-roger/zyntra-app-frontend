@@ -91,7 +91,7 @@ export const AgentRunModal: React.FC<AgentRunModalProps> = ({ agent, onClose }) 
   };
 
   return (
-    <div className="modal modal-open">
+    <div className="modal modal-open !mt-0">
       <div className="modal-box max-w-2xl">
         <div className="flex justify-between items-start mb-6">
           <div>

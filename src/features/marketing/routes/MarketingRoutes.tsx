@@ -10,6 +10,19 @@ const AiAgentsTeamPage = lazy(() => import('../pages/AiAgentsTeamPage'));
 
 export const marketingRoutes: RouteObject[] = [
   {
+    path: '/agents/chat',
+    element: (
+      <PermissionGuard menuKey="agents_chat">
+        <ModuleGuard menuKey="agents_chat">
+          <ConstructionPage
+            title="Chat con tu Equipo de Agentes"
+            description="Muy pronto vas a poder hablar directamente con tu equipo de agentes de IA para definir objetivos y que trabajen para vos."
+          />
+        </ModuleGuard>
+      </PermissionGuard>
+    ),
+  },
+  {
     path: '/agents/store',
     element: (
       <PermissionGuard menuKey="agents_store">

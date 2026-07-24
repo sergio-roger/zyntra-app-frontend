@@ -64,7 +64,7 @@ describe('AiAgentsTeamPage', () => {
     expect(
       await screen.findByText('Todavía no importaste ningún agente a tu equipo.'),
     ).toBeInTheDocument();
-    expect(screen.getByRole('link', { name: 'Ir a la Tienda de Agentes' })).toBeInTheDocument();
+    expect(screen.getByRole('link', { name: 'Ir al Catálogo de Agentes' })).toBeInTheDocument();
   });
 
   it('renderiza los agentes importados con botón "Ver Detalles"', async () => {
