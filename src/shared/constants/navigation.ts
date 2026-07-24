@@ -26,6 +26,8 @@ import {
   Store,
   FolderKanban,
   Megaphone,
+  Clock,
+  Trash2,
 } from 'lucide-react';
 import { NavModule } from '@shared/types/nav';
 
@@ -200,9 +202,35 @@ export const NAV_MODULES: NavModule[] = [
     label: 'Drive',
     icon: HardDrive,
     match: '/drive',
-    to: '/drive',
+    to: '/drive/me',
     description: 'Administra los archivos y recursos de tu negocio.',
     color: 'text-primary',
+    children: [
+      {
+        to: '/drive/me',
+        label: 'Mi unidad',
+        icon: HardDrive,
+        description: 'Tus archivos y carpetas personales.',
+      },
+      {
+        to: '/drive/company',
+        label: 'Empresa',
+        icon: Building2,
+        description: 'Archivos y carpetas compartidos del negocio.',
+      },
+      {
+        to: '/drive/recent',
+        label: 'Recientes',
+        icon: Clock,
+        description: 'Archivos abiertos o modificados recientemente.',
+      },
+      {
+        to: '/drive/trash',
+        label: 'Papelera',
+        icon: Trash2,
+        description: 'Archivos y carpetas eliminados.',
+      },
+    ],
   },
   {
     key: 'analytics',
