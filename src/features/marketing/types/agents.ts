@@ -13,6 +13,9 @@ export interface SystemAgentCatalogItem {
   name: string;
   role: string;
   description: string;
+  avatarUrl: string | null;
+  personaPrompt: string;
+  functions: string[];
   status: SystemAgentStatus;
   model: string;
   category: AgentCategory | null;

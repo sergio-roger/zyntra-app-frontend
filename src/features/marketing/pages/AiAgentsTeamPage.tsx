@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom';
 import React, { useState } from 'react';
 import { PageHeader } from '@shared/components/PageHeader';
 import { AgentCard } from '@features/marketing/components/AgentCard';
+import { AgentDetailModal } from '@features/marketing/components/AgentDetailModal';
 import { AgentRunModal } from '@features/marketing/components/AgentRunModal';
 import { useImportedAgents } from '@features/marketing/hooks/use-agents-catalog';
 import { SystemAgentCatalogItem } from '@features/marketing/types/agents';
@@ -19,8 +20,10 @@ const EmptyTeamState: React.FC = () => (
 
 export const AiAgentsTeamPage: React.FC = () => {
   const { data: importedAgents, isLoading } = useImportedAgents();
-  const [selectedAgent, setSelectedAgent] =
-    useState<SystemAgentCatalogItem | null>(null);
+  const [runAgent, setRunAgent] = useState<SystemAgentCatalogItem | null>(null);
+  const [detailAgent, setDetailAgent] = useState<SystemAgentCatalogItem | null>(
+    null,
+  );
 
   return (
     <div className="space-y-6 animate-in fade-in duration-500">
@@ -41,19 +44,29 @@ export const AiAgentsTeamPage: React.FC = () => {
             <AgentCard
               key={agent.id}
               agent={agent}
-              primaryLabel="Ver Detalles"
+              primaryLabel="Ejecutar"
               primaryDisabled={false}
-              onPrimaryAction={() => setSelectedAgent(agent)}
+              onPrimaryAction={() => setRunAgent(agent)}
+              onShowDetail={() => setDetailAgent(agent)}
               showStats
             />
           ))}
         </div>
       )}
 
-      {selectedAgent && (
-        <AgentRunModal
-          agent={selectedAgent}
-          onClose={() => setSelectedAgent(null)}
+      {runAgent && <AgentRunModal agent={runAgent} onClose={() => setRunAgent(null)} />}
+
+      {detailAgent && (
+        <AgentDetailModal
+          agent={detailAgent}
+          primaryLabel="Ejecutar"
+          primaryDisabled={false}
+          onPrimaryAction={() => {
+            setRunAgent(detailAgent);
+            setDetailAgent(null);
+          }}
+          onClose={() => setDetailAgent(null)}
+          showStats
         />
       )}
     </div>

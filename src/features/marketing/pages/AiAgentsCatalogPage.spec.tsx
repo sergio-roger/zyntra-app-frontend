@@ -111,11 +111,11 @@ describe('AiAgentsCatalogPage', () => {
     expect(comingSoonLabels).toHaveLength(7);
   });
 
-  it('deshabilita "Importar" para los agentes coming_soon y lo habilita para el activo', async () => {
+  it('deshabilita "Agregar a mi equipo" para los agentes coming_soon y lo habilita para el activo', async () => {
     renderPage();
     await screen.findByText('Estratega');
 
-    const buttons = screen.getAllByRole('button', { name: 'Importar' });
+    const buttons = screen.getAllByRole('button', { name: 'Agregar a mi equipo' });
     expect(buttons).toHaveLength(8);
 
     const activeIndex = CATALOG.findIndex((a) => a.status === 'active');
@@ -125,7 +125,7 @@ describe('AiAgentsCatalogPage', () => {
     });
   });
 
-  it('importa el agente activo y refleja el estado "Importado"', async () => {
+  it('importa el agente activo y refleja el estado "En tu equipo"', async () => {
     (agentsApi.importAgent as ReturnType<typeof vi.fn>).mockResolvedValue({
       ...CATALOG[0],
       importedAt: new Date().toISOString(),
@@ -135,7 +135,9 @@ describe('AiAgentsCatalogPage', () => {
     await screen.findByText('Estratega');
 
     const activeIndex = CATALOG.findIndex((a) => a.status === 'active');
-    fireEvent.click(screen.getAllByRole('button', { name: 'Importar' })[activeIndex]);
+    fireEvent.click(
+      screen.getAllByRole('button', { name: 'Agregar a mi equipo' })[activeIndex],
+    );
 
     await waitFor(() =>
       expect(agentsApi.importAgent).toHaveBeenCalledWith('biz-1', CATALOG[0].id),

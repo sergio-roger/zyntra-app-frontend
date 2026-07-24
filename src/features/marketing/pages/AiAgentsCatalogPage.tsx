@@ -2,6 +2,7 @@ import { Loader2 } from 'lucide-react';
 import React, { useMemo, useState } from 'react';
 import { PageHeader } from '@shared/components/PageHeader';
 import { AgentCard } from '@features/marketing/components/AgentCard';
+import { AgentDetailModal } from '@features/marketing/components/AgentDetailModal';
 import { CategoryTabs, StatusFilter } from '@features/marketing/components/CategoryTabs';
 import {
   useImportAgent,
@@ -36,6 +37,9 @@ export const AiAgentsCatalogPage: React.FC = () => {
   const importAgent = useImportAgent();
   const [activeCategoryId, setActiveCategoryId] = useState<string | null>(null);
   const [statusFilter, setStatusFilter] = useState<StatusFilter>('all');
+  const [selectedAgent, setSelectedAgent] = useState<SystemAgentCatalogItem | null>(
+    null,
+  );
 
   const categories = useMemo(() => uniqueCategories(agents ?? []), [agents]);
   const visibleAgents = useMemo(
@@ -74,13 +78,28 @@ export const AiAgentsCatalogPage: React.FC = () => {
               <AgentCard
                 key={agent.id}
                 agent={agent}
-                primaryLabel={isImported ? 'Importado' : 'Importar'}
+                primaryLabel={isImported ? 'En tu equipo' : 'Agregar a mi equipo'}
                 primaryDisabled={agent.status !== 'active' || isImported}
                 onPrimaryAction={() => importAgent.mutate(agent.id)}
+                onShowDetail={() => setSelectedAgent(agent)}
               />
             );
           })}
         </div>
+      )}
+
+      {selectedAgent && (
+        <AgentDetailModal
+          agent={selectedAgent}
+          primaryLabel={
+            importedIds.has(selectedAgent.id) ? 'En tu equipo' : 'Agregar a mi equipo'
+          }
+          primaryDisabled={
+            selectedAgent.status !== 'active' || importedIds.has(selectedAgent.id)
+          }
+          onPrimaryAction={() => importAgent.mutate(selectedAgent.id)}
+          onClose={() => setSelectedAgent(null)}
+        />
       )}
     </div>
   );
