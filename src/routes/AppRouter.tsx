@@ -1,6 +1,7 @@
 import { ModuleGuard } from '@core/components/ModuleGuard';
 import { ProtectedRoute } from '@core/routes/ProtectedRoute';
 import { crmRoutes } from '@crm/routes/CrmRoutes';
+import { driveRoutes } from '@features/drive/routes/DriveRoutes';
 import { marketingRoutes } from '@features/marketing/routes/MarketingRoutes';
 import { workflowRoutes } from '@features/workflows/routes/WorkflowRoutes';
 import { authRoutes } from '@features/auth/routes/AuthRoutes';
@@ -27,14 +28,7 @@ const AppRoutes = () => {
         ...marketingRoutes,
         ...workflowRoutes,
         ...settingsRoutes,
-        {
-          path: '/drive/*',
-          element: (
-            <ModuleGuard menuKey="drive">
-              <ConstructionPage />
-            </ModuleGuard>
-          ),
-        },
+        ...driveRoutes,
         {
           path: '/analytics/*',
           element: (

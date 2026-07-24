@@ -1,0 +1,22 @@
+export function formatBytes(bytes: number): string {
+  if (bytes === 0) return '0 B';
+  const units = ['B', 'KB', 'MB', 'GB', 'TB'];
+  const exponent = Math.min(
+    Math.floor(Math.log(bytes) / Math.log(1024)),
+    units.length - 1,
+  );
+  const value = bytes / Math.pow(1024, exponent);
+  return `${exponent === 0 ? value : value.toFixed(1)} ${units[exponent]}`;
+}
+
+export function formatDate(iso: string): string {
+  return new Date(iso).toLocaleDateString('es-EC', {
+    day: '2-digit',
+    month: 'short',
+    year: 'numeric',
+  });
+}
+
+export function isPreviewableMimeType(mimeType: string): boolean {
+  return mimeType.startsWith('image/') || mimeType === 'application/pdf';
+}
