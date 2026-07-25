@@ -37,7 +37,7 @@ export const EmptyState: React.FC<EmptyStateProps> = ({
       </p>
 
       {actionLabel && onAction && (
-        <Button variant="tertiary" onClick={onAction} icon={Plus}>
+        <Button variant="primary" onClick={onAction} icon={Plus}>
           {actionLabel}
         </Button>
       )}

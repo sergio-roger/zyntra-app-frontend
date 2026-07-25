@@ -10,6 +10,7 @@ import {
   useOwnChannelDashboard,
   useOwnChannelStatus,
 } from '@features/youtube-analytics/hooks/useOwnChannel';
+import { getDisconnectedCopy } from '@features/youtube-analytics/utils/disconnected-channel-copy.util';
 import { useQueryClient } from '@tanstack/react-query';
 import { EmptyState } from '@shared/components/EmptyState';
 import { PageHeader } from '@shared/components/PageHeader';
@@ -52,17 +53,13 @@ const OwnChannelSection: React.FC = () => {
   }
 
   if (status.status !== 'connected') {
+    const { title, description } = getDisconnectedCopy(status.status);
     return (
       <div className="rounded-2xl border border-warning/20 bg-warning/10 p-6 flex flex-col sm:flex-row items-center gap-4">
         <AlertTriangle size={28} className="text-warning shrink-0" />
         <div className="flex-1 text-center sm:text-left">
-          <h3 className="font-bold text-base-content">
-            Tu conexión con YouTube expiró
-          </h3>
-          <p className="text-sm text-base-content/60 mt-1">
-            Reconectá tu cuenta de Google para seguir recolectando datos de tu
-            canal. Tu historial ya guardado no se pierde.
-          </p>
+          <h3 className="font-bold text-base-content">{title}</h3>
+          <p className="text-sm text-base-content/60 mt-1">{description}</p>
         </div>
         <Button
           onClick={() => {

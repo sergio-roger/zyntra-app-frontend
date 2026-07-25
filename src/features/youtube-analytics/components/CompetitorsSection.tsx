@@ -58,9 +58,13 @@ export const CompetitorsSection: React.FC = () => {
         <EmptyState
           icon={Radar}
           title="Todavía no monitoreás competencia"
-          description="Agregá canales de YouTube de tu competencia para comparar su rendimiento con el tuyo."
-          actionLabel="Agregar canal"
-          onAction={() => setIsModalOpen(true)}
+          description={
+            isLimitReached
+              ? 'Tu plan actual no incluye canales de competencia.'
+              : 'Agregá canales de YouTube de tu competencia para comparar su rendimiento con el tuyo.'
+          }
+          actionLabel={isLimitReached ? undefined : 'Agregar canal'}
+          onAction={isLimitReached ? undefined : () => setIsModalOpen(true)}
         />
       ) : (
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
