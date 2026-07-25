@@ -9,7 +9,7 @@ import { TeamProcessPanel } from '@features/marketing/components/chat/TeamProces
 
 const ChatHeaderActions: React.FC = () => (
   <div className="flex items-center gap-2">
-    <button className="btn btn-sm rounded-lg border-none bg-secondary text-white hover:bg-secondary/80">
+    <button className="btn btn-sm rounded-lg border border-base-300 bg-base-200 text-base-content/80 hover:bg-base-300">
       <Plus size={16} /> Nuevo objetivo
     </button>
     <button className="btn btn-sm btn-square rounded-lg border border-base-300 bg-base-200">
