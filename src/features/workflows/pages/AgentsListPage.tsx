@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Bot, Loader2, Plus, Share2, Trash2, Zap } from 'lucide-react';
+import { Button } from '@core/ui/Button';
 import { useAuthStore } from '@features/auth/store/authStore';
 import { ConfirmModal } from '@shared/components/ConfirmModal';
 import { EmptyState } from '@shared/components/EmptyState';
@@ -19,29 +20,29 @@ const StatusBadge: React.FC<{ isActive: boolean }> = ({ isActive }) =>
       Activo
     </span>
   ) : (
-    <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-lg text-[10px] font-black uppercase tracking-wider bg-slate-800 text-slate-500">
-      <span className="w-1.5 h-1.5 rounded-full bg-slate-500" />
+    <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-lg text-[10px] font-black uppercase tracking-wider bg-base-300 text-base-content/50">
+      <span className="w-1.5 h-1.5 rounded-full bg-base-content/40" />
       Inactivo
     </span>
   );
 
 const ReadyDocsCount: React.FC<{ agentId: string }> = ({ agentId }) => {
   const { data: documents, isLoading } = useAgentKnowledgeDocuments(agentId);
-  if (isLoading) return <Loader2 size={13} className="animate-spin text-slate-500" />;
+  if (isLoading) return <Loader2 size={13} className="animate-spin text-base-content/50" />;
   const readyCount =
     documents?.filter((d) => d.status === KnowledgeDocumentStatus.READY).length ?? 0;
-  return <span className="text-slate-300">{readyCount}</span>;
+  return <span className="text-base-content/70">{readyCount}</span>;
 };
 
 const AssignedChannelCell: React.FC<{ agent: Agent }> = ({ agent }) => {
   const { data: channels } = useChannelsList();
   const assigned = channels?.filter((c) => c.agentId === agent.id) ?? [];
   if (assigned.length === 0) {
-    return <span className="text-slate-600">Sin asignar</span>;
+    return <span className="text-base-content/40">Sin asignar</span>;
   }
   return (
-    <span className="inline-flex items-center gap-1.5 text-slate-300">
-      <Share2 size={12} className="text-slate-500" />
+    <span className="inline-flex items-center gap-1.5 text-base-content/70">
+      <Share2 size={12} className="text-base-content/50" />
       {assigned.map((c) => c.name).join(', ')}
     </span>
   );
@@ -69,7 +70,7 @@ export const AgentsListPage: React.FC = () => {
   if (isLoading) {
     return (
       <div className="flex w-full items-center justify-center py-24">
-        <Loader2 size={24} className="animate-spin text-slate-500" />
+        <Loader2 size={24} className="animate-spin text-base-content/50" />
       </div>
     );
   }
@@ -80,22 +81,19 @@ export const AgentsListPage: React.FC = () => {
         title="Agentes"
         subtitle="Configura agentes de IA para responder conversaciones automáticamente."
         actions={
-          <button
+          <Button
+            variant="tertiary"
             onClick={() => navigate('/automations/agents/new')}
             disabled={isLimitReached}
-            className={`inline-flex items-center gap-2 rounded-xl px-5 py-2.5 text-sm font-bold shadow-lg transition-all ${
-              isLimitReached
-                ? 'bg-slate-800 text-slate-500 cursor-not-allowed shadow-none'
-                : 'bg-primary text-white shadow-primary/20 hover:-translate-y-px hover:shadow-xl active:scale-95'
-            }`}
+            icon={Plus}
           >
-            <Plus size={18} /> Crear agente
-          </button>
+            Crear agente
+          </Button>
         }
       >
-        <div className="text-xs font-semibold text-slate-500">
+        <div className="text-xs font-semibold text-base-content/50">
           <span
-            className={isLimitReached ? 'text-rose-400 font-bold' : 'text-slate-300'}
+            className={isLimitReached ? 'text-error font-bold' : 'text-base-content/70'}
           >
             {agents.length}
           </span>{' '}
@@ -106,7 +104,7 @@ export const AgentsListPage: React.FC = () => {
       {isLimitReached && (
         <div className="flex items-center gap-3 rounded-2xl border border-warning/20 bg-warning/10 p-4 text-sm">
           <Zap size={16} className="shrink-0 text-warning" />
-          <span className="text-slate-300">
+          <span className="text-base-content/70">
             Alcanzaste el límite de agentes de tu plan. Actualiza tu plan para crear más.
           </span>
           <button
@@ -127,9 +125,9 @@ export const AgentsListPage: React.FC = () => {
           onAction={isLimitReached ? undefined : () => navigate('/automations/agents/new')}
         />
       ) : (
-        <div className="overflow-x-auto rounded-xl border border-white/10 bg-slate-900/50">
+        <div className="overflow-x-auto rounded-xl border border-base-300 bg-base-200 shadow-md">
           <table className="w-full text-left text-sm border-collapse">
-            <thead className="border-b border-white/10 bg-slate-900/80 text-xs text-slate-400 uppercase">
+            <thead className="border-b border-base-300 bg-base-300/30 text-xs text-base-content/60 uppercase">
               <tr>
                 <th className="px-4 py-3 font-semibold">Nombre</th>
                 <th className="px-4 py-3 font-semibold">Canal asignado</th>
@@ -144,12 +142,12 @@ export const AgentsListPage: React.FC = () => {
               {agents.map((agent) => (
                 <tr
                   key={agent.id}
-                  className="border-b border-white/5 last:border-0 hover:bg-white/[0.02] cursor-pointer transition-colors"
+                  className="border-b border-base-300/50 last:border-0 hover:bg-base-300/20 cursor-pointer transition-colors"
                   onClick={() => navigate(`/automations/agents/${agent.id}`)}
                 >
                   <td className="px-4 py-3">
-                    <span className="flex items-center gap-2 font-medium text-slate-100">
-                      <span className="inline-flex h-7 w-7 shrink-0 items-center justify-center rounded-lg bg-indigo-500/10 text-indigo-400">
+                    <span className="flex items-center gap-2 font-medium text-base-content">
+                      <span className="inline-flex h-7 w-7 shrink-0 items-center justify-center rounded-lg bg-primary/10 text-primary">
                         <Bot size={13} />
                       </span>
                       {agent.name}
@@ -161,11 +159,11 @@ export const AgentsListPage: React.FC = () => {
                   <td className="px-4 py-3">
                     <StatusBadge isActive={agent.isActive} />
                   </td>
-                  <td className="px-4 py-3 text-slate-300">{agent.model}</td>
+                  <td className="px-4 py-3 text-base-content/70">{agent.model}</td>
                   <td className="px-4 py-3">
                     <ReadyDocsCount agentId={agent.id} />
                   </td>
-                  <td className="px-4 py-3 text-slate-400">
+                  <td className="px-4 py-3 text-base-content/60">
                     {formatDate(agent.createdAt)}
                   </td>
                   <td className="px-4 py-3 text-right">
@@ -174,7 +172,7 @@ export const AgentsListPage: React.FC = () => {
                         e.stopPropagation();
                         setAgentToDelete(agent);
                       }}
-                      className="inline-flex h-7 w-7 items-center justify-center rounded-lg text-slate-500 hover:bg-rose-500/10 hover:text-rose-400 transition-colors"
+                      className="inline-flex h-7 w-7 items-center justify-center rounded-lg text-base-content/50 hover:bg-error/10 hover:text-error transition-colors"
                       aria-label={`Eliminar ${agent.name}`}
                     >
                       <Trash2 size={13} />

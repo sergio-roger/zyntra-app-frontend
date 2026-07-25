@@ -34,7 +34,7 @@ const SubmissionDataPreview: React.FC<{ data: Record<string, unknown> }> = ({
         <button
           type="button"
           onClick={() => setExpanded(false)}
-          className="text-[11px] text-primary hover:underline"
+          className="text-[11px] text-link hover:underline"
         >
           Ocultar
         </button>
@@ -53,7 +53,7 @@ const SubmissionDataPreview: React.FC<{ data: Record<string, unknown> }> = ({
         <button
           type="button"
           onClick={() => setExpanded(true)}
-          className="text-[11px] text-primary hover:underline"
+          className="text-[11px] text-link hover:underline"
         >
           Ver todo ({entries.length} campos)
         </button>
@@ -123,7 +123,7 @@ export const FormSubmissionsTab: React.FC<FormSubmissionsTabProps> = ({
                   {submission.contactId ? (
                     <Link
                       to={`/crm/contacts/${submission.contactId}`}
-                      className="text-primary hover:underline"
+                      className="text-link hover:underline"
                     >
                       Ver contacto
                     </Link>

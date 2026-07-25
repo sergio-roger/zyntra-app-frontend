@@ -45,7 +45,7 @@ export const AgentCard: React.FC<AgentCardProps> = ({
         <button
           onClick={onPrimaryAction}
           disabled={primaryDisabled}
-          className="btn btn-sm flex-1 h-auto min-h-0 py-2 rounded-lg border-none bg-gradient-to-r from-secondary/20 to-secondary-deep/60 text-white text-xs leading-tight whitespace-normal hover:from-secondary/35 hover:to-secondary-deep/80 disabled:opacity-50"
+          className="btn btn-sm flex-1 h-auto min-h-0 py-2 rounded-lg border-none bg-tertiary text-tertiary-content text-xs leading-tight whitespace-normal hover:opacity-90 disabled:opacity-50"
         >
           {primaryLabel}
         </button>

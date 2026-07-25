@@ -135,11 +135,11 @@ export const RegisterForm: React.FC<RegisterFormProps> = ({ onSuccess }) => {
 
       <p className="text-center text-xs text-slate-500">
         Al registrarte, aceptas nuestros{' '}
-        <a href="#" className="text-slate-400 hover:text-indigo-400">
+        <a href="#" className="text-slate-400 hover:text-link">
           Términos
         </a>{' '}
         y{' '}
-        <a href="#" className="text-slate-400 hover:text-indigo-400">
+        <a href="#" className="text-slate-400 hover:text-link">
           Política de Privacidad
         </a>
         .

@@ -39,7 +39,7 @@ export const FormDetailPage: React.FC = () => {
         <p className="text-slate-400">No se encontró el formulario.</p>
         <button
           onClick={() => navigate('/automations/forms')}
-          className="mt-4 text-sm text-primary hover:underline"
+          className="mt-4 text-sm text-link hover:underline"
         >
           Volver a formularios
         </button>

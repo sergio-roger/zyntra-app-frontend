@@ -1,3 +1,4 @@
+import { Button } from '@core/ui/Button';
 import { DateRange } from '@core/ui/DateRangePicker';
 import { Tabs } from '@core/ui/Tabs';
 import { CompanyCustomFieldsSidebar } from '@crm/components/CompanyCustomFieldsSidebar';
@@ -215,24 +216,23 @@ export const CompanyListPage: React.FC = () => {
         actions={
           <>
             {isAdminOrManager && (
-              <button
+              <Button
+                variant="secondary"
+                outline
                 onClick={() => setIsImportOpen(true)}
-                className="inline-flex items-center gap-2 rounded-xl border border-white/10 bg-slate-800 px-5 py-2.5 text-sm font-bold text-slate-300 transition-all hover:bg-slate-700 hover:-translate-y-px active:scale-95"
+                icon={FileSpreadsheet}
               >
-                <FileSpreadsheet size={18} /> Importar
-              </button>
+                Importar
+              </Button>
             )}
-            <button
-              onClick={openCreate}
-              className="inline-flex items-center gap-2 rounded-xl bg-primary px-5 py-2.5 text-sm font-bold text-white shadow-lg shadow-primary/20 transition-all hover:-translate-y-px hover:shadow-xl active:scale-95"
-            >
-              <Plus size={18} /> Nueva empresa
-            </button>
+            <Button variant="tertiary" onClick={openCreate} icon={Plus}>
+              Nueva empresa
+            </Button>
           </>
         }
       >
-        <div className="text-xs font-semibold text-slate-500">
-          <span className="text-slate-300">{allQuery.data?.total ?? 0}</span>{' '}
+        <div className="text-xs font-semibold text-base-content/50">
+          <span className="text-base-content/70">{allQuery.data?.total ?? 0}</span>{' '}
           empresa{(allQuery.data?.total ?? 0) !== 1 ? 's' : ''} registrada
           {(allQuery.data?.total ?? 0) !== 1 ? 's' : ''}
         </div>

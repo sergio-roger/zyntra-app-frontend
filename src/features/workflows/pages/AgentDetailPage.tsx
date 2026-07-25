@@ -51,7 +51,7 @@ export const AgentDetailPage: React.FC = () => {
         <p className="text-slate-400">No se encontró el agente.</p>
         <button
           onClick={() => navigate('/automations/agents')}
-          className="mt-4 text-sm text-primary hover:underline"
+          className="mt-4 text-sm text-link hover:underline"
         >
           Volver a agentes
         </button>

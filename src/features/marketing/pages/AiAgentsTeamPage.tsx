@@ -12,7 +12,10 @@ const EmptyTeamState: React.FC = () => (
   <div className="flex flex-col items-center gap-3 p-20 text-center text-base-content/60">
     <Users size={40} />
     <p>Todavía no importaste ningún agente a tu equipo.</p>
-    <Link to="/agents/store" className="btn btn-primary btn-sm">
+    <Link
+      to="/agents/store"
+      className="btn btn-sm bg-tertiary text-tertiary-content border-none hover:opacity-90"
+    >
       Ir al Catálogo de Agentes
     </Link>
   </div>

@@ -1,3 +1,4 @@
+import { Button } from '@core/ui/Button';
 import { useAuthStore } from '@features/auth/store/authStore';
 import { UserFormSidebar } from '@features/settings/components/UserFormSidebar';
 import {
@@ -106,8 +107,8 @@ export const UsersPage: React.FC = () => {
       );
     }
     return (
-      <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-lg text-[10px] font-black uppercase tracking-wider bg-slate-800 text-slate-500">
-        <span className="w-1.5 h-1.5 rounded-full bg-slate-500" />
+      <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-lg text-[10px] font-black uppercase tracking-wider bg-base-300 text-base-content/50">
+        <span className="w-1.5 h-1.5 rounded-full bg-base-content/40" />
         Inactivo
       </span>
     );
@@ -119,23 +120,20 @@ export const UsersPage: React.FC = () => {
         title="Usuarios y Colaboradores"
         subtitle="Gestiona quién tiene acceso a tu plataforma y sus permisos."
         actions={
-          <button
+          <Button
+            variant="tertiary"
             onClick={openCreate}
             disabled={isLimitReached}
-            className={`inline-flex items-center gap-2 rounded-xl px-5 py-2.5 text-sm font-bold shadow-lg transition-all ${
-              isLimitReached
-                ? 'bg-slate-800 text-slate-500 cursor-not-allowed shadow-none'
-                : 'bg-primary text-white shadow-primary/20 hover:-translate-y-px hover:shadow-xl active:scale-95'
-            }`}
+            icon={Plus}
           >
-            <Plus size={18} /> Añadir usuario
-          </button>
+            Añadir usuario
+          </Button>
         }
       >
-        <div className="text-xs font-semibold text-slate-500">
+        <div className="text-xs font-semibold text-base-content/50">
           <span
             className={
-              isLimitReached ? 'text-rose-400 font-bold' : 'text-slate-300'
+              isLimitReached ? 'text-error font-bold' : 'text-base-content/70'
             }
           >
             {activeUsersCount}
@@ -157,15 +155,15 @@ export const UsersPage: React.FC = () => {
       {isLoading && (
         <div className="flex flex-col items-center justify-center py-32 space-y-4">
           <Loader2 className="animate-spin text-primary" size={40} />
-          <p className="text-sm text-slate-500 font-medium">
+          <p className="text-sm text-base-content/50 font-medium">
             Cargando personal...
           </p>
         </div>
       )}
 
       {isError && (
-        <div className="flex items-center gap-4 rounded-2xl border border-rose-500/20 bg-rose-500/5 p-6 text-sm text-rose-300">
-          <AlertCircle size={24} className="text-rose-500" />
+        <div className="flex items-center gap-4 rounded-2xl border border-error/20 bg-error/5 p-6 text-sm text-error">
+          <AlertCircle size={24} className="text-error" />
           <p>{(error as Error).message}</p>
         </div>
       )}
@@ -181,35 +179,35 @@ export const UsersPage: React.FC = () => {
       )}
 
       {!isLoading && users.length > 0 && (
-        <div className="bg-slate-900/50 border border-white/5 rounded-3xl overflow-hidden shadow-xl">
+        <div className="bg-base-200 border border-base-300 rounded-2xl overflow-hidden shadow-md">
           <div className="overflow-x-auto">
             <table className="w-full text-left border-collapse">
               <thead>
-                <tr className="border-b border-white/5 bg-white/5">
-                  <th className="px-6 py-4 text-[10px] font-black text-slate-500 uppercase tracking-widest">
+                <tr className="border-b border-base-300 bg-base-300/30">
+                  <th className="px-6 py-4 text-[10px] font-black text-base-content/50 uppercase tracking-widest">
                     Colaborador
                   </th>
-                  <th className="px-6 py-4 text-[10px] font-black text-slate-500 uppercase tracking-widest">
+                  <th className="px-6 py-4 text-[10px] font-black text-base-content/50 uppercase tracking-widest">
                     Rol
                   </th>
-                  <th className="px-6 py-4 text-[10px] font-black text-slate-500 uppercase tracking-widest">
+                  <th className="px-6 py-4 text-[10px] font-black text-base-content/50 uppercase tracking-widest">
                     Equipos
                   </th>
-                  <th className="px-6 py-4 text-[10px] font-black text-slate-500 uppercase tracking-widest">
+                  <th className="px-6 py-4 text-[10px] font-black text-base-content/50 uppercase tracking-widest">
                     Activación
                   </th>
-                  <th className="px-6 py-4 text-[10px] font-black text-slate-500 uppercase tracking-widest">
+                  <th className="px-6 py-4 text-[10px] font-black text-base-content/50 uppercase tracking-widest">
                     Estado
                   </th>
-                  <th className="px-6 py-4 text-[10px] font-black text-slate-500 uppercase tracking-widest">
+                  <th className="px-6 py-4 text-[10px] font-black text-base-content/50 uppercase tracking-widest">
                     Creado
                   </th>
-                  <th className="px-6 py-4 text-[10px] font-black text-slate-500 uppercase tracking-widest text-right">
+                  <th className="px-6 py-4 text-[10px] font-black text-base-content/50 uppercase tracking-widest text-right">
                     Acciones
                   </th>
                 </tr>
               </thead>
-              <tbody className="divide-y divide-white/5">
+              <tbody className="divide-y divide-base-300">
                 {users.map((user) => {
                   const isActive = user.status
                     ? user.status === 'active'
@@ -225,7 +223,7 @@ export const UsersPage: React.FC = () => {
                   return (
                     <tr
                       key={user.id}
-                      className="group hover:bg-white/[0.02] transition-colors"
+                      className="group hover:bg-base-300/20 transition-colors"
                     >
                       <td className="px-6 py-4">
                         <div className="flex items-center gap-3">
@@ -235,19 +233,19 @@ export const UsersPage: React.FC = () => {
                             avatarUrl={avatarUrl}
                             size={40}
                             rounded="2xl"
-                            className="ring-1 ring-white/10"
+                            className="ring-1 ring-base-content/10"
                           />
                           <div>
-                            <p className="text-sm font-bold text-white">
+                            <p className="text-sm font-bold text-base-content">
                               {fullName}
                             </p>
-                            <div className="flex items-center gap-2 text-xs text-slate-500 mt-0.5">
+                            <div className="flex items-center gap-2 text-xs text-base-content/50 mt-0.5">
                               <span className="flex items-center gap-1">
                                 <Mail size={12} />
                                 {user.email}
                               </span>
                               {jobTitle && (
-                                <span className="flex items-center gap-1 text-indigo-400/80 font-medium">
+                                <span className="flex items-center gap-1 text-primary/80 font-medium">
                                   <Briefcase size={11} />
                                   {jobTitle}
                                 </span>
@@ -257,9 +255,9 @@ export const UsersPage: React.FC = () => {
                         </div>
                       </td>
                       <td className="px-6 py-4">
-                        <div className="flex items-center gap-2 px-3 py-1 rounded-full bg-slate-800 border border-white/5 w-fit">
-                          <Shield size={12} className="text-indigo-400" />
-                          <span className="text-[11px] font-bold text-slate-300">
+                        <div className="flex items-center gap-2 px-3 py-1 rounded-full bg-base-300 border border-base-300 w-fit">
+                          <Shield size={12} className="text-primary" />
+                          <span className="text-[11px] font-bold text-base-content/70">
                             {getRoleLabel(user.role ?? '')}
                           </span>
                         </div>
@@ -270,19 +268,19 @@ export const UsersPage: React.FC = () => {
                             user.teams!.map((team) => (
                               <div
                                 key={team.id}
-                                className="flex items-center gap-1.5 px-2 py-1 rounded-lg bg-white/5 border border-white/5 shadow-sm"
+                                className="flex items-center gap-1.5 px-2 py-1 rounded-lg bg-base-300/50 border border-base-300 shadow-sm"
                               >
                                 <div
                                   className="w-2 h-2 rounded-full shadow-sm"
                                   style={{ backgroundColor: team.color }}
                                 />
-                                <span className="text-[10px] font-bold text-slate-300 whitespace-nowrap">
+                                <span className="text-[10px] font-bold text-base-content/70 whitespace-nowrap">
                                   {team.name}
                                 </span>
                               </div>
                             ))
                           ) : (
-                            <span className="text-[10px] text-slate-600 italic">
+                            <span className="text-[10px] text-base-content/40 italic">
                               Sin equipo
                             </span>
                           )}
@@ -300,7 +298,7 @@ export const UsersPage: React.FC = () => {
                         )}
                       </td>
                       <td className="px-6 py-4">{renderStatusBadge(user)}</td>
-                      <td className="px-6 py-4 text-xs text-slate-400 whitespace-nowrap">
+                      <td className="px-6 py-4 text-xs text-base-content/60 whitespace-nowrap">
                         {user.createdAt
                           ? new Date(user.createdAt).toLocaleDateString(
                               'es-ES',
@@ -319,8 +317,8 @@ export const UsersPage: React.FC = () => {
                             title={isActive ? 'Desactivar' : 'Activar'}
                             className={`p-2 rounded-xl transition-all ${
                               isActive
-                                ? 'text-slate-500 hover:text-rose-400 hover:bg-rose-400/10'
-                                : 'text-emerald-500 hover:bg-emerald-500/10'
+                                ? 'text-base-content/50 hover:text-error hover:bg-error/10'
+                                : 'text-success hover:bg-success/10'
                             }`}
                           >
                             {isActive ? (
@@ -332,7 +330,7 @@ export const UsersPage: React.FC = () => {
                           <button
                             onClick={() => openEdit(user)}
                             title="Editar"
-                            className="p-2 text-slate-500 hover:text-indigo-400 hover:bg-indigo-400/10 rounded-xl transition-all"
+                            className="p-2 text-base-content/50 hover:text-primary hover:bg-primary/10 rounded-xl transition-all"
                           >
                             <Pencil size={16} />
                           </button>

@@ -19,7 +19,7 @@ export const ResetPasswordPage: React.FC = () => {
         footer={
           <Link
             to="/forgot-password"
-            className="font-medium text-indigo-400 hover:underline"
+            className="font-medium text-link hover:underline"
           >
             Solicitar uno nuevo
           </Link>

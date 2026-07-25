@@ -31,14 +31,14 @@ const formatDate = (iso: string | null | undefined) => {
 const getCustomFieldValue = (c: Company, colKey: string) => {
   const val = c.customFields?.[colKey];
   if (val === undefined || val === null || val === '')
-    return <span className="text-slate-600">—</span>;
+    return <span className="text-base-content/40">—</span>;
   if (typeof val === 'boolean') {
     return (
       <span
         className={`inline-flex px-1.5 py-0.5 rounded text-[10px] font-bold ${
           val
-            ? 'bg-emerald-500/10 text-emerald-400'
-            : 'bg-slate-800 text-slate-400'
+            ? 'bg-success/10 text-success'
+            : 'bg-base-300 text-base-content/60'
         }`}
       >
         {val ? 'Sí' : 'No'}
@@ -46,9 +46,9 @@ const getCustomFieldValue = (c: Company, colKey: string) => {
     );
   }
   if (Array.isArray(val)) {
-    return <span className="text-slate-300">{val.join(', ')}</span>;
+    return <span className="text-base-content/70">{val.join(', ')}</span>;
   }
-  return <span className="text-slate-300">{String(val)}</span>;
+  return <span className="text-base-content/70">{String(val)}</span>;
 };
 
 const RENDERERS: Record<
@@ -58,17 +58,17 @@ const RENDERERS: Record<
   name: (c, onSelect) => (
     <button
       onClick={() => onSelect?.(c)}
-      className="flex items-center gap-2 text-left font-medium text-slate-100 hover:text-indigo-400"
+      className="flex items-center gap-2 text-left font-medium text-base-content hover:text-primary"
     >
-      <span className="inline-flex h-7 w-7 shrink-0 items-center justify-center rounded-lg bg-indigo-500/10 text-indigo-400">
+      <span className="inline-flex h-7 w-7 shrink-0 items-center justify-center rounded-lg bg-primary/10 text-primary">
         <Building2 size={13} />
       </span>
       {c.name}
     </button>
   ),
-  taxType: (c) => <span className="text-slate-300">{c.taxType ?? '—'}</span>,
+  taxType: (c) => <span className="text-base-content/70">{c.taxType ?? '—'}</span>,
   identification: (c) => (
-    <span className="text-slate-300">{c.identification ?? '—'}</span>
+    <span className="text-base-content/70">{c.identification ?? '—'}</span>
   ),
   website: (c) =>
     c.website ? (
@@ -76,7 +76,7 @@ const RENDERERS: Record<
         href={c.website.startsWith('http') ? c.website : `https://${c.website}`}
         target="_blank"
         rel="noopener noreferrer"
-        className="inline-flex items-center gap-1 text-indigo-400 hover:underline"
+        className="inline-flex items-center gap-1 text-link hover:underline"
         onClick={(e) => e.stopPropagation()}
       >
         <ExternalLink size={11} />
@@ -85,27 +85,27 @@ const RENDERERS: Record<
         </span>
       </a>
     ) : (
-      <span className="text-slate-600">—</span>
+      <span className="text-base-content/40">—</span>
     ),
   employeeRange: (c) => (
-    <span className="text-slate-300">
+    <span className="text-base-content/70">
       {c.employeeRange ? (
-        <span className="inline-flex items-center gap-1.5 rounded-full border border-slate-700/50 bg-slate-800/50 px-2.5 py-0.5 text-xs">
+        <span className="inline-flex items-center gap-1.5 rounded-full border border-base-300 bg-base-300/50 px-2.5 py-0.5 text-xs">
           {c.employeeRange}
         </span>
       ) : (
-        <span className="text-slate-600">—</span>
+        <span className="text-base-content/40">—</span>
       )}
     </span>
   ),
   owner: (c) => <OwnerDisplay owner={c.owner} />,
   industry: (c) =>
     c.industry ? (
-      <span className="inline-flex items-center rounded-md border border-slate-700 bg-slate-800 px-2 py-0.5 text-[10px] font-medium text-slate-300">
+      <span className="inline-flex items-center rounded-md border border-base-300 bg-base-300 px-2 py-0.5 text-[10px] font-medium text-base-content/70">
         {c.industry.name}
       </span>
     ) : (
-      <span className="text-slate-600">—</span>
+      <span className="text-base-content/40">—</span>
     ),
   lifecycleStage: (c) =>
     c.lifecycle_stage ? (
@@ -125,7 +125,7 @@ const RENDERERS: Record<
         {c.lifecycle_stage.name}
       </span>
     ) : (
-      <span className="text-slate-600">—</span>
+      <span className="text-base-content/40">—</span>
     ),
 
   tags: (c) => (
@@ -140,13 +140,13 @@ const RENDERERS: Record<
         </span>
       ))}
       {(c.tags ?? []).length > 3 && (
-        <span className="text-[9px] text-slate-500">+{c.tags.length - 3}</span>
+        <span className="text-[9px] text-base-content/50">+{c.tags.length - 3}</span>
       )}
-      {(c.tags ?? []).length === 0 && <span className="text-slate-600">—</span>}
+      {(c.tags ?? []).length === 0 && <span className="text-base-content/40">—</span>}
     </div>
   ),
   createdAt: (c) => (
-    <span className="text-slate-400">{formatDate(c.createdAt)}</span>
+    <span className="text-base-content/60">{formatDate(c.createdAt)}</span>
   ),
 };
 
@@ -175,9 +175,9 @@ export const CompanyTable: React.FC<CompanyTableProps> = ({
   const visibleCols = columns.filter((col) => col.visible);
 
   return (
-    <div className="overflow-x-auto rounded-xl border border-white/10 bg-slate-900/50">
+    <div className="overflow-x-auto rounded-xl border border-base-300 bg-base-200 shadow-md">
       <table className="w-full text-left text-sm border-collapse">
-        <thead className="border-b border-white/10 bg-slate-900/80 text-xs text-slate-400 uppercase">
+        <thead className="border-b border-base-300 bg-base-300/30 text-xs text-base-content/60 uppercase">
           <tr>
             {visibleCols.map((col) => (
               <th key={col.key} className="px-4 py-3 font-semibold">
@@ -191,7 +191,7 @@ export const CompanyTable: React.FC<CompanyTableProps> = ({
           {companies.map((c) => (
             <tr
               key={c.id}
-              className="border-b border-white/5 transition-colors last:border-0 hover:bg-white/5"
+              className="border-b border-base-300/50 transition-colors last:border-0 hover:bg-base-300/20"
             >
               {visibleCols.map((col) => (
                 <td key={col.key} className="px-4 py-3 align-middle">
@@ -206,7 +206,7 @@ export const CompanyTable: React.FC<CompanyTableProps> = ({
                     <button
                       onClick={() => onCustomFields(c)}
                       aria-label="Campos personalizados"
-                      className="rounded-md p-1.5 text-slate-400 transition-colors hover:bg-white/10 hover:text-indigo-400"
+                      className="rounded-md p-1.5 text-base-content/50 transition-colors hover:bg-base-300/50 hover:text-primary"
                     >
                       <Settings2 size={15} />
                     </button>
@@ -217,8 +217,8 @@ export const CompanyTable: React.FC<CompanyTableProps> = ({
                     aria-label="Editar"
                     className={`rounded-md p-1.5 transition-colors ${
                       canEdit
-                        ? 'text-slate-400 hover:bg-white/10 hover:text-indigo-400'
-                        : 'cursor-not-allowed text-slate-700 opacity-40'
+                        ? 'text-base-content/50 hover:bg-base-300/50 hover:text-primary'
+                        : 'cursor-not-allowed text-base-content/20 opacity-40'
                     }`}
                   >
                     <Pencil size={15} />
@@ -229,8 +229,8 @@ export const CompanyTable: React.FC<CompanyTableProps> = ({
                     aria-label="Eliminar"
                     className={`rounded-md p-1.5 transition-colors ${
                       canEdit
-                        ? 'text-slate-400 hover:bg-rose-500/15 hover:text-rose-400'
-                        : 'cursor-not-allowed text-slate-700 opacity-40'
+                        ? 'text-base-content/50 hover:bg-error/15 hover:text-error'
+                        : 'cursor-not-allowed text-base-content/20 opacity-40'
                     }`}
                   >
                     <Trash2 size={15} />

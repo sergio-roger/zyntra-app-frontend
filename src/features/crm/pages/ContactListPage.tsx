@@ -1,3 +1,4 @@
+import { Button } from '@core/ui/Button';
 import { DateRange } from '@core/ui/DateRangePicker';
 import { Tabs } from '@core/ui/Tabs';
 import { ContactCustomFieldsSidebar } from '@crm/components/ContactCustomFieldsSidebar';
@@ -238,35 +239,30 @@ export const ContactListPage: React.FC = () => {
         subtitle="Gestiona tu base de clientes, leads y prospectos comerciales."
         actions={
           <>
-            <button
+            <Button
+              variant="secondary"
+              outline
               onClick={() => setIsImportOpen(true)}
               disabled={isLimitReached}
-              className={`inline-flex items-center gap-2 rounded-xl border px-5 py-2.5 text-sm font-bold transition-all ${
-                isLimitReached
-                  ? 'bg-slate-800 border-white/5 text-slate-500 cursor-not-allowed shadow-none'
-                  : 'border-white/10 bg-slate-800 text-slate-300 hover:bg-slate-700 hover:-translate-y-px active:scale-95'
-              }`}
+              icon={FileSpreadsheet}
             >
-              <FileSpreadsheet size={18} /> Importar
-            </button>
-            <button
+              Importar
+            </Button>
+            <Button
+              variant="tertiary"
               onClick={openCreate}
               disabled={isLimitReached}
-              className={`inline-flex items-center gap-2 rounded-xl px-5 py-2.5 text-sm font-bold shadow-lg transition-all ${
-                isLimitReached
-                  ? 'bg-slate-800 text-slate-500 cursor-not-allowed shadow-none'
-                  : 'bg-primary text-white shadow-primary/20 hover:-translate-y-px hover:shadow-xl active:scale-95'
-              }`}
+              icon={Plus}
             >
-              <Plus size={18} /> Nuevo contacto
-            </button>
+              Nuevo contacto
+            </Button>
           </>
         }
       >
-        <div className="text-xs font-semibold text-slate-500">
+        <div className="text-xs font-semibold text-base-content/50">
           <span
             className={
-              isLimitReached ? 'text-rose-400 font-bold' : 'text-slate-300'
+              isLimitReached ? 'text-error font-bold' : 'text-base-content/70'
             }
           >
             {allQuery.data?.total || 0}

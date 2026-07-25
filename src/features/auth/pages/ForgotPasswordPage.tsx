@@ -15,7 +15,7 @@ export const ForgotPasswordPage: React.FC = () => {
           ¿Recordaste tu contraseña?{' '}
           <Link
             to="/login"
-            className="font-medium text-indigo-400 hover:underline"
+            className="font-medium text-link hover:underline"
           >
             Volver al inicio de sesión
           </Link>

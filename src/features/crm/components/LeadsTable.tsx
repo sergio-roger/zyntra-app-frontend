@@ -1,3 +1,4 @@
+import { Button } from '@core/ui/Button';
 import { Contact } from '@crm/types/contact';
 import {
   Archive,
@@ -61,14 +62,14 @@ export const LeadsTable: React.FC<LeadsTableProps> = ({
   if (leads.length === 0) {
     return (
       <div className="flex flex-col items-center justify-center py-24 gap-4">
-        <div className="h-16 w-16 rounded-2xl bg-slate-800/60 flex items-center justify-center text-slate-600">
+        <div className="h-16 w-16 rounded-2xl bg-base-300/60 flex items-center justify-center text-base-content/40">
           <Inbox size={32} />
         </div>
         <div className="text-center">
-          <p className="text-slate-300 font-bold text-sm">
+          <p className="text-base-content/80 font-bold text-sm">
             No hay leads en el inbox
           </p>
-          <p className="text-slate-500 text-xs mt-1">
+          <p className="text-base-content/50 text-xs mt-1">
             Los nuevos leads aparecerán aquí automáticamente.
           </p>
         </div>
@@ -77,26 +78,26 @@ export const LeadsTable: React.FC<LeadsTableProps> = ({
   }
 
   return (
-    <div className="overflow-x-auto rounded-2xl border border-white/5 bg-slate-900/30">
+    <div className="overflow-x-auto rounded-2xl border border-base-300 bg-base-200/50 shadow-md">
       <table className="w-full text-sm">
         <thead>
-          <tr className="border-b border-white/5">
-            <th className="text-left px-5 py-3 text-[10px] font-bold uppercase tracking-widest text-slate-500">
+          <tr className="border-b border-base-300">
+            <th className="text-left px-5 py-3 text-[10px] font-bold uppercase tracking-widest text-base-content/50">
               Lead
             </th>
-            <th className="text-left px-5 py-3 text-[10px] font-bold uppercase tracking-widest text-slate-500 hidden md:table-cell">
+            <th className="text-left px-5 py-3 text-[10px] font-bold uppercase tracking-widest text-base-content/50 hidden md:table-cell">
               Contacto
             </th>
-            <th className="text-left px-5 py-3 text-[10px] font-bold uppercase tracking-widest text-slate-500 hidden lg:table-cell">
+            <th className="text-left px-5 py-3 text-[10px] font-bold uppercase tracking-widest text-base-content/50 hidden lg:table-cell">
               Canal
             </th>
-            <th className="text-left px-5 py-3 text-[10px] font-bold uppercase tracking-widest text-slate-500 hidden xl:table-cell">
+            <th className="text-left px-5 py-3 text-[10px] font-bold uppercase tracking-widest text-base-content/50 hidden xl:table-cell">
               Etiqueta
             </th>
-            <th className="text-left px-5 py-3 text-[10px] font-bold uppercase tracking-widest text-slate-500 hidden lg:table-cell">
+            <th className="text-left px-5 py-3 text-[10px] font-bold uppercase tracking-widest text-base-content/50 hidden lg:table-cell">
               Registrado
             </th>
-            <th className="text-right px-5 py-3 text-[10px] font-bold uppercase tracking-widest text-slate-500">
+            <th className="text-right px-5 py-3 text-[10px] font-bold uppercase tracking-widest text-base-content/50">
               Acciones
             </th>
           </tr>
@@ -111,7 +112,7 @@ export const LeadsTable: React.FC<LeadsTableProps> = ({
             return (
               <tr
                 key={lead.id}
-                className={`group border-b border-white/[0.03] hover:bg-white/[0.02] transition-colors ${idx === leads.length - 1 ? 'border-b-0' : ''}`}
+                className={`group border-b border-base-300/50 hover:bg-base-300/20 transition-colors ${idx === leads.length - 1 ? 'border-b-0' : ''}`}
               >
                 {/* Lead / Avatar + Name */}
                 <td className="px-5 py-3.5">
@@ -122,11 +123,11 @@ export const LeadsTable: React.FC<LeadsTableProps> = ({
                       {initials}
                     </div>
                     <div className="min-w-0">
-                      <p className="text-white font-semibold text-sm truncate max-w-[140px]">
+                      <p className="text-base-content font-semibold text-sm truncate max-w-[140px]">
                         {lead.name}
                       </p>
                       {lead.company?.name && (
-                        <p className="text-slate-500 text-xs truncate max-w-[140px]">
+                        <p className="text-base-content/50 text-xs truncate max-w-[140px]">
                           {lead.company.name}
                         </p>
                       )}
@@ -137,10 +138,10 @@ export const LeadsTable: React.FC<LeadsTableProps> = ({
                 {/* Contact info */}
                 <td className="px-5 py-3.5 hidden md:table-cell">
                   <div className="flex flex-col gap-0.5">
-                    <span className="text-slate-300 text-xs truncate max-w-[180px]">
+                    <span className="text-base-content/70 text-xs truncate max-w-[180px]">
                       {lead.email || '—'}
                     </span>
-                    <span className="text-slate-500 text-xs">
+                    <span className="text-base-content/50 text-xs">
                       {lead.phone || '—'}
                     </span>
                   </div>
@@ -167,13 +168,13 @@ export const LeadsTable: React.FC<LeadsTableProps> = ({
                       {firstTag.name}
                     </span>
                   ) : (
-                    <span className="text-slate-600 text-xs">Sin etiqueta</span>
+                    <span className="text-base-content/40 text-xs">Sin etiqueta</span>
                   )}
                 </td>
 
                 {/* Created at */}
                 <td className="px-5 py-3.5 hidden lg:table-cell">
-                  <span className="text-slate-500 text-xs">
+                  <span className="text-base-content/50 text-xs">
                     {relativeTime(lead.createdAt)}
                   </span>
                 </td>
@@ -181,21 +182,24 @@ export const LeadsTable: React.FC<LeadsTableProps> = ({
                 {/* Actions */}
                 <td className="px-5 py-3.5">
                   <div className="flex items-center justify-end gap-2">
-                    <button
+                    <Button
+                      variant="tertiary"
+                      outline
+                      size="sm"
                       onClick={() => onConvert(lead)}
                       title="Convertir a negocio"
-                      className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-primary/10 hover:bg-primary/20 text-primary border border-primary/20 text-xs font-bold transition-all active:scale-95"
+                      icon={ArrowRightCircle}
                     >
-                      <ArrowRightCircle size={13} />
                       <span className="hidden sm:inline">Convertir</span>
-                    </button>
-                    <button
+                    </Button>
+                    <Button
+                      variant="secondary"
+                      size="sm"
                       onClick={() => onArchive(lead)}
                       title="Archivar lead"
-                      className="p-1.5 rounded-lg bg-slate-800/60 hover:bg-slate-700/60 text-slate-400 hover:text-slate-200 border border-white/5 transition-all active:scale-95"
-                    >
-                      <Archive size={14} />
-                    </button>
+                      aria-label="Archivar lead"
+                      icon={Archive}
+                    />
                   </div>
                 </td>
               </tr>

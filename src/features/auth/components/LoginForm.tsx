@@ -118,7 +118,7 @@ export const LoginForm: React.FC<LoginFormProps> = ({ onSuccess }) => {
           </label>
           <Link
             to="/forgot-password"
-            className="mt-2 text-xs text-slate-400 transition-colors hover:text-indigo-400"
+            className="mt-2 text-xs text-slate-400 transition-colors hover:text-link"
           >
             ¿Olvidaste tu contraseña?
           </Link>

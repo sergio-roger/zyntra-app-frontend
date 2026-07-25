@@ -28,7 +28,7 @@ const PLAN_STATUS_COLORS: Record<Business['planStatus'], string> = {
   trial: 'text-amber-400',
   active: 'text-emerald-400',
   past_due: 'text-rose-400',
-  cancelled: 'text-slate-500',
+  cancelled: 'text-base-content/50',
 };
 
 const formatBusinessDate = (value: string) =>
@@ -46,7 +46,7 @@ export const MyBusinessPage: React.FC = () => {
   if (isLoading) {
     return (
       <div className="flex w-full items-center justify-center py-24">
-        <Loader2 size={24} className="animate-spin text-slate-500" />
+        <Loader2 size={24} className="animate-spin text-base-content/50" />
       </div>
     );
   }
@@ -59,7 +59,7 @@ export const MyBusinessPage: React.FC = () => {
         onEdit={() => setIsDrawerOpen(true)}
       />
 
-      <div className="w-full bg-slate-900/50 border border-white/5 rounded-3xl overflow-hidden shadow-xl">
+      <div className="w-full bg-base-200 border border-base-300 rounded-2xl overflow-hidden shadow-md">
         <div className="p-6">
           <BusinessReadView business={business} />
         </div>
@@ -83,11 +83,11 @@ const SectionGroup: React.FC<{
 }> = ({ title, description, children }) => (
   <section className="space-y-3">
     <div>
-      <h3 className="text-xs font-black uppercase tracking-widest text-slate-400">
+      <h3 className="text-xs font-black uppercase tracking-widest text-base-content/60">
         {title}
       </h3>
       {description && (
-        <p className="mt-0.5 text-[11px] text-slate-500">{description}</p>
+        <p className="mt-0.5 text-[11px] text-base-content/50">{description}</p>
       )}
     </div>
     {children}
@@ -99,12 +99,12 @@ const ReadOnlyField: React.FC<{
   label: string;
   value: React.ReactNode;
 }> = ({ icon: Icon, label, value }) => (
-  <div className="rounded-xl bg-slate-900/40 px-3 py-2.5">
-    <div className="flex items-center gap-1.5 text-[10px] font-bold uppercase tracking-wider text-slate-500">
+  <div className="rounded-xl bg-base-300/40 px-3 py-2.5">
+    <div className="flex items-center gap-1.5 text-[10px] font-bold uppercase tracking-wider text-base-content/50">
       <Icon size={12} />
       {label}
     </div>
-    <p className="mt-1 truncate text-sm text-slate-200">{value}</p>
+    <p className="mt-1 truncate text-sm text-base-content/80">{value}</p>
   </div>
 );
 

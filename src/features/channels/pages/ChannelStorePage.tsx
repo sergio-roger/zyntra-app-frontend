@@ -107,7 +107,7 @@ const ChannelTypeCard: React.FC<ChannelTypeCardProps> = ({
           ) : (
             <button
               data-testid={`activate-${channelType.key}`}
-              className="btn btn-primary btn-sm gap-1 w-full"
+              className="btn btn-sm gap-1 w-full bg-tertiary hover:opacity-90 text-tertiary-content border-none"
               onClick={() => onActivate(channelType)}
             >
               <Plus size={14} /> {isWebChat && existingChannel ? 'Agregar otro' : 'Activar'}

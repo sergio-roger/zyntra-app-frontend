@@ -17,7 +17,7 @@ export const RegisterPage: React.FC = () => {
           ¿Ya tienes una cuenta?{' '}
           <Link
             to="/login"
-            className="font-medium text-primary hover:underline"
+            className="font-medium text-link hover:underline"
           >
             Inicia sesión
           </Link>

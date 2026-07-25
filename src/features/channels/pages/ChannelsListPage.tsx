@@ -114,7 +114,7 @@ export const ChannelsListPage: React.FC = () => {
         subtitle="Administra los canales de comunicación con tus clientes."
         actions={
           <button
-            className="btn btn-primary gap-1"
+            className="btn gap-1 bg-tertiary hover:opacity-90 text-tertiary-content border-none"
             onClick={handleCreate}
             disabled={!webChatType}
             data-testid="create-web-channel"

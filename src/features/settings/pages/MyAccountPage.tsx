@@ -29,7 +29,6 @@ import {
   CheckCircle2,
   ImagePlus,
   Info,
-  Loader2,
   Lock,
   LucideIcon,
   Mail,
@@ -98,9 +97,9 @@ const ProfileInfoRow: React.FC<{
   value: React.ReactNode;
   children?: React.ReactNode;
 }> = ({ icon: Icon, value, children }) => (
-  <div className="flex items-center gap-2 rounded-xl bg-slate-900/40 px-3 py-2.5">
-    <Icon size={14} className="shrink-0 text-slate-500" />
-    <span className="truncate text-sm text-slate-300">{value}</span>
+  <div className="flex items-center gap-2 rounded-xl bg-base-300/40 px-3 py-2.5">
+    <Icon size={14} className="shrink-0 text-base-content/50" />
+    <span className="truncate text-sm text-base-content/80">{value}</span>
     {children}
   </div>
 );
@@ -198,7 +197,7 @@ export const MyAccountPage: React.FC = () => {
         subtitle="Gestiona los datos de tu cuenta de usuario, contraseña y perfil."
       />
 
-      <div className="w-full bg-slate-900/50 border border-white/5 rounded-3xl overflow-hidden shadow-xl">
+      <div className="w-full bg-base-200 border border-base-300 rounded-2xl overflow-hidden shadow-md">
         <Tabs
           tabs={[
             { key: 'perfil', label: 'Perfil', icon: UserIcon },
@@ -213,7 +212,7 @@ export const MyAccountPage: React.FC = () => {
         {activeTab === 'perfil' && (
           <div className="grid grid-cols-1 gap-6 p-6 lg:grid-cols-[360px_1fr]">
             {/* Columna izquierda: tarjeta de perfil directamente editable */}
-            <div className="rounded-2xl border border-white/5 bg-slate-950/30 p-5 space-y-5 flex flex-col justify-between">
+            <div className="rounded-xl border border-base-300 bg-base-200/60 p-5 space-y-5 flex flex-col justify-between">
               <div className="space-y-5">
                 <div className="flex items-center gap-3">
                   <Avatar
@@ -222,47 +221,47 @@ export const MyAccountPage: React.FC = () => {
                     avatarUrl={user?.avatarUrl}
                     size={56}
                     rounded="2xl"
-                    className="ring-1 ring-white/10 shrink-0"
+                    className="ring-1 ring-base-content/10 shrink-0"
                   />
                   <div className="min-w-0">
-                    <p className="truncate text-base font-bold text-white">
+                    <p className="truncate text-base font-bold text-base-content">
                       {fullName || '—'}
                     </p>
-                    <div className="flex items-center gap-1 text-xs text-slate-500">
-                      <Shield size={12} className="text-slate-400" />
+                    <div className="flex items-center gap-1 text-xs text-base-content/50">
+                      <Shield size={12} className="text-base-content/40" />
                       <span>{roleLabel}</span>
                     </div>
                   </div>
                 </div>
 
                 <div className="flex items-center gap-3">
-                  <button
+                  <Button
                     type="button"
+                    variant="secondary"
+                    size="sm"
                     onClick={() => setIsAvatarModalOpen(true)}
                     disabled={uploadAvatar.isPending}
-                    className="inline-flex items-center gap-2 rounded-xl px-3 py-2 text-xs font-bold bg-slate-800 text-slate-300 hover:bg-slate-700 transition-all disabled:opacity-50"
+                    loading={uploadAvatar.isPending}
+                    icon={ImagePlus}
                   >
-                    {uploadAvatar.isPending ? (
-                      <Loader2 size={14} className="animate-spin" />
-                    ) : (
-                      <ImagePlus size={14} />
-                    )}
                     Cambiar foto
-                  </button>
+                  </Button>
                   {user?.avatarUrl && (
-                    <button
+                    <Button
                       type="button"
+                      variant="danger"
+                      size="sm"
                       onClick={() => removeAvatar.mutate()}
                       disabled={removeAvatar.isPending}
-                      className="inline-flex items-center gap-2 rounded-xl px-3 py-2 text-xs font-bold bg-rose-500/10 text-rose-400 hover:bg-rose-500/20 transition-all disabled:opacity-50"
+                      loading={removeAvatar.isPending}
+                      icon={Trash2}
                     >
-                      <Trash2 size={14} />
                       Quitar
-                    </button>
+                    </Button>
                   )}
                 </div>
 
-                <div className="h-px bg-white/5" />
+                <div className="h-px bg-base-300" />
 
                 <form
                   onSubmit={handleProfileSubmit(onProfileSubmit)}
@@ -290,7 +289,7 @@ export const MyAccountPage: React.FC = () => {
                     value={user?.email ?? ''}
                     disabled
                     readOnly
-                    className="!border-none !text-slate-500 cursor-not-allowed"
+                    className="!border-none !text-base-content/40 cursor-not-allowed"
                   />
 
                   <Input
@@ -321,7 +320,7 @@ export const MyAccountPage: React.FC = () => {
                   <Accordion title="Información adicional">
                     {(user?.teams?.length ?? 0) > 0 && (
                       <section className="space-y-2">
-                        <h4 className="flex items-center gap-1.5 text-[10px] font-black uppercase tracking-widest text-slate-500">
+                        <h4 className="flex items-center gap-1.5 text-[10px] font-black uppercase tracking-widest text-base-content/50">
                           <Users size={12} />
                           Equipos
                         </h4>
@@ -329,13 +328,13 @@ export const MyAccountPage: React.FC = () => {
                           {user!.teams!.map((team) => (
                             <div
                               key={team.id}
-                              className="flex items-center gap-1.5 px-2 py-1 rounded-lg bg-slate-900/40 border border-white/5"
+                              className="flex items-center gap-1.5 px-2 py-1 rounded-lg bg-base-300/40 border border-base-300"
                             >
                               <div
                                 className="w-2 h-2 rounded-full shrink-0"
                                 style={{ backgroundColor: team.color }}
                               />
-                              <span className="text-[10px] font-bold text-slate-300 whitespace-nowrap">
+                              <span className="text-[10px] font-bold text-base-content/80 whitespace-nowrap">
                                 {team.name}
                               </span>
                             </div>
@@ -345,7 +344,7 @@ export const MyAccountPage: React.FC = () => {
                     )}
 
                     <section className="space-y-2">
-                      <h4 className="text-[10px] font-black uppercase tracking-widest text-slate-500">
+                      <h4 className="text-[10px] font-black uppercase tracking-widest text-base-content/50">
                         Antigüedad
                       </h4>
                       <ProfileInfoRow
@@ -383,6 +382,7 @@ export const MyAccountPage: React.FC = () => {
                 <Button
                   type="submit"
                   form="profile-edit-form"
+                  variant="tertiary"
                   disabled={isProfileSubmitting}
                   loading={updateProfile.isPending}
                   icon={Save}
@@ -394,10 +394,10 @@ export const MyAccountPage: React.FC = () => {
             </div>
 
             {/* Columna derecha: actividad */}
-            <div className="rounded-2xl border border-white/5 bg-slate-950/30 p-5">
+            <div className="rounded-xl border border-base-300 bg-base-200/60 p-5">
               <div className="mb-4 flex items-center gap-2">
-                <Activity size={16} className="text-indigo-400" />
-                <h3 className="text-sm font-bold text-white">
+                <Activity size={16} className="text-primary" />
+                <h3 className="text-sm font-bold text-base-content">
                   Actividad reciente
                 </h3>
               </div>
@@ -405,36 +405,36 @@ export const MyAccountPage: React.FC = () => {
               <div className="overflow-x-auto">
                 <table className="w-full text-left">
                   <thead>
-                    <tr className="border-b border-white/5">
-                      <th className="px-3 py-2 text-[10px] font-black uppercase tracking-widest text-slate-500">
+                    <tr className="border-b border-base-300">
+                      <th className="px-3 py-2 text-[10px] font-black uppercase tracking-widest text-base-content/50">
                         Usuario
                       </th>
-                      <th className="px-3 py-2 text-[10px] font-black uppercase tracking-widest text-slate-500">
+                      <th className="px-3 py-2 text-[10px] font-black uppercase tracking-widest text-base-content/50">
                         Actividad
                       </th>
-                      <th className="px-3 py-2 text-[10px] font-black uppercase tracking-widest text-slate-500 text-right">
+                      <th className="px-3 py-2 text-[10px] font-black uppercase tracking-widest text-base-content/50 text-right">
                         Fecha
                       </th>
                     </tr>
                   </thead>
-                  <tbody className="divide-y divide-white/5">
+                  <tbody className="divide-y divide-base-300">
                     {MOCK_ACTIVITIES.map((activity) => (
                       <tr
                         key={activity.id}
-                        className="hover:bg-white/[0.02] transition-colors"
+                        className="hover:bg-base-content/[0.02] transition-colors"
                       >
                         <td className="px-3 py-3">
                           <div className="flex items-center gap-2">
                             <Avatar name={activity.actorName} size={24} />
-                            <span className="text-sm text-slate-200 whitespace-nowrap">
+                            <span className="text-sm text-base-content/80 whitespace-nowrap">
                               {activity.actorName}
                             </span>
                           </div>
                         </td>
-                        <td className="px-3 py-3 text-sm text-slate-400">
+                        <td className="px-3 py-3 text-sm text-base-content/60">
                           {activity.action}
                         </td>
-                        <td className="px-3 py-3 text-xs text-slate-500 text-right whitespace-nowrap">
+                        <td className="px-3 py-3 text-xs text-base-content/50 text-right whitespace-nowrap">
                           {activity.date}
                         </td>
                       </tr>

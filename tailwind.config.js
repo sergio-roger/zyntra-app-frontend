@@ -14,6 +14,26 @@ export default {
         // paleta Zyntra, se agrega para botones/superficies moradas sin
         // recurrir a un border.
         'secondary-deep': '#2e0d3f',
+        // DaisyUI no tiene slot nativo para un tercer color de marca —
+        // se agrega como token Tailwind plano para CTAs de conversión.
+        'tertiary': '#ff8c00',
+        'tertiary-content': '#ffffff',
+        // Color dedicado para links/hipervínculos — se diferencia del
+        // primary violeta para que un texto clickeable no se confunda
+        // con acciones/marca.
+        'link': '#0a6cff',
+      },
+      borderRadius: {
+        lg: '8px',
+        xl: '12px',
+        '2xl': '16px',
+        '3xl': '24px',
+      },
+      boxShadow: {
+        sm: '0 1px 2px rgba(0,0,0,0.05)',
+        md: '0 4px 6px rgba(0,0,0,0.1)',
+        lg: '0 10px 15px rgba(0,0,0,0.1)',
+        xl: '0 20px 25px rgba(0,0,0,0.15)',
       },
     },
   },

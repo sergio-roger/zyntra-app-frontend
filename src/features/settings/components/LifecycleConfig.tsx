@@ -49,7 +49,7 @@ export const LifecycleConfig: React.FC = () => {
               Cancelar
             </button>
             <button
-              className="btn btn-primary btn-sm px-6 shadow-lg shadow-primary/20"
+              className="btn btn-sm px-6 shadow-lg shadow-tertiary/20 bg-tertiary text-tertiary-content border-none hover:opacity-90"
               onClick={handleSave}
               disabled={saving}
             >
@@ -135,7 +135,7 @@ export const LifecycleConfig: React.FC = () => {
                       </button>
                       <button
                         onClick={confirmAddStage}
-                        className="btn btn-primary btn-sm btn-xs px-5 shadow-lg shadow-primary/20 text-[10px]"
+                        className="btn btn-sm btn-xs px-5 shadow-lg shadow-tertiary/20 bg-tertiary text-tertiary-content border-none hover:opacity-90 text-[10px]"
                       >
                         Añadir
                       </button>

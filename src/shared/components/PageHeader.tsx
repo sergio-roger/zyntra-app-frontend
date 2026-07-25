@@ -12,12 +12,14 @@ export const PageHeader: React.FC<PageHeaderProps> = ({
     <div className="flex flex-wrap items-center justify-between gap-3">
       <div className="space-y-1">
         <div className="flex items-center gap-3">
-          <h2 className="text-xl font-bold text-white tracking-tight">
+          <h2 className="text-xl font-bold text-base-content tracking-tight">
             {title}
           </h2>
           {badge}
         </div>
-        {subtitle && <p className="text-sm text-slate-400">{subtitle}</p>}
+        {subtitle && (
+          <p className="text-sm text-base-content/60">{subtitle}</p>
+        )}
         {children}
       </div>
       {actions && <div className="flex items-center gap-3">{actions}</div>}

@@ -1,10 +1,11 @@
+import { Button } from '@core/ui/Button';
+import { Tabs } from '@core/ui/Tabs';
 import { TagFormSidebar } from '@crm/components/TagFormSidebar';
 import { useRemoveTag, useTags } from '@crm/hooks/useTags';
 import { Tag } from '@crm/types/tag';
 import { ConfirmModal } from '@shared/components/ConfirmModal';
 import { EmptyState } from '@shared/components/EmptyState';
 import { PageHeader } from '@shared/components/PageHeader';
-import { Tabs } from '@core/ui/Tabs';
 import {
   AlertCircle,
   Edit2,
@@ -62,20 +63,16 @@ export const TagsPage: React.FC = () => {
         title="Etiquetas"
         subtitle="Organiza y segmenta tus contactos eficazmente."
         actions={
-          <button
-            onClick={() => handleOpenSidebar()}
-            className="flex items-center gap-2 px-4 py-2 rounded-xl bg-indigo-600 hover:bg-indigo-500 text-white text-sm font-semibold transition-all shadow-lg shadow-indigo-500/20"
-          >
-            <Plus size={18} />
-            <span>Nueva Etiqueta</span>
-          </button>
+          <Button variant="tertiary" onClick={() => handleOpenSidebar()} icon={Plus}>
+            Nueva Etiqueta
+          </Button>
         }
       />
 
-      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-white/5 pb-2">
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-base-300 pb-2">
         <div className="relative max-w-md flex-1">
           <Search
-            className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-500"
+            className="absolute left-3 top-1/2 -translate-y-1/2 text-base-content/40"
             size={16}
           />
           <input
@@ -83,7 +80,7 @@ export const TagsPage: React.FC = () => {
             placeholder="Buscar etiquetas..."
             value={search}
             onChange={(e) => setSearch(e.target.value)}
-            className="w-full pl-10 pr-4 py-2 rounded-xl bg-slate-900/50 border border-white/5 text-sm text-slate-300 focus:outline-none focus:ring-2 focus:ring-indigo-500/40"
+            className="w-full pl-10 pr-4 py-2 rounded-xl bg-base-200 border border-base-300 text-sm text-base-content/80 focus:outline-none focus:ring-2 focus:ring-primary/40"
           />
         </div>
         <Tabs
@@ -97,11 +94,11 @@ export const TagsPage: React.FC = () => {
 
       {isLoading ? (
         <div className="flex flex-col items-center justify-center py-20 gap-4">
-          <Loader2 className="animate-spin text-indigo-400" size={32} />
-          <p className="text-slate-400 text-sm">Cargando etiquetas...</p>
+          <Loader2 className="animate-spin text-primary" size={32} />
+          <p className="text-base-content/60 text-sm">Cargando etiquetas...</p>
         </div>
       ) : isError ? (
-        <div className="flex items-center gap-3 rounded-xl border border-rose-500/30 bg-rose-500/10 p-4 text-sm text-rose-300">
+        <div className="flex items-center gap-3 rounded-xl border border-error/30 bg-error/10 p-4 text-sm text-error">
           <AlertCircle size={18} />
           <span>Error: {(error as Error)?.message}</span>
         </div>
@@ -110,7 +107,7 @@ export const TagsPage: React.FC = () => {
           {filteredTags?.map((tag) => (
             <div
               key={tag.id}
-              className="group relative flex flex-col gap-3 rounded-2xl border border-white/[0.05] bg-slate-900/40 p-5 transition-all hover:bg-slate-900/60 hover:border-white/[0.1] shadow-xl shadow-black/10"
+              className="group relative flex flex-col gap-3 rounded-xl border border-base-300 bg-base-200 p-5 transition-all hover:bg-base-200/80 hover:border-base-content/10 shadow-md"
             >
               <div className="flex items-start justify-between">
                 <div
@@ -122,13 +119,13 @@ export const TagsPage: React.FC = () => {
                 <div className="flex gap-1 opacity-0 group-hover:opacity-100 transition-opacity">
                   <button
                     onClick={() => handleOpenSidebar(tag)}
-                    className="p-1.5 rounded-lg hover:bg-white/5 text-slate-400 hover:text-white"
+                    className="p-1.5 rounded-lg hover:bg-base-300/50 text-base-content/50 hover:text-base-content"
                   >
                     <Edit2 size={14} />
                   </button>
                   <button
                     onClick={() => handleDeleteRequest(tag.id)}
-                    className="p-1.5 rounded-lg hover:bg-rose-500/10 text-slate-400 hover:text-rose-400"
+                    className="p-1.5 rounded-lg hover:bg-error/10 text-base-content/50 hover:text-error"
                   >
                     <Trash2 size={14} />
                   </button>
@@ -136,18 +133,18 @@ export const TagsPage: React.FC = () => {
               </div>
 
               <div>
-                <h3 className="font-bold text-white text-lg">{tag.name}</h3>
-                <p className="text-xs text-slate-500 mt-1 line-clamp-2 min-h-[32px]">
+                <h3 className="font-bold text-base-content text-lg">{tag.name}</h3>
+                <p className="text-xs text-base-content/50 mt-1 line-clamp-2 min-h-[32px]">
                   {tag.description || 'Sin descripción'}
                 </p>
               </div>
 
-              <div className="mt-2 flex items-center justify-between border-t border-white/[0.05] pt-3">
-                <span className="text-[10px] text-slate-600 uppercase tracking-widest font-bold">
+              <div className="mt-2 flex items-center justify-between border-t border-base-300 pt-3">
+                <span className="text-[10px] text-base-content/40 uppercase tracking-widest font-bold">
                   CRM Tag
                 </span>
                 <div className="flex -space-x-2">
-                  <div className="h-6 w-6 rounded-full border-2 border-slate-900 bg-slate-800 flex items-center justify-center text-[10px] text-slate-400 font-bold">
+                  <div className="h-6 w-6 rounded-full border-2 border-base-200 bg-base-300 flex items-center justify-center text-[10px] text-base-content/60 font-bold">
                     0
                   </div>
                 </div>
