@@ -7,6 +7,7 @@ import { ConstructionPage } from '@shared/components/ConstructionPage';
 
 const AiAgentsCatalogPage = lazy(() => import('../pages/AiAgentsCatalogPage'));
 const AiAgentsTeamPage = lazy(() => import('../pages/AiAgentsTeamPage'));
+const AiAgentsChatPage = lazy(() => import('../pages/AiAgentsChatPage'));
 
 export const marketingRoutes: RouteObject[] = [
   {
@@ -14,10 +15,9 @@ export const marketingRoutes: RouteObject[] = [
     element: (
       <PermissionGuard menuKey="agents_chat">
         <ModuleGuard menuKey="agents_chat">
-          <ConstructionPage
-            title="Chat con tu Equipo de Agentes"
-            description="Muy pronto vas a poder hablar directamente con tu equipo de agentes de IA para definir objetivos y que trabajen para vos."
-          />
+          <SuspenseLoader>
+            <AiAgentsChatPage />
+          </SuspenseLoader>
         </ModuleGuard>
       </PermissionGuard>
     ),
