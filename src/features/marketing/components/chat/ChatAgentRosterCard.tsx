@@ -1,34 +1,18 @@
-import { Bot, Headset, PenSquare, Search, TrendingUp, Zap } from 'lucide-react';
+import { Bot } from 'lucide-react';
 import React from 'react';
 import { ChatAgentRosterItem } from '@features/marketing/types/chat-mock';
-
-const SLUG_ICONS: Record<string, React.ElementType> = {
-  'marketing-strategist': TrendingUp,
-  'content-creator': PenSquare,
-  'seo-specialist': Search,
-  'data-analyst': Zap,
-  'automation-agent': Bot,
-  'crm-agent': Headset,
-};
-
-const STATUS_LABEL: Record<ChatAgentRosterItem['status'], string> = {
-  active: 'Activo',
-  working: 'Trabajando',
-  idle: 'Inactivo',
-};
-
-const STATUS_DOT_CLASS: Record<ChatAgentRosterItem['status'], string> = {
-  active: 'bg-success',
-  working: 'bg-warning',
-  idle: 'bg-base-content/30',
-};
+import {
+  CHAT_AGENT_SLUG_ICONS,
+  CHAT_AGENT_STATUS_DOT_CLASS,
+  CHAT_AGENT_STATUS_LABEL,
+} from '@features/marketing/constants/chat-agent-visuals';
 
 interface ChatAgentRosterCardProps {
   agent: ChatAgentRosterItem;
 }
 
 export const ChatAgentRosterCard: React.FC<ChatAgentRosterCardProps> = ({ agent }) => {
-  const Icon = SLUG_ICONS[agent.slug] ?? Bot;
+  const Icon = CHAT_AGENT_SLUG_ICONS[agent.slug] ?? Bot;
   return (
     <div className="flex flex-col items-center gap-2 p-3 rounded-2xl bg-base-200 border border-base-300 min-w-[104px]">
       <div
@@ -42,8 +26,8 @@ export const ChatAgentRosterCard: React.FC<ChatAgentRosterCardProps> = ({ agent 
         <p className="text-[11px] text-base-content/50 leading-tight">{agent.role}</p>
       </div>
       <div className="flex items-center gap-1.5">
-        <span className={`w-1.5 h-1.5 rounded-full ${STATUS_DOT_CLASS[agent.status]}`} />
-        <span className="text-[11px] text-base-content/60">{STATUS_LABEL[agent.status]}</span>
+        <span className={`w-1.5 h-1.5 rounded-full ${CHAT_AGENT_STATUS_DOT_CLASS[agent.status]}`} />
+        <span className="text-[11px] text-base-content/60">{CHAT_AGENT_STATUS_LABEL[agent.status]}</span>
       </div>
     </div>
   );
