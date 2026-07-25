@@ -20,6 +20,7 @@ import {
 } from '../hooks/channels.queries';
 import { useAiAgents } from '@features/ai-agents/hooks/useAiAgents';
 import { ConfirmModal } from '@shared/components/ConfirmModal';
+import { PageHeader } from '@shared/components/PageHeader';
 
 function CopyButton({ text }: { text: string }) {
   const [copied, setCopied] = useState(false);
@@ -121,27 +122,25 @@ export const ChannelDetailPage: React.FC = () => {
   const assignedAgent = agents.find((a) => a.id === channel.agentId);
 
   return (
-    <div className="p-6">
+    <div className="space-y-6 animate-in fade-in duration-500">
       <button
-        className="btn btn-ghost btn-sm gap-1 mb-6"
+        className="btn btn-ghost btn-sm gap-1 -mb-2 w-fit"
         onClick={() => navigate('/settings/channels')}
       >
         <ArrowLeft size={14} /> Canal Store
       </button>
 
-      <div className="flex items-center justify-between mb-6">
-        <div>
-          <h1 className="text-xl font-bold">{channel.name}</h1>
-          <p className="text-sm text-base-content/60">
-            {channel.channelType?.label ?? 'Canal'}
-          </p>
-        </div>
-        <div className="flex items-center gap-2">
+      <PageHeader
+        title={channel.name}
+        subtitle={channel.channelType?.label ?? 'Canal'}
+        badge={
           <span
             className={`badge ${channel.status === 'active' ? 'badge-success' : 'badge-ghost'}`}
           >
             {channel.status === 'active' ? 'Activo' : 'Inactivo'}
           </span>
+        }
+        actions={
           <button
             className="btn btn-ghost btn-sm"
             onClick={handleToggleStatus}
@@ -149,11 +148,11 @@ export const ChannelDetailPage: React.FC = () => {
           >
             {channel.status === 'active' ? 'Desactivar' : 'Activar'}
           </button>
-        </div>
-      </div>
+        }
+      />
 
       {error && (
-        <div className="alert alert-error mb-4 text-sm">
+        <div className="alert alert-error text-sm">
           <AlertCircle size={16} /> <span>{error}</span>
           <button className="btn btn-ghost btn-xs" onClick={() => setError('')}>
             <X size={12} />
@@ -163,7 +162,7 @@ export const ChannelDetailPage: React.FC = () => {
 
       {/* Embed code */}
       {channel.embedCode && (
-        <div className="card bg-base-100 border border-base-300 shadow-sm mb-4">
+        <div className="card bg-base-100 border border-base-300 shadow-sm">
           <div className="card-body gap-3">
             <div className="flex items-center justify-between">
               <h2 className="font-semibold">Código de integración</h2>
@@ -181,7 +180,7 @@ export const ChannelDetailPage: React.FC = () => {
       )}
 
       {/* Agent assignment */}
-      <div className="card bg-base-100 border border-base-300 shadow-sm mb-4">
+      <div className="card bg-base-100 border border-base-300 shadow-sm">
         <div className="card-body gap-4">
           <h2 className="font-semibold flex items-center gap-2">
             <Bot size={18} /> Agente de IA

@@ -275,14 +275,9 @@ export const WebChannelStepForm: React.FC<WebChannelStepFormProps> = ({
               </button>
 
               {!isLastStep ? (
-                <button
-                  key="wizard-next-button"
-                  type="button"
-                  onClick={handleNext}
-                  className="inline-flex items-center gap-1.5 rounded-xl px-5 py-2.5 text-sm font-bold bg-indigo-600 text-white shadow-lg shadow-indigo-500/20 hover:bg-indigo-500 transition-all"
-                >
+                <Button key="wizard-next-button" type="button" onClick={handleNext}>
                   Siguiente <ArrowRight size={14} />
-                </button>
+                </Button>
               ) : (
                 <Button
                   key="wizard-submit-button"

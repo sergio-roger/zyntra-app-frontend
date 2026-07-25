@@ -42,7 +42,7 @@ export const WebChannelStepFormPage: React.FC = () => {
   }
 
   return (
-    <div className="p-6">
+    <div>
       <WebChannelStepForm
         key={mode === 'edit' ? channelId : 'create'}
         mode={mode}

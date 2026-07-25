@@ -24,7 +24,7 @@ export const StepIndicator: React.FC<StepIndicatorProps> = ({ current }) => {
               <div
                 className={`flex items-center justify-center w-8 h-8 rounded-full text-xs font-bold shrink-0 transition-colors ${
                   isDone || isActive
-                    ? 'bg-indigo-600 text-white'
+                    ? 'bg-primary text-white'
                     : 'bg-slate-800 text-slate-500'
                 }`}
               >
@@ -41,7 +41,7 @@ export const StepIndicator: React.FC<StepIndicatorProps> = ({ current }) => {
             {i < WEB_CHANNEL_FORM_STEPS.length - 1 && (
               <div
                 className={`flex-1 h-px mt-4 mx-2 transition-colors ${
-                  isDone ? 'bg-indigo-600' : 'bg-slate-800'
+                  isDone ? 'bg-primary' : 'bg-slate-800'
                 }`}
               />
             )}
