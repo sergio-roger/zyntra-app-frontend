@@ -1,8 +1,9 @@
 import { ChevronDown, MoreHorizontal, Plus } from 'lucide-react';
-import React from 'react';
+import React, { useState } from 'react';
 import { PageHeader } from '@shared/components/PageHeader';
 import { CHAT_AGENT_ROSTER, CHAT_MESSAGES } from '@features/marketing/constants/chat-mock-data';
-import { ChatAgentRoster } from '@features/marketing/components/chat/ChatAgentRoster';
+import { ChatTeamAvatarStack } from '@features/marketing/components/chat/ChatTeamAvatarStack';
+import { TeamRosterPopover } from '@features/marketing/components/chat/TeamRosterPopover';
 import { ChatThread } from '@features/marketing/components/chat/ChatThread';
 import { ChatComposer } from '@features/marketing/components/chat/ChatComposer';
 import { TeamProcessPanel } from '@features/marketing/components/chat/TeamProcessPanel';
@@ -26,6 +27,8 @@ const HeaderSubtitle: React.FC = () => (
 );
 
 export const AiAgentsChatPage: React.FC = () => {
+  const [isTeamPopoverOpen, setIsTeamPopoverOpen] = useState(false);
+
   return (
     <div className="flex flex-col gap-4 h-full animate-in fade-in duration-500">
       <PageHeader
@@ -38,9 +41,17 @@ export const AiAgentsChatPage: React.FC = () => {
         }
         actions={<HeaderActions />}
       />
-      <ChatAgentRoster agents={CHAT_AGENT_ROSTER} />
       <div className="flex-1 min-h-0 flex flex-col lg:flex-row gap-4">
-        <div className="flex-1 min-h-0 flex flex-col bg-base-200 border border-base-300 rounded-2xl overflow-hidden">
+        <div className="relative flex-1 min-h-0 flex flex-col bg-base-200 border border-base-300 rounded-2xl overflow-hidden">
+          <div className="p-3 border-b border-base-300">
+            <ChatTeamAvatarStack
+              agents={CHAT_AGENT_ROSTER}
+              onClick={() => setIsTeamPopoverOpen((prev) => !prev)}
+            />
+          </div>
+          {isTeamPopoverOpen && (
+            <TeamRosterPopover agents={CHAT_AGENT_ROSTER} onClose={() => setIsTeamPopoverOpen(false)} />
+          )}
           <ChatThread messages={CHAT_MESSAGES} />
           <ChatComposer />
         </div>

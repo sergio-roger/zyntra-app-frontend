@@ -7,25 +7,25 @@ import {
   CHAT_AGENT_STATUS_LABEL,
 } from '@features/marketing/constants/chat-agent-visuals';
 
-interface ChatAgentRosterCardProps {
+interface TeamRosterPopoverRowProps {
   agent: ChatAgentRosterItem;
 }
 
-export const ChatAgentRosterCard: React.FC<ChatAgentRosterCardProps> = ({ agent }) => {
+export const TeamRosterPopoverRow: React.FC<TeamRosterPopoverRowProps> = ({ agent }) => {
   const Icon = CHAT_AGENT_SLUG_ICONS[agent.slug] ?? Bot;
   return (
-    <div className="flex flex-col items-center gap-2 p-3 rounded-2xl bg-base-200 border border-base-300 min-w-[104px]">
+    <div className="flex items-center gap-2.5 px-3 py-2 rounded-lg hover:bg-base-300/50">
       <div
-        className="w-14 h-14 rounded-full flex items-center justify-center"
+        className="w-9 h-9 rounded-full flex items-center justify-center shrink-0"
         style={{ backgroundColor: `${agent.color}26`, color: agent.color }}
       >
-        <Icon size={26} strokeWidth={2} />
+        <Icon size={16} strokeWidth={2} />
       </div>
-      <div className="text-center">
-        <p className="text-sm font-semibold leading-tight">{agent.displayName}</p>
-        <p className="text-[11px] text-base-content/50 leading-tight">{agent.role}</p>
+      <div className="min-w-0 flex-1">
+        <p className="text-sm font-medium leading-tight truncate">{agent.displayName}</p>
+        <p className="text-[11px] text-base-content/50 leading-tight truncate">{agent.role}</p>
       </div>
-      <div className="flex items-center gap-1.5">
+      <div className="flex items-center gap-1.5 shrink-0">
         <span className={`w-1.5 h-1.5 rounded-full ${CHAT_AGENT_STATUS_DOT_CLASS[agent.status]}`} />
         <span className="text-[11px] text-base-content/60">{CHAT_AGENT_STATUS_LABEL[agent.status]}</span>
       </div>
