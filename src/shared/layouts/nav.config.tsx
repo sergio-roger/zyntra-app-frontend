@@ -56,6 +56,8 @@ const PATH_TO_KEY_MAP: Record<string, string> = {
   '/settings/permissions': 'settings_roles',
   '/inbox/channels': 'inbox_channels',
   '/inbox/my-channels': 'inbox_my_channels',
+  '/redes-sociales': 'redes_sociales',
+  '/redes-sociales/youtube': 'redes_sociales_youtube',
 };
 
 export const getMenuKeyFromPath = (path: string): string => {

@@ -29,6 +29,7 @@ import {
   Clock,
   Trash2,
   MessageCircle,
+  Video,
 } from 'lucide-react';
 import { NavModule } from '@shared/types/nav';
 
@@ -271,6 +272,23 @@ export const NAV_MODULES: NavModule[] = [
         label: 'Rendimiento',
         icon: LineChart,
         description: 'Eficiencia de agentes.',
+      },
+    ],
+  },
+  {
+    key: 'redes_sociales',
+    label: 'Redes Sociales',
+    icon: Share2,
+    match: '/redes-sociales',
+    to: '/redes-sociales/youtube',
+    description: 'Analítica centralizada de tus redes sociales.',
+    color: 'text-error',
+    children: [
+      {
+        to: '/redes-sociales/youtube',
+        label: 'YouTube',
+        icon: Video,
+        description: 'Canal propio y canales de competencia en YouTube.',
       },
     ],
   },

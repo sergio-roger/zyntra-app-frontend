@@ -8,6 +8,7 @@ import { authRoutes } from '@features/auth/routes/AuthRoutes';
 import { inboxRoutes } from '@features/inbox/routes/InboxRoutes';
 import { dashboardRoutes } from '@features/dashboard/routes/DashboardRoutes';
 import { settingsRoutes } from '@features/settings/routes/SettingsRoutes';
+import { youtubeAnalyticsRoutes } from '@features/youtube-analytics/routes/YoutubeAnalyticsRoutes';
 import { ConstructionPage } from '@shared/components/ConstructionPage';
 import { AppShell } from '@shared/layouts/AppShell';
 import { BrowserRouter, Navigate, useRoutes } from 'react-router-dom';
@@ -29,6 +30,7 @@ const AppRoutes = () => {
         ...workflowRoutes,
         ...settingsRoutes,
         ...driveRoutes,
+        ...youtubeAnalyticsRoutes,
         {
           path: '/analytics/*',
           element: (

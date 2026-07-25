@@ -27,4 +27,5 @@ export interface Plan {
   stripePriceId?: string;
   taskLimit: number;
   userLimit: number;
+  youtubeCompetitorLimit: number;
 }
