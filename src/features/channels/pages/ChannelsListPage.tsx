@@ -40,7 +40,7 @@ export const ChannelsListPage: React.FC = () => {
   const handleCreate = () => {
     if (!webChatType) return;
     navigate(
-      `/settings/channels/new?type=${webChatType.id}&key=web_chat&label=${encodeURIComponent(webChatType.label)}`,
+      `/inbox/channels/new?type=${webChatType.id}&key=web_chat&label=${encodeURIComponent(webChatType.label)}`,
     );
   };
 
@@ -82,7 +82,7 @@ export const ChannelsListPage: React.FC = () => {
   };
 
   const handleRedirectToStore = () => {
-    navigate('/settings/channels');
+    navigate('/inbox/channels');
   };
 
   if (isLoading) {

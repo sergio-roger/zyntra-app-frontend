@@ -60,7 +60,7 @@ describe('usePermissions Hooks', () => {
 
   describe('useRolePermissions', () => {
     it('should fetch and return role permissions', async () => {
-      const mockPerms = { role: 'agent', menu_ids: ['1', '2'] };
+      const mockPerms = { role: 'agent', menuIds: ['1', '2'] };
       vi.mocked(api.get).mockResolvedValueOnce({ data: mockPerms });
 
       const { result } = renderHook(() => useRolePermissions('agent'), {
@@ -85,7 +85,7 @@ describe('usePermissions Hooks', () => {
 
       await waitFor(() => expect(result.current.isSuccess).toBe(true));
       expect(api.put).toHaveBeenCalledWith('/settings/permissions/agent', {
-        menu_ids: ['1', '2', '3'],
+        menuIds: ['1', '2', '3'],
       });
     });
   });

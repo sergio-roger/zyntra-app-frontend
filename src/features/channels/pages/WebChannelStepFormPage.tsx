@@ -21,8 +21,8 @@ export const WebChannelStepFormPage: React.FC = () => {
 
   const [createdChannel, setCreatedChannel] = useState<Channel | null>(null);
 
-  const handleCancel = () => navigate('/settings/my-channels');
-  const handleUpdated = () => navigate('/settings/my-channels');
+  const handleCancel = () => navigate('/inbox/my-channels');
+  const handleUpdated = () => navigate('/inbox/my-channels');
 
   if (mode === 'edit' && isLoading) {
     return (
@@ -56,7 +56,7 @@ export const WebChannelStepFormPage: React.FC = () => {
       {createdChannel && (
         <EmbedSnippetModal
           isOpen={!!createdChannel}
-          onClose={() => navigate('/settings/my-channels')}
+          onClose={() => navigate('/inbox/my-channels')}
           channelId={createdChannel.id}
           channelName={createdChannel.name}
         />

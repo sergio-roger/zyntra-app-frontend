@@ -94,7 +94,7 @@ export const ChannelDetailPage: React.FC = () => {
   const handleDelete = async () => {
     try {
       await removeChannel(channelId);
-      navigate('/settings/channels');
+      navigate('/inbox/channels');
     } catch {
       setError('No se puede eliminar el canal.');
     } finally {
@@ -108,7 +108,7 @@ export const ChannelDetailPage: React.FC = () => {
     <div className="space-y-8 animate-in fade-in duration-500">
       <button
         className="btn btn-ghost btn-sm gap-1 -mb-2 w-fit"
-        onClick={() => navigate('/settings/channels')}
+        onClick={() => navigate('/inbox/channels')}
       >
         <ArrowLeft size={14} /> Canal Store
       </button>

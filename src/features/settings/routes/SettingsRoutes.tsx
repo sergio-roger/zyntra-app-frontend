@@ -5,26 +5,6 @@ import { AdminGuard } from '@core/routes/AdminGuard';
 import { PermissionGuard } from '@core/routes/PermissionGuard';
 import { ModuleGuard } from '@core/components/ModuleGuard';
 
-const ChannelStorePage = lazy(() =>
-  import('@features/channels/pages/ChannelStorePage').then((m) => ({
-    default: m.ChannelStorePage,
-  })),
-);
-const WebChannelStepFormPage = lazy(() =>
-  import('@features/channels/pages/WebChannelStepFormPage').then((m) => ({
-    default: m.WebChannelStepFormPage,
-  })),
-);
-const ChannelDetailPage = lazy(() =>
-  import('@features/channels/pages/ChannelDetailPage').then((m) => ({
-    default: m.ChannelDetailPage,
-  })),
-);
-const ChannelsListPage = lazy(() =>
-  import('@features/channels/pages/ChannelsListPage').then((m) => ({
-    default: m.ChannelsListPage,
-  })),
-);
 const LifecycleConfig = lazy(() =>
   import('@features/settings/components/LifecycleConfig').then((m) => ({
     default: m.LifecycleConfig,
@@ -152,66 +132,6 @@ export const settingsRoutes: RouteObject[] = [
             <ModuleGuard menuKey="settings_lifecycle">
               <SuspenseLoader>
                 <LifecycleConfig />
-              </SuspenseLoader>
-            </ModuleGuard>
-          </PermissionGuard>
-        ),
-      },
-      {
-        path: 'channels',
-        element: (
-          <PermissionGuard menuKey="settings_channels">
-            <ModuleGuard menuKey="settings_channels">
-              <SuspenseLoader>
-                <ChannelStorePage />
-              </SuspenseLoader>
-            </ModuleGuard>
-          </PermissionGuard>
-        ),
-      },
-      {
-        path: 'channels/new',
-        element: (
-          <PermissionGuard menuKey="settings_channels">
-            <ModuleGuard menuKey="settings_channels">
-              <SuspenseLoader>
-                <WebChannelStepFormPage />
-              </SuspenseLoader>
-            </ModuleGuard>
-          </PermissionGuard>
-        ),
-      },
-      {
-        path: 'channels/:channelId',
-        element: (
-          <PermissionGuard menuKey="settings_channels">
-            <ModuleGuard menuKey="settings_channels">
-              <SuspenseLoader>
-                <ChannelDetailPage />
-              </SuspenseLoader>
-            </ModuleGuard>
-          </PermissionGuard>
-        ),
-      },
-      {
-        path: 'channels/:channelId/edit',
-        element: (
-          <PermissionGuard menuKey="settings_channels">
-            <ModuleGuard menuKey="settings_channels">
-              <SuspenseLoader>
-                <WebChannelStepFormPage />
-              </SuspenseLoader>
-            </ModuleGuard>
-          </PermissionGuard>
-        ),
-      },
-      {
-        path: 'my-channels',
-        element: (
-          <PermissionGuard menuKey="settings_my_channels">
-            <ModuleGuard menuKey="settings_my_channels">
-              <SuspenseLoader>
-                <ChannelsListPage />
               </SuspenseLoader>
             </ModuleGuard>
           </PermissionGuard>

@@ -135,17 +135,17 @@ export const ChannelStorePage: React.FC = () => {
     // Si es web_chat permitimos agregar múltiples, ignorando el chequeo de canal existente
     if (ct.key === 'web_chat') {
       navigate(
-        `/settings/channels/new?type=${ct.id}&key=${ct.key}&label=${encodeURIComponent(ct.label)}`,
+        `/inbox/channels/new?type=${ct.id}&key=${ct.key}&label=${encodeURIComponent(ct.label)}`,
       );
       return;
     }
 
     const existing = channels.find((c) => c.channelType?.key === ct.key);
     if (existing) {
-      navigate(`/settings/channels/${existing.id}`);
+      navigate(`/inbox/channels/${existing.id}`);
     } else {
       navigate(
-        `/settings/channels/new?type=${ct.id}&key=${ct.key}&label=${encodeURIComponent(ct.label)}`,
+        `/inbox/channels/new?type=${ct.id}&key=${ct.key}&label=${encodeURIComponent(ct.label)}`,
       );
     }
   };

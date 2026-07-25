@@ -56,13 +56,13 @@ export function useRolePermissions(roleName: string) {
 export function useUpdatePermissions(roleName: string) {
   const queryClient = useQueryClient();
   return useMutation({
-    mutationFn: async (menu_ids: string[]) => {
+    mutationFn: async (menuIds: string[]) => {
       const { data } = await api.put(`/settings/permissions/${roleName}`, {
-        menu_ids,
+        menuIds,
       });
       return data;
     },
-    onMutate: async (menu_ids) => {
+    onMutate: async (menuIds) => {
       await queryClient.cancelQueries({
         queryKey: ['settings-permissions', roleName],
       });
@@ -72,7 +72,7 @@ export function useUpdatePermissions(roleName: string) {
       ]);
       queryClient.setQueryData(['settings-permissions', roleName], {
         role: roleName,
-        menu_ids,
+        menuIds,
       });
       return { prev };
     },

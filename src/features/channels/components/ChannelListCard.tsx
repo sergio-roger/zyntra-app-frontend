@@ -56,7 +56,7 @@ export const ChannelListCard: React.FC<ChannelListCardProps> = ({
         <div className="flex items-center justify-between gap-2 pt-4 border-t border-base-300">
           <button
             className="btn btn-outline btn-sm gap-1"
-            onClick={() => navigate(`/settings/channels/${channel.id}/edit`)}
+            onClick={() => navigate(`/inbox/channels/${channel.id}/edit`)}
           >
             <Settings2 size={14} /> Editar
           </button>

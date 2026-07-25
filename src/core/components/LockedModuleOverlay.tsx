@@ -28,7 +28,6 @@ const PLAN_NAMES: Record<string, string> = {
   analytics: 'Impulse Pro',
   settings_users: 'Impulse Pro',
   settings_teams: 'Impulse Pro',
-  settings_channels: 'Impulse Pro',
 };
 
 interface LockedModuleOverlayProps {

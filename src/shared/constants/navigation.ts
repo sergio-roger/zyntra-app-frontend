@@ -189,14 +189,14 @@ export const NAV_MODULES: NavModule[] = [
         description: 'Automatiza tus respuestas.',
       },
       {
-        to: '/settings/channels',
+        to: '/inbox/channels',
         label: 'Canales',
         icon: Share2,
         description: 'Catálogo y gestión de canales.',
         menuKey: 'inbox_channels',
       },
       {
-        to: '/settings/my-channels',
+        to: '/inbox/my-channels',
         label: 'Mis Canales',
         icon: Radio,
         description: 'Canales conectados a tu negocio.',

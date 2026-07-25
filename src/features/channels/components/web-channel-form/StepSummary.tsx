@@ -160,7 +160,7 @@ export const StepSummary: React.FC<StepSummaryProps> = ({
 
       {mode === 'edit' && channelId && (
         <Link
-          to={`/settings/channels/${channelId}`}
+          to={`/inbox/channels/${channelId}`}
           className="inline-block text-xs font-medium text-indigo-400 hover:text-indigo-300 transition-colors"
         >
           Más opciones (activar/desactivar, eliminar)
