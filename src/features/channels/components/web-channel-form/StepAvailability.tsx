@@ -58,7 +58,7 @@ export const StepAvailability: React.FC = () => {
 
   return (
     <div className="grid grid-cols-1 lg:grid-cols-[1fr_380px] gap-6">
-      <div className="rounded-2xl border border-white/5 bg-slate-950/30 p-6 space-y-6">
+      <div className="rounded-3xl border border-white/5 bg-slate-950/30 p-6 md:p-8 space-y-6">
         <div className="space-y-2">
           <label className="flex items-center gap-2 text-xs font-bold text-slate-400 uppercase tracking-wider ml-1">
             <Radio size={14} className="text-slate-500" />

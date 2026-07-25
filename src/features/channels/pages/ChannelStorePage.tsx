@@ -18,9 +18,9 @@ import { ChannelType, Channel } from '../types/channels.types';
 import { PageHeader } from '@shared/components/PageHeader';
 
 const CHANNEL_ICONS: Record<string, React.ReactNode> = {
-  web_chat: <Globe size={28} />,
-  facebook: <MessageCircle size={28} />,
-  telegram: <Send size={28} />,
+  web_chat: <Globe size={32} />,
+  facebook: <MessageCircle size={32} />,
+  telegram: <Send size={32} />,
 };
 
 interface ChannelTypeCardProps {
@@ -43,57 +43,63 @@ const ChannelTypeCard: React.FC<ChannelTypeCardProps> = ({
   return (
     <div
       data-testid={`channel-card-${channelType.key}`}
-      className={`card bg-base-100 border shadow-sm transition-all ${
+      className={`card bg-base-100 border shadow-sm transition-all duration-200 ${
         disabled
           ? 'opacity-60 cursor-not-allowed border-base-300'
-          : 'border-base-300 hover:border-primary hover:shadow-md cursor-pointer'
+          : 'border-base-300 hover:border-primary hover:shadow-lg hover:shadow-primary/5 hover:-translate-y-0.5 cursor-pointer'
       }`}
     >
-      <div className="card-body gap-3">
+      <div className="card-body gap-4 p-6">
         <div className="flex items-start justify-between">
           <div
-            className={`w-12 h-12 rounded-xl flex items-center justify-center ${
-              disabled
-                ? 'bg-base-200 text-base-content/40'
-                : 'bg-primary/10 text-primary'
+            className={`w-16 h-16 rounded-2xl flex items-center justify-center ${
+              disabled ? 'bg-base-200 text-base-content/40' : 'text-primary'
             }`}
+            style={
+              disabled
+                ? undefined
+                : {
+                    backgroundImage:
+                      'radial-gradient(circle at 50% 35%, rgba(124,58,237,0.22) 0%, transparent 70%)',
+                  }
+            }
           >
-            {CHANNEL_ICONS[channelType.key] ?? <Globe size={28} />}
+            {CHANNEL_ICONS[channelType.key] ?? <Globe size={32} />}
           </div>
           <div className="flex flex-col items-end gap-1">
             {disabled ? (
-              <span className="badge badge-ghost badge-sm gap-1">
+              <span className="badge badge-ghost gap-1">
                 <Lock size={10} /> Próximamente
               </span>
             ) : isCurrentlyActive ? (
-              <span className="badge badge-success badge-sm">Activo</span>
+              <span className="badge badge-success">Activo</span>
             ) : isWebChat && existingChannel ? (
-              <span className="badge badge-info badge-sm">Configurado</span>
+              <span className="badge badge-info">Configurado</span>
             ) : (
-              <span className="badge badge-primary badge-outline badge-sm">
+              <span className="badge badge-primary badge-outline">
                 Disponible
               </span>
             )}
           </div>
         </div>
 
-        <div>
-          <h3 className="font-semibold text-base">{channelType.label}</h3>
+        <div className="space-y-1">
+          <h3 className="font-bold text-lg leading-tight">{channelType.label}</h3>
           {channelType.description && (
-            <p className="text-sm text-base-content/60 mt-0.5">
+            <p className="text-sm text-base-content/60 leading-relaxed">
               {channelType.description}
             </p>
           )}
         </div>
 
-        <div className="card-actions justify-end mt-1">
+        <div className="card-actions justify-end mt-2 pt-4 border-t border-base-300">
           {disabled ? (
             <button className="btn btn-ghost btn-sm" disabled>
               No disponible
             </button>
           ) : isCurrentlyActive ? (
             <button
-              className="btn btn-ghost btn-sm gap-1"
+              className="btn btn-outline btn-sm gap-1 w-full"
               onClick={() => onActivate(channelType)}
             >
               Ver configuración <ArrowRight size={14} />
@@ -101,7 +107,7 @@ const ChannelTypeCard: React.FC<ChannelTypeCardProps> = ({
           ) : (
             <button
               data-testid={`activate-${channelType.key}`}
-              className="btn btn-primary btn-sm gap-1"
+              className="btn btn-primary btn-sm gap-1 w-full"
               onClick={() => onActivate(channelType)}
             >
               <Plus size={14} /> {isWebChat && existingChannel ? 'Agregar otro' : 'Activar'}

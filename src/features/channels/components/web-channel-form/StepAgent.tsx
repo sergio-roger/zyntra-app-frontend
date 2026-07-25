@@ -16,7 +16,7 @@ export const StepAgent: React.FC = () => {
     setValue('agentId', value, { shouldDirty: true });
 
   return (
-    <div className="w-full rounded-2xl border border-white/5 bg-slate-950/30 p-6 md:p-8 space-y-6">
+    <div className="w-full rounded-3xl border border-white/5 bg-slate-950/30 p-6 md:p-8 space-y-6">
       <div className="flex items-center justify-between">
         <h2 className="flex items-center gap-2 text-xs font-bold text-slate-400 uppercase tracking-wider ml-1">
           <Bot size={14} className="text-slate-500" /> Agente de IA

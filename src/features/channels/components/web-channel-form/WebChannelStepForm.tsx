@@ -238,7 +238,7 @@ export const WebChannelStepForm: React.FC<WebChannelStepFormProps> = ({
 
         <StepIndicator current={formStep} />
 
-        <form onSubmit={onSubmit} className={`${stepMaxWidth} bg-slate-900/40 rounded-2xl border border-white/5 p-6 md:p-8 space-y-8`}>
+        <form onSubmit={onSubmit} className={`${stepMaxWidth} bg-slate-900/40 rounded-3xl border border-white/5 p-6 md:p-10 space-y-8`}>
           <div className="min-h-[420px]">
             {formStep === 'identity' && <StepIdentity />}
             {formStep === 'availability' && <StepAvailability />}

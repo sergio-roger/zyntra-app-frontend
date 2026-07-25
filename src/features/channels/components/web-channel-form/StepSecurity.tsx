@@ -67,7 +67,7 @@ const DomainListSection: React.FC<DomainListSectionProps> = ({
 
   return (
     <div
-      className={`space-y-3 rounded-xl border border-white/5 bg-slate-900/30 p-4 transition-opacity ${
+      className={`space-y-3 rounded-2xl border border-white/5 bg-slate-900/30 p-5 transition-opacity ${
         disabled ? 'opacity-40 pointer-events-none' : ''
       }`}
     >
@@ -96,7 +96,7 @@ const DomainListSection: React.FC<DomainListSectionProps> = ({
           onClick={handleAdd}
           disabled={disabled}
           data-testid={`add-${testIdPrefix}`}
-          className="inline-flex items-center gap-1.5 rounded-xl px-4 py-2.5 text-sm font-bold bg-indigo-600 text-white shadow-lg shadow-indigo-500/20 hover:bg-indigo-500 transition-all disabled:opacity-50 disabled:pointer-events-none"
+          className="inline-flex items-center gap-1.5 rounded-xl px-4 py-2.5 text-sm font-bold bg-primary text-white shadow-lg shadow-primary/20 hover:opacity-90 transition-all disabled:opacity-50 disabled:pointer-events-none"
         >
           <Plus size={14} /> Agregar
         </button>
@@ -143,7 +143,7 @@ export const StepSecurity: React.FC = () => {
   const allowInsecureDomains = watch('allowInsecureDomains');
 
   return (
-    <div className="w-full space-y-5">
+    <div className="w-full space-y-6">
       <div className="flex items-center gap-2 rounded-xl border border-amber-500/30 bg-amber-500/10 px-4 py-3 text-sm text-amber-300">
         <AlertTriangle size={16} className="shrink-0" />
         <span>

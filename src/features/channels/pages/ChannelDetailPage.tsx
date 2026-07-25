@@ -1,13 +1,13 @@
 import React, { useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import {
-  ArrowLeft,
-  Copy,
-  Check,
-  Loader2,
   AlertCircle,
-  Trash2,
+  AlertTriangle,
+  ArrowLeft,
   Bot,
+  Code2,
+  Loader2,
+  Trash2,
   X,
 } from 'lucide-react';
 import {
@@ -19,27 +19,10 @@ import {
   useUnassignAgentMutation,
 } from '../hooks/channels.queries';
 import { useAiAgents } from '@features/ai-agents/hooks/useAiAgents';
+import { CopyButton } from '@features/channels/components/CopyButton';
+import { SectionHeading } from '@features/channels/components/SectionHeading';
 import { ConfirmModal } from '@shared/components/ConfirmModal';
 import { PageHeader } from '@shared/components/PageHeader';
-
-function CopyButton({ text }: { text: string }) {
-  const [copied, setCopied] = useState(false);
-  const handle = async () => {
-    await navigator.clipboard.writeText(text);
-    setCopied(true);
-    setTimeout(() => setCopied(false), 2000);
-  };
-  return (
-    <button className="btn btn-ghost btn-sm gap-1" onClick={handle}>
-      {copied ? (
-        <Check size={14} className="text-success" />
-      ) : (
-        <Copy size={14} />
-      )}
-      {copied ? 'Copiado' : 'Copiar'}
-    </button>
-  );
-}
 
 export const ChannelDetailPage: React.FC = () => {
   const navigate = useNavigate();
@@ -122,7 +105,7 @@ export const ChannelDetailPage: React.FC = () => {
   const assignedAgent = agents.find((a) => a.id === channel.agentId);
 
   return (
-    <div className="space-y-6 animate-in fade-in duration-500">
+    <div className="space-y-8 animate-in fade-in duration-500">
       <button
         className="btn btn-ghost btn-sm gap-1 -mb-2 w-fit"
         onClick={() => navigate('/settings/channels')}
@@ -163,12 +146,12 @@ export const ChannelDetailPage: React.FC = () => {
       {/* Embed code */}
       {channel.embedCode && (
         <div className="card bg-base-100 border border-base-300 shadow-sm">
-          <div className="card-body gap-3">
+          <div className="card-body gap-4 p-6">
             <div className="flex items-center justify-between">
-              <h2 className="font-semibold">Código de integración</h2>
+              <SectionHeading icon={Code2} label="Código de integración" />
               <CopyButton text={channel.embedCode} />
             </div>
-            <pre className="text-xs font-mono bg-base-200 rounded-lg p-3 whitespace-pre-wrap break-all overflow-x-auto">
+            <pre className="text-xs font-mono bg-base-200 rounded-xl p-4 whitespace-pre-wrap break-all overflow-x-auto">
               {channel.embedCode}
             </pre>
             <p className="text-xs text-base-content/50">
@@ -181,13 +164,11 @@ export const ChannelDetailPage: React.FC = () => {
 
       {/* Agent assignment */}
       <div className="card bg-base-100 border border-base-300 shadow-sm">
-        <div className="card-body gap-4">
-          <h2 className="font-semibold flex items-center gap-2">
-            <Bot size={18} /> Agente de IA
-          </h2>
+        <div className="card-body gap-5 p-6">
+          <SectionHeading icon={Bot} label="Agente de IA" />
 
           {assignedAgent ? (
-            <div className="flex items-center justify-between bg-base-200 rounded-lg p-3">
+            <div className="flex items-center justify-between bg-base-200 rounded-xl p-4">
               <div>
                 <p className="font-medium text-sm">{assignedAgent.name}</p>
                 <p className="text-xs text-base-content/50">
@@ -253,8 +234,8 @@ export const ChannelDetailPage: React.FC = () => {
 
       {/* Danger zone */}
       <div className="card bg-base-100 border border-error/30 shadow-sm">
-        <div className="card-body gap-3">
-          <h2 className="font-semibold text-error">Zona de peligro</h2>
+        <div className="card-body gap-4 p-6">
+          <SectionHeading icon={AlertTriangle} label="Zona de peligro" tone="error" />
           <button
             className="btn btn-outline btn-error btn-sm w-fit gap-1"
             onClick={() => setConfirmDelete(true)}

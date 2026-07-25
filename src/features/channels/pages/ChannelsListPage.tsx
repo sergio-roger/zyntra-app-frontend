@@ -1,5 +1,5 @@
+import { ChannelListCard } from '@features/channels/components/ChannelListCard';
 import { EmbedSnippetModal } from '@features/channels/components/EmbedSnippetModal';
-import { CHANNEL_ICONS } from '@features/channels/constants/channels.constants';
 import {
   useChannelsQuery,
   useChannelStoreQuery,
@@ -9,19 +9,9 @@ import {
 import { Channel } from '@features/channels/types/channels.types';
 import { ConfirmModal } from '@shared/components/ConfirmModal';
 import { EmptyState } from '@shared/components/EmptyState';
+import { PageHeader } from '@shared/components/PageHeader';
 import { toastManager } from '@shared/components/toast/toastManager';
-import {
-  AlertCircle,
-  Ban,
-  Bot,
-  Code2,
-  Globe,
-  Loader2,
-  Plus,
-  Radio,
-  Settings2,
-  Trash2
-} from 'lucide-react';
+import { AlertCircle, Loader2, Plus, Radio } from 'lucide-react';
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 
@@ -118,23 +108,21 @@ export const ChannelsListPage: React.FC = () => {
   }
 
   return (
-    <div className="px-6">
-      <div className="flex items-center justify-between mb-6">
-        <div>
-          <h1 className="text-2xl font-bold">Mis Canales</h1>
-          <p className="text-base-content/60 mt-1">
-            Administra los canales de comunicación con tus clientes.
-          </p>
-        </div>
-        <button
-          className="btn btn-primary gap-1"
-          onClick={handleCreate}
-          disabled={!webChatType}
-          data-testid="create-web-channel"
-        >
-          <Plus size={16} /> Crear canal web
-        </button>
-      </div>
+    <div className="space-y-6 animate-in fade-in duration-500">
+      <PageHeader
+        title="Mis Canales"
+        subtitle="Administra los canales de comunicación con tus clientes."
+        actions={
+          <button
+            className="btn btn-primary gap-1"
+            onClick={handleCreate}
+            disabled={!webChatType}
+            data-testid="create-web-channel"
+          >
+            <Plus size={16} /> Crear canal web
+          </button>
+        }
+      />
 
       {channels.length === 0 ? (
         <EmptyState
@@ -145,69 +133,15 @@ export const ChannelsListPage: React.FC = () => {
           onAction={handleRedirectToStore}
         />
       ) : (
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5">
           {channels.map((channel) => (
-            <div
+            <ChannelListCard
               key={channel.id}
-              data-testid={`channel-row-${channel.id}`}
-              className="card bg-base-100 border border-base-300 shadow-sm"
-            >
-              <div className="card-body gap-3">
-                <div className="flex items-start justify-between">
-                  <div className="w-11 h-11 rounded-xl bg-primary/10 text-primary flex items-center justify-center">
-                    {CHANNEL_ICONS[channel.channelType?.key ?? ''] ?? (
-                      <Globe size={22} />
-                    )}
-                  </div>
-                  <span
-                    className={`badge ${channel.status === 'active' ? 'badge-success' : 'badge-ghost'}`}
-                  >
-                    {channel.status === 'active' ? 'Activo' : 'Inactivo'}
-                  </span>
-                </div>
-
-                <div>
-                  <h3 className="font-semibold text-base">{channel.name}</h3>
-                  <p className="text-sm text-base-content/60">
-                    {channel.channelType?.label ?? 'Canal'}
-                  </p>
-                  {channel.agentId && (
-                    <p className="text-xs text-base-content/50 flex items-center gap-1 mt-1">
-                      <Bot size={12} /> Agente asignado
-                    </p>
-                  )}
-                </div>
-
-                <div className="card-actions justify-end mt-1 gap-1">
-                  <button
-                    className="btn btn-ghost btn-sm gap-1"
-                    onClick={() =>
-                      navigate(`/settings/channels/${channel.id}/edit`)
-                    }
-                  >
-                    <Settings2 size={14} /> Editar
-                  </button>
-                  <button
-                    className="btn btn-ghost btn-sm gap-1"
-                    onClick={() => setSnippetChannel(channel)}
-                  >
-                    <Code2 size={14} /> Snippet
-                  </button>
-                  <button
-                    className="btn btn-ghost btn-sm gap-1 text-warning"
-                    onClick={() => setDeactivatingChannel(channel)}
-                  >
-                    <Ban size={14} /> Desactivar
-                  </button>
-                  <button
-                    className="btn btn-ghost btn-sm gap-1 text-error"
-                    onClick={() => setDeletingChannel(channel)}
-                  >
-                    <Trash2 size={14} /> Eliminar
-                  </button>
-                </div>
-              </div>
-            </div>
+              channel={channel}
+              onShowSnippet={() => setSnippetChannel(channel)}
+              onDeactivate={() => setDeactivatingChannel(channel)}
+              onDelete={() => setDeletingChannel(channel)}
+            />
           ))}
         </div>
       )}
