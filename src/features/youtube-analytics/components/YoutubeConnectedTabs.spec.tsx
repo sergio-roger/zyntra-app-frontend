@@ -1,6 +1,7 @@
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { fireEvent, render, screen } from '@testing-library/react';
 import React from 'react';
+import { MemoryRouter } from 'react-router-dom';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 import { YoutubeConnectedTabs } from '@features/youtube-analytics/components/YoutubeConnectedTabs';
 
@@ -35,7 +36,9 @@ function renderTabs() {
   const qc = new QueryClient({ defaultOptions: { queries: { retry: false } } });
   return render(
     <QueryClientProvider client={qc}>
-      <YoutubeConnectedTabs />
+      <MemoryRouter>
+        <YoutubeConnectedTabs />
+      </MemoryRouter>
     </QueryClientProvider>,
   );
 }
