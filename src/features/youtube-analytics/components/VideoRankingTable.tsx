@@ -72,7 +72,7 @@ export const VideoRankingTable: React.FC<VideoRankingTableProps> = ({
               </td>
               <td className="px-4 py-3 align-middle">{video.avgViewDuration}s</td>
               <td className="px-4 py-3 align-middle">
-                {video.thumbnailCtr.toFixed(2)}%
+                {Number(video.thumbnailCtr).toFixed(2)}%
               </td>
             </tr>
           ))}
