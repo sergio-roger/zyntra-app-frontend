@@ -1,4 +1,5 @@
 import { Button } from '@core/ui/Button';
+import { DisconnectedChannelPrompt } from '@features/youtube-analytics/components/DisconnectedChannelPrompt';
 import { YoutubeConnectedTabs } from '@features/youtube-analytics/components/YoutubeConnectedTabs';
 import {
   buildYoutubeOAuthConnectUrl,
@@ -7,10 +8,9 @@ import {
 } from '@features/youtube-analytics/hooks/useOwnChannel';
 import { getDisconnectedCopy } from '@features/youtube-analytics/utils/disconnected-channel-copy.util';
 import { useQueryClient } from '@tanstack/react-query';
-import { EmptyState } from '@shared/components/EmptyState';
 import { PageHeader } from '@shared/components/PageHeader';
 import { toastManager } from '@shared/components/toast/toastManager';
-import { AlertTriangle, Loader2, Video } from 'lucide-react';
+import { AlertTriangle, Loader2 } from 'lucide-react';
 import React, { useEffect } from 'react';
 import { useSearchParams } from 'react-router-dom';
 
@@ -26,17 +26,7 @@ const OwnChannelSection: React.FC = () => {
   }
 
   if (!status) {
-    return (
-      <EmptyState
-        icon={Video}
-        title="Conectá tu canal de YouTube"
-        description="Iniciá sesión con Google para empezar a ver la analítica de tu canal propio."
-        actionLabel="Conectar con Google"
-        onAction={() => {
-          window.location.href = buildYoutubeOAuthConnectUrl();
-        }}
-      />
-    );
+    return <DisconnectedChannelPrompt />;
   }
 
   if (status.status !== 'connected') {

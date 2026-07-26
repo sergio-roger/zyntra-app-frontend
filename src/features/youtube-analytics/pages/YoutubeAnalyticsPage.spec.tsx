@@ -18,6 +18,11 @@ vi.mock('@features/youtube-analytics/hooks/useOwnChannel', () => ({
   buildYoutubeOAuthConnectUrl: () => 'http://localhost:3000/api/youtube-analytics/oauth/connect',
 }));
 
+vi.mock('@features/youtube-analytics/hooks/useVideoInterests', () => ({
+  useVideoInterests: () => ({ data: [] }),
+  useSaveVideoInterestSelection: () => ({ mutateAsync: vi.fn(), isPending: false }),
+}));
+
 vi.mock('@features/youtube-analytics/hooks/useCompetitors', () => ({
   useCompetitorsDashboard: () => useCompetitorsDashboardMock(),
   useCreateCompetitor: () => ({ mutate: vi.fn(), isPending: false }),
