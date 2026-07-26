@@ -83,7 +83,6 @@ const useYoutubeOAuthRedirectToast = () => {
 
     searchParams.delete('youtube');
     setSearchParams(searchParams, { replace: true });
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 };
 
