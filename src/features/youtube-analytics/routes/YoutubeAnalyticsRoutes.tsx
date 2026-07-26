@@ -10,6 +10,12 @@ const YoutubeAnalyticsPage = lazy(() =>
   ),
 );
 
+const CompetitorDetailPage = lazy(() =>
+  import('@features/youtube-analytics/pages/CompetitorDetailPage').then(
+    (m) => ({ default: m.CompetitorDetailPage }),
+  ),
+);
+
 export const youtubeAnalyticsRoutes: RouteObject[] = [
   {
     path: '/redes-sociales/youtube',
@@ -18,6 +24,18 @@ export const youtubeAnalyticsRoutes: RouteObject[] = [
         <ModuleGuard menuKey="redes_sociales_youtube">
           <SuspenseLoader>
             <YoutubeAnalyticsPage />
+          </SuspenseLoader>
+        </ModuleGuard>
+      </PermissionGuard>
+    ),
+  },
+  {
+    path: '/redes-sociales/youtube/competencia/:competitorId',
+    element: (
+      <PermissionGuard menuKey="redes_sociales_youtube">
+        <ModuleGuard menuKey="redes_sociales_youtube">
+          <SuspenseLoader>
+            <CompetitorDetailPage />
           </SuspenseLoader>
         </ModuleGuard>
       </PermissionGuard>

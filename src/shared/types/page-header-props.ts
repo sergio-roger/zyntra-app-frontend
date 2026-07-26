@@ -5,5 +5,5 @@ export interface PageHeaderProps {
   badge?: ReactNode;
   children?: ReactNode;
   subtitle?: ReactNode;
-  title: string;
+  title: ReactNode;
 }
