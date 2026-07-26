@@ -1,3 +1,4 @@
+import { describe, expect, it } from 'vitest';
 import { buildChannelUrl } from '@features/youtube-analytics/utils/build-channel-url.util';
 
 describe('buildChannelUrl', () => {
