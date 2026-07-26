@@ -8,6 +8,10 @@ import {
   YoutubeOwnChannelDashboard,
   YoutubeOwnChannelStatus,
 } from '@features/youtube-analytics/types/own-channel.type';
+import {
+  VideoInterest,
+  YoutubeInterestVideo,
+} from '@features/youtube-analytics/types/video-interest.type';
 import api from '@shared/api/axios';
 
 export const youtubeAnalyticsApi = {
@@ -47,4 +51,19 @@ export const youtubeAnalyticsApi = {
 
   removeCompetitor: (id: string): Promise<void> =>
     api.delete(`/youtube-analytics/competitors/${id}`),
+
+  getVideoInterests: (): Promise<{ data: VideoInterest[] }> =>
+    api
+      .get<unknown, ApiResponse<VideoInterest[]>>('/youtube-analytics/interests')
+      .then((res) => ({ data: res.data })),
+
+  saveVideoInterestSelection: (interestIds: string[]): Promise<void> =>
+    api.put('/youtube-analytics/interests/selection', { interestIds }),
+
+  getInterestVideos: (): Promise<{ data: YoutubeInterestVideo[] }> =>
+    api
+      .get<unknown, ApiResponse<YoutubeInterestVideo[]>>(
+        '/youtube-analytics/dashboard/interest-videos',
+      )
+      .then((res) => ({ data: res.data })),
 };
