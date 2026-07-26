@@ -68,6 +68,7 @@ describe('buildOwnVsCompetitorsSeries', () => {
         views: 300,
         likes: 10,
         comments: 1,
+        thumbnailUrl: null,
       },
       {
         id: 'v2',
@@ -79,6 +80,7 @@ describe('buildOwnVsCompetitorsSeries', () => {
         views: 200,
         likes: 5,
         comments: 0,
+        thumbnailUrl: null,
       },
     ];
 
@@ -104,6 +106,7 @@ describe('buildOwnVsCompetitorsSeries', () => {
         views: 400,
         likes: 10,
         comments: 1,
+        thumbnailUrl: null,
       },
     ];
 
@@ -129,6 +132,7 @@ describe('buildOwnVsCompetitorsSeries', () => {
         views: 150,
         likes: 2,
         comments: 0,
+        thumbnailUrl: null,
       },
     ];
 

@@ -3,6 +3,7 @@ import {
   CreateCompetitorChannelInput,
   YoutubeCompetitorChannel,
   YoutubeCompetitorsDashboard,
+  YoutubeCompetitorVideoStats,
 } from '@features/youtube-analytics/types/competitor.type';
 import {
   YoutubeOwnChannelDashboard,
@@ -51,6 +52,15 @@ export const youtubeAnalyticsApi = {
 
   removeCompetitor: (id: string): Promise<void> =>
     api.delete(`/youtube-analytics/competitors/${id}`),
+
+  getCompetitorVideos: (
+    competitorId: string,
+  ): Promise<{ data: YoutubeCompetitorVideoStats[] }> =>
+    api
+      .get<unknown, ApiResponse<YoutubeCompetitorVideoStats[]>>(
+        `/youtube-analytics/dashboard/competitors/${competitorId}/videos`,
+      )
+      .then((res) => ({ data: res.data })),
 
   getVideoInterests: (): Promise<{ data: VideoInterest[] }> =>
     api

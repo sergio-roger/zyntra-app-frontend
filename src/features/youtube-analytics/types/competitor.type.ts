@@ -20,6 +20,7 @@ export interface YoutubeCompetitorVideoStats {
   views: number;
   likes: number;
   comments: number;
+  thumbnailUrl: string | null;
 }
 
 export interface YoutubeCompetitorsDashboard {

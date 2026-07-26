@@ -6,6 +6,8 @@ import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 
 export const competitorsKeys = {
   dashboard: ['youtube-analytics', 'competitors', 'dashboard'] as const,
+  videos: (competitorId: string) =>
+    ['youtube-analytics', 'competitors', competitorId, 'videos'] as const,
 };
 
 export const useCompetitorsDashboard = () =>
@@ -15,6 +17,16 @@ export const useCompetitorsDashboard = () =>
       const res = await youtubeAnalyticsApi.getCompetitorsDashboard();
       return res.data;
     },
+  });
+
+export const useCompetitorVideos = (competitorId: string) =>
+  useQuery({
+    queryKey: competitorsKeys.videos(competitorId),
+    queryFn: async () => {
+      const res = await youtubeAnalyticsApi.getCompetitorVideos(competitorId);
+      return res.data;
+    },
+    enabled: !!competitorId,
   });
 
 export const useCreateCompetitor = () => {

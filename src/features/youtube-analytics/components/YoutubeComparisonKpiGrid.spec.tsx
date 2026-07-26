@@ -56,6 +56,7 @@ describe('YoutubeComparisonKpiGrid', () => {
             views: 300,
             likes: 5,
             comments: 0,
+            thumbnailUrl: null,
           },
           {
             id: 'cv2',
@@ -67,6 +68,7 @@ describe('YoutubeComparisonKpiGrid', () => {
             views: 150,
             likes: 1,
             comments: 0,
+            thumbnailUrl: null,
           },
         ]}
       />,
