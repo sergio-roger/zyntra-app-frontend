@@ -64,6 +64,7 @@ describe('YoutubeAnalyticsPage', () => {
 
     expect(screen.getByText('Conectá tu canal de YouTube')).toBeInTheDocument();
     expect(screen.getByText('Conectar con Google')).toBeInTheDocument();
+    expect(screen.queryByText('Canal')).not.toBeInTheDocument();
   });
 
   it('shows a loading state while the connection status is being fetched', () => {
@@ -74,7 +75,20 @@ describe('YoutubeAnalyticsPage', () => {
     expect(container.querySelector('.animate-spin')).toBeInTheDocument();
   });
 
-  it('shows the dashboard KPIs and video ranking once connected with data', () => {
+  it('shows the reconnect CTA without tabs when the connection expired', () => {
+    useOwnChannelStatusMock.mockReturnValue({
+      data: { status: 'expired', youtubeChannelId: 'UC123' },
+      isLoading: false,
+    });
+
+    renderPage();
+
+    expect(screen.getByText('Tu conexión con YouTube expiró')).toBeInTheDocument();
+    expect(screen.getByText('Reconectar')).toBeInTheDocument();
+    expect(screen.queryByText('Competencia')).not.toBeInTheDocument();
+  });
+
+  it('shows the 3 tabs with the Canal tab active once connected', () => {
     useOwnChannelStatusMock.mockReturnValue({
       data: { status: 'connected', youtubeChannelId: 'UC123' },
       isLoading: false,
@@ -93,16 +107,6 @@ describe('YoutubeAnalyticsPage', () => {
             subscribersLost: 2,
             viewsTotal: 50000,
             watchTimeMinutes: 3000,
-          },
-          {
-            id: '2',
-            businessId: 'biz-1',
-            date: '2026-07-20',
-            subscribers: 1100,
-            subscribersGained: 15,
-            subscribersLost: 1,
-            viewsTotal: 48000,
-            watchTimeMinutes: 2800,
           },
         ],
         videoDailyStats: [
@@ -124,80 +128,11 @@ describe('YoutubeAnalyticsPage', () => {
 
     renderPage();
 
+    expect(screen.getByText('Canal')).toBeInTheDocument();
+    expect(screen.getByText('Competencia')).toBeInTheDocument();
+    expect(screen.getByText('Dashboard')).toBeInTheDocument();
     expect(screen.getByText('Canal propio')).toBeInTheDocument();
     expect(screen.getByText('50.000')).toBeInTheDocument();
     expect(screen.getByText('vid-1')).toBeInTheDocument();
-  });
-
-  it('shows a stale badge for a competitor that failed to sync', () => {
-    useOwnChannelStatusMock.mockReturnValue({ data: null, isLoading: false });
-    useCompetitorsDashboardMock.mockReturnValue({
-      isLoading: false,
-      isError: false,
-      data: {
-        competitors: [
-          {
-            id: 'comp-1',
-            businessId: 'biz-1',
-            channelHandleOrUrl: '@competidor',
-            youtubeChannelId: null,
-            status: 'stale',
-            lastSyncedAt: null,
-            addedAt: '2026-07-20T00:00:00.000Z',
-          },
-        ],
-        competitorVideoStats: [],
-      },
-    });
-
-    renderPage();
-
-    expect(screen.getByText('@competidor')).toBeInTheDocument();
-    expect(screen.getByText('Stale')).toBeInTheDocument();
-  });
-
-  it('disables adding a new competitor once the plan limit is reached', () => {
-    useOwnChannelStatusMock.mockReturnValue({ data: null, isLoading: false });
-    useCompetitorsDashboardMock.mockReturnValue({
-      isLoading: false,
-      isError: false,
-      data: {
-        competitors: [
-          {
-            id: 'comp-1',
-            businessId: 'biz-1',
-            channelHandleOrUrl: '@a',
-            youtubeChannelId: null,
-            status: 'fresh',
-            lastSyncedAt: '2026-07-25T00:00:00.000Z',
-            addedAt: '2026-07-20T00:00:00.000Z',
-          },
-          {
-            id: 'comp-2',
-            businessId: 'biz-1',
-            channelHandleOrUrl: '@b',
-            youtubeChannelId: null,
-            status: 'fresh',
-            lastSyncedAt: '2026-07-25T00:00:00.000Z',
-            addedAt: '2026-07-20T00:00:00.000Z',
-          },
-          {
-            id: 'comp-3',
-            businessId: 'biz-1',
-            channelHandleOrUrl: '@c',
-            youtubeChannelId: null,
-            status: 'fresh',
-            lastSyncedAt: '2026-07-25T00:00:00.000Z',
-            addedAt: '2026-07-20T00:00:00.000Z',
-          },
-        ],
-        competitorVideoStats: [],
-      },
-    });
-
-    renderPage();
-
-    expect(screen.getByText('Agregar otro')).toBeDisabled();
-    expect(screen.getByText(/Alcanzaste el límite de 3 canales/)).toBeInTheDocument();
   });
 });

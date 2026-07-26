@@ -1,6 +1,5 @@
 import { YoutubeVideoDailyStats } from '@features/youtube-analytics/types/own-channel.type';
-import { EmptyState } from '@shared/components/EmptyState';
-import { ArrowDown, ArrowUp, Video } from 'lucide-react';
+import { ArrowDown, ArrowUp } from 'lucide-react';
 import React, { useMemo, useState } from 'react';
 
 type SortKey = 'views' | 'avgViewDuration' | 'thumbnailCtr';
@@ -26,13 +25,7 @@ export const VideoRankingTable: React.FC<VideoRankingTableProps> = ({
   );
 
   if (videos.length === 0) {
-    return (
-      <EmptyState
-        icon={Video}
-        title="Todavía no hay videos con datos"
-        description="En cuanto corra el primer job diario vas a ver el ranking de tus videos acá."
-      />
-    );
+    return null;
   }
 
   return (

@@ -1,13 +1,8 @@
 import { Button } from '@core/ui/Button';
-import { ChannelGrowthCharts } from '@features/youtube-analytics/components/ChannelGrowthCharts';
-import { CompetitorsSection } from '@features/youtube-analytics/components/CompetitorsSection';
-import { OwnChannelKpiRow } from '@features/youtube-analytics/components/OwnChannelKpiRow';
-import { VideoRankingTable } from '@features/youtube-analytics/components/VideoRankingTable';
+import { YoutubeConnectedTabs } from '@features/youtube-analytics/components/YoutubeConnectedTabs';
 import {
   buildYoutubeOAuthConnectUrl,
   ownChannelKeys,
-  useDisconnectOwnChannel,
-  useOwnChannelDashboard,
   useOwnChannelStatus,
 } from '@features/youtube-analytics/hooks/useOwnChannel';
 import { getDisconnectedCopy } from '@features/youtube-analytics/utils/disconnected-channel-copy.util';
@@ -15,20 +10,12 @@ import { useQueryClient } from '@tanstack/react-query';
 import { EmptyState } from '@shared/components/EmptyState';
 import { PageHeader } from '@shared/components/PageHeader';
 import { toastManager } from '@shared/components/toast/toastManager';
-import { AlertTriangle, Loader2, LogOut, Video } from 'lucide-react';
+import { AlertTriangle, Loader2, Video } from 'lucide-react';
 import React, { useEffect } from 'react';
 import { useSearchParams } from 'react-router-dom';
 
 const OwnChannelSection: React.FC = () => {
   const { data: status, isLoading: isLoadingStatus } = useOwnChannelStatus();
-  const disconnect = useDisconnectOwnChannel();
-  const isConnected = status?.status === 'connected';
-
-  const {
-    data: dashboard,
-    isLoading: isLoadingDashboard,
-    isError,
-  } = useOwnChannelDashboard({ enabled: isConnected });
 
   if (isLoadingStatus) {
     return (
@@ -72,46 +59,7 @@ const OwnChannelSection: React.FC = () => {
     );
   }
 
-  if (isLoadingDashboard) {
-    return (
-      <div className="flex items-center justify-center h-48">
-        <Loader2 className="animate-spin text-primary" size={28} />
-      </div>
-    );
-  }
-
-  if (isError || !dashboard) {
-    return (
-      <div className="alert alert-error">
-        <span>No se pudo cargar la analítica de tu canal. Intenta de nuevo.</span>
-      </div>
-    );
-  }
-
-  return (
-    <div className="space-y-4">
-      <div className="flex items-center justify-between">
-        <h2 className="text-lg font-bold text-base-content">Canal propio</h2>
-        <Button
-          variant="secondary"
-          outline
-          size="sm"
-          icon={LogOut}
-          loading={disconnect.isPending}
-          onClick={() => disconnect.mutate()}
-        >
-          Desconectar
-        </Button>
-      </div>
-
-      <OwnChannelKpiRow
-        channelDailyStats={dashboard.channelDailyStats}
-        videoDailyStats={dashboard.videoDailyStats}
-      />
-      <ChannelGrowthCharts channelDailyStats={dashboard.channelDailyStats} />
-      <VideoRankingTable videos={dashboard.videoDailyStats} />
-    </div>
-  );
+  return <YoutubeConnectedTabs />;
 };
 
 const useYoutubeOAuthRedirectToast = () => {
@@ -150,10 +98,6 @@ export const YoutubeAnalyticsPage: React.FC = () => {
       />
 
       <OwnChannelSection />
-
-      <div className="divider" />
-
-      <CompetitorsSection />
     </div>
   );
 };
