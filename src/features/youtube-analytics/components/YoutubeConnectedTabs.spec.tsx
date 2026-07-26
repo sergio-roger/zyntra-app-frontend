@@ -7,10 +7,15 @@ import { YoutubeConnectedTabs } from '@features/youtube-analytics/components/You
 const useOwnChannelDashboardMock = vi.fn();
 const useDisconnectOwnChannelMock = vi.fn();
 const useCompetitorsDashboardMock = vi.fn();
+const useInterestVideosMock = vi.fn();
 
 vi.mock('@features/youtube-analytics/hooks/useOwnChannel', () => ({
   useOwnChannelDashboard: () => useOwnChannelDashboardMock(),
   useDisconnectOwnChannel: () => useDisconnectOwnChannelMock(),
+}));
+
+vi.mock('@features/youtube-analytics/hooks/useVideoInterests', () => ({
+  useInterestVideos: () => useInterestVideosMock(),
 }));
 
 vi.mock('@features/youtube-analytics/hooks/useCompetitors', () => ({
@@ -133,5 +138,31 @@ describe('YoutubeConnectedTabs', () => {
     fireEvent.click(screen.getByText('Dashboard'));
 
     expect(screen.getByText('Todavía no hay datos de tu canal')).toBeInTheDocument();
+  });
+
+  it('switches to the Videos tab content on click', () => {
+    useInterestVideosMock.mockReturnValue({
+      isLoading: false,
+      data: [
+        {
+          id: 'v1',
+          businessId: 'biz-1',
+          videoId: 'vid-1',
+          title: 'Video de prueba',
+          channelName: 'Canal de prueba',
+          thumbnailUrl: null,
+          viewCount: 100,
+          likeCount: null,
+          durationSeconds: null,
+          uploadedAt: null,
+          fetchedAt: '2026-07-25T00:00:00.000Z',
+        },
+      ],
+    });
+
+    renderTabs();
+    fireEvent.click(screen.getByText('Videos'));
+
+    expect(screen.getByText('Video de prueba')).toBeInTheDocument();
   });
 });
