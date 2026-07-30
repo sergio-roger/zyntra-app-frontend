@@ -8,6 +8,7 @@ const AiAgentsCatalogPage = lazy(() => import('../pages/AiAgentsCatalogPage'));
 const AiAgentsTeamPage = lazy(() => import('../pages/AiAgentsTeamPage'));
 const AiAgentsChatPage = lazy(() => import('../pages/AiAgentsChatPage'));
 const ContentPlanningPage = lazy(() => import('@features/content-planning/pages/ContentPlanningPage'));
+const ContentPlanDetailPage = lazy(() => import('@features/content-planning/pages/ContentPlanDetailPage'));
 
 export const marketingRoutes: RouteObject[] = [
   {
@@ -41,6 +42,18 @@ export const marketingRoutes: RouteObject[] = [
         <ModuleGuard menuKey="agents_projects">
           <SuspenseLoader>
             <ContentPlanningPage />
+          </SuspenseLoader>
+        </ModuleGuard>
+      </PermissionGuard>
+    ),
+  },
+  {
+    path: '/agents/projects/:planId',
+    element: (
+      <PermissionGuard menuKey="agents_projects">
+        <ModuleGuard menuKey="agents_projects">
+          <SuspenseLoader>
+            <ContentPlanDetailPage />
           </SuspenseLoader>
         </ModuleGuard>
       </PermissionGuard>
