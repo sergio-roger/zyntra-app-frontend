@@ -3,11 +3,11 @@ import { lazy } from 'react';
 import { SuspenseLoader } from '@shared/components/SuspenseLoader';
 import { PermissionGuard } from '@core/routes/PermissionGuard';
 import { ModuleGuard } from '@core/components/ModuleGuard';
-import { ConstructionPage } from '@shared/components/ConstructionPage';
 
 const AiAgentsCatalogPage = lazy(() => import('../pages/AiAgentsCatalogPage'));
 const AiAgentsTeamPage = lazy(() => import('../pages/AiAgentsTeamPage'));
 const AiAgentsChatPage = lazy(() => import('../pages/AiAgentsChatPage'));
+const ContentPlanningPage = lazy(() => import('@features/content-planning/pages/ContentPlanningPage'));
 
 export const marketingRoutes: RouteObject[] = [
   {
@@ -39,7 +39,9 @@ export const marketingRoutes: RouteObject[] = [
     element: (
       <PermissionGuard menuKey="agents_projects">
         <ModuleGuard menuKey="agents_projects">
-          <ConstructionPage />
+          <SuspenseLoader>
+            <ContentPlanningPage />
+          </SuspenseLoader>
         </ModuleGuard>
       </PermissionGuard>
     ),
