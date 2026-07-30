@@ -13,6 +13,10 @@ vi.mock('@features/auth/store/authStore', () => {
   return { useAuthStore };
 });
 
+vi.mock('@features/content-planning/hooks/use-approve-post', () => ({
+  useApprovePost: () => ({ mutate: vi.fn() }),
+}));
+
 const renderWithClient = (ui: React.ReactElement) => {
   const qc = new QueryClient({ defaultOptions: { queries: { retry: false } } });
   return render(<QueryClientProvider client={qc}>{ui}</QueryClientProvider>);
@@ -55,5 +59,24 @@ describe('ContentPostCard', () => {
     );
 
     expect(screen.getByText(/próximamente/i)).toBeInTheDocument();
+  });
+
+  it('shows the "Aprobar" action when the post already has an image', () => {
+    renderWithClient(
+      <ContentPostCard
+        post={{
+          id: 'post-3',
+          planId: 'plan-1',
+          platform: ContentPlanPlatform.FACEBOOK,
+          scheduledAt: '2026-08-06T10:00:00.000Z',
+          copyText: 'x',
+          mediaType: 'image',
+          imageUrl: 'https://example.com/img.png',
+          status: ContentPostStatus.WITH_IMAGE,
+        }}
+      />,
+    );
+
+    expect(screen.getByText('Aprobar')).toBeInTheDocument();
   });
 });
