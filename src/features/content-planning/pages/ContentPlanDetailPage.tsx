@@ -5,6 +5,7 @@ import { useContentPlanDetail } from '@features/content-planning/hooks/use-conte
 import { ContentPlanCalendarView } from '@features/content-planning/components/ContentPlanCalendarView';
 import { ContentPlanKanbanView } from '@features/content-planning/components/ContentPlanKanbanView';
 import { ContentPlanDayPanel } from '@features/content-planning/components/ContentPlanDayPanel';
+import { ErrorBoundary } from '@shared/components/ErrorBoundary';
 
 type ViewMode = 'calendar' | 'kanban';
 
@@ -32,7 +33,9 @@ export const ContentPlanDetailPage: React.FC = () => {
       </div>
 
       {view === 'calendar' ? (
-        <ContentPlanCalendarView posts={data.posts} onDayClick={setSelectedDate} />
+        <ErrorBoundary>
+          <ContentPlanCalendarView posts={data.posts} onDayClick={setSelectedDate} />
+        </ErrorBoundary>
       ) : (
         <ContentPlanKanbanView posts={data.posts} />
       )}

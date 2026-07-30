@@ -14,6 +14,7 @@ export const ContentPlanCalendarView: React.FC<ContentPlanCalendarViewProps> = (
   <FullCalendar
     plugins={[dayGridPlugin, interactionPlugin]}
     initialView="dayGridMonth"
+    timeZone="UTC"
     events={buildCalendarEvents(posts)}
     dateClick={(info) => onDayClick(info.dateStr)}
     eventClick={(info) => onDayClick(info.event.startStr.slice(0, 10))}
