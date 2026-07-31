@@ -21,4 +21,5 @@ export interface CreateContentPlanPayload {
   endDate: string;
   brief: string;
   platformConfigs: ContentPlanPlatformConfig[];
+  projectId?: string;
 }

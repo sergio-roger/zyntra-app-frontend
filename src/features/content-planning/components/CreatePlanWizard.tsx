@@ -10,9 +10,10 @@ import { Button } from '@core/ui/Button';
 
 interface CreatePlanWizardProps {
   onCreated: (plan: ContentPlan) => void;
+  projectId?: string;
 }
 
-export const CreatePlanWizard: React.FC<CreatePlanWizardProps> = ({ onCreated }) => {
+export const CreatePlanWizard: React.FC<CreatePlanWizardProps> = ({ onCreated, projectId }) => {
   const [name, setName] = useState('');
   const [brief, setBrief] = useState('');
   const [startDate, setStartDate] = useState('');
@@ -29,6 +30,7 @@ export const CreatePlanWizard: React.FC<CreatePlanWizardProps> = ({ onCreated })
       endDate,
       brief,
       platformConfigs,
+      projectId,
     });
     onCreated(plan);
   };
