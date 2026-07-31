@@ -7,8 +7,9 @@ import { ModuleGuard } from '@core/components/ModuleGuard';
 const AiAgentsCatalogPage = lazy(() => import('../pages/AiAgentsCatalogPage'));
 const AiAgentsTeamPage = lazy(() => import('../pages/AiAgentsTeamPage'));
 const AiAgentsChatPage = lazy(() => import('../pages/AiAgentsChatPage'));
-const ContentPlanningPage = lazy(() => import('@features/content-planning/pages/ContentPlanningPage'));
-const ContentPlanDetailPage = lazy(() => import('@features/content-planning/pages/ContentPlanDetailPage'));
+const MarketingProjectsListPage = lazy(() => import('@features/marketing-projects/pages/MarketingProjectsListPage'));
+const CreateMarketingProjectPage = lazy(() => import('@features/marketing-projects/pages/CreateMarketingProjectPage'));
+const MarketingProjectDetailPage = lazy(() => import('@features/marketing-projects/pages/MarketingProjectDetailPage'));
 
 export const marketingRoutes: RouteObject[] = [
   {
@@ -41,19 +42,31 @@ export const marketingRoutes: RouteObject[] = [
       <PermissionGuard menuKey="agents_projects">
         <ModuleGuard menuKey="agents_projects">
           <SuspenseLoader>
-            <ContentPlanningPage />
+            <MarketingProjectsListPage />
           </SuspenseLoader>
         </ModuleGuard>
       </PermissionGuard>
     ),
   },
   {
-    path: '/agents/projects/:planId',
+    path: '/agents/projects/new',
     element: (
       <PermissionGuard menuKey="agents_projects">
         <ModuleGuard menuKey="agents_projects">
           <SuspenseLoader>
-            <ContentPlanDetailPage />
+            <CreateMarketingProjectPage />
+          </SuspenseLoader>
+        </ModuleGuard>
+      </PermissionGuard>
+    ),
+  },
+  {
+    path: '/agents/projects/:id',
+    element: (
+      <PermissionGuard menuKey="agents_projects">
+        <ModuleGuard menuKey="agents_projects">
+          <SuspenseLoader>
+            <MarketingProjectDetailPage />
           </SuspenseLoader>
         </ModuleGuard>
       </PermissionGuard>
