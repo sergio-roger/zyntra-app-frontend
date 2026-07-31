@@ -1,11 +1,14 @@
 import React, { useState } from 'react';
 import { useParams } from 'react-router-dom';
+import { CalendarDays, LayoutGrid } from 'lucide-react';
 import { PageHeader } from '@shared/components/PageHeader';
 import { useContentPlanDetail } from '@features/content-planning/hooks/use-content-plan-detail';
 import { ContentPlanCalendarView } from '@features/content-planning/components/ContentPlanCalendarView';
 import { ContentPlanKanbanView } from '@features/content-planning/components/ContentPlanKanbanView';
 import { ContentPlanDayPanel } from '@features/content-planning/components/ContentPlanDayPanel';
 import { ErrorBoundary } from '@shared/components/ErrorBoundary';
+import { Button } from '@core/ui/Button';
+import { CardWrapper } from '@shared/components/CardWrapper';
 
 type ViewMode = 'calendar' | 'kanban';
 
@@ -24,18 +27,32 @@ export const ContentPlanDetailPage: React.FC = () => {
       <PageHeader title={data.plan.name} subtitle={`${data.plan.startDate} — ${data.plan.endDate}`} />
 
       <div className="flex gap-2">
-        <button type="button" className="btn btn-sm" onClick={() => setView('calendar')}>
+        <Button
+          variant="primary"
+          outline={view !== 'calendar'}
+          size="sm"
+          icon={CalendarDays}
+          onClick={() => setView('calendar')}
+        >
           Calendario
-        </button>
-        <button type="button" className="btn btn-sm" onClick={() => setView('kanban')}>
+        </Button>
+        <Button
+          variant="primary"
+          outline={view !== 'kanban'}
+          size="sm"
+          icon={LayoutGrid}
+          onClick={() => setView('kanban')}
+        >
           Kanban
-        </button>
+        </Button>
       </div>
 
       {view === 'calendar' ? (
-        <ErrorBoundary>
-          <ContentPlanCalendarView posts={data.posts} onDayClick={setSelectedDate} />
-        </ErrorBoundary>
+        <CardWrapper hoverable={false} className="p-4">
+          <ErrorBoundary>
+            <ContentPlanCalendarView posts={data.posts} onDayClick={setSelectedDate} />
+          </ErrorBoundary>
+        </CardWrapper>
       ) : (
         <ContentPlanKanbanView posts={data.posts} />
       )}

@@ -33,8 +33,8 @@ describe('ContentPlanKanbanView', () => {
       />,
     );
 
-    expect(screen.getByText('Borrador')).toBeInTheDocument();
-    expect(screen.getByText('Aprobado')).toBeInTheDocument();
+    expect(screen.getByRole('heading', { name: 'Borrador' })).toBeInTheDocument();
+    expect(screen.getByRole('heading', { name: 'Aprobado' })).toBeInTheDocument();
     expect(screen.getAllByText(/^a$|^b$/)).toHaveLength(2);
   });
 });

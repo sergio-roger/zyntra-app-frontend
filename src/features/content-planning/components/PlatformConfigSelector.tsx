@@ -1,6 +1,7 @@
 import React from 'react';
 import { ContentPlanPlatform } from '@features/content-planning/enums/content-plan-platform.enum';
 import { ContentPlanPlatformConfig } from '@features/content-planning/interfaces/content-plan.interface';
+import { PLATFORM_ICONS, PLATFORM_LABELS } from '@features/content-planning/constants/platform-icons.constant';
 
 interface PlatformConfigSelectorProps {
   configs: ContentPlanPlatformConfig[];
@@ -27,26 +28,33 @@ export const PlatformConfigSelector: React.FC<PlatformConfigSelectorProps> = ({ 
     <div className="space-y-2">
       {ALL_PLATFORMS.map((platform) => {
         const config = configs.find((c) => c.platform === platform);
+        const PlatformIcon = PLATFORM_ICONS[platform];
         return (
-          <div key={platform} className="flex items-center gap-3">
-            <label className="flex items-center gap-2">
+          <div
+            key={platform}
+            className={`flex items-center gap-3 rounded-xl border p-3 transition-colors duration-200 ${
+              config ? 'border-primary/40 bg-primary/5' : 'border-base-300 bg-base-200/40'
+            }`}
+          >
+            <label className="flex flex-1 items-center gap-2 cursor-pointer">
               <input
                 aria-label={platform}
                 type="checkbox"
-                className="checkbox"
+                className="checkbox checkbox-primary checkbox-sm"
                 checked={!!config}
                 onChange={(e) => toggle(platform, e.target.checked)}
               />
-              <span className="capitalize">{platform}</span>
+              <PlatformIcon size={16} className={config ? 'text-primary' : 'text-base-content/50'} />
+              <span className="text-sm font-medium">{PLATFORM_LABELS[platform]}</span>
             </label>
             {config && (
               <label className="flex items-center gap-2">
-                <span className="label-text">posts/semana</span>
+                <span className="text-xs text-base-content/50">posts/semana</span>
                 <input
                   aria-label={`posts por semana · ${platform}`}
                   type="number"
                   min={1}
-                  className="input input-bordered input-sm w-20"
+                  className="input input-bordered input-sm w-16 rounded-lg text-center"
                   value={config.postsPerWeek}
                   onChange={(e) => updatePostsPerWeek(platform, Number(e.target.value))}
                 />

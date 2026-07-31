@@ -1,5 +1,6 @@
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
+import { CalendarRange } from 'lucide-react';
 import { PageHeader } from '@shared/components/PageHeader';
 import { CreatePlanWizard } from '@features/content-planning/components/CreatePlanWizard';
 import { CreditsUsageBadge } from '@features/content-planning/components/CreditsUsageBadge';
@@ -24,7 +25,10 @@ export const ContentPlanningPage: React.FC = () => {
         {plans?.length ? (
           plans.map((plan) => <ContentPlanListItem key={plan.id} plan={plan} />)
         ) : (
-          <p className="text-sm text-base-content/60">Todavía no creaste ningún plan.</p>
+          <div className="flex flex-col items-center gap-2 rounded-xl border border-dashed border-base-300 py-10 text-center">
+            <CalendarRange size={28} className="text-base-content/30" />
+            <p className="text-sm text-base-content/50">Todavía no creaste ningún plan.</p>
+          </div>
         )}
       </div>
     </div>
