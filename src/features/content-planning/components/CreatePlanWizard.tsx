@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { useCreateContentPlan } from '@features/content-planning/hooks/use-create-content-plan';
-import { ContentPlan } from '@features/content-planning/interfaces/content-plan.interface';
+import { ContentPlan, ContentPlanPlatformConfig } from '@features/content-planning/interfaces/content-plan.interface';
+import { PlatformConfigSelector } from '@features/content-planning/components/PlatformConfigSelector';
 
 interface CreatePlanWizardProps {
   onCreated: (plan: ContentPlan) => void;
@@ -11,6 +12,7 @@ export const CreatePlanWizard: React.FC<CreatePlanWizardProps> = ({ onCreated })
   const [brief, setBrief] = useState('');
   const [startDate, setStartDate] = useState('');
   const [endDate, setEndDate] = useState('');
+  const [platformConfigs, setPlatformConfigs] = useState<ContentPlanPlatformConfig[]>([]);
   const createPlan = useCreateContentPlan();
 
   const handleSubmit = async (event: React.FormEvent) => {
@@ -21,7 +23,7 @@ export const CreatePlanWizard: React.FC<CreatePlanWizardProps> = ({ onCreated })
       startDate,
       endDate,
       brief,
-      platformConfigs: [],
+      platformConfigs,
     });
     onCreated(plan);
   };
@@ -69,6 +71,11 @@ export const CreatePlanWizard: React.FC<CreatePlanWizardProps> = ({ onCreated })
           onChange={(e) => setEndDate(e.target.value)}
         />
       </label>
+
+      <div className="form-control">
+        <span className="label-text">Plataformas</span>
+        <PlatformConfigSelector configs={platformConfigs} onChange={setPlatformConfigs} />
+      </div>
 
       <button type="submit" className="btn btn-primary">
         Crear plan
