@@ -121,7 +121,7 @@ export const IdentityTab: React.FC<IdentityTabProps> = ({ agent, onCreated }) =>
           max={1}
           step={0.1}
           value={temperature}
-          formatValue={(v) => v.toFixed(1)}
+          formatValue={(v) => (v ?? 0).toFixed(1)}
           error={errors.temperature?.message}
           {...register('temperature', { valueAsNumber: true })}
         />
