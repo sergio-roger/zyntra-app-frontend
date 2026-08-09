@@ -1,0 +1,138 @@
+trigger:
+  branches:
+    include:
+      - main
+      - develop
+
+pr:
+  branches:
+    include:
+      - main
+      - develop
+
+pool:
+  name: zyntra-agent
+
+variables:
+  - group: marketing-frontend-secrets
+  - name: project
+    value: zyntra
+  - name: imageName
+    value: marketing-frontend
+
+stages:
+  - stage: TestAndLint
+    jobs:
+      - job: TestAndLint
+        steps:
+          - checkout: self
+
+          - script: npm ci
+            displayName: Install dependencies
+
+          - script: npm run lint
+            displayName: Run linter
+
+          - script: npm run test
+            displayName: Run tests
+
+          - script: npm run build
+            displayName: Build project (production build check)
+
+  - stage: BuildPushDev
+    dependsOn: TestAndLint
+    condition: |
+      and(
+        succeeded(),
+        eq(variables['Build.Reason'], 'IndividualCI'),
+        eq(variables['Build.SourceBranch'], 'refs/heads/develop')
+      )
+    jobs:
+      - job: BuildPushDev
+        steps:
+          - checkout: self
+
+          - script: |
+              set -e
+              SHA=$(git rev-parse --short HEAD)
+              echo "##vso[task.setvariable variable=shortSha]$SHA"
+            displayName: Get short SHA
+
+          - script: |
+              set -e
+              echo "$(HARBOR_PASS)" | docker login "$(HARBOR_URL)" -u "$(HARBOR_USER)" --password-stdin
+            displayName: Log in to Harbor
+
+          - script: |
+              set -e
+              REGISTRY="$(HARBOR_URL)"
+              TAG_LATEST="$REGISTRY/$(project)/$(imageName):dev-latest"
+              TAG_SHA="$REGISTRY/$(project)/$(imageName):dev-$(shortSha)"
+              echo "##vso[task.setvariable variable=tagLatest]$TAG_LATEST"
+              echo "##vso[task.setvariable variable=tagSha]$TAG_SHA"
+            displayName: Determine tags
+
+          - script: |
+              set -e
+              docker buildx build \
+                --file ./Dockerfile \
+                --target production \
+                --push \
+                --tag "$(tagLatest)" \
+                --tag "$(tagSha)" \
+                --provenance=false \
+                --build-arg VITE_API_URL="$(VITE_API_URL)" \
+                .
+            displayName: Build and push Docker image
+
+          - script: curl -X POST "$(DOKPLOY_WEBHOOK_URL)"
+            displayName: Trigger Dokploy Deployment
+
+  - stage: BuildPushProd
+    dependsOn: TestAndLint
+    condition: |
+      and(
+        succeeded(),
+        eq(variables['Build.Reason'], 'IndividualCI'),
+        eq(variables['Build.SourceBranch'], 'refs/heads/main')
+      )
+    jobs:
+      - job: BuildPushProd
+        steps:
+          - checkout: self
+
+          - script: |
+              set -e
+              SHA=$(git rev-parse --short HEAD)
+              echo "##vso[task.setvariable variable=shortSha]$SHA"
+            displayName: Get short SHA
+
+          - script: |
+              set -e
+              echo "$(HARBOR_PASS)" | docker login "$(HARBOR_URL)" -u "$(HARBOR_USER)" --password-stdin
+            displayName: Log in to Harbor
+
+          - script: |
+              set -e
+              REGISTRY="$(HARBOR_URL)"
+              TAG_LATEST="$REGISTRY/$(project)/$(imageName):latest"
+              TAG_SHA="$REGISTRY/$(project)/$(imageName):prod-$(shortSha)"
+              echo "##vso[task.setvariable variable=tagLatest]$TAG_LATEST"
+              echo "##vso[task.setvariable variable=tagSha]$TAG_SHA"
+            displayName: Determine tags
+
+          - script: |
+              set -e
+              docker buildx build \
+                --file ./Dockerfile \
+                --target production \
+                --push \
+                --tag "$(tagLatest)" \
+                --tag "$(tagSha)" \
+                --provenance=false \
+                --build-arg VITE_API_URL="$(VITE_API_URL)" \
+                .
+            displayName: Build and push Docker image
+
+          - script: curl -X POST "$(DOKPLOY_WEBHOOK_URL)"
+            displayName: Trigger Dokploy Deployment
